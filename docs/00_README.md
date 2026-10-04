@@ -5,25 +5,26 @@ Consolidated plan for the dual-city POC (SF + Malaga) ahead of the YC W27 applic
 ## Reading order
 
 1. `event_market_data_pack.html` — the pitch-ready interactive data pack (open in a browser; tabs per city)
-2. `01_scope.md` — the solidified A+B scope (organiser-first GTM + machine-readable availability architecture)
-3. `adversarial_*.md` — three hostile reviews (investor [agent], customers, market structure) — read before believing anything else in here
-4. `05_poc_plan_v2.md` — the revised plan after grilling, with data folded in: SF full-loop primary, Malaga half-scope replication
-5. `03_ops_kit.md` — the Airtable schema (= the pivot-B seed), scripts EN/ES, metrics definitions
-6. `04_onepager_template.md` — the venue-facing pitch artifact template
-7. `06_pitch_angles.md` — which numbers go to which audience
-8. `data_pack_sf.md` / `data_pack_malaga.md` — full market distributions with method+confidence labels
-9. `prospects_*.csv` — 33 SF + 31 Malaga named recurring organisers with contact channels
-10. `venue_candidates_*.md` — named venue hit lists (14 warm + 9 candidate Malaga; 14 Mission + 8 Hayes SF)
+2. `01_scope.md` — the solidified scope: venue-pays B2B primary frame, A as default GTM, B separable, agent-led ops core on all variants
+3. `07_pivot_variants.md` — A/B/C kept as standalone tracks: each variant's payer, artifact, agent role, risk, kill criteria
+4. `adversarial_*.md` — three hostile reviews (investor [agent], customers, market structure) — read before believing anything else in here
+5. `05_poc_plan_v2.md` — the revised plan after grilling + direction update, with data folded in: SF full-loop primary, Malaga half-scope replication, venue-WTP co-primary gate
+6. `03_ops_kit.md` — the Airtable schema (= the pivot-B seed), scripts EN/ES, metrics definitions
+7. `04_onepager_template.md` — the venue-facing pitch artifact template
+8. `06_pitch_angles.md` — which numbers go to which audience
+9. `data_pack_sf.md` / `data_pack_malaga.md` — full market distributions with method+confidence labels
+10. `prospects_*.csv` — 33 SF + 31 Malaga named recurring organisers with contact channels
+11. `venue_candidates_*.md` — named venue hit lists (14 warm + 9 candidate Malaga; 14 Mission + 8 Hayes SF)
 
 ## The thesis in one paragraph (post-grill)
 
-Recurring community-event organisers book independent venues' dead weeknight hours through us. The organiser pays a per-event fee (deposit-backed, settled by us); the venue pays nothing and keeps the F&B. The fee is the wedge, not the business — the business is the venue's Priority subscription once events have landed, and the option on the machine-readable availability layer that agents (and AI planners) will call. Venue marketplaces died selling *to* low-frequency supply; we sell *for* venues and charge the side with the recurring need — while keeping a money flow through the platform on every event, which is the piece the graveyard never had.
+A B2B demand-visibility platform for independent venues: venues pay a subscription to be seen and booked by recurring organisers and agents. The transaction rail is the wedge — organisers book dead weeknight hours through the platform with deposit-backed fees settled through us on every event (the anti-leakage piece the graveyard never had), producing the measured till lift the venue subscription is then sold against. Every event runs under agent-led management end to end — the concierge loop is an agent, not a founder — and the same structured availability data is agent-callable via API, which is the option on the machine layer. Venue marketplaces died selling *to* low-frequency supply; we sell visibility *for* venues once events have proven their Tuesday is worth something — and pivots A (organiser-first) and B (agent-native availability API) stay separable tracks (`07_pivot_variants.md`) so repositioning never costs a rebuild.
 
 ## The three things that must be true for this to be a company
 
 1. **Anti-leakage works**: organiser books event #2 through the platform because the deposit/min-spend/settlement rail only exists through us — not because they're being nice.
 2. **Venue supply stays warm unprodded**: slots re-offered within 30 days without re-selling (the schema's `last_confirmed_at` tracks rot).
-3. **Phase-2 pull exists**: at least a few venues say "I'd pay monthly for this" at €79–149 — the fee business alone tops out ~€1M/yr and partners know it.
+3. **Venue-pays pull exists**: ≥2 venues commit to paying for visibility (€/$79–199/mo) after seeing a lift — the venue subscription is the P&L; the fee rail alone tops out ~€1M/yr and partners know it.
 
 ## What the POC actually is
 

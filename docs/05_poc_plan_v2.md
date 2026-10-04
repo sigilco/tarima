@@ -17,6 +17,9 @@
 | Week-2 build: read-only JSON endpoint over the venues table → "agent-callable" literally true in the demo | Investor: narrative can't outrun the artifact |
 | WTP one-pager moved to week 2 (tests the actual business earlier) | Investor |
 | Malaga ops = WhatsApp-first, Spanish-first; pricing €15–30 flat or % take (auto-scales vs SF $40–75) | Customer grill: €200-event economics; owner answers WhatsApp when she feels like it |
+| **Venue-pays B2B is the primary frame**: the product = venues buy demand visibility (feed placement + actions dashboard + attribution); organiser fees are transaction mechanics + on-ramp. Venue WTP is a co-primary gate, moved to week 2 | Quim direction 10-04 + investor (subscription is the business) |
+| **Pivots A/B stay separable** (`07_pivot_variants.md`): same schema + rail + agent-led ops in every variant — repositioning, not rebuild | Quim direction 10-04 |
+| **Agent-led management is the ops core** in all variants: match→negotiate→confirm→run→settle→collect as an agent loop; founders man it manually during POC, week-2 deliverable = loop with agent-assist on real events + read-only JSON endpoint | Quim direction 10-04 + investor (agent-callable must be literally true) |
 
 ## Roles (independent tracks)
 
@@ -32,8 +35,13 @@ Green by ~Oct 24:
 - ≥3 fees or min-spend contracts actually collected
 - ≥1 venue requests another event unprodded; ≥30% of yes-venues re-offer slots within 30 days
 - ≥1 measured till lift quoted by the owner ("you made my Tuesday worth €X")
+- **≥2 venues commit to paying for visibility** (pilot or paid, €/$79–199/mo) — co-primary gate, because the venue subscription is the P&L
 
-Red: events run but zero rebookings (leakage confirmed → the business is venue SaaS; pivot the pitch), or no organiser will pay anything even once (demand falsified → pivot C decision).
+Red: events run but zero rebookings (leakage confirmed → the business is pure venue SaaS; pitch adjusts), no organiser pays anything (demand falsified → pivot C decision), or venues take events but nobody will pay for visibility even after a lift (B2B frame falsified → the whole model is pivot-A fee-led or pivot C).
+
+## Agent-led event management (the ops core, retained on every pivot)
+
+The concierge loop — match organiser↔venue/slot → negotiate terms → confirm → remind → run → settle (deposit/min-spend) → collect till outcome — is designed as an **agent loop**, not founder chores. POC implementation: founders run it manually with the ops-kit scripts (which double as the agent's future prompts), everything logged against the schema; by week 2 the matching + comms run with agent-assist on real bookings and the read-only endpoint (`GET /venues?day=tue&capacity=30`) is live so "agent-callable" is literally true. Same loop in pivots A, B, and C — in B it IS the product.
 
 ## Money mechanics (decided before first fee — investor requirement)
 
