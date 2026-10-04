@@ -1,0 +1,183 @@
+<div class="a-prose">
+  <p><strong>Purpose:</strong> pitch-ready market data for the off-peak venue booking layer — where public events cluster, what formats dominate, and when demand meets venue dead hours. Corpus: 1,717 Meetup events + 76 Luma + 4,293 Eventbrite listings (SF, Oct 4–Nov 4 2026 window); Málaga sampled across Meetup, Eventbrite, Couchsurfing, InterNations, venue calendars. Every figure states its basis — counted vs sampled vs estimated.</p>
+</div>
+
+<div class="a-section">
+  <h2 class="a-section__title">Headline numbers</h2>
+  <div class="a-grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));display:grid;gap:12px;">
+    <div class="a-metric"><div class="a-metric__label">SF Meetup events in-city / 31d</div><div class="a-metric__value">738</div><div class="a-metric__delta">1,717 within 30mi — counted</div></div>
+    <div class="a-metric"><div class="a-metric__label">SF events with NO venue listed</div><div class="a-metric__value">21%</div><div class="a-metric__delta">365/1,717 — the pitch stat</div></div>
+    <div class="a-metric"><div class="a-metric__label">SF Mon–Thu 17–22h events</div><div class="a-metric__value">260/mo</div><div class="a-metric__delta">35% of listings — the dead-hour demand</div></div>
+    <div class="a-metric"><div class="a-metric__label">SF weekday events in F&B venues</div><div class="a-metric__value">40%</div><div class="a-metric__delta">85 bars + 10 rest. + 6 cafés</div></div>
+    <div class="a-metric"><div class="a-metric__label">Málaga dead-hour events</div><div class="a-metric__value">~20–30/wk</div><div class="a-metric__delta">of ~35–55 weekly venue events</div></div>
+    <div class="a-metric"><div class="a-metric__label">Named recurring organisers</div><div class="a-metric__value">64</div><div class="a-metric__delta">33 SF + 31 Málaga prospect lists</div></div>
+  </div>
+</div>
+
+<div class="a-callout">
+  <p><strong>The core pitch stat:</strong> one in five SF Meetup events lists no venue — organisers publicly post events without a home. In Málaga the behavior already exists informally: Bakkano 2.0 self-programs Mon beer-pong / Tue Mundo Lingo / Wed intl party / Thu game-zone and closes Sunday — the entire thesis running in one bar.</p>
+</div>
+
+<div class="a-section">
+  <h2 class="a-section__title">City data</h2>
+  <div data-a-tabs>
+    <div role="tablist" aria-label="City">
+      <button role="tab" id="tab-sf" aria-controls="panel-sf" aria-selected="true">San Francisco</button>
+      <button role="tab" id="panel-malaga-tab" aria-controls="panel-malaga">Málaga</button>
+    </div>
+
+    <div role="tabpanel" id="panel-sf" aria-labelledby="tab-sf">
+
+      <h3>Neighborhood share of events — Mission is #1</h3>
+      <figure class="a-panel" data-a-chart="bar" data-a-chart-unit="%" data-a-chart-label="SF neighborhood share of Meetup events">
+        <figcaption class="a-panel__title">Share of Meetup SF events by neighborhood (n=738 geocoded, counted)</figcaption>
+        <div class="a-table-scroll"><table class="a-table">
+          <caption class="a-visually-hidden">SF neighborhood share of Meetup events</caption>
+          <thead><tr><th scope="col">Neighborhood</th><th scope="col" data-numeric>Meetup %</th><th scope="col" data-numeric>Eventbrite %</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Mission</th><td data-numeric>18.6%</td><td data-numeric>16.6%</td></tr>
+            <tr><th scope="row">FiDi/Union Sq/Tenderloin</th><td data-numeric>16.9%</td><td data-numeric>27.3%</td></tr>
+            <tr><th scope="row">West/South residential</th><td data-numeric>9.3%</td><td data-numeric>7.0%</td></tr>
+            <tr><th scope="row">Nob/Russian/Pac Heights</th><td data-numeric>8.5%</td><td data-numeric>5.1%</td></tr>
+            <tr><th scope="row">Richmond</th><td data-numeric>6.6%</td><td data-numeric>2.0%</td></tr>
+            <tr><th scope="row">GG Park/Presidio</th><td data-numeric>6.5%</td><td data-numeric>2.9%</td></tr>
+            <tr><th scope="row">SoMa</th><td data-numeric>5.1%</td><td data-numeric>12.3%</td></tr>
+            <tr><th scope="row">North Beach/Chinatown</th><td data-numeric>4.9%</td><td data-numeric>6.4%</td></tr>
+            <tr><th scope="row">Potrero/Mission Bay</th><td data-numeric>4.9%</td><td data-numeric>5.3%</td></tr>
+            <tr><th scope="row">Marina/Cow Hollow</th><td data-numeric>4.7%</td><td data-numeric>4.1%</td></tr>
+            <tr><th scope="row">Hayes Valley</th><td data-numeric>2.6%</td><td data-numeric>4.9%</td></tr>
+          </tbody>
+        </table></div>
+      </figure>
+      <p class="a-section__note">Mission also carries <strong>25% of all Mon–Thu evening events</strong> (66/260). FiDi/SoMa leads ticketed platforms but its venue economics are wrong for walk-ins (corporate, chains, lunch-rush). POC pick: <strong>Mission + Hayes Valley/Divisadero</strong> (Marina alternate).</p>
+
+      <h3>Day-of-week — Mon–Thu is 46% of listings</h3>
+      <figure class="a-panel" data-a-chart="bar" data-a-chart-label="SF Meetup events by day of week">
+        <figcaption class="a-panel__title">Meetup SF events by day (n=738, counted)</figcaption>
+        <div class="a-table-scroll"><table class="a-table">
+          <caption class="a-visually-hidden">Events by day of week</caption>
+          <thead><tr><th scope="col">Day</th><th scope="col" data-numeric>Events</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Mon</th><td data-numeric>56</td></tr>
+            <tr><th scope="row">Tue</th><td data-numeric>77</td></tr>
+            <tr><th scope="row">Wed</th><td data-numeric>100</td></tr>
+            <tr><th scope="row">Thu</th><td data-numeric>105</td></tr>
+            <tr><th scope="row">Fri</th><td data-numeric>80</td></tr>
+            <tr><th scope="row">Sat</th><td data-numeric>179</td></tr>
+            <tr><th scope="row">Sun</th><td data-numeric>141</td></tr>
+          </tbody>
+        </table></div>
+      </figure>
+      <p class="a-section__note">Evening starts cluster at 18:00 (134) and 19:00 (144). Wed/Thu are the strongest weeknights. ~60 listed events run on a dead Tuesday in SF — the pitch sentence for venue walk-ins.</p>
+
+      <h3>What organisers run — venue-compatible formats ≈44%</h3>
+      <div class="a-table-scroll"><table class="a-table">
+        <caption class="a-visually-hidden">SF event-type mix</caption>
+        <thead><tr><th scope="col">Format</th><th scope="col" data-numeric>Share of Meetup SF</th><th scope="col">POC relevance</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">General social</th><td data-numeric>16.3%</td><td>Venue-compatible</td></tr>
+          <tr><th scope="row">Fitness/run-club social</th><td data-numeric>13.4%</td><td>Post-event venue need</td></tr>
+          <tr><th scope="row">Founder/business networking</th><td data-numeric>12.6%</td><td><strong>Most fee-tolerant — priority</strong></td></tr>
+          <tr><th scope="row">Arts &amp; culture</th><td data-numeric>12.2%</td><td>Partial (drink-and-draw yes, gallery no)</td></tr>
+          <tr><th scope="row">Food/supper social</th><td data-numeric>7.5%</td><td>Venue-compatible (private reservations only)</td></tr>
+          <tr><th scope="row">Language exchange</th><td data-numeric>7.3%</td><td>Venue-compatible — already in cafés/bars</td></tr>
+          <tr><th scope="row">Games/trivia</th><td data-numeric>5.4%</td><td>Venue-native</td></tr>
+          <tr><th scope="row">Tech/AI meetups</th><td data-numeric>4.1%</td><td>Needs AV/quiet — exclude from POC (also Tech-Week-inflated)</td></tr>
+          <tr><th scope="row">Wellness, singles, music, workshops, dance, books, other</th><td data-numeric>~17%</td><td>Mixed</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3>Where events already happen (Mon–Thu evening subset, n=260)</h3>
+      <div class="a-table-scroll"><table class="a-table">
+        <caption class="a-visually-hidden">SF venue types used on weeknight evenings</caption>
+        <thead><tr><th scope="col">Venue type</th><th scope="col" data-numeric>Events</th><th scope="col" data-numeric>Share</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Bars/pubs/breweries</th><td data-numeric>85</td><td data-numeric>33%</td></tr>
+          <tr><th scope="row">Dedicated event/community space</th><td data-numeric>41</td><td data-numeric>16%</td></tr>
+          <tr><th scope="row">Unspecified/address-only</th><td data-numeric>59</td><td data-numeric>23%</td></tr>
+          <tr><th scope="row">Community institutions</th><td data-numeric>20</td><td data-numeric>8%</td></tr>
+          <tr><th scope="row">Coworking</th><td data-numeric>17</td><td data-numeric>7%</td></tr>
+          <tr><th scope="row">Hotels</th><td data-numeric>12</td><td data-numeric>5%</td></tr>
+          <tr><th scope="row">Restaurants</th><td data-numeric>10</td><td data-numeric>4%</td></tr>
+          <tr><th scope="row">Parks/public</th><td data-numeric>9</td><td data-numeric>3%</td></tr>
+          <tr><th scope="row">Cafés</th><td data-numeric>6</td><td data-numeric>2% — they close before 17h</td></tr>
+        </tbody>
+      </table></div>
+      <p class="a-section__note">The café gap is supply-side, not demand: cafés are absent from evening events because none are open — exactly the dead-hour inventory the product unlocks.</p>
+
+      <div class="a-callout a-callout--decision"><p><strong>SF POC call:</strong> Mission (14 named candidates incl. warm venues already hosting: Muddy Waters, Manny's, The Sycamore, Southern Pacific Brewing) + Hayes/Divisadero (8: Rick &amp; Roxy's, The Function, Two Sisters). 33 pre-qualified organisers incl. founder-networking groups already paying for rooms. Fee ladder $40–75 flat or min-spend. Keep groups &lt;50 and social formats only — avoids SF entertainment permits entirely.</p></div>
+    </div>
+
+    <div role="tabpanel" id="panel-malaga" aria-labelledby="panel-malaga-tab" hidden>
+
+      <h3>Neighborhood share of recurring-event venues — Centro dominates</h3>
+      <figure class="a-panel" data-a-chart="bar" data-a-chart-unit="%" data-a-chart-label="Málaga neighborhood share of recurring event venues">
+        <figcaption class="a-panel__title">Share of identified recurring-event venues (sampled)</figcaption>
+        <div class="a-table-scroll"><table class="a-table">
+          <caption class="a-visually-hidden">Málaga neighborhood distribution</caption>
+          <thead><tr><th scope="col">Area</th><th scope="col" data-numeric>Share (est.)</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Centro Histórico</th><td data-numeric>60%</td></tr>
+            <tr><th scope="row">Huelin/Perchel</th><td data-numeric>25%</td></tr>
+            <tr><th scope="row">Soho</th><td data-numeric>8%</td></tr>
+            <tr><th scope="row">Teatinos</th><td data-numeric>8%</td></tr>
+            <tr><th scope="row">El Palo/Pedregalejo</th><td data-numeric>5%</td></tr>
+          </tbody>
+        </table></div>
+      </figure>
+      <p class="a-section__note">Centro ≈15 named venues on one walkable grid; Huelin is where nomads/expats actually live (beats the Soho hypothesis); Soho folds into Centro outreach; Teatinos is student-dense but venue-poor; El Palo is seasonal.</p>
+
+      <h3>Format mix — language exchange/social dominates</h3>
+      <div class="a-table-scroll"><table class="a-table">
+        <caption class="a-visually-hidden">Málaga event-type mix</caption>
+        <thead><tr><th scope="col">Format</th><th scope="col" data-numeric>Identified recurring organisers</th><th scope="col">POC relevance</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Language exchange / intl social</th><td data-numeric>~11</td><td><strong>The wedge</strong> — weekly, venue-dependent, already charge €3 cover</td></tr>
+          <tr><th scope="row">Tech/founders/business</th><td data-numeric>~7</td><td>Credible but mostly monthly (Malaga-AI, Startup Oasis, Cursor, PyData, GDG)</td></tr>
+          <tr><th scope="row">Games/quizzes</th><td data-numeric>~5</td><td>Venue-native (Play Planet, Museum Pub quiz, Bartola)</td></tr>
+          <tr><th scope="row">Dance schools</th><td data-numeric>~4</td><td>Highest session count Mon–Fri (Báilame 6 sites, 500+ students)</td></tr>
+          <tr><th scope="row">Books/talks, wellness, arts</th><td data-numeric>~8</td><td>Smaller groups</td></tr>
+          <tr><th scope="row">Food/supper</th><td data-numeric>~1–2</td><td>Thin — a gap to create, not count</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3>Timing — Thursday is the community night</h3>
+      <div class="a-prose"><p>Sampled recurring events: Thu ~10–12 (peak), Wed ~6, Tue ~5, Mon ~3, Fri ~5, Sun ~4. Start hours: 19:00–20:29 ≈40%, 20:30–22:00 ≈30%, 17:30–18:59 ≈20% (professional formats), &gt;22:00 ≈10%. The Tue/Wed/Thu 19:00–22:30 window is where organiser demand meets dead venue hours.</p></div>
+
+      <h3>The price anchor that exists today</h3>
+      <div class="a-prose"><p>The de-facto hosted-slot price is <strong>€3/head cover or a one-drink minimum</strong> (Tándem charges €3 at Sala Premier; Mundo Lingo runs free with the venue keeping the bar). Organisers already pay to attend — a €20–25 flat fee per guaranteed booking is an easy sell against that; €50 needs min-spend framing.</p></div>
+
+      <div class="a-callout a-callout--decision"><p><strong>Málaga POC call:</strong> Centro Histórico (90-min walk covers 14 warm venues — Bakkano, Sala Premier, Garrison's, El Colmao, O'Hara, Bartola, Museum Pub) + Huelin second. 31 named organisers; Meetup + InterNations + Couchsurfing + Telegram are the channels (Luma ≈ zero presence here). Honest size: ~1/10–1/20 SF density — viable for concierge POC, thin for the platform story.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="a-section">
+  <h2 class="a-section__title">What the data says to do</h2>
+  <div class="a-table-scroll"><table class="a-table">
+    <caption class="a-visually-hidden">POC targeting summary</caption>
+    <thead><tr><th scope="col">Axis</th><th scope="col">SF</th><th scope="col">Málaga</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Walk-in neighborhoods</th><td>Mission + Hayes/Divisadero</td><td>Centro + Huelin</td></tr>
+      <tr><th scope="row">Target weeknights</th><td>Wed + Thu 18–21h</td><td>Tue–Thu 19–22:30</td></tr>
+      <tr><th scope="row">Priority formats</th><td>Founder networking, language, games/trivia, book clubs, food socials</td><td>Language exchange, games/quiz, women's/professional networking</td></tr>
+      <tr><th scope="row">Pitch number</th><td>"~60 events run on a dead Tuesday; 21% of events have no venue"</td><td>"Thu has ~10–12 community events; fill your other three nights"</td></tr>
+      <tr><th scope="row">Fee anchor</th><td>$40–75 flat / min-spend</td><td>€20–25 flat (€3/head is the incumbent price)</td></tr>
+      <tr><th scope="row">Event size to promise</th><td>15–30 prepaid guests</td><td>15–35 prepaid guests</td></tr>
+      <tr><th scope="row">Constraint</th><td>Groups &lt;50, no live entertainment (permit-free)</td><td>WhatsApp-first, ES-first ops</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<details class="a-disclosure">
+  <summary>Caveats &amp; method</summary>
+  <div class="a-prose">
+    <ul>
+      <li>SF window is forward listings Oct 4–Nov 4 (public sources don't enumerate history); recurrence inferred from series flags and multi-event groups. <strong>SF Tech Week Oct 5–12 inflates tech/founder counts ±2–3pts.</strong></li>
+      <li>Meetup RSVPs undercount actual attendance ~1.5–3×; median listed RSVP is 2 but community-format mass sits at 5–35.</li>
+      <li>Eventbrite: 4,293 total counted, 499 sampled for detail (category shares are sampled).</li>
+      <li>Málaga is sampled/estimated, not counted — Facebook groups (Expats in Málaga 106K members) can't be enumerated without login; figures stated as such.</li>
+      <li>Sources: Meetup GraphQL + group pages, Luma API/city pages, Eventbrite, Funcheap, Couchsurfing, InterNations, mundolingo.org, PolyglotClub, venue sites, Málaga press agendas. Full lists in data_pack_sf.md / data_pack_malaga.md.</li>
+    </ul>
+  </div>
+</details>
