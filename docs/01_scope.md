@@ -4,13 +4,14 @@ v1 post-adversarial, post-direction update (2026-10-04). Synthesizes the narrowe
 
 ## The product in one sentence
 
-**B2B demand-visibility platform for independent venues**: venues pay a subscription to be seen and booked by recurring event organisers and agents; we own the booking transaction (slot, terms, deposit/settlement rail) that makes the visibility real — and every event runs under agent-led management end to end.
+**Venue-pays B2B availability/visibility platform — that IS pivot B**: venues pay to have their dead hours visible, bookable, and attributable to recurring organisers and agents; pivot A (organiser-pays booking) is the GTM wedge that bootstraps the inventory and proves the lift. Every event runs under agent-led management end to end.
 
-## The three layers (all present from day 1, revealed in order)
+## The two pivots as products (kept separate)
 
-1. **Transaction rail** — the organiser-facing booking: slot + house terms (free/min-spend/flat) + deposit escrow + settlement. It's the wedge: produces events, produces till lifts, produces the evidence the subscription is sold against. Organiser pays the per-event fee here.
-2. **The business — venue visibility subscription** (€79–149/mo ES / $99–199 SF per location): placement in the organiser/agent demand feed, the "what your Tuesday is worth" actions dashboard, revenue attribution, calendar sync. Sold only against a measured lift — never before money lands (the honest tension documented in `07_pivot_variants.md`).
-3. **The option — machine-readable availability API**: the same schema exposed agent-first (`GET /venues?day=tue&capacity=30`, `POST /bookings`). Demand channels for it: AI planners (Nowadays YC S23), copilots, other organisers' agents.
+- **A — organiser-pays booking**: recurring organisers book structured venue slots; they pay per booking (deferred-fee during POC). It's the wedge: produces events, produces till lifts, produces the evidence B is sold against.
+- **B — venue-pays visibility**: venues pay a subscription (€79–149/mo ES / $99–199 SF) for placement in the organiser/agent demand feed, the "what your Tuesday is worth" dashboard, revenue attribution — i.e., **for visibility of their availability to demand**, human and machine. The machine-readable/agent-callable API is the same product seen by machine demand (the "sustainable for agents" angle, YC's AI-into-physical-world theme).
+
+The merged default: A's transactions bootstrap B's supply and generate the lift B sells against. But each stands alone — if POC data says only venues pay, or only organisers pay, the other pivot is the product (see `07_pivot_variants.md`).
 
 ## Who does what
 
@@ -29,6 +30,10 @@ v1 post-adversarial, post-direction update (2026-10-04). Synthesizes the narrowe
 
 The concierge is an agent, not a founder: match → negotiate terms → confirm → remind → run → settle → collect outcomes, all run against the structured schema. During the POC founders man the loop manually (scripts = the agent's future prompts); the deliverable by week 2 is the loop running with agent-assist on real events and the read-only endpoint live. This is the YC "AI into the physical world" angle made literal — and it's also the ops answer to "walk-in sales doesn't scale": agent-run demand-side ops scales even where supply acquisition doesn't.
 
+## Payment-free POC posture (legal constraint, not product choice)
+
+No Spanish entity (SL = ~€3k + weeks) + US cofounder on an F-1 visa (no employment/self-employment, no holding customer funds) → **the POC holds no customer money**. Design in `08_payment_free_poc.md`: we broker terms, organiser settles venue directly, and WTP is measured via signed deferred-fee commitments + venue visibility LOIs. Anti-leakage becomes slot-lock (recurring slot lives in our registry) instead of money-lock during POC. The money rail is written, turns on with the entity.
+
 ## Explicit non-goals (v1)
 
 - Art displays, cross-business collaborations, offices, general "venue optimization" — cut.
@@ -36,11 +41,11 @@ The concierge is an agent, not a founder: match → negotiate terms → confirm 
 - B2C anything — cut from the application entirely.
 - Selling software to venues before transactions exist — Phase 2, only after they've seen money land.
 
-## Monetization (venue-pays B2B primary — updated per direction)
+## Monetization (venue-pays B2B = pivot B; organiser fee = pivot A mechanics)
 
-- **The P&L: venue visibility subscription** — €79–149/mo ES / $99–199/mo SF per location: demand-feed placement, actions dashboard, attribution, calendar sync. Positioned as the product from day 1 of the pitch ("we fill your dead hours and prove it"); *sold* only after a measured lift exists.
-- **The mechanics: organiser per-event fee + deposit/settlement rail** — flat per booking (€20–25 Málaga / $40–75 SF, data-calibrated) or % of tickets; deposit escrow + min-spend settlement keeps money flowing through the platform on every event (the anti-leakage primitive).
-- **Phase 3:** performance pricing on measured lift + API/booking fees on machine-originated demand — roadmap, not launch.
+- **Pivot B — the P&L**: venue visibility subscription, €79–149/mo ES / $99–199/mo SF per location — placement in organiser/agent demand, actions dashboard, attribution. POC-validated via signed LOIs (no collection); *sold* against a measured lift.
+- **Pivot A — the mechanics**: organiser per-event fee (€20–25 Málaga / $40–75 SF) or % of tickets + deposit/min-spend settlement. During POC: deferred-fee signature, money settles venue↔organiser directly.
+- **Phase 3**: performance pricing on lift + API/booking fees on machine-originated demand.
 
 ## The one KPI per side
 

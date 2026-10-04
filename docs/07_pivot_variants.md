@@ -1,9 +1,10 @@
 # Pivot variants — A / B / C kept as separate tracks
 
-Quim's direction (2026-10-04): pivots A and B stay **separable** — each is a standalone product direction, not only ingredients of the merged scope. Two constraints apply to every variant:
+Quim's direction (2026-10-04, clarified same day): pivots A and B stay **separable** — each is a standalone product, not only ingredients of the merged scope. **"Venues pay for visibility" IS pivot B** — not a third variant: the venue's subscription buys visibility of its availability to demand (organiser feed now, agents/API later). Two constraints apply to every variant:
 
-1. **Primary frame is venue-pays B2B**: venues/F&B pay a fee for **visibility** — placement in the demand feed, the actions dashboard, revenue attribution. The P&L is the venue subscription; transactions are the on-ramp that proves the value being sold.
+1. **The payer differs by pivot**: A = organiser pays per booking; B = venue pays the visibility subscription; C = venue pays SaaS fee (the most literal B2B). The merged default runs A's transactions to bootstrap B's supply and generate the lift B is sold against.
 2. **Agent-led event management is retained on either pivot**: matching, term negotiation, confirmations, reminders, day-of coordination, post-event till collection run as an agent (founders manning it manually during the POC, but the interface is built agent-first — structured schema, script-shaped prompts, agent-callable endpoint). This is both the ops-scale answer and the "sustainable for humans and agents" condition made literal.
+3. **POC is payment-free** (`08_payment_free_poc.md`): no ES entity + F-1 visa → zero customer money through founders/platform. Venue↔organiser settle directly; WTP measured by signed deferred-fee commitments + venue LOIs.
 
 ---
 
@@ -16,14 +17,14 @@ Quim's direction (2026-10-04): pivots A and B stay **separable** — each is a s
 - **Risk carried**: recurrence leakage (solved by the money rail), organiser-fee TAM ceiling (~€1M/yr — acceptable because the venue subscription is the P&L).
 - **Kill/falsify**: zero organiser rebookings through the rail; no venue converts to paying visibility after events.
 
-## Variant B — agent-native venue availability layer
+## Variant B — venue-pays availability/visibility platform (the "venues pay for visibility" pivot)
 
-- **Who pays who**: venues pay for distribution of their availability (the same visibility subscription, aimed at agent/machine demand channels: AI planners, corporate copilots, Luma-style tools); API/booking fees on machine-originated bookings later.
-- **Core artifact**: the machine-readable availability standard + booking API (`GET /venues?day=tue&capacity=30` → slots + terms → `POST /bookings`).
-- **Agent-led management**: the agent IS the product — a venue's agent handles inquiries, quotes terms, confirms, collects deposits; organiser-side agents call the same API. Humans only onboard venues.
-- **When it becomes the main bet**: if POC shows venues don't care about dead hours but organisers/planners desperately want machine-readable rooms — or once variant A generates enough live inventory that the API is worth calling.
-- **Risk carried**: standards businesses are slow and need design partners; the fix is to keep it downstream of real transaction volume (it's the same schema as A's index, just exposed).
-- **Kill/falsify**: no planner/agent channel calls it within 60 days of having ≥30 live venues; venues won't maintain stated terms.
+- **Who pays who**: venues pay a subscription for visibility of their availability to demand — placement in the organiser/agent feed, the actions dashboard, revenue attribution. The machine-readable API is the *same visibility* exposed to machine demand (AI planners, copilots, Luma-style tools); API/booking fees on machine-originated bookings come later.
+- **Core artifact**: the structured availability layer — venue records (slots, terms, capacity, `last_confirmed_at`) + booking API (`GET /venues?day=tue&capacity=30` → slots + terms → `POST /bookings`) + the visibility surface (feed/dashboard/attribution).
+- **Agent-led management**: the agent IS the product's ops — a venue's agent handles inquiries, quotes terms, confirms, settles; organiser-side agents call the same API. Humans only onboard venues.
+- **When it becomes the main bet**: the POC's co-primary gate answers this directly — ≥2 venues sign/pay for visibility after seeing a lift means B is real now, not later; if organisers won't pay but venues will, B becomes the front door.
+- **Risk carried**: a venue that hasn't seen money land pays for nothing (subscription sold only against lift); standards/API demand is slow — mitigated because B's supply and proof come from A's transactions.
+- **Kill/falsify**: venues take free events but nobody signs a visibility commitment after a lift; venues won't maintain stated terms; no agent/planner demand channel materializes post-POC.
 
 ## Variant C — Spain private-dining SaaS (safety net)
 

@@ -17,9 +17,10 @@
 | Week-2 build: read-only JSON endpoint over the venues table → "agent-callable" literally true in the demo | Investor: narrative can't outrun the artifact |
 | WTP one-pager moved to week 2 (tests the actual business earlier) | Investor |
 | Malaga ops = WhatsApp-first, Spanish-first; pricing €15–30 flat or % take (auto-scales vs SF $40–75) | Customer grill: €200-event economics; owner answers WhatsApp when she feels like it |
-| **Venue-pays B2B is the primary frame**: the product = venues buy demand visibility (feed placement + actions dashboard + attribution); organiser fees are transaction mechanics + on-ramp. Venue WTP is a co-primary gate, moved to week 2 | Quim direction 10-04 + investor (subscription is the business) |
+| **Venue-pays B2B = pivot B**: venues buy visibility of their availability (feed placement + actions dashboard + attribution) — the subscription is pivot B's product, not a third variant. Venue WTP is a co-primary gate, moved to week 2 | Quim direction 10-04 (clarified) + investor (subscription is the business) |
 | **Pivots A/B stay separable** (`07_pivot_variants.md`): same schema + rail + agent-led ops in every variant — repositioning, not rebuild | Quim direction 10-04 |
 | **Agent-led management is the ops core** in all variants: match→negotiate→confirm→run→settle→collect as an agent loop; founders man it manually during POC, week-2 deliverable = loop with agent-assist on real events + read-only JSON endpoint | Quim direction 10-04 + investor (agent-callable must be literally true) |
+| **POC is payment-free** (`08_payment_free_poc.md`): no ES entity + F-1 visa → zero customer money through founders/platform. We broker terms; organiser settles venue directly; WTP measured via signed deferred-fee commitments + venue visibility LOIs. Anti-leakage becomes slot-lock (recurring slot lives in our registry) during POC | Quim 10-04 legal constraint |
 
 ## Roles (independent tracks)
 
@@ -32,24 +33,29 @@
 Green by ~Oct 24:
 - ≥5 completed events across ≥4 venues (SF weighted)
 - ≥2 organiser rebookings **through the platform** (the leakage test — booking #2 is what proves the model)
-- ≥3 fees or min-spend contracts actually collected
+- **≥3 signed deferred-fee commitments** (payment-free POC: signatures, not collections — vary €10/20/25–30 to read price sensitivity)
+- **≥1 observed direct settlement** (organiser→venue deposit or min-spend honored on the night — validates the deal structure without us in the money)
 - ≥1 venue requests another event unprodded; ≥30% of yes-venues re-offer slots within 30 days
 - ≥1 measured till lift quoted by the owner ("you made my Tuesday worth €X")
-- **≥2 venues commit to paying for visibility** (pilot or paid, €/$79–199/mo) — co-primary gate, because the venue subscription is the P&L
+- **≥2 signed venue visibility LOIs** (pivot-B gate — the venue-pays model is the P&L)
 
-Red: events run but zero rebookings (leakage confirmed → the business is pure venue SaaS; pitch adjusts), no organiser pays anything (demand falsified → pivot C decision), or venues take events but nobody will pay for visibility even after a lift (B2B frame falsified → the whole model is pivot-A fee-led or pivot C).
+Red: events run but zero rebookings through the registry (slot-lock fails → leakage confirmed; pitch adjusts), no organiser signs any deferred-fee commitment (demand falsified → pivot C decision), or venues take events but nobody signs a visibility LOI after a lift (pivot-B frame falsified → whole model is pivot-A fee-led or pivot C).
 
 ## Agent-led event management (the ops core, retained on every pivot)
 
 The concierge loop — match organiser↔venue/slot → negotiate terms → confirm → remind → run → settle (deposit/min-spend) → collect till outcome — is designed as an **agent loop**, not founder chores. POC implementation: founders run it manually with the ops-kit scripts (which double as the agent's future prompts), everything logged against the schema; by week 2 the matching + comms run with agent-assist on real bookings and the read-only endpoint (`GET /venues?day=tue&capacity=30`) is live so "agent-callable" is literally true. Same loop in pivots A, B, and C — in B it IS the product.
 
-## Money mechanics (decided before first fee — investor requirement)
+## Money mechanics — payment-free POC (`08_payment_free_poc.md`)
 
-1. **Every booking:** organiser pays a deposit to the platform via payment link (Stripe/Bizum), refunded-applied on event-ran. This is the recurring money flow and the flake insurance.
-2. **Min-spend deal:** organiser precommits a tab (card-on-file or deposit = min-spend floor); venue settles on the night against actual till. Underspend → platform collects the difference from deposit, pays venue. THIS is why the organiser keeps booking through us — the deal exists only via us.
-3. **Flat hire:** deposit + balance via platform.
-4. Liability: all POC events run as private-party bookings inside the venue's normal operations — no public door tickets, no advertised "ticketed event" framing, no live entertainment formats. One paid hour with a local lawyer per country before first booking (not a workstream — a sanity check).
-5. Supper clubs = private reservations only (no public ticketed food events — health-permit territory).
+**Legal constraint drives the design**: no Spanish entity (SL = ~€3k + weeks) and the US cofounder is on an F-1 student visa (no employment/self-employment, no holding customer funds). During POC: **money never flows through founders or the platform** — we broker, venues and organisers settle directly.
+
+1. **We broker, they settle.** We write slot terms (min-spend / deposit / flat hire) in a one-page slot agreement signed venue↔organiser; deposit = organiser prepays the venue (Bizum/cash/card terminal), min-spend = venue's bar tab. We're the introducer, not a money party. Deal structure validated by ≥1 observed settlement on the night.
+2. **Anti-leakage = slot-lock during POC.** The recurring slot, negotiated terms, and rebooking window exist only in our registry; booking #2 through us is how the organiser *keeps* the slot. Weaker than money-lock — flagged honestly — free to test; the money rail drops in post-incorporation with no redesign.
+3. **WTP = signed deferred-fee commitments.** Every slot agreement carries: *"Service fee to platform: €X per booking — payable upon launch (deferred during pilot)."* Signed-acceptance rate = the WTP signal; vary €10/20/25–30 for price sensitivity. Zero euros collected.
+4. **Venue-side LOI for pivot B.** After any event with visible lift: venue signs *"If this pipeline ran continuously, I'd subscribe at €X–Y/mo for placement + attribution."* ≥2 signed = the co-primary gate.
+5. Liability: all POC events run as private-party bookings inside the venue's normal operations — no public door tickets, no advertised "ticketed event" framing, no live entertainment formats. Supper clubs = private reservations only.
+6. **F-1 posture (SF track)**: unpaid research/validation only — no personal invoicing, no money held, no employment relationships. 1-hour immigration-attorney consult before the SF trip (not legal advice).
+7. YC framing: *"We ran the POC capital-free on purpose — pre-incorporation we couldn't hold money, so we measured signed commitments + LOIs plus real events settling venue↔organiser. The money rail is written; it turns on with the entity."*
 
 ## Week-by-week
 
@@ -57,7 +63,7 @@ The concierge loop — match organiser↔venue/slot → negotiate terms → conf
 |---|---|---|
 | **W0 Oct 4–5** | Data pack lands → finalize 2 neighborhoods + formats + hit lists; Airtable up (schema + `last_confirmed_at`); localized scripts | same |
 | **W1 Oct 6–12** | 20 venue walk-ins (Mission 14 + Hayes 8 corridor list) + 30 organiser contacts; daily funnel counts; first slot offers. ⚠️ SF Tech Week Oct 5–12 inflates tech/founder counts — don't extrapolate that week | 20 venue walk-ins (Centro loop + Huelin); async organiser outreach via verified channels only; attend Tándem Thu @ Sala Premier or Mundo Lingo Tue @ Bakkano to recruit |
-| **W2 Oct 13–19** | Remaining contacts; first 2–3 events booked + run; first deposits collected; WTP one-pager shown to interested venues; JSON endpoint built | Remaining 20 walk-ins; demand contacts async; bank supply map |
+| **W2 Oct 13–19** | Remaining contacts; first 2–3 events booked + run; first signed deferred-fee commitments + observed direct settlements; venue visibility LOI shown to interested venues; JSON endpoint built | Remaining 20 walk-ins; demand contacts async; bank supply map |
 | **W3 Oct 20–24** | More events; rebooking test live; till lifts measured | Wrap Malaga: final slot confirmations; hand off to async contacts |
 | **Oct 24** | **Behavioral gates verdict** (SF primary, Malaga as supply-side datapoint) | same |
 | **Oct 26–Nov 1** | Joint SF: 3+ more events, application written from numbers (wedge→subscription→API framing), 1-min video, submit Nov 1 | |
