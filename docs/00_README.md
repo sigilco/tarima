@@ -5,17 +5,18 @@ Consolidated plan for the dual-city POC (SF + Malaga) ahead of the YC W27 applic
 ## Reading order
 
 1. `event_market_data_pack.html` — the pitch-ready interactive data pack (open in a browser; tabs per city)
-2. `01_scope.md` — the solidified scope: venue-pays B2B primary frame, A as default GTM, B separable, agent-led ops core on all variants
-3. `07_pivot_variants.md` — A/B/C kept as standalone tracks: each variant's payer, artifact, agent role, risk, kill criteria (B = the venue-pays-for-visibility product)
-4. `08_payment_free_poc.md` — the payment-free POC design: no customer money through founders (no ES entity + F-1 visa), direct venue↔organiser settlement, deferred-fee signatures + venue LOIs as the WTP evidence
-5. `adversarial_*.md` — three hostile reviews (investor [agent], customers, market structure) — read before believing anything else in here
-6. `05_poc_plan_v2.md` — the revised plan after grilling + direction update, with data folded in: SF full-loop primary, Malaga half-scope replication, venue-WTP co-primary gate
-7. `03_ops_kit.md` — the Airtable schema (= the pivot-B seed), scripts EN/ES, metrics definitions
-8. `04_onepager_template.md` — the venue-facing pitch artifact template
-9. `06_pitch_angles.md` — which numbers go to which audience
-10. `data_pack_sf.md` / `data_pack_malaga.md` — full market distributions with method+confidence labels
-11. `prospects_*.csv` — 33 SF + 31 Malaga named recurring organisers with contact channels
-12. `venue_candidates_*.md` — named venue hit lists (14 warm + 9 candidate Malaga; 14 Mission + 8 Hayes SF)
+2. `09_week1_execution.md` — **start here**: the frozen offer per side + the Oct 6–12 dual-city sprint, evidence buckets (leads/active users/planned revenue), Málaga continuity design
+3. `01_scope.md` — the solidified scope: venue-pays B2B primary frame, A as default GTM, B separable, agent-led ops core on all variants
+4. `07_pivot_variants.md` — A/B/C kept as standalone tracks: each variant's payer, artifact, agent role, risk, kill criteria (B = the venue-pays-for-visibility product)
+5. `08_payment_free_poc.md` — the payment-free POC design: no customer money through founders (no ES entity + F-1 visa), direct venue↔organiser settlement, deferred-fee signatures + venue LOIs as the WTP evidence
+6. `adversarial_*.md` — three hostile reviews (investor [agent], customers, market structure) — read before believing anything else in here
+7. `05_poc_plan_v2.md` — the revised plan after grilling + direction update, with data folded in: SF full-loop primary, Malaga half-scope replication, venue-WTP co-primary gate
+8. `03_ops_kit.md` — the Airtable schema (= the pivot-B seed), scripts EN/ES, metrics definitions
+9. `04_onepager_template.md` — the venue-facing pitch artifact template
+10. `06_pitch_angles.md` — which numbers go to which audience
+11. `data_pack_sf.md` / `data_pack_malaga.md` — full market distributions with method+confidence labels
+12. `prospects_*.csv` — 33 SF + 31 Malaga named recurring organisers with contact channels
+13. `venue_candidates_*.md` — named venue hit lists (14 warm + 9 candidate Malaga; 14 Mission + 8 Hayes SF)
 
 ## The thesis in one paragraph (post-grill)
 
@@ -33,8 +34,8 @@ A 3-week concierge run (Oct 6–24) instrumented like a product: Airtable schema
 
 ## Decisions still open (need Quim)
 
-- [ ] Founder-market-fit sentence for the app (any events/hospitality/community history on either founder?)
-- [ ] Confirm application framing: wedge(fees)→business(venue subscription)→option(availability API)
-- [ ] Malaga post-Oct-25 owner: who keeps the supply map warm async?
-- [ ] ~~First-event money rail~~ → resolved by `08_payment_free_poc.md`: no money through founders during POC; venue↔organiser settle directly; WTP via signed deferred-fee commitments
+- [x] ~~Founder-market-fit sentence~~ → resolved in `09_week1_execution.md` §6: both founders ran recurring community events (Quim Málaga, cofounder SF); own networks are the first demand channel — confirm exact wording for the app
+- [x] ~~Confirm application framing~~ → wedge(fees)→business(venue subscription)→option(availability API)
+- [ ] Malaga post-Oct-25 owner → narrowed: pick a "city captain" from Quim's organiser network; shortlist by Oct 12, name by Oct 24 (`09_week1_execution.md` §3)
+- [x] ~~First-event money rail~~ → resolved by `08_payment_free_poc.md`: no money through founders during POC; venue↔organiser settle directly; WTP via signed deferred-fee commitments
 - [ ] 1-hour immigration-attorney consult for the cofounder before the SF trip (F-1 posture: unpaid validation only)
