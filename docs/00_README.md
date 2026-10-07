@@ -9,14 +9,15 @@ Consolidated plan for the dual-city POC (SF + Malaga) ahead of the YC W27 applic
 3. `01_scope.md` — the solidified scope: venue-pays B2B primary frame, A as default GTM, B separable, agent-led ops core on all variants
 4. `07_pivot_variants.md` — A/B/C kept as standalone tracks: each variant's payer, artifact, agent role, risk, kill criteria (B = the venue-pays-for-visibility product)
 5. `08_payment_free_poc.md` — the payment-free POC design: no customer money through founders (no ES entity + F-1 visa), direct venue↔organiser settlement, deferred-fee signatures + venue LOIs as the WTP evidence
-6. `adversarial_*.md` — three hostile reviews (investor [agent], customers, market structure) — read before believing anything else in here
-7. `05_poc_plan_v2.md` — the revised plan after grilling + direction update, with data folded in: SF full-loop primary, Malaga half-scope replication, venue-WTP co-primary gate
-8. `03_ops_kit.md` — the Airtable schema (= the pivot-B seed), scripts EN/ES, metrics definitions
-9. `04_onepager_template.md` — the venue-facing pitch artifact template
-10. `06_pitch_angles.md` — which numbers go to which audience
-11. `data_pack_sf.md` / `data_pack_malaga.md` — full market distributions with method+confidence labels
-12. `prospects_*.csv` — 33 SF + 31 Malaga named recurring organisers with contact channels
-13. `venue_candidates_*.md` — named venue hit lists (14 warm + 9 candidate Malaga; 14 Mission + 8 Hayes SF)
+6. `09_direct_validation.md` — the fastest path to a B2B answer: demand canary → verbatim venue pitch → concierge event → LOI ask; why the corporate-events agent is a different product/buyer
+7. `adversarial_*.md` — three hostile reviews (investor [agent], customers, market structure) — read before believing anything else in here
+8. `05_poc_plan_v2.md` — the revised plan after grilling + direction update, with data folded in: SF full-loop primary, Malaga half-scope replication, venue-WTP co-primary gate
+9. `03_ops_kit.md` — the Airtable schema (= the pivot-B seed), scripts EN/ES, metrics definitions
+10. `04_onepager_template.md` — the venue-facing pitch artifact template
+11. `06_pitch_angles.md` — which numbers go to which audience
+12. `data_pack_sf.md` / `data_pack_malaga.md` — full market distributions with method+confidence labels
+13. `prospects_*.csv` — 33 SF + 31 Malaga named recurring organisers with contact channels
+14. `venue_candidates_*.md` — named venue hit lists (14 warm + 9 candidate Malaga; 14 Mission + 8 Hayes SF)
 
 ## The thesis in one paragraph (post-grill)
 
