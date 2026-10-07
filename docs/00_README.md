@@ -10,6 +10,8 @@ Consolidated plan for the dual-city POC (SF + Malaga) ahead of the YC W27 applic
 4. `07_pivot_variants.md` — A/B/C kept as standalone tracks: each variant's payer, artifact, agent role, risk, kill criteria (B = the venue-pays-for-visibility product)
 5. `08_payment_free_poc.md` — the payment-free POC design: no customer money through founders (no ES entity + F-1 visa), direct venue↔organiser settlement, deferred-fee signatures + venue LOIs as the WTP evidence
 6. `09_direct_validation.md` — the fastest path to a B2B answer: demand canary → verbatim venue pitch → concierge event → LOI ask; why the corporate-events agent is a different product/buyer
+6a. `10_test_plan_venue_b2b.md` — test plan for the venue-pays assumption: assumption, method, verbatim pitch, green/red outcomes, feedback loop
+6b. `11_test_plan_agent_builders.md` — test plan for the organiser-side agent: same skeleton; delegation + WTP as the falsifiable core
 7. `adversarial_*.md` — three hostile reviews (investor [agent], customers, market structure) — read before believing anything else in here
 8. `05_poc_plan_v2.md` — the revised plan after grilling + direction update, with data folded in: SF full-loop primary, Malaga half-scope replication, venue-WTP co-primary gate
 9. `03_ops_kit.md` — the Airtable schema (= the pivot-B seed), scripts EN/ES, metrics definitions
