@@ -33,6 +33,11 @@ html {
   text-rendering: optimizeLegibility;
 }
 
+html,
+body {
+  overflow-x: clip;
+}
+
 body {
   margin: 0;
 }

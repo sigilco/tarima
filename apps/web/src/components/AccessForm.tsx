@@ -35,7 +35,7 @@ export function AccessForm({ compact = false }: { compact?: boolean }) {
   return (
     <form
       onSubmit={onSubmit}
-      className={`group flex items-center gap-2 rounded-full bg-ink/[0.04] p-1.5 ring-1 ring-ink/10 transition-shadow focus-within:ring-ink/25 ${
+      className={`group flex items-center gap-2 rounded-full bg-ink/[0.04] p-1.5 ring-1 ring-ink/10 transition-shadow focus-within:ring-ink/25 max-[420px]:flex-col max-[420px]:rounded-[1.4rem] max-[420px]:items-stretch ${
         compact ? 'w-full max-w-md' : 'w-full max-w-xl'
       }`}
     >
@@ -45,12 +45,12 @@ export function AccessForm({ compact = false }: { compact?: boolean }) {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder={m['hero.placeholder']()}
-        className="min-w-0 flex-1 bg-transparent px-4 py-2.5 text-[15px] text-ink outline-none placeholder:text-ink-3"
+        className="min-w-0 flex-1 bg-transparent px-4 py-2.5 text-[15px] text-ink outline-none placeholder:text-ink-3 max-[420px]:py-3"
       />
       <button
         type="submit"
         disabled={state === 'sending'}
-        className="flex shrink-0 items-center gap-2.5 rounded-full bg-ink py-2.5 pl-5 pr-1.5 text-sm font-medium text-paper transition-transform duration-300 ease-[cubic-bezier(0.34,1.4,0.4,1)] hover:scale-[1.02] active:scale-[0.97] disabled:opacity-60"
+        className="flex shrink-0 items-center gap-2.5 rounded-full bg-ink py-2.5 pl-5 pr-1.5 text-sm font-medium text-paper transition-transform duration-300 ease-[cubic-bezier(0.34,1.4,0.4,1)] hover:scale-[1.02] active:scale-[0.97] disabled:opacity-60 max-[420px]:w-full max-[420px]:justify-between"
       >
         {state === 'sending' ? '…' : m['hero.cta']()}
         <span className="flex h-8 w-8 items-center justify-center rounded-full bg-paper/15 transition-transform duration-300 ease-[cubic-bezier(0.34,1.4,0.4,1)] group-hover:translate-x-0.5 group-hover:-translate-y-px">

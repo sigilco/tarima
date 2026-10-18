@@ -98,9 +98,10 @@ export function AgentBoard({
   const isVenues = variant === 'venues'
   const rows = isVenues ? VENUE_ROWS : SPONSOR_ROWS
   const seq = isVenues ? VENUE_SEQ : SPONSOR_SEQ
+  // below 560px the area/tier column drops so the status pill stays on-screen
   const gridCols = isVenues
-    ? 'grid-cols-[1.4fr_1fr_0.55fr_1.1fr_1.15fr]'
-    : 'grid-cols-[1.4fr_1fr_1.3fr_1.15fr]'
+    ? 'grid-cols-[1.4fr_1fr_0.55fr_1.1fr_1.15fr] max-[560px]:grid-cols-[1.5fr_0.55fr_1.15fr_1.2fr]'
+    : 'grid-cols-[1.4fr_1fr_1.3fr_1.15fr] max-[560px]:grid-cols-[1.4fr_1.3fr_1.15fr]'
 
   const [stepIdx, setStepIdx] = useState(-1)
   const [rowStatus, setRowStatus] = useState<Status[]>(rows.map(() => 'idle'))
@@ -201,11 +202,12 @@ export function AgentBoard({
           </div>
         </div>
 
-        {/* table */}
-        <div className="px-5 pb-5 pt-2">
+        {/* table — internal horizontal scroll keeps cells legible below 560px */}
+        <div className="overflow-x-auto">
+          <div className="min-w-[400px] px-5 pb-5 pt-2">
           <div className={`grid ${gridCols} items-center gap-x-3 border-b border-line py-2 text-[10px] font-medium uppercase tracking-[0.16em] text-ink-3`}>
             <span>{isVenues ? m['board.colName']() : m['board.colSponsor']()}</span>
-            <span>{isVenues ? m['board.colArea']() : m['board.colTier']()}</span>
+            <span className="max-[560px]:hidden">{isVenues ? m['board.colArea']() : m['board.colTier']()}</span>
             {isVenues && <span className="text-right">{m['board.colCapacity']()}</span>}
             <span>{isVenues ? m['board.colTerms']() : m['board.colDeliverable']()}</span>
             <span>{m['board.colStatus']()}</span>
@@ -221,7 +223,7 @@ export function AgentBoard({
                 }`}
               >
                 <span className="truncate font-medium text-ink">{row.name}</span>
-                <span className="truncate text-ink-2">{row.area}</span>
+                <span className="truncate text-ink-2 max-[560px]:hidden">{row.area}</span>
                 {isVenues && <span className="text-right tabular-nums text-ink-2">{row.seats}</span>}
                 <span
                   className={`truncate rounded-md px-1.5 py-0.5 text-ink-2 transition-all duration-500 ${
@@ -243,6 +245,7 @@ export function AgentBoard({
               </div>
             )
           })}
+          </div>
         </div>
 
         {/* approval card */}
@@ -251,10 +254,10 @@ export function AgentBoard({
             showApproval ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
           }`}
         >
-          <span className="text-[13px] font-medium">
+          <span className="min-w-0 text-[13px] font-medium">
             {isVenues ? m['board.approval']() : m['board.approvalSponsors']()}
           </span>
-          <span className="flex items-center gap-2">
+          <span className="flex shrink-0 items-center gap-2">
             <span
               data-anchor="approve"
               className="pointer-events-auto rounded-full bg-paper px-3.5 py-1.5 text-[12px] font-semibold text-ink"

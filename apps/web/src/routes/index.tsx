@@ -46,13 +46,13 @@ function Landing() {
   const [job, setJob] = useState<'venues' | 'sponsors'>('venues')
 
   return (
-    <div className="grain min-h-[100dvh] bg-paper text-ink">
+    <div className="grain min-h-[100dvh] overflow-x-clip bg-paper text-ink">
       <Nav />
 
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="mx-auto max-w-7xl px-5 pb-20 pt-32 md:pt-40 lg:px-8">
-        <div className="grid items-center gap-14 lg:grid-cols-2 lg:gap-10">
-          <Reveal>
+        <div className="grid min-w-0 items-center gap-14 lg:grid-cols-2 lg:gap-10">
+          <Reveal className="min-w-0">
             <Eyebrow>{m['hero.eyebrow']()}</Eyebrow>
             <h1 className="mt-6 font-display text-[2.9rem] leading-[1.02] tracking-[-0.01em] text-ink md:text-[4.3rem]">
               {m['hero.titlePre']()}{' '}
@@ -68,7 +68,7 @@ function Landing() {
             <p className="mt-4 text-[13px] text-ink-3">{m['hero.note']()}</p>
           </Reveal>
 
-          <Reveal delay={150}>
+          <Reveal delay={150} className="min-w-0">
             <AgentBoard brief={m['board.brief']()} />
           </Reveal>
         </div>
@@ -86,23 +86,25 @@ function Landing() {
         </Reveal>
 
         <Reveal delay={120} className="mt-12">
-          <div className="mx-auto flex w-max items-center gap-1 rounded-full bg-ink/[0.05] p-1 ring-1 ring-ink/10">
-            {(['venues', 'sponsors'] as const).map((v) => (
-              <button
-                key={v}
-                onClick={() => setJob(v)}
-                className={`rounded-full px-5 py-2.5 text-[13px] font-medium transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${
-                  job === v ? 'bg-ink text-paper shadow-sm' : 'text-ink-2 hover:text-ink'
-                }`}
-              >
-                {v === 'venues' ? m['jobs.tab1']() : m['jobs.tab2']()}
-              </button>
-            ))}
+          <div className="mx-auto max-w-full overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div className="mx-auto flex w-max items-center gap-1 rounded-full bg-ink/[0.05] p-1 ring-1 ring-ink/10 max-[420px]:w-full max-[420px]:rounded-[1.6rem]">
+              {(['venues', 'sponsors'] as const).map((v) => (
+                <button
+                  key={v}
+                  onClick={() => setJob(v)}
+                  className={`whitespace-nowrap rounded-full px-5 py-2.5 text-[13px] font-medium leading-snug transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] max-[420px]:flex-1 max-[420px]:whitespace-normal max-[420px]:px-3 max-[420px]:py-3 ${
+                    job === v ? 'bg-ink text-paper shadow-sm' : 'text-ink-2 hover:text-ink'
+                  }`}
+                >
+                  {v === 'venues' ? m['jobs.tab1']() : m['jobs.tab2']()}
+                </button>
+              ))}
+            </div>
           </div>
           <p className="mx-auto mt-5 max-w-xl text-center text-[15px] leading-relaxed text-ink-2">
             {job === 'venues' ? m['jobs.tab1desc']() : m['jobs.tab2desc']()}
           </p>
-          <div className="mx-auto mt-10 max-w-4xl">
+          <div className="mx-auto mt-10 min-w-0 max-w-4xl">
             <AgentBoard
               key={job}
               variant={job}
