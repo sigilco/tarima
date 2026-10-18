@@ -1,0 +1,165 @@
+@import '@fontsource-variable/geist';
+@import '@fontsource/instrument-serif';
+@import 'tailwindcss';
+
+@theme {
+  --color-paper: #f7f4ed;
+  --color-paper-2: #efeade;
+  --color-paper-3: #e7e0cf;
+  --color-ink: #1a1613;
+  --color-ink-2: #6b6155;
+  --color-ink-3: #9a8f7d;
+  --color-line: rgba(26, 22, 19, 0.09);
+  --color-clay: #b8491f;
+  --color-clay-deep: #93350f;
+  --color-clay-soft: #f0ddd0;
+  --color-sage: #57694f;
+  --color-sage-soft: #e2e8d9;
+  --color-amber-w: #9a6b1f;
+  --color-amber-soft: #f2e8cd;
+
+  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Instrument Serif', ui-serif, Georgia, serif;
+
+  --ease-out-expo: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.4, 1);
+}
+
+html {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+}
+
+/* film grain — fixed, pointer-events-none */
+.grain::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(2.5rem);
+  filter: blur(6px);
+  transition:
+    opacity 0.9s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo),
+    filter 0.9s var(--ease-out-expo);
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* agent cursor */
+.agent-cursor {
+  transition:
+    transform 0.85s var(--ease-out-expo),
+    opacity 0.4s ease;
+  will-change: transform;
+}
+.agent-cursor.is-acting {
+  animation: cursor-click 0.42s var(--ease-spring);
+}
+@keyframes cursor-click {
+  0% {
+    scale: 1;
+  }
+  40% {
+    scale: 0.82;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+/* cell edge lighting — a light sweep around the updated cell */
+.cell-lit {
+  position: relative;
+}
+.cell-lit::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 0.5rem;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--lit-angle, 0deg),
+    transparent 0%,
+    var(--color-clay) 12%,
+    transparent 26%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation:
+    lit-rotate 1.15s linear 2,
+    lit-fade 0.5s ease 1.9s forwards;
+  pointer-events: none;
+}
+@property --lit-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes lit-rotate {
+  to {
+    --lit-angle: 360deg;
+  }
+}
+@keyframes lit-fade {
+  to {
+    opacity: 0;
+  }
+}
+
+/* row working glow */
+.row-working {
+  animation: row-pulse 1.6s var(--ease-out-expo) infinite;
+}
+@keyframes row-pulse {
+  0%,
+  100% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: rgba(184, 73, 31, 0.05);
+  }
+}
+
+/* status pill base transitions */
+.pill {
+  transition:
+    background-color 0.5s var(--ease-out-expo),
+    color 0.5s var(--ease-out-expo),
+    opacity 0.5s var(--ease-out-expo);
+}
+
+/* marquee for a soft ticker if needed */
+@keyframes drift {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
