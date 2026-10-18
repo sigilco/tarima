@@ -109,7 +109,7 @@ function Landing() {
               brief={
                 job === 'venues'
                   ? m['board.brief']()
-                  : '12 sponsors for the spring hackathon — logos, invoices, slides'
+                  : m['board.briefSponsors']()
               }
             />
           </div>

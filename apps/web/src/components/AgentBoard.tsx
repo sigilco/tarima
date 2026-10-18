@@ -27,11 +27,11 @@ const VENUE_ROWS: BoardRow[] = [
 ]
 
 const SPONSOR_ROWS: BoardRow[] = [
-  { name: 'Northwind', area: 'Gold tier', seats: '—', terms: 'Invoice sent' },
-  { name: 'Acme Dev', area: 'Silver tier', seats: '—', terms: 'Logo received' },
-  { name: 'Kernel & Co', area: 'Venue partner', seats: '—', terms: 'Contract signed' },
-  { name: 'Driftline', area: 'Gold tier', seats: '—', terms: 'Slides due Fri' },
-  { name: 'Beacon Labs', area: 'Community', seats: '—', terms: 'Bio received' },
+  { name: 'Northwind', area: 'Gold tier', seats: '', terms: 'Invoice sent' },
+  { name: 'Acme Dev', area: 'Silver tier', seats: '', terms: 'Logo received' },
+  { name: 'Kernel & Co', area: 'Venue partner', seats: '', terms: 'Contract signed' },
+  { name: 'Driftline', area: 'Gold tier', seats: '', terms: 'Slides due Fri' },
+  { name: 'Beacon Labs', area: 'Community', seats: '', terms: 'Bio received' },
 ]
 
 const VENUE_SEQ: Step[] = [
@@ -95,8 +95,12 @@ export function AgentBoard({
   brief: string
   className?: string
 }) {
-  const rows = variant === 'venues' ? VENUE_ROWS : SPONSOR_ROWS
-  const seq = variant === 'venues' ? VENUE_SEQ : SPONSOR_SEQ
+  const isVenues = variant === 'venues'
+  const rows = isVenues ? VENUE_ROWS : SPONSOR_ROWS
+  const seq = isVenues ? VENUE_SEQ : SPONSOR_SEQ
+  const gridCols = isVenues
+    ? 'grid-cols-[1.4fr_1fr_0.55fr_1.1fr_1.15fr]'
+    : 'grid-cols-[1.4fr_1fr_1.3fr_1.15fr]'
 
   const [stepIdx, setStepIdx] = useState(-1)
   const [rowStatus, setRowStatus] = useState<Status[]>(rows.map(() => 'idle'))
@@ -199,11 +203,11 @@ export function AgentBoard({
 
         {/* table */}
         <div className="px-5 pb-5 pt-2">
-          <div className="grid grid-cols-[1.4fr_1fr_0.55fr_1.1fr_1.15fr] items-center gap-x-3 border-b border-line py-2 text-[10px] font-medium uppercase tracking-[0.16em] text-ink-3">
-            <span>{m['board.colName']()}</span>
-            <span>{m['board.colArea']()}</span>
-            <span className="text-right">{m['board.colCapacity']()}</span>
-            <span>{m['board.colTerms']()}</span>
+          <div className={`grid ${gridCols} items-center gap-x-3 border-b border-line py-2 text-[10px] font-medium uppercase tracking-[0.16em] text-ink-3`}>
+            <span>{isVenues ? m['board.colName']() : m['board.colSponsor']()}</span>
+            <span>{isVenues ? m['board.colArea']() : m['board.colTier']()}</span>
+            {isVenues && <span className="text-right">{m['board.colCapacity']()}</span>}
+            <span>{isVenues ? m['board.colTerms']() : m['board.colDeliverable']()}</span>
             <span>{m['board.colStatus']()}</span>
           </div>
 
@@ -212,13 +216,13 @@ export function AgentBoard({
             return (
               <div
                 key={row.name}
-                className={`grid grid-cols-[1.4fr_1fr_0.55fr_1.1fr_1.15fr] items-center gap-x-3 border-b border-line/60 py-2.5 text-[13px] transition-colors ${
+                className={`grid ${gridCols} items-center gap-x-3 border-b border-line/60 py-2.5 text-[13px] transition-colors ${
                   workingRow === i ? 'row-working' : ''
                 }`}
               >
                 <span className="truncate font-medium text-ink">{row.name}</span>
                 <span className="truncate text-ink-2">{row.area}</span>
-                <span className="text-right tabular-nums text-ink-2">{row.seats}</span>
+                {isVenues && <span className="text-right tabular-nums text-ink-2">{row.seats}</span>}
                 <span
                   className={`truncate rounded-md px-1.5 py-0.5 text-ink-2 transition-all duration-500 ${
                     termsFilled[i] ? 'bg-sage-soft/60 text-ink' : 'text-ink-3'
@@ -247,7 +251,9 @@ export function AgentBoard({
             showApproval ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
           }`}
         >
-          <span className="text-[13px] font-medium">{m['board.approval']()}</span>
+          <span className="text-[13px] font-medium">
+            {isVenues ? m['board.approval']() : m['board.approvalSponsors']()}
+          </span>
           <span className="flex items-center gap-2">
             <span
               data-anchor="approve"
