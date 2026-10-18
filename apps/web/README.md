@@ -3,8 +3,8 @@
 A minimal TanStack Start app with one route and plain CSS.
 
 ```bash
-bun install
-bun --bun run dev
+pnpm install
+pnpm dev
 ```
 
 Edit `src/routes/index.tsx` to get started. Add route files under
@@ -13,6 +13,6 @@ Edit `src/routes/index.tsx` to get started. Add route files under
 Build the production app with:
 
 ```bash
-bun --bun run build
+pnpm build
 ```
 

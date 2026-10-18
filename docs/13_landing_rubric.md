@@ -48,7 +48,7 @@ nav collapses gracefully, no horizontal overflow, tap targets ≥40px.
 
 ## C9 · Technical health
 Zero console errors, zero 5xx, request-access POST returns 201 and shows the done
-state, page renders without SSR hydration errors, `bunx tsc --noEmit` clean in
+state, page renders without SSR hydration errors, `pnpm tsc --noEmit` clean in
 apps/web.
 
 ## C10 · Overall "expensive" feel

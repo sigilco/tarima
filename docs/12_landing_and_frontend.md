@@ -50,7 +50,7 @@ User constraints honored: self-hostable, local-first, Web Standards, EN-only wit
 - **Request access:** `POST /api/access-requests` → SQLite row + transactional mail via Brevo HTTP API behind a `sendMail()` seam (swappable to CF Email Workers later — both are env-var config, not architecture).
 - **i18n:** `paraglide-js` (inlang) via Vite plugin — typesafe `m.xxx()` calls, copy lives in `messages/en.json`, compiles to per-locale modules. Adds locales later for free; satisfies "manage copy separately" without shipping a second language.
 - **UI:** Tailwind v4 + shadcn/ui (semantic tokens, light theme) + TanStack Table for the board surface. Copy strings only via paraglide — no hardcoded marketing text.
-- **Repo layout:** `apps/web` (TanStack Start) · `apps/api` (Hono+drizzle) · `packages/copy` — bun workspaces.
+- **Repo layout:** `apps/web` (TanStack Start) · `apps/api` (Hono+drizzle) · `packages/copy` — pnpm workspaces.
 
 ## The messaging question: internal chat now, messaging apps later
 

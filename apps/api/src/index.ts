@@ -1,3 +1,4 @@
+import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { db } from './db'
@@ -38,7 +39,6 @@ app.post('/api/access-requests', async (c) => {
 
 const port = Number(process.env.PORT ?? 3001)
 
-export default {
-  port,
-  fetch: app.fetch,
-}
+serve({ fetch: app.fetch, port }, (info) => {
+  console.log(`api listening on :${info.port}`)
+})
