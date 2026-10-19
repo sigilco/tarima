@@ -1,0 +1,11 @@
+{
+  "name": "tarima",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.21.0",
+  "scripts": {
+    "dev": "pnpm -C apps/web dev & pnpm -C apps/api dev",
+    "dev:web": "pnpm -C apps/web dev",
+    "dev:api": "pnpm -C apps/api dev"
+  }
+}
