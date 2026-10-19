@@ -4,4 +4,10 @@
   "compatibility_date": "2025-10-18",
   "compatibility_flags": ["nodejs_compat"],
   "main": "@tanstack/react-start/server-entry",
+  "kv_namespaces": [
+    {
+      "binding": "TARIMA_WAITLIST",
+      "id": "b96cbe79e23c49c581701aef2c40105d"
+    }
+  ]
 }
