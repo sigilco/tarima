@@ -1,0 +1,31 @@
+{
+  "$schema": "./node_modules/knip/schema.json",
+  "workspaces": {
+    ".": {
+      "entry": ["scripts/*.ts"],
+      "ignoreDependencies": [
+        "@iconify/json",
+        "oxlint",
+        "oxfmt",
+        "@logtape/file",
+        "@logtape/logtape",
+        "valibot",
+        "vitest"
+      ]
+    },
+    "apps/*": {
+      "entry": ["src/**/*.{ts,tsx}"],
+      "ignore": ["src/paraglide/**"]
+    },
+    "packages/*": {
+      "entry": ["src/index.ts"]
+    },
+    "apps/web": {
+      "entry": ["src/**/*.{ts,tsx}"],
+      "ignore": ["src/paraglide/**"],
+      "ignoreDependencies": ["@nanostores/react", "cloudflare"],
+      "ignoreBinaries": ["tsgo"]
+    },
+    "apps/api": {}
+  }
+}

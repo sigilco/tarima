@@ -16,10 +16,12 @@
   },
   "devDependencies": {
     "@types/node": "^22.20.5",
+    "knip": "catalog:",
     "lefthook": "^2.2.2",
-    "oxfmt": "^0.73.0",
-    "oxlint": "^1.88.0",
-    "typescript": "^6.0.3"
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
+    "typescript": "^6.0.3",
+    "vitest": "catalog:"
   },
   "packageManager": "pnpm@11.21.0"
 }
