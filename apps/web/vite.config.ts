@@ -4,7 +4,9 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import { cloudflare } from "@cloudflare/vite-plugin";
 import { paraglideVitePlugin } from "@inlang/paraglide-js";
 
-import viteReact from "@vitejs/plugin-react";
+import Icons from "unplugin-icons/vite";
+import viteReact, { reactCompilerPreset } from "@vitejs/plugin-react";
+import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
 
 const config = defineConfig({
@@ -18,7 +20,12 @@ const config = defineConfig({
       strategy: ["preferredLanguage", "baseLocale"],
     }),
     tanstackStart(),
-    viteReact(),
+    Icons({
+      compiler: "jsx",
+      autoInstall: false,
+    }),
+    viteReact({ compiler: {} }),
+    babel({ presets: [reactCompilerPreset()] }),
   ],
   server: {
     proxy: {

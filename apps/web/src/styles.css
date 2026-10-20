@@ -25,6 +25,27 @@
   --ease-spring: cubic-bezier(0.34, 1.4, 0.4, 1);
 }
 
+/* Semantic tokens (T0.4). UI code uses ONLY these names; raw palette
+   variables below stay for the landing page and as token values. */
+@theme {
+  --color-surface: var(--color-paper);
+  --color-surface-raised: var(--color-paper-2);
+  --color-surface-sunken: var(--color-paper-3);
+  --color-content: var(--color-ink);
+  --color-content-muted: var(--color-ink-2);
+  --color-content-faint: var(--color-ink-3);
+  --color-accent: var(--color-clay);
+  --color-accent-strong: var(--color-clay-deep);
+  --color-accent-soft: var(--color-clay-soft);
+  --color-border-subtle: var(--color-line);
+  --color-success: var(--color-sage);
+  --color-success-soft: var(--color-sage-soft);
+  --color-warning: var(--color-amber-w);
+  --color-warning-soft: var(--color-amber-soft);
+  --color-danger: #a3341f;
+  --color-danger-soft: #f2d9d2;
+}
+
 html {
   background: var(--color-paper);
   color: var(--color-ink);
