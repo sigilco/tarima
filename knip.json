@@ -27,5 +27,8 @@
       "ignoreBinaries": ["tsgo"]
     },
     "apps/api": {}
-  }
+  },
+  "ignore": ["apps/api/src/server.ts", "apps/api/src/db/index.test.ts"],
+  "ignoreBinaries": ["validate"],
+  "ignoreDependencies": ["react", "react-dom", "@tanstack/react-router", "@tanstack/react-start"]
 }

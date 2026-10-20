@@ -1,0 +1,25 @@
+[Unit]
+Description=Tarima Litestream WAL replication to R2
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=web-services
+Group=web-services
+WorkingDirectory=/opt/tarima
+EnvironmentFile=/opt/tarima/shared/litestream.env
+ExecStart=/usr/local/bin/litestream replicate -config /opt/tarima/app/deploy/litestream/litestream.yml
+Restart=on-failure
+RestartSec=5s
+MemoryMax=128M
+CPUQuota=5%
+LimitNOFILE=4096
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/opt/tarima/shared/data
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

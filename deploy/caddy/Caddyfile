@@ -1,0 +1,7 @@
+# Public site: auto-HTTPS via Let's Encrypt (HTTP-01 on :80) and reverse
+# proxy to the single tarima Node process on loopback.
+tarima.events, tarima.illo.fyi {
+	encode zstd gzip
+
+	reverse_proxy 127.0.0.1:3001
+}

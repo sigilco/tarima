@@ -1,0 +1,33 @@
+[Unit]
+Description=Tarima web + API (single Node process)
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=web-services
+Group=web-services
+WorkingDirectory=/opt/tarima/app
+EnvironmentFile=/opt/tarima/shared/app.env
+Environment=NODE_ENV=production
+Environment=PORT=3001
+ExecStart=/usr/bin/env node dist/server/index.mjs
+Restart=on-failure
+RestartSec=3
+
+MemoryHigh=500M
+MemoryMax=768M
+
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/opt/tarima
+
+[Install]
+WantedBy=multi-user.target
