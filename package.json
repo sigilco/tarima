@@ -7,5 +7,10 @@
     "dev": "pnpm -C apps/web dev & pnpm -C apps/api dev",
     "dev:web": "pnpm -C apps/web dev",
     "dev:api": "pnpm -C apps/api dev"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.7"
   }
 }
