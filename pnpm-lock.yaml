@@ -4,6 +4,18 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    '@types/node':
+      specifier: ^24
+      version: 24.19.2
+    typescript:
+      specifier: ^5.9.3
+      version: 5.9.3
+    vitest:
+      specifier: ^3.2.7
+      version: 3.2.7
+
 importers:
 
   .:
@@ -36,12 +48,21 @@ importers:
       '@types/better-sqlite3':
         specifier: ^9.6.0
         version: 9.6.0
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.2
       drizzle-kit:
         specifier: ^0.31.11
         version: 0.31.11
       tsx:
         specifier: ^4.23.15
         version: 4.23.15
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 3.2.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.33.0)(supports-color@10.2.2)(tsx@4.23.15)
 
   apps/web:
     dependencies:
@@ -100,6 +121,31 @@ importers:
       wrangler:
         specifier: ^4.151.1
         version: 4.151.1(@types/node@22.20.5)
+
+  packages/engine:
+    dependencies:
+      '@tarima/api':
+        specifier: workspace:*
+        version: link:../../apps/api
+      better-sqlite3:
+        specifier: ^13.0.3
+        version: 13.0.3
+      drizzle-orm:
+        specifier: ^0.45.4
+        version: 0.45.4(@types/better-sqlite3@9.6.0)(better-sqlite3@13.0.3)(kysely@0.28.18)
+    devDependencies:
+      '@types/better-sqlite3':
+        specifier: ^9.6.0
+        version: 9.6.0
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.2
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 3.2.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.33.0)(supports-color@10.2.2)(tsx@4.23.15)
 
 packages:
 
@@ -3790,7 +3836,7 @@ snapshots:
 
   '@types/better-sqlite3@9.6.0':
     dependencies:
-      '@types/node': 22.20.5
+      '@types/node': 24.19.2
 
   '@types/chai@5.2.3':
     dependencies:
