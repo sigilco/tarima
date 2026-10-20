@@ -14,7 +14,19 @@ await build({
   platform: "node",
   format: "esm",
   target: "node22",
+  // Bundle workspace packages (@tarima/*) so the artifact resolves their
+  // sources at build time; leave third-party packages external so native
+  // bindings (better-sqlite3) and node builtins stay as real requires.
   packages: "external",
+  alias: {
+    "@tarima/obs": join(apiRoot, "../../packages/obs/src/index.ts"),
+    "@tarima/auth-core/otp": join(apiRoot, "../../packages/auth-core/src/otp.ts"),
+    "@tarima/auth-core/rate-limit": join(apiRoot, "../../packages/auth-core/src/rate-limit.ts"),
+    "@tarima/auth-core/session": join(apiRoot, "../../packages/auth-core/src/session.ts"),
+    "@tarima/contract": join(apiRoot, "../../packages/contract/src/index.ts"),
+    "@tarima/engine": join(apiRoot, "../../packages/engine/src/index.ts"),
+    "@tarima/chase": join(apiRoot, "../../packages/chase/src/index.ts"),
+  },
   nodePaths: [join(process.cwd(), "apps/web/node_modules")],
   outfile: join(outDir, "index.mjs"),
   sourcemap: true,

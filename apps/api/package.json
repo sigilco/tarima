@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "@hono/node-server": "^2.1.5",
+    "@logtape/file": "catalog:",
+    "@logtape/logtape": "catalog:",
     "@tanstack/react-router": "1.170.45",
     "@tanstack/react-start": "1.169.3",
     "@tarima/auth-core": "workspace:*",
