@@ -34,7 +34,7 @@ export function startRunner(
       inFlight += 1
       void (async () => {
         try {
-          const handler = handlers[step.stepKey]
+          const handler = handlers[step.stepKey] ?? handlers[step.stepKey.replace(/#\d+$/, '')]
           if (!handler) {
             completeStep(db, step.id, { ok: false, error: `no handler for step '${step.stepKey}'` })
             return
@@ -94,7 +94,7 @@ export async function runOnce(
   const due = claimDueSteps(db, workerId, leaseTtlMs, batchSize)
   for (const step of due) {
     try {
-      const handler = handlers[step.stepKey]
+      const handler = handlers[step.stepKey] ?? handlers[step.stepKey.replace(/#\d+$/, '')]
       if (!handler) {
         completeStep(db, step.id, { ok: false, error: `no handler for step '${step.stepKey}'` })
         continue

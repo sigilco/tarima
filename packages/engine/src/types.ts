@@ -31,6 +31,8 @@ export interface StepResult {
     type: string
     payload?: Record<string, unknown>
   }>
+  /** Merge these keys into the workflow's persisted context. */
+  contextPatch?: Record<string, unknown>
   /** Mark the whole run done (terminal states). */
   finish?: boolean
 }

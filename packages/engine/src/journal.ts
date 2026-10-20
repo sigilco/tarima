@@ -1,4 +1,4 @@
-import { and, eq, inArray, isNull, lte, or, sql } from 'drizzle-orm'
+import { and, eq, inArray, isNull, lte, or, sql, like } from 'drizzle-orm'
 import type { EngineDb } from './db'
 import { outbox, steps, workflows } from '@tarima/api/db/schema'
 import type { ClaimedStep, StepResult, StepStatus, WorkflowStatus } from './types'
@@ -173,7 +173,19 @@ export function completeStep(db: EngineDb, stepId: string, outcome: StepOutcome)
       .where(eq(steps.id, stepId))
       .run()
     for (const next of result.nextSteps ?? []) {
-      enqueueStep(tx, step.runId, next.key, next.input ?? {}, now + (next.delayMs ?? 0))
+      // Step keys are unique per run; loops (e.g. await_reply -> followup ->
+      // await_reply) re-enter the same key, so suffix on conflict. The
+      // runner strips the '#n' suffix when resolving the handler.
+      try {
+        enqueueStep(tx, step.runId, next.key, next.input ?? {}, now + (next.delayMs ?? 0))
+      } catch {
+        const [{ count }] = tx
+          .select({ count: sql<number>`count(*)` })
+          .from(steps)
+          .where(and(eq(steps.runId, step.runId), like(steps.stepKey, `${next.key}%`)))
+          .all()
+        enqueueStep(tx, step.runId, `${next.key}#${count + 1}`, next.input ?? {}, now + (next.delayMs ?? 0))
+      }
     }
     for (const emit of result.emit ?? []) {
       tx.insert(outbox)
@@ -190,10 +202,14 @@ export function completeStep(db: EngineDb, stepId: string, outcome: StepOutcome)
     }
     const runDone = result.finish === true
     if (runDone || result.nextState !== undefined) {
+      const finalStatus = result.nextState === 'failed' ? 'failed' : runDone ? 'done' : undefined
       tx.update(workflows)
         .set({
           state: result.nextState ?? sql`${workflows.state}`,
-          status: runDone ? 'done' : sql`${workflows.status}`,
+          status: finalStatus ?? sql`${workflows.status}`,
+          context: result.contextPatch
+            ? sql`json_patch(${workflows.context}, ${JSON.stringify(result.contextPatch)})`
+            : sql`${workflows.context}`,
           updatedAt: now,
         })
         .where(eq(workflows.id, step.runId))
