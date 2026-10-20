@@ -8,3 +8,4 @@ dist
 .output
 *.db-shm
 *.db-wal
+.worktrees
