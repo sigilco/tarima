@@ -11,6 +11,7 @@ import { cors } from "hono/cors";
 import { db } from "./db";
 import { accessRequests } from "./db/schema";
 import { sendMail } from "./mail";
+import { authRoutes } from "./routes/auth";
 
 const here = dirname(fileURLToPath(import.meta.url));
 
@@ -22,6 +23,8 @@ try {
 } catch {
   console.warn("[server] web SSR build not found, API-only mode");
 }
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const app = new Hono();
 
@@ -52,6 +55,8 @@ app.post("/api/access-requests", async (c) => {
 
   return c.json({ ok: true }, 201);
 });
+
+app.route("/", authRoutes);
 
 // TanStack Start SSR for everything that is not /api/*.
 app.all("*", async (c) => {

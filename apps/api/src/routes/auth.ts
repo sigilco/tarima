@@ -1,0 +1,186 @@
+import { randomUUID } from "node:crypto";
+import bcrypt from "bcryptjs";
+import { Hono } from "hono";
+import { and, desc, eq, isNull, sql } from "drizzle-orm";
+import * as v from "valibot";
+import {
+  MAX_VERIFY_ATTEMPTS,
+  generateOtpCode,
+  hashOtp,
+  isOtpExpired,
+  otpExpiresAt,
+} from "@tarima/auth-core/otp";
+import {
+  checkFailedVerify,
+  checkRequestOtp,
+  recordFailedVerify,
+  recordRequestOtp,
+} from "@tarima/auth-core/rate-limit";
+import {
+  SESSION_TTL_SECONDS,
+  createSessionToken,
+  sessionCookieHeader,
+} from "@tarima/auth-core/session";
+import { audit } from "@tarima/obs";
+import { db } from "../db";
+import { loopbackInbox, otpCodes, sessions, users } from "../db/schema";
+import { extractOtp } from "../lib/extract-otp";
+import { sendMail } from "../mail";
+
+const requestSchema = v.object({
+  email: v.pipe(v.string(), v.trim(), v.email()),
+});
+
+const verifySchema = v.object({
+  email: v.pipe(v.string(), v.trim(), v.email()),
+  code: v.pipe(v.string(), v.regex(/^\d{6}$/)),
+});
+
+function normalize(email: string): string {
+  return email.trim().toLowerCase();
+}
+
+function otpEmailHtml(code: string): string {
+  return `<p>Your Tarima sign in code is <strong>${code}</strong>.</p><p>It expires in 5 minutes.</p>`;
+}
+
+export const authRoutes = new Hono()
+  .post("/auth/request-otp", async (c) => {
+    const parsed = v.safeParse(requestSchema, await c.req.json().catch(() => null));
+    if (!parsed.success) return c.json({ error: "invalid_request" }, 400);
+
+    const email = normalize(parsed.output.email);
+    const ip = c.req.header("x-forwarded-for") ?? undefined;
+    const limit = checkRequestOtp(email, ip);
+    if (!limit.ok) return c.json({ error: "too_many_requests" }, 429);
+    recordRequestOtp(email, ip);
+
+    const code = generateOtpCode();
+
+    // Burn any previously issued, still unconsumed code so only the newest
+    // one can ever verify.
+    db.update(otpCodes)
+      .set({ consumedAt: Date.now() })
+      .where(and(eq(otpCodes.email, email), isNull(otpCodes.consumedAt)))
+      .run();
+
+    db.insert(otpCodes)
+      .values({
+        id: randomUUID(),
+        email,
+        codeHash: hashOtp(code),
+        expiresAt: otpExpiresAt().getTime(),
+        createdAt: Date.now(),
+      })
+      .run();
+
+    await sendMail({
+      to: email,
+      subject: "Your Tarima sign in code",
+      text: `Your Tarima sign in code is ${code}. It expires in 5 minutes.`,
+      html: otpEmailHtml(code),
+    }).catch((err) => console.error("[mail] otp send failed", err));
+
+    audit("auth.otp_requested", { userId: email, target: "auth", extra: { email } });
+
+    // Always the same response: never reveal whether the address exists.
+    return c.json({ ok: true });
+  })
+  .post("/auth/verify-otp", async (c) => {
+    const parsed = v.safeParse(verifySchema, await c.req.json().catch(() => null));
+    if (!parsed.success) return c.json({ error: "invalid_request" }, 400);
+
+    const email = normalize(parsed.output.email);
+    const code = parsed.output.code;
+
+    const limit = checkFailedVerify(email, Date.now());
+    if (!limit.ok) return c.json({ error: "too_many_requests" }, 429);
+
+    const row = db
+      .select()
+      .from(otpCodes)
+      .where(and(eq(otpCodes.email, email), isNull(otpCodes.consumedAt)))
+      // Two codes issued in the same millisecond tie on createdAt, so break
+      // the tie on the rowid-backed primary key to guarantee "newest wins".
+      .orderBy(desc(otpCodes.createdAt), desc(sql`rowid`))
+      .get();
+
+    const codeMatches =
+      row !== undefined &&
+      !isOtpExpired({ expiresAt: new Date(row.expiresAt) }) &&
+      bcrypt.compareSync(code, row.codeHash);
+
+    const invalid = () => {
+      recordFailedVerify(email);
+      return c.json({ error: "invalid_code" }, 401);
+    };
+
+    if (!codeMatches || row === undefined) {
+      if (row) {
+        const attempts = row.attempts + 1;
+        db.update(otpCodes)
+          .set({
+            attempts,
+            consumedAt: attempts > MAX_VERIFY_ATTEMPTS ? Date.now() : null,
+          })
+          .where(eq(otpCodes.id, row.id))
+          .run();
+      }
+      return invalid();
+    }
+
+    db.update(otpCodes).set({ consumedAt: Date.now() }).where(eq(otpCodes.id, row.id)).run();
+
+    const user =
+      db.select().from(users).where(eq(users.email, email)).get() ??
+      (() => {
+        const created = { id: randomUUID(), email, createdAt: Date.now() };
+        db.insert(users).values(created).run();
+        return created;
+      })();
+
+    const token = createSessionToken(
+      user.id,
+      process.env.SESSION_SECRET ?? "dev-insecure-session-secret",
+      SESSION_TTL_SECONDS,
+    );
+
+    db.insert(sessions)
+      .values({
+        id: randomUUID(),
+        userId: user.id,
+        tokenHash: hashOtp(token),
+        expiresAt: Date.now() + SESSION_TTL_SECONDS * 1000,
+      })
+      .run();
+
+    audit("auth.otp_verified", { userId: user.id, target: "auth", extra: { email } });
+
+    c.header("Set-Cookie", sessionCookieHeader(token, process.env.NODE_ENV === "production"));
+    return c.json({ ok: true, userId: user.id });
+  })
+  .get("/internal/admin/inbox", (c) => {
+    if (process.env.NODE_ENV === "production") return c.text("not found", 404);
+
+    const to = c.req.query("to");
+    if (!to) return c.json({ error: "missing_to" }, 400);
+
+    const rows = db
+      .select()
+      .from(loopbackInbox)
+      .where(eq(loopbackInbox.toAddr, normalize(to)))
+      .orderBy(desc(loopbackInbox.createdAt))
+      .all();
+
+    return c.json({
+      messages: rows.map((row) => ({
+        id: row.id,
+        to: row.toAddr,
+        from: row.fromAddr,
+        subject: row.subject,
+        body: row.body,
+        createdAt: row.createdAt,
+        otp: extractOtp(row.html ?? row.body),
+      })),
+    });
+  });

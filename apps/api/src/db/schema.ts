@@ -234,3 +234,31 @@ export const outbox = sqliteTable(
   },
   (t) => [uniqueIndex("idx_outbox_key").on(t.idempotencyKey)],
 );
+
+// ---------- Stage 3: auth-core OTP ----------
+
+/**
+ * One row per issued OTP. Email is the natural key: the api burns prior
+ * unconsumed rows on reissue by marking `consumed_at` set, then inserting
+ * a fresh row. `attempts` is the failed-verify counter on the current
+ * code; once > 5 the api flips `consumed_at` and rejects further compares.
+ */
+export const otpCodes = sqliteTable(
+  "otp_codes",
+  {
+    id: text("id").primaryKey(),
+    email: text("email").notNull(),
+    codeHash: text("code_hash").notNull(),
+    attempts: integer("attempts").notNull().default(0),
+    expiresAt: integer("expires_at").notNull(),
+    consumedAt: integer("consumed_at"),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [
+    index("idx_otp_email").on(t.email),
+    index("idx_otp_email_unconsumed").on(t.email, t.consumedAt),
+  ],
+);
+
+export type OtpCode = typeof otpCodes.$inferSelect;
+export type NewOtpCode = typeof otpCodes.$inferInsert;
