@@ -1,6 +1,6 @@
-@import '@fontsource-variable/geist';
-@import '@fontsource/instrument-serif';
-@import 'tailwindcss';
+@import "@fontsource-variable/geist";
+@import "@fontsource/instrument-serif";
+@import "tailwindcss";
 
 @theme {
   --color-paper: #f7f4ed;
@@ -18,8 +18,8 @@
   --color-amber-w: #9a6b1f;
   --color-amber-soft: #f2e8cd;
 
-  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Instrument Serif', ui-serif, Georgia, serif;
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Instrument Serif", ui-serif, Georgia, serif;
 
   --ease-out-expo: cubic-bezier(0.32, 0.72, 0, 1);
   --ease-spring: cubic-bezier(0.34, 1.4, 0.4, 1);
@@ -44,7 +44,7 @@ body {
 
 /* film grain — fixed, pointer-events-none */
 .grain::after {
-  content: '';
+  content: "";
   position: fixed;
   inset: 0;
   z-index: 40;
@@ -96,7 +96,7 @@ body {
   position: relative;
 }
 .cell-lit::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: -1px;
   border-radius: 0.5rem;
@@ -121,7 +121,7 @@ body {
   pointer-events: none;
 }
 @property --lit-angle {
-  syntax: '<angle>';
+  syntax: "<angle>";
   initial-value: 0deg;
   inherits: false;
 }
