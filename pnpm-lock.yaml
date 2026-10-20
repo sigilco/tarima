@@ -15,6 +15,9 @@ catalogs:
     typescript:
       specifier: 6.0.3
       version: 6.0.3
+    valibot:
+      specifier: ^1.2.0
+      version: 1.5.0
 
 importers:
 
@@ -128,6 +131,16 @@ importers:
       wrangler:
         specifier: ^4.151.1
         version: 4.151.1(@types/node@22.20.5)
+
+  packages/contract:
+    dependencies:
+      valibot:
+        specifier: 'catalog:'
+        version: 1.5.0(typescript@6.0.3)
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
 
   packages/obs:
     dependencies:
