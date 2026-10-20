@@ -4,6 +4,18 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    '@logtape/file':
+      specifier: ^2.1.0
+      version: 2.4.2
+    '@logtape/logtape':
+      specifier: ^2.1.0
+      version: 2.4.2
+    typescript:
+      specifier: 6.0.3
+      version: 6.0.3
+
 importers:
 
   .:
@@ -116,6 +128,22 @@ importers:
       wrangler:
         specifier: ^4.151.1
         version: 4.151.1(@types/node@22.20.5)
+
+  packages/obs:
+    dependencies:
+      '@logtape/file':
+        specifier: 'catalog:'
+        version: 2.4.2(@logtape/logtape@2.4.2)
+      '@logtape/logtape':
+        specifier: 'catalog:'
+        version: 2.4.2
+    devDependencies:
+      '@types/node':
+        specifier: ^22.20.5
+        version: 22.20.5
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
 
 packages:
 
