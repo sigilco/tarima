@@ -107,6 +107,17 @@ describe("POST /api/projects/:projectId/entities/bulk", () => {
     expect(notJson.status).toBe(400);
   });
 
+  it("answers 200 with no entities for a header-only csv", async () => {
+    const res = await csvRoutes.request(
+      `/api/projects/${projectId}/entities/bulk`,
+      json({ csv: "name,contact,missing\n" }),
+    );
+    expect(res.status).toBe(200);
+    const data = (await res.json()) as { created: number; errors: unknown[] };
+    expect(data.created).toBe(0);
+    expect(data.errors).toHaveLength(1);
+  });
+
   it("answers 404 when the project does not exist", async () => {
     const res = await csvRoutes.request(
       "/api/projects/00000000-0000-4000-8000-000000000000/entities/bulk",

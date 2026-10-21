@@ -117,7 +117,11 @@ export function parseEntitiesCsvDetailed(csvText: string): CsvParseDetailed {
   const parseErrors = parsed.errors ?? [];
   if (parseErrors.length > 0) {
     for (const error of parseErrors) {
-      errors.push({ row: error.row ?? 0, message: error.message });
+      // Papaparse numbers rows 0-based; the intake vocabulary is 1-based
+      // over the whole file, so shift by one. A row of -1 means "not tied
+      // to a row" (for example a delimiter sniff failure), reported as 0.
+      const reported = error.row === undefined || error.row < 0 ? 0 : error.row + 1;
+      errors.push({ row: reported, message: error.message });
     }
   }
 
@@ -125,6 +129,11 @@ export function parseEntitiesCsvDetailed(csvText: string): CsvParseDetailed {
   if (rows.length === 0) {
     errors.push({ row: 0, message: "csv has no rows" });
     return { entities, errors, fatal: true };
+  }
+
+  if (rows.length === 1) {
+    errors.push({ row: 0, message: "csv has a header but no data rows" });
+    return { entities, errors, fatal: false };
   }
 
   const header = normalizeHeader(rows[0]);

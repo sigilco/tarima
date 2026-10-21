@@ -16,12 +16,13 @@
 import { eq } from "drizzle-orm";
 import {
   MemoryBindingStore,
-  createTelegramBot,
+  createTelegram,
   startLongPoll,
   type BindingStore,
   type DigestInput,
   type DigestRow,
   type DigestTotals,
+  type TelegramBot,
 } from "@tarima/telegram";
 import { db } from "./db";
 import { entities, projects, type EntityStatus } from "./db/schema";
@@ -88,6 +89,19 @@ async function digestFor(projectId: string): Promise<DigestInput | null> {
   return { projectId, projectName: project.name, rows: digestRows, totals };
 }
 
+/** The bot handle, as a running singleton needs it. */
+let running: TelegramBot | undefined;
+
+/**
+ * Push the digest of a project to every chat bound to it. Callers (a
+ * cron tick, a workflow step) invoke this after the board changes.
+ * Without a running bot this is a no-op.
+ */
+export async function pushDigest(projectId: string): Promise<void> {
+  if (!running) return;
+  await running.pushDigest(projectId);
+}
+
 /**
  * Start the Telegram bot when a token is configured. Never throws: a
  * network failure inside long polling is retried by `startLongPoll`,
@@ -98,11 +112,12 @@ export async function startTelegram(): Promise<void> {
   if (!botToken) return;
 
   const store: BindingStore = new MemoryBindingStore();
-  const bot = createTelegramBot(
+  const handle = createTelegram(
     { botToken, apiBase: process.env.TELEGRAM_API_BASE?.trim() || undefined },
     { store, source: { digest: digestFor } },
   );
-  if (!bot) return;
+  if (!handle) return;
+  running = handle;
 
-  await startLongPoll(bot);
+  await startLongPoll(handle.bot);
 }

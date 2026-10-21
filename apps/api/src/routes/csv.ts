@@ -25,6 +25,7 @@ import { audit } from "@tarima/obs";
 import { db } from "../db";
 import { entities, events, projects, type EntityStatus } from "../db/schema";
 import { parseEntitiesCsvDetailed } from "../services/csv-intake";
+import { pushDigest } from "../telegram";
 
 /** The status intake rows land in, in the db vocabulary. */
 const INTAKE_STATUS: EntityStatus = "intake";
@@ -82,6 +83,12 @@ export const csvRoutes = new Hono().post(
       target: `project:${projectId}`,
       extra: { created: created.length, failed: errors.length },
     });
+
+    // The board changed, so the chats bound to this project get the new
+    // digest. A push failure must not fail the intake.
+    if (created.length > 0) {
+      pushDigest(projectId).catch((err) => console.error("[telegram] digest push failed", err));
+    }
 
     return c.json({ created: created.length, entities: created, errors });
   },

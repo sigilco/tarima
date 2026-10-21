@@ -8,13 +8,16 @@
 export { digestForProject, DIGEST_MAX_ROWS } from "./digest.js";
 export type { BotCommand, BotDeps, CommandReply, DigestSource, ParsedCommand } from "./bot.js";
 export {
+  createTelegram,
   createTelegramBot,
+  createTelegramHandle,
   handleCommand,
   parseCommand,
   startLongPoll,
   usageText,
   type BotContext,
   type BotLogger,
+  type TelegramBot,
 } from "./bot.js";
 export { MemoryBindingStore, type BindingStore } from "./store.js";
 export type {

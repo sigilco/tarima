@@ -119,6 +119,12 @@ export async function handleCommand(
 
 /** Register the command handlers on a grammY bot. */
 function registerHandlers(bot: Bot, deps: BotDeps): void {
+  // A failing handler must not take the bot down: grammY routes the error
+  // here and the bot keeps polling.
+  bot.catch((err) => {
+    console.error("[telegram] command failed", err);
+  });
+
   bot.command("start", async (ctx) => {
     await ctx.reply((await handleCommand({ chatId: ctx.chat.id, text: "start" }, deps)).text);
   });
@@ -162,6 +168,16 @@ export function createTelegramBot(config: TelegramConfig, deps: BotDeps): Bot | 
   return bot;
 }
 
+/**
+ * Create the bot and wrap it into the handle the host keeps, or null
+ * when no token is configured. Equivalent to `createTelegramBot` plus
+ * `createTelegramHandle` in one call.
+ */
+export function createTelegram(config: TelegramConfig, deps: BotDeps): TelegramBot | null {
+  const bot = createTelegramBot(config, deps);
+  return bot ? createTelegramHandle(bot, deps) : null;
+}
+
 /** The grammY context type the bot handlers use. */
 export type BotContext = Context;
 
@@ -170,6 +186,64 @@ export type BotLogger = (message: string, error?: unknown) => void;
 
 /** Backoff schedule (ms) between long-polling retries. */
 const RETRY_BACKOFF_MS = [1000, 2000, 5000, 10000, 30000] as const;
+
+/**
+ * A bot plus the store it writes to, as a running instance needs both.
+ * The host holds this handle so it can push digests to the chats bound
+ * to a project.
+ */
+export interface TelegramBot {
+  /** The underlying grammY bot, for callers that need the raw API. */
+  readonly bot: Bot;
+  /** The binding store the bot writes to. */
+  readonly store: BindingStore;
+  /**
+   * Push the digest of a project to every chat bound to it. A chat whose
+   * push fails is skipped, never thrown, so one stale chat cannot abort
+   * the fan-out.
+   */
+  pushDigest(projectId: string): Promise<void>;
+}
+
+/**
+ * Wrap a bot and its store into the handle the host keeps. The digest is
+ * read through the injected `DigestSource`, so the wrapper stays db-free.
+ */
+export function createTelegramHandle(bot: Bot, deps: BotDeps): TelegramBot {
+  return {
+    bot,
+    store: deps.store,
+    async pushDigest(projectId: string): Promise<void> {
+      const input = await deps.source.digest(projectId);
+      if (!input) return;
+      const text = digestForProject(input);
+      // Sent one chat at a time on purpose: parallel sends trip the
+      // Telegram flood limits.
+      await sendToChats(bot, deps.store.listForProject(projectId), text, 0);
+    },
+  };
+}
+
+/**
+ * Send one message to each chat, in order. Written recursively because
+ * the sends are strictly sequential; a failing chat is logged and
+ * skipped so the rest still go out.
+ */
+async function sendToChats(
+  bot: Bot,
+  chatIds: number[],
+  text: string,
+  index: number,
+): Promise<void> {
+  const chatId = chatIds[index];
+  if (chatId === undefined) return;
+  try {
+    await bot.api.sendMessage(chatId, text);
+  } catch (error) {
+    console.error(`[telegram] digest push to chat ${chatId} failed`, error);
+  }
+  await sendToChats(bot, chatIds, text, index + 1);
+}
 
 /**
  * Start long polling. The returned promise resolves when polling stops

@@ -62,6 +62,12 @@ describe("parseEntitiesCsv", () => {
     expect(result.errors[0]?.message).toContain('"name"');
   });
 
+  it("reports a header-only csv as empty but not fatal", () => {
+    const result = parseEntitiesCsv("name,contact,missing\n");
+    expect(result.entities).toEqual([]);
+    expect(result.errors).toEqual([{ row: 0, message: "csv has a header but no data rows" }]);
+  });
+
   it("strips a leading BOM from the header", () => {
     const bom = "\uFEFFname,contact\nAcme,a@b.co\n";
     const result = parseEntitiesCsv(bom);

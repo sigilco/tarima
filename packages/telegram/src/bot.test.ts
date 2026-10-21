@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { createTelegramBot, handleCommand, parseCommand, usageText } from "./bot.js";
+import {
+  createTelegramBot,
+  createTelegramHandle,
+  handleCommand,
+  parseCommand,
+  usageText,
+} from "./bot.js";
 import { MemoryBindingStore } from "./store.js";
 import type { DigestInput } from "./types.js";
 
@@ -116,5 +122,68 @@ describe("createTelegramBot", () => {
   it("builds a bot with a token", () => {
     const bot = createTelegramBot({ botToken: "123:abc" }, deps());
     expect(bot).not.toBeNull();
+  });
+});
+
+describe("createTelegramHandle", () => {
+  it("pushes the digest to every chat bound to the project", async () => {
+    const store = new MemoryBindingStore();
+    store.set(1, "p1");
+    store.set(2, "p1");
+    store.set(3, "p2");
+
+    const sent: Array<{ chatId: number; text: string }> = [];
+    const fakeBot = {
+      api: {
+        async sendMessage(chatId: number, text: string) {
+          sent.push({ chatId, text });
+          return {};
+        },
+      },
+    } as unknown as Parameters<typeof createTelegramHandle>[0];
+
+    const handle = createTelegramHandle(fakeBot, deps(store));
+    await handle.pushDigest("p1");
+
+    expect(sent.map((s) => s.chatId).toSorted((a, b) => a - b)).toEqual([1, 2]);
+    expect(sent[0]?.text).toContain("Project: Beta Launch");
+  });
+
+  it("skips a chat whose push fails and keeps going", async () => {
+    const store = new MemoryBindingStore();
+    store.set(1, "p1");
+    store.set(2, "p1");
+
+    const sent: number[] = [];
+    const fakeBot = {
+      api: {
+        async sendMessage(chatId: number) {
+          if (chatId === 1) throw new Error("chat is gone");
+          sent.push(chatId);
+          return {};
+        },
+      },
+    } as unknown as Parameters<typeof createTelegramHandle>[0];
+
+    const handle = createTelegramHandle(fakeBot, deps(store));
+    await handle.pushDigest("p1");
+
+    expect(sent).toEqual([2]);
+  });
+
+  it("pushes nothing for an unknown project", async () => {
+    const sent: number[] = [];
+    const fakeBot = {
+      api: {
+        async sendMessage(chatId: number) {
+          sent.push(chatId);
+          return {};
+        },
+      },
+    } as unknown as Parameters<typeof createTelegramHandle>[0];
+
+    const handle = createTelegramHandle(fakeBot, deps());
+    await handle.pushDigest("nope");
+    expect(sent).toEqual([]);
   });
 });
