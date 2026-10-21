@@ -11,7 +11,13 @@ import { cors } from "hono/cors";
 import { db } from "./db";
 import { accessRequests } from "./db/schema";
 import { sendMail } from "./mail";
+import { apiKeyRoutes } from "./routes/api-keys";
 import { authRoutes } from "./routes/auth";
+import { capabilityRoutes } from "./routes/capabilities";
+import { entityRoutes } from "./routes/entities";
+import { mcpRoutes } from "./routes/mcp";
+import { projectRoutes } from "./routes/projects";
+import { workflowRoutes } from "./routes/workflows";
 
 const here = dirname(fileURLToPath(import.meta.url));
 
@@ -57,6 +63,12 @@ app.post("/api/access-requests", async (c) => {
 });
 
 app.route("/", authRoutes);
+app.route("/", apiKeyRoutes);
+app.route("/", projectRoutes);
+app.route("/", entityRoutes);
+app.route("/", workflowRoutes);
+app.route("/", mcpRoutes);
+app.route("/", capabilityRoutes);
 
 // TanStack Start SSR for everything that is not /api/*.
 app.all("*", async (c) => {

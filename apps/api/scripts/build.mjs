@@ -24,6 +24,7 @@ await build({
     "@tarima/auth-core/rate-limit": join(apiRoot, "../../packages/auth-core/src/rate-limit.ts"),
     "@tarima/auth-core/session": join(apiRoot, "../../packages/auth-core/src/session.ts"),
     "@tarima/contract": join(apiRoot, "../../packages/contract/src/index.ts"),
+    "@tarima/api-keys": join(apiRoot, "../../packages/api-keys/src/index.ts"),
     // engine and chase expose subpath exports only, so alias each one
     // separately; a bare "@tarima/engine" alias would point at a file that
     // does not exist and break the artifact build.
