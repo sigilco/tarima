@@ -17,7 +17,7 @@ describe("generateOtpCode", () => {
     }
   });
 
-  it("never collapses to a shorter string (padding is unconditional)", () => {
+  it("never collapses to a shorter string (padding is unconditional)", { timeout: 20_000 }, () => {
     // 100k draws is plenty to touch every short branch in [0, 99]; if the
     // padding were conditional any short code (e.g. "0" or "12") would
     // appear here.

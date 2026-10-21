@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     "target": "ES2022",
+    // ES2023 for the immutable array helpers (toSorted, toReversed) used
+    // by the workspace packages; the runtime is node 22, so they exist.
     "lib": ["ES2023"],
     "module": "ESNext",
     "moduleResolution": "bundler",

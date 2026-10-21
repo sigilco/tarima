@@ -11,6 +11,8 @@ catalog:
   "@logtape/file": ^1.2.0
   "node-html-parser": ^9.0.5
   "postal-mime": ^4.0.11
+  grammy: ^1.46.0
+  papaparse: ^5.7.0
 
 allowBuilds:
   lefthook: true
