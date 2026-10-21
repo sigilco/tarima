@@ -5,7 +5,7 @@
 import { generateApiKey, type ApiKeyRecord } from "@tarima/api-keys";
 import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import type * as schema from "../db/schema";
-import { createDbApiKeyStore, listActiveKeys } from "./api-key-store";
+import { createDbApiKeyStore } from "./api-key-store";
 
 type ApiDb = BetterSQLite3Database<typeof schema>;
 
@@ -56,18 +56,6 @@ export function listApiKeysForUser(db: ApiDb, userId: string): ApiKeySummary[] {
   const store = createDbApiKeyStore(db);
   const rows: ApiKeyRecord[] = store.listForUser(userId);
   return rows.map((row) => ({
-    id: row.id,
-    name: row.name,
-    prefix: row.prefix,
-    scopes: row.scopes,
-    createdAt: row.createdAt,
-    revokedAt: row.revokedAt,
-  }));
-}
-
-/** Keys of a user that have not been revoked. */
-export function listActiveApiKeysForUser(db: ApiDb, userId: string): ApiKeySummary[] {
-  return listActiveKeys(db, userId).map((row) => ({
     id: row.id,
     name: row.name,
     prefix: row.prefix,

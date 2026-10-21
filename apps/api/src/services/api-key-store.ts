@@ -3,7 +3,7 @@
  * table. The package owns the semantics (hashing, verification); this
  * module owns the SQL.
  */
-import { and, desc, eq, isNull } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import type { ApiKeyRecord, ApiKeyStore } from "@tarima/api-keys";
 import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { apiKeys } from "../db/schema";
@@ -57,15 +57,4 @@ export function createDbApiKeyStore(db: ApiDb): ApiKeyStore {
       db.update(apiKeys).set({ revokedAt }).where(eq(apiKeys.id, id)).run();
     },
   };
-}
-
-/** Keys that are still usable for a user (not revoked). */
-export function listActiveKeys(db: ApiDb, userId: string): ApiKeyRecord[] {
-  return db
-    .select()
-    .from(apiKeys)
-    .where(and(eq(apiKeys.userId, userId), isNull(apiKeys.revokedAt)))
-    .orderBy(desc(apiKeys.createdAt))
-    .all()
-    .map(toRecord);
 }
