@@ -62,9 +62,21 @@ importers:
       '@tanstack/react-start':
         specifier: 1.169.3
         version: 1.169.3(esbuild@0.28.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rolldown@1.2.14)(rollup@4.64.10)(supports-color@10.2.2)(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.15)(yaml@2.9.1))
+      '@tarima/api-keys':
+        specifier: workspace:*
+        version: link:../../packages/api-keys
       '@tarima/auth-core':
         specifier: workspace:*
         version: link:../../packages/auth-core
+      '@tarima/chase':
+        specifier: workspace:*
+        version: link:../../packages/chase
+      '@tarima/contract':
+        specifier: workspace:*
+        version: link:../../packages/contract
+      '@tarima/engine':
+        specifier: workspace:*
+        version: link:../../packages/engine
       '@tarima/obs':
         specifier: workspace:*
         version: link:../../packages/obs
@@ -163,6 +175,19 @@ importers:
       vite:
         specifier: ^8.0.0
         version: 8.3.4(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)
+
+  packages/api-keys:
+    dependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.2
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 3.2.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.33.0)(supports-color@10.2.2)(tsx@4.23.15)(yaml@2.9.1)
 
   packages/auth-core:
     dependencies:

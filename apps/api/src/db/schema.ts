@@ -72,6 +72,11 @@ export const projects = sqliteTable("projects", {
   ownerId: text("owner_id").references(() => users.id, { onDelete: "set null" }),
   name: text("name").notNull(),
   description: text("description"),
+  // Free-form goal payload; the contract exposes it as an optional JSON record.
+  goal: text("goal", { mode: "json" })
+    .notNull()
+    .default(sql`'{}'`)
+    .$type<Record<string, unknown>>(),
   createdAt: integer("created_at").notNull().$defaultFn(nowMs),
   updatedAt: integer("updated_at").notNull().$defaultFn(nowMs),
 });
