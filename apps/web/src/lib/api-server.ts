@@ -27,12 +27,31 @@ function requestCookies(): string | undefined {
 /** The project id of the board route. */
 const projectIdSchema = v.pipe(v.string(), v.minLength(1));
 
+/**
+ * The origin of the api when the server function runs on the server.
+ *
+ * In production the web app and the api are the same process, so a
+ * relative url is right, but node's fetch has no notion of the current
+ * origin: it needs an absolute one. The request that triggered this
+ * server function carries it, so we read it from there. In dev the vite
+ * proxy answers on the same origin the browser used, which also works.
+ */
+function apiOrigin(): string {
+  try {
+    const url = getRequest().url;
+    return new URL(url).origin;
+  } catch {
+    return process.env.VITE_API_ORIGIN ?? "";
+  }
+}
+
 /** GET against the api, forwarding the session cookie. */
 async function apiGet(path: string): Promise<Response> {
   const headers = new Headers();
   const cookie = requestCookies();
   if (cookie) headers.set("cookie", cookie);
-  return fetch(path, { headers });
+  const origin = apiOrigin();
+  return fetch(origin ? `${origin}${path}` : path, { headers });
 }
 
 /** The project list payload (see lib/api.ts for the shapes). */

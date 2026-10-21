@@ -53,13 +53,17 @@ export async function handleBulkIntake(
   const { entities: rows, errors, fatal } = parseEntitiesCsvDetailed(csv);
   if (fatal) return { created: 0, entities: [], errors, fatal: true };
 
-  const created = rows.map((row) =>
+  // One millisecond per row, so the board keeps the order of the
+  // document instead of the order of the random uuids.
+  const now = Date.now();
+  const created = rows.map((row, index) =>
     createEntity(db, {
       projectId,
       name: row.name,
       ...(row.contact ? { contact: row.contact } : {}),
       status: "intake",
       missing: row.missing,
+      createdAt: now + index,
     }),
   );
 

@@ -8,6 +8,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
+import { serveStatic } from "@hono/node-server/serve-static";
 import { db } from "./db";
 import { accessRequests } from "./db/schema";
 import { startEngine } from "./engine";
@@ -83,6 +84,15 @@ app.route("/", mcpRoutes);
 app.route("/", capabilityRoutes);
 app.route("/", uiRoutes);
 app.route("/", eventRoutes);
+
+// Static client assets (vite build output) and the SSR handler for
+// everything else. In production both live inside the artifact next to
+// this file; the ssr bundle references /assets/* which must resolve here
+// because Caddy proxies the whole site to this process.
+const WEB_CLIENT = join(here, "./web/client");
+app.use("/assets/*", serveStatic({ root: join(WEB_CLIENT) }));
+app.get("/mark.png", serveStatic({ path: join(WEB_CLIENT, "mark.png") }));
+app.get("/favicon.ico", serveStatic({ path: join(WEB_CLIENT, "favicon.ico") }));
 
 // TanStack Start SSR for everything that is not /api/*.
 app.all("*", async (c) => {

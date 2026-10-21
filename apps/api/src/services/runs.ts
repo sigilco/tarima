@@ -44,6 +44,12 @@ export interface ContactLookup {
    * the number it came from (whatsapp).
    */
   threadId: string;
+  /**
+   * The sender of the message. A reply comes FROM the contact we chased,
+   * so the sender is the address that identifies the row. The thread
+   * address is our own (a reply-to alias), so it matches nothing.
+   */
+  from?: string;
 }
 
 function normalizeEmail(value: string): string {
@@ -63,14 +69,23 @@ function contextContact(context: Record<string, unknown>, channel: "email" | "wh
 
 /**
  * The newest running chase-deliverables run whose context matches the
- * inbound thread, or null when there is none.
+ * inbound message, or null when there is none.
+ *
+ * A reply identifies its row by its SENDER: we wrote to the contact, so
+ * the answer comes back from them. The thread address (the `to` of the
+ * inbound message) is our own reply-to alias and identifies nothing, so
+ * the sender is what we match on. The thread id is still accepted as a
+ * fallback for providers that only carry the thread.
  */
 export function findActiveRunForContact(
   db: ApiDb,
-  { channel, threadId }: ContactLookup,
+  { channel, threadId, from }: ContactLookup,
 ): ActiveRun | null {
-  const needle = channel === "email" ? normalizeEmail(threadId) : normalizePhone(threadId);
-  if (!needle) return null;
+  const normalize = channel === "email" ? normalizeEmail : normalizePhone;
+  const needles = [from, threadId]
+    .map((value) => (typeof value === "string" ? normalize(value) : ""))
+    .filter((value) => value.length > 0);
+  if (needles.length === 0) return null;
 
   const rows = db
     .select()
@@ -83,9 +98,7 @@ export function findActiveRunForContact(
     const context = (row.context ?? {}) as Record<string, unknown>;
     const contact = contextContact(context, channel);
     if (!contact) continue;
-    const hit =
-      channel === "email" ? normalizeEmail(contact) === needle : normalizePhone(contact) === needle;
-    if (!hit) continue;
+    if (!needles.includes(normalize(contact))) continue;
     return {
       runId: row.id,
       entityId: typeof context.entityId === "string" ? context.entityId : null,

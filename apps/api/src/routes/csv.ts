@@ -51,8 +51,12 @@ export const csvRoutes = new Hono().post(
     // client error; a document with a few bad rows is not.
     if (fatal) return c.json({ created: 0, entities: [], errors }, 400);
 
+    // Stamp each row with its own millisecond so the board keeps the csv
+    // order: the rows are sorted by (createdAt, id) and a single shared
+    // timestamp would leave the order to the random uuid.
     const now = Date.now();
-    const created = rows.map((row) => {
+    const created = rows.map((row, index) => {
+      const stamp = now + index;
       const record: typeof entities.$inferSelect = {
         id: randomUUID(),
         projectId,
@@ -61,8 +65,8 @@ export const csvRoutes = new Hono().post(
         goal: { missing: row.missing },
         result: {},
         status: INTAKE_STATUS,
-        createdAt: now,
-        updatedAt: now,
+        createdAt: stamp,
+        updatedAt: stamp,
       };
       db.insert(entities).values(record).run();
       return toWire(record);

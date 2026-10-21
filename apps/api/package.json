@@ -30,8 +30,11 @@
     "@tarima/telegram": "workspace:*",
     "better-sqlite3": "^13.0.3",
     "drizzle-orm": "^0.45.4",
+    "grammy": "catalog:",
     "hono": "^4.13.13",
+    "node-html-parser": "catalog:",
     "papaparse": "catalog:",
+    "postal-mime": "catalog:",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "valibot": "catalog:"

@@ -70,6 +70,7 @@ function recordInbound(record: InboundRecord): { assigned: boolean } {
   const run = findActiveRunForContact(db, {
     channel: record.channel,
     threadId: record.threadId,
+    from: record.from,
   });
 
   if (!run?.entityId) {

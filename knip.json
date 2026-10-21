@@ -19,7 +19,7 @@
       "ignore": ["src/paraglide/**"]
     },
     "packages/*": {
-      "entry": ["src/index.ts"]
+      "entry": ["src/index.ts", "src/*.ts"]
     },
     "apps/web": {
       "entry": ["src/**/*.{ts,tsx}"],
@@ -28,9 +28,17 @@
       "ignoreDependencies": ["@nanostores/react", "cloudflare"],
       "ignoreBinaries": ["tsgo"]
     },
-    "apps/api": {},
+    "apps/api": {
+      "ignoreDependencies": ["grammy", "node-html-parser", "postal-mime"]
+    },
     "apps/inbound-worker": {
       "entry": ["src/**/*.ts"]
+    },
+    "packages/engine": {
+      "entry": ["src/journal.ts", "src/runner.ts", "src/store.ts", "src/db.ts", "src/types.ts"]
+    },
+    "packages/chase": {
+      "entry": ["src/sfm.ts", "src/template.ts", "src/handlers.ts", "src/llm.ts", "src/register.ts"]
     }
   },
   "ignore": ["apps/api/src/server.ts", "apps/api/src/db/index.test.ts"],

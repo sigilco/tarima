@@ -100,11 +100,18 @@ export interface CreateEntityInput {
   channel?: Channel;
   status: ChaseRowState;
   missing?: string[];
+  /**
+   * Explicit creation timestamp. A bulk import passes a distinct
+   * millisecond per row so the board keeps the order of the document:
+   * rows are sorted by (createdAt, id) and a shared timestamp would
+   * leave the order to the random uuid.
+   */
+  createdAt?: number;
 }
 
 /** Create an entity under a project. */
 export function createEntity(db: ApiDb, input: CreateEntityInput): EntityWire {
-  const now = Date.now();
+  const now = input.createdAt ?? Date.now();
   const goal: Record<string, unknown> = { missing: input.missing ?? [] };
   if (input.channel) goal.channel = input.channel;
 
