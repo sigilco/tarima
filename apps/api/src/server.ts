@@ -14,10 +14,12 @@ import { sendMail } from "./mail";
 import { apiKeyRoutes } from "./routes/api-keys";
 import { authRoutes } from "./routes/auth";
 import { capabilityRoutes } from "./routes/capabilities";
+import { csvRoutes } from "./routes/csv";
 import { entityRoutes } from "./routes/entities";
 import { mcpRoutes } from "./routes/mcp";
 import { projectRoutes } from "./routes/projects";
 import { workflowRoutes } from "./routes/workflows";
+import { startTelegram } from "./telegram";
 
 const here = dirname(fileURLToPath(import.meta.url));
 
@@ -67,6 +69,7 @@ app.route("/", apiKeyRoutes);
 app.route("/", projectRoutes);
 app.route("/", entityRoutes);
 app.route("/", workflowRoutes);
+app.route("/", csvRoutes);
 app.route("/", mcpRoutes);
 app.route("/", capabilityRoutes);
 
@@ -81,5 +84,9 @@ const port = Number(process.env.PORT ?? 3001);
 serve({ fetch: app.fetch, port, hostname: "127.0.0.1" }, (info) => {
   console.log(`tarima listening on :${info.port}`);
 });
+
+// The Telegram bot is optional: without TELEGRAM_BOT_TOKEN this is a
+// no-op, so dev and CI boot the api without a bot.
+startTelegram().catch((err) => console.error("[telegram] boot failed", err));
 
 export default app;
