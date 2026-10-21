@@ -26,6 +26,7 @@ import { db } from "../db";
 import { loopbackInbox, otpCodes, sessions, users } from "../db/schema";
 import { extractOtp } from "../lib/extract-otp";
 import { sendMail } from "../mail";
+import { sessionSecret } from "../services/session";
 
 const requestSchema = v.object({
   email: v.pipe(v.string(), v.trim(), v.email()),
@@ -139,11 +140,7 @@ export const authRoutes = new Hono()
         return created;
       })();
 
-    const token = createSessionToken(
-      user.id,
-      process.env.SESSION_SECRET ?? "dev-insecure-session-secret",
-      SESSION_TTL_SECONDS,
-    );
+    const token = createSessionToken(user.id, sessionSecret(), SESSION_TTL_SECONDS);
 
     db.insert(sessions)
       .values({
