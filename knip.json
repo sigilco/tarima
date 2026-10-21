@@ -27,7 +27,10 @@
       "ignoreDependencies": ["@nanostores/react", "cloudflare"],
       "ignoreBinaries": ["tsgo"]
     },
-    "apps/api": {}
+    "apps/api": {},
+    "apps/inbound-worker": {
+      "entry": ["src/**/*.ts"]
+    }
   },
   "ignore": ["apps/api/src/server.ts", "apps/api/src/db/index.test.ts"],
   "ignoreBinaries": ["validate"],
