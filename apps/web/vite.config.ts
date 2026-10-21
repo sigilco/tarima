@@ -24,6 +24,14 @@ const config = defineConfig({
         target: "http://localhost:3001",
         changeOrigin: true,
       },
+      "/auth": {
+        target: "http://localhost:3001",
+        changeOrigin: true,
+      },
+      "/webhooks": {
+        target: "http://localhost:3001",
+        changeOrigin: true,
+      },
     },
   },
   // Node SSR build consumed by apps/api/src/server.ts. No Cloudflare/wrangler.

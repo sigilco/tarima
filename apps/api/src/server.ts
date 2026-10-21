@@ -17,8 +17,10 @@ import { authRoutes } from "./routes/auth";
 import { capabilityRoutes } from "./routes/capabilities";
 import { csvRoutes } from "./routes/csv";
 import { entityRoutes } from "./routes/entities";
+import { eventRoutes } from "./routes/events";
 import { mcpRoutes } from "./routes/mcp";
 import { projectRoutes } from "./routes/projects";
+import { uiRoutes } from "./routes/ui";
 import { webhookRoutes } from "./routes/webhooks";
 import { workflowRoutes } from "./routes/workflows";
 import { startTelegram } from "./telegram";
@@ -79,6 +81,8 @@ app.route("/", workflowRoutes);
 app.route("/", csvRoutes);
 app.route("/", mcpRoutes);
 app.route("/", capabilityRoutes);
+app.route("/", uiRoutes);
+app.route("/", eventRoutes);
 
 // TanStack Start SSR for everything that is not /api/*.
 app.all("*", async (c) => {
