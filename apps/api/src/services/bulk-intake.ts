@@ -21,7 +21,7 @@ import { createEntity, type EntityWire } from "./entities";
 import { pushDigest } from "../telegram";
 
 /** One rejected row, as reported back to the caller. */
-export interface IntakeRowError {
+interface IntakeRowError {
   row: number;
   message: string;
 }

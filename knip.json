@@ -10,7 +10,8 @@
         "@logtape/file",
         "@logtape/logtape",
         "valibot",
-        "vitest"
+        "vitest",
+        "nanostores"
       ]
     },
     "apps/*": {

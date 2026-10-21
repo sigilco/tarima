@@ -55,7 +55,7 @@ export function cursorNow(): EventCursor {
 }
 
 /** The ids of the entities of a project (the rows of its board). */
-export function listEntityIds(db: EventsDb, projectId: string): string[] {
+function listEntityIds(db: EventsDb, projectId: string): string[] {
   return db
     .select({ id: entities.id })
     .from(entities)
@@ -123,7 +123,7 @@ export function listProjectEvents(
  * (`entity.changed:<id>:<updatedAt>`) so the dedup set treats them exactly
  * like audit rows.
  */
-export function listEntityChangedEvents(
+function listEntityChangedEvents(
   db: EventsDb,
   projectId: string,
   cursor: EventCursor,

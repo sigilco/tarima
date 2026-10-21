@@ -14,7 +14,7 @@
 import { BOARD_STATUS, type ChaseRowState } from "@tarima/contract";
 
 /** The bucket a wire row state belongs to. */
-export type BoardBucket = (typeof BOARD_STATUS)[number];
+type BoardBucket = (typeof BOARD_STATUS)[number];
 
 /**
  * Wire state -> bucket.
@@ -39,12 +39,12 @@ const TO_BUCKET: Record<ChaseRowState, BoardBucket> = {
 };
 
 /** The bucket of a wire row state. Unknown states count as "chasing". */
-export function bucketOf(status: ChaseRowState): BoardBucket {
+function bucketOf(status: ChaseRowState): BoardBucket {
   return TO_BUCKET[status] ?? "chasing";
 }
 
 /** One bucket's count, as the header chips render it. */
-export interface BucketCount {
+interface BucketCount {
   bucket: BoardBucket;
   count: number;
 }
