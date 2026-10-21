@@ -1,8 +1,16 @@
 export {
   API_KEY_PREFIX,
+  compareApiKey,
+  generateApiKey,
   hashApiKey,
-  type ApiKeyRecord,
-  verifyApiKeyFormat,
   splitApiKey,
+  verifyApiKeyFormat,
+  type ApiKeyRecord,
 } from "./keys.js";
-export { createKeyStore } from "./store.js";
+export {
+  createKeyStore,
+  createMemoryStore,
+  verifyApiKey,
+  type ApiKeyStore,
+  type VerifiedKey,
+} from "./store.js";
