@@ -1,0 +1,18 @@
+{
+  // Cloudflare Email Worker for the Tarima chase pipeline (Stage 4, T4.1b).
+  //
+  // Deploy:
+  //   pnpm -C apps/inbound-worker exec wrangler secret put INBOUND_WEBHOOK_SECRET
+  //   pnpm -C apps/inbound-worker exec wrangler deploy
+  //
+  // `API_BASE` is a plain var (the public api base url). The webhook
+  // secret is a wrangler secret, never a var, and never in this file.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "tarima-email",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "API_BASE": "https://tarima.events",
+  },
+}

@@ -1,0 +1,15 @@
+{
+  "name": "@tarima/inbound-worker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20251003.0",
+    "typescript": "catalog:",
+    "wrangler": "^4.51.0"
+  }
+}
