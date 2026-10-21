@@ -85,7 +85,7 @@ importers:
         version: 19.3.1(react@19.3.1)
       valibot:
         specifier: 'catalog:'
-        version: 1.5.0(typescript@6.0.3)
+        version: 1.5.0(typescript@5.9.3)
     devDependencies:
       '@types/better-sqlite3':
         specifier: ^9.6.0
@@ -105,6 +105,9 @@ importers:
       tsx:
         specifier: ^4.23.15
         version: 4.23.15
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
       vitest:
         specifier: 'catalog:'
         version: 3.2.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.33.0)(supports-color@10.2.2)(tsx@4.23.15)(yaml@2.9.1)

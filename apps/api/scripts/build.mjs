@@ -24,8 +24,19 @@ await build({
     "@tarima/auth-core/rate-limit": join(apiRoot, "../../packages/auth-core/src/rate-limit.ts"),
     "@tarima/auth-core/session": join(apiRoot, "../../packages/auth-core/src/session.ts"),
     "@tarima/contract": join(apiRoot, "../../packages/contract/src/index.ts"),
-    "@tarima/engine": join(apiRoot, "../../packages/engine/src/index.ts"),
-    "@tarima/chase": join(apiRoot, "../../packages/chase/src/index.ts"),
+    // engine and chase expose subpath exports only, so alias each one
+    // separately; a bare "@tarima/engine" alias would point at a file that
+    // does not exist and break the artifact build.
+    "@tarima/engine/types": join(apiRoot, "../../packages/engine/src/types.ts"),
+    "@tarima/engine/journal": join(apiRoot, "../../packages/engine/src/journal.ts"),
+    "@tarima/engine/runner": join(apiRoot, "../../packages/engine/src/runner.ts"),
+    "@tarima/engine/store": join(apiRoot, "../../packages/engine/src/store.ts"),
+    "@tarima/engine/db": join(apiRoot, "../../packages/engine/src/db.ts"),
+    "@tarima/chase/sfm": join(apiRoot, "../../packages/chase/src/sfm.ts"),
+    "@tarima/chase/template": join(apiRoot, "../../packages/chase/src/template.ts"),
+    "@tarima/chase/handlers": join(apiRoot, "../../packages/chase/src/handlers.ts"),
+    "@tarima/chase/llm": join(apiRoot, "../../packages/chase/src/llm.ts"),
+    "@tarima/chase/register": join(apiRoot, "../../packages/chase/src/register.ts"),
   },
   nodePaths: [join(process.cwd(), "apps/web/node_modules")],
   outfile: join(outDir, "index.mjs"),
