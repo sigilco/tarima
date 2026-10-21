@@ -24,6 +24,7 @@ import * as v from "valibot";
 import { audit } from "@tarima/obs";
 import { db } from "../db";
 import { entities, events, projects, type EntityStatus } from "../db/schema";
+import { requireApiKey } from "../middleware/require-api-key";
 import { parseEntitiesCsvDetailed } from "../services/csv-intake";
 import { pushDigest } from "../telegram";
 
@@ -36,7 +37,7 @@ const bodySchema = v.object({
 
 export const csvRoutes = new Hono().post(
   "/api/projects/:projectId/entities/bulk",
-  // TODO(stage3-merge): requireApiKey(["entities:write"])
+  requireApiKey(["entities:write"]),
   async (c) => {
     const projectId = c.req.param("projectId");
     const project = db.select().from(projects).where(eq(projects.id, projectId)).get();

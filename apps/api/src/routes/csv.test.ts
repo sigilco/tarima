@@ -10,17 +10,30 @@ process.env.NODE_ENV = "test";
 
 const { csvRoutes } = await import("./csv");
 const { db } = await import("../db");
-const { projects } = await import("../db/schema");
+const { apiKeys, projects, users } = await import("../db/schema");
+const { generateApiKey } = await import("@tarima/api-keys");
+
+let bearerKey: string;
 
 const json = (body: unknown) => ({
   method: "POST",
-  headers: { "content-type": "application/json" },
+  headers: {
+    "content-type": "application/json",
+    ...(bearerKey ? { Authorization: `Bearer ${bearerKey}` } : {}),
+  },
   body: JSON.stringify(body),
 });
 
 let projectId: string;
 
 beforeAll(() => {
+  db.insert(users)
+    .values({ id: "user-csv", email: "csv@tarima.test", createdAt: Date.now() })
+    .onConflictDoNothing()
+    .run();
+  const { plaintext, record } = generateApiKey("user-csv", "csv test", ["entities:write"]);
+  db.insert(apiKeys).values(record).run();
+  bearerKey = plaintext;
   const row = {
     id: randomUUID(),
     ownerId: null,
@@ -101,7 +114,10 @@ describe("POST /api/projects/:projectId/entities/bulk", () => {
 
     const notJson = await csvRoutes.request(`/api/projects/${projectId}/entities/bulk`, {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers: {
+        "content-type": "application/json",
+        ...(bearerKey ? { Authorization: `Bearer ${bearerKey}` } : {}),
+      },
       body: "not json",
     });
     expect(notJson.status).toBe(400);
