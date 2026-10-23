@@ -1,40 +1,40 @@
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
+import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
 
-import appCss from '../styles.css?url'
+import appCss from "../styles.css?url";
 
 export const Route = createRootRoute({
   head: () => ({
     meta: [
       {
-        charSet: 'utf-8',
+        charSet: "utf-8",
       },
       {
-        name: 'viewport',
-        content: 'width=device-width, initial-scale=1',
+        name: "viewport",
+        content: "width=device-width, initial-scale=1",
       },
       {
-        title: 'Tarima — the ops agent for events',
+        title: "Tarima — the ops agent for events",
       },
       {
-        name: 'description',
+        name: "description",
         content:
-          'Tarima is the back-office agent for event organizers. It calls venues and chases sponsors across email, phone and chat, and fills your board until every row is done.',
+          "Tarima is the back-office agent for event organizers. It calls venues and chases sponsors across email, phone and chat, and fills your board until every row is done.",
       },
     ],
     links: [
       {
-        rel: 'stylesheet',
+        rel: "stylesheet",
         href: appCss,
       },
       {
-        rel: 'icon',
-        type: 'image/png',
-        href: '/mark.png',
+        rel: "icon",
+        type: "image/png",
+        href: "/mark.png",
       },
     ],
   }),
   shellComponent: RootDocument,
-})
+});
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
@@ -48,5 +48,5 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Scripts />
       </body>
     </html>
-  )
+  );
 }

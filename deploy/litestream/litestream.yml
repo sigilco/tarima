@@ -1,0 +1,13 @@
+dbs:
+  - path: /opt/tarima/shared/data/tarima.db
+    replicas:
+      - type: s3
+        # Non-secret settings come from deploy/secrets-manifest.toml (static
+        # table of the litestream entry), rendered into litestream.env.
+        bucket: ${S3_BUCKET}
+        path: ${S3_PATH}
+        region: ${S3_REGION}
+        endpoint: ${S3_ENDPOINT}
+        access-key-id: ${S3_ACCESS_KEY}
+        secret-access-key: ${S3_SECRET_KEY}
+        sync-interval: 1s

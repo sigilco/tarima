@@ -1,0 +1,21 @@
+{
+  "name": "@tarima/obs",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --test --experimental-strip-types src/*.test.ts || true"
+  },
+  "dependencies": {
+    "@logtape/file": "catalog:",
+    "@logtape/logtape": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "typescript": "catalog:"
+  }
+}

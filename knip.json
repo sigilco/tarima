@@ -1,0 +1,47 @@
+{
+  "$schema": "./node_modules/knip/schema.json",
+  "workspaces": {
+    ".": {
+      "entry": ["scripts/*.ts"],
+      "ignoreDependencies": [
+        "@iconify/json",
+        "oxlint",
+        "oxfmt",
+        "@logtape/file",
+        "@logtape/logtape",
+        "valibot",
+        "vitest",
+        "nanostores"
+      ]
+    },
+    "apps/*": {
+      "entry": ["src/**/*.{ts,tsx}"],
+      "ignore": ["src/paraglide/**"]
+    },
+    "packages/*": {
+      "entry": ["src/index.ts", "src/*.ts"]
+    },
+    "apps/web": {
+      "entry": ["src/**/*.{ts,tsx}", "cosmos/**/*.ts"],
+      "ignore": ["src/paraglide/**"],
+      "ignoreUnresolved": ["../paraglide/messages.js"],
+      "ignoreDependencies": ["@nanostores/react", "cloudflare"],
+      "ignoreBinaries": ["tsgo"]
+    },
+    "apps/api": {
+      "ignoreDependencies": ["grammy", "node-html-parser", "postal-mime"]
+    },
+    "apps/inbound-worker": {
+      "entry": ["src/**/*.ts"]
+    },
+    "packages/engine": {
+      "entry": ["src/journal.ts", "src/runner.ts", "src/store.ts", "src/db.ts", "src/types.ts"]
+    },
+    "packages/chase": {
+      "entry": ["src/sfm.ts", "src/template.ts", "src/handlers.ts", "src/llm.ts", "src/register.ts"]
+    }
+  },
+  "ignore": ["apps/api/src/server.ts", "apps/api/src/db/index.test.ts"],
+  "ignoreBinaries": ["validate"],
+  "ignoreDependencies": ["react", "react-dom", "@tanstack/react-router", "@tanstack/react-start"]
+}

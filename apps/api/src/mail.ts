@@ -1,38 +1,83 @@
+import { randomUUID } from "node:crypto";
+import { db } from "./db";
+import { loopbackInbox } from "./db/schema";
+
 interface MailMessage {
-  to: string
-  subject: string
-  text: string
+  to: string;
+  subject: string;
+  text: string;
+  html?: string;
+  from?: string;
+}
+
+const DEFAULT_LOOPBACK_DOMAINS = "tarima.test";
+
+/**
+ * Domains whose mail never leaves the box. Anything addressed to one of
+ * these is written to the `loopback_inbox` table so tests and agents can
+ * read it back through the admin inbox endpoint instead of depending on a
+ * real provider. Configured as a comma separated list in
+ * EMAIL_LOOPBACK_DOMAINS.
+ */
+function loopbackDomains(): string[] {
+  return (process.env.EMAIL_LOOPBACK_DOMAINS ?? DEFAULT_LOOPBACK_DOMAINS)
+    .split(",")
+    .map((domain) => domain.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+/** True when `to` belongs to a loopback domain. */
+function isLoopbackRecipient(to: string): boolean {
+  const domain = to.trim().toLowerCase().split("@")[1];
+  if (!domain) return false;
+  return loopbackDomains().includes(domain);
 }
 
 /**
- * Transactional mail seam. Brevo HTTP API when BREVO_API_KEY is set;
- * logs to stdout otherwise. Swap the implementation for CF Email
- * Workers later — callers never see the provider.
+ * Transactional mail seam. Loopback domains are captured in the database,
+ * Brevo HTTP API is used when BREVO_API_KEY is set, and everything else
+ * logs to stdout. Callers never see the provider.
  */
 export async function sendMail(message: MailMessage): Promise<void> {
-  const apiKey = process.env.BREVO_API_KEY
-  if (!apiKey) {
-    console.info('[mail:noop]', message.subject, '->', message.to)
-    return
+  if (isLoopbackRecipient(message.to)) {
+    db.insert(loopbackInbox)
+      .values({
+        id: randomUUID(),
+        toAddr: message.to.trim().toLowerCase(),
+        fromAddr: message.from ?? process.env.MAIL_FROM ?? null,
+        subject: message.subject,
+        body: message.text,
+        html: message.html ?? null,
+      })
+      .run();
+    console.info("[mail:loopback]", message.subject, "->", message.to);
+    return;
   }
-  const res = await fetch('https://api.brevo.com/v3/smtp/email', {
-    method: 'POST',
+
+  const apiKey = process.env.BREVO_API_KEY;
+  if (!apiKey) {
+    console.info("[mail:noop]", message.subject, "->", message.to);
+    return;
+  }
+  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
     headers: {
-      'api-key': apiKey,
-      'content-type': 'application/json',
-      accept: 'application/json',
+      "api-key": apiKey,
+      "content-type": "application/json",
+      accept: "application/json",
     },
     body: JSON.stringify({
       sender: {
-        email: process.env.MAIL_FROM ?? 'hello@tarima.events',
-        name: 'Tarima',
+        email: process.env.MAIL_FROM ?? "notifications@tarima.illo.fyi",
+        name: "Tarima",
       },
       to: [{ email: message.to }],
       subject: message.subject,
       textContent: message.text,
+      ...(message.html ? { htmlContent: message.html } : {}),
     }),
-  })
+  });
   if (!res.ok) {
-    throw new Error(`Brevo send failed: ${res.status} ${await res.text()}`)
+    throw new Error(`Brevo send failed: ${res.status} ${await res.text()}`);
   }
 }

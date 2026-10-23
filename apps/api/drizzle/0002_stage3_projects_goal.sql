@@ -1,0 +1,1 @@
+ALTER TABLE `projects` ADD `goal` text DEFAULT '{}' NOT NULL;

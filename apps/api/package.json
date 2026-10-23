@@ -1,21 +1,53 @@
 {
-  "name": "api",
+  "name": "@tarima/api",
   "private": true,
   "type": "module",
+  "exports": {
+    "./db/schema": "./src/db/schema.ts"
+  },
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "db:generate": "drizzle-kit generate",
-    "db:push": "drizzle-kit push"
+    "db:push": "drizzle-kit push",
+    "build": "node ./scripts/build.mjs",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@hono/node-server": "^2.1.5",
+    "@logtape/file": "catalog:",
+    "@logtape/logtape": "catalog:",
+    "@tanstack/react-router": "1.170.45",
+    "@tanstack/react-start": "1.169.3",
+    "@tarima/api-keys": "workspace:*",
+    "@tarima/auth-core": "workspace:*",
+    "@tarima/channels": "workspace:*",
+    "@tarima/chase": "workspace:*",
+    "@tarima/contract": "workspace:*",
+    "@tarima/engine": "workspace:*",
+    "@tarima/llm": "workspace:*",
+    "@tarima/obs": "workspace:*",
+    "@tarima/telegram": "workspace:*",
     "better-sqlite3": "^13.0.3",
     "drizzle-orm": "^0.45.4",
-    "hono": "^4.13.13"
+    "grammy": "catalog:",
+    "hono": "^4.13.13",
+    "node-html-parser": "catalog:",
+    "papaparse": "catalog:",
+    "postal-mime": "catalog:",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "valibot": "catalog:"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^9.6.0",
+    "@types/node": "catalog:",
+    "@types/papaparse": "^5.5.2",
+    "bcryptjs": "^3.0.2",
     "drizzle-kit": "^0.31.11",
-    "tsx": "^4.23.15"
+    "esbuild": "^0.28.2",
+    "tsx": "^4.23.15",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

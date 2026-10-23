@@ -1,0 +1,11 @@
+{
+  "$schema": "./node_modules/react-cosmos/config.schema.json",
+  "plugins": ["react-cosmos-plugin-vite"],
+  "watchDirs": ["src"],
+  "globalImports": ["./src/styles.css"],
+  "port": 6000,
+  "vite": {
+    "configPath": "./cosmos/vite.config.ts",
+    "port": 6001
+  }
+}

@@ -1,0 +1,18 @@
+# Git hooks powered by lefthook. Installed by the root package.json
+# `prepare` script (`lefthook install`) on `pnpm install`.
+#
+# pre-commit: quick static gate (~10s target). Catches the common agent
+# mistakes (type errors, lint, formatting, broken workspace imports) without
+# running the test suite.
+# pre-push: full gate. Same as CI's `pnpm validate`.
+# Bypass with `git push --no-verify` when you really need to.
+
+pre-commit:
+  commands:
+    quick-gate:
+      run: pnpm validate --quick
+
+pre-push:
+  commands:
+    validate:
+      run: pnpm validate

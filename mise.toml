@@ -1,0 +1,15 @@
+[tools]
+node = "24"
+pnpm = "11.21.0"
+
+[tasks.validate]
+description = "Full gate: typecheck + lint + format + tests + knip"
+run = "pnpm validate"
+
+[tasks."validate:quick"]
+description = "Quick static gate (~10s): typecheck + lint + format, no tests/knip"
+run = "pnpm validate --quick"
+
+[tasks.dev]
+description = "Run web + api dev servers"
+run = "pnpm dev"

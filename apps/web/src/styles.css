@@ -1,36 +1,131 @@
-@import '@fontsource-variable/geist';
-@import '@fontsource/instrument-serif';
-@import 'tailwindcss';
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/host-grotesk";
+@import "tailwindcss";
+
+@plugin "daisyui" {
+  themes: false;
+  logs: false;
+}
+
+/*
+ * Auralis — "engineered softness".
+ * Tonal layering + hairline borders, no drop shadows.
+ */
+@plugin "daisyui/theme" {
+  name: "tarima";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  --color-base-100: #ffffff;
+  --color-base-200: #f7f7f5;
+  --color-base-300: #f1edec;
+  --color-base-content: #111111;
+  --color-primary: #111111;
+  --color-primary-content: #ffffff;
+  --color-secondary: #6b6b6b;
+  --color-secondary-content: #ffffff;
+  --color-accent: #e7e0f6;
+  --color-accent-content: #111111;
+  --color-neutral: #111111;
+  --color-neutral-content: #ffffff;
+  --color-info: #dcebe8;
+  --color-info-content: #111111;
+  --color-success: #dcebe8;
+  --color-success-content: #111111;
+  --color-warning: #f2e8cd;
+  --color-warning-content: #111111;
+  --color-error: #f0ddd0;
+  --color-error-content: #111111;
+
+  --radius-selector: var(--radius-btn);
+  --radius-field: var(--radius-btn);
+  --radius-box: var(--radius-card);
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
 
 @theme {
-  --color-paper: #f7f4ed;
-  --color-paper-2: #efeade;
-  --color-paper-3: #e7e0cf;
-  --color-ink: #1a1613;
-  --color-ink-2: #6b6155;
-  --color-ink-3: #9a8f7d;
-  --color-line: rgba(26, 22, 19, 0.09);
-  --color-clay: #b8491f;
-  --color-clay-deep: #93350f;
-  --color-clay-soft: #f0ddd0;
-  --color-sage: #57694f;
-  --color-sage-soft: #e2e8d9;
-  --color-amber-w: #9a6b1f;
-  --color-amber-soft: #f2e8cd;
+  /* core palette */
+  --color-paper: #f7f7f5;
+  --color-ink: #111111;
+  --color-muted: #6b6b6b;
+  --color-line: #e7e7e4;
 
-  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Instrument Serif', ui-serif, Georgia, serif;
+  /* surfaces */
+  --color-surface: #ffffff;
+  --color-surface-dim: #f1edec;
+  --color-content: #111111;
 
+  /* washes */
+  --color-lavender: #e7e0f6;
+  --color-mint: #dcebe8;
+
+  /* radii */
+  --radius-card: 24px;
+  --radius-btn: 12px;
+
+  /* typography */
+  --font-display: "Host Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+
+  /* motion */
   --ease-out-expo: cubic-bezier(0.32, 0.72, 0, 1);
   --ease-spring: cubic-bezier(0.34, 1.4, 0.4, 1);
+
+  /*
+   * Legacy tokens still referenced by app routes (landing v1, AgentBoard).
+   * Retuned to the Auralis palette, removed once T6/T7 restyle those routes.
+   */
+  --color-paper-2: #f1edec;
+  --color-paper-3: #eceae9;
+  --color-ink-2: #444746;
+  --color-ink-3: #6b6b6b;
+  --color-clay: #a8421d;
+  --color-clay-deep: #863311;
+  --color-clay-soft: #f0ddd0;
+  --color-sage: #4a5b46;
+  --color-sage-soft: #dcebe8;
+  --color-amber-w: #8a5f18;
+  --color-amber-soft: #f2e8cd;
+}
+
+/* Semantic tokens (T0.4). UI code uses ONLY these names; raw palette
+   variables below stay for legacy routes until restyled. */
+@theme {
+  --color-surface: var(--color-paper);
+  --color-surface-raised: var(--color-surface);
+  --color-surface-sunken: var(--color-surface-dim);
+  --color-content: var(--color-ink);
+  --color-content-muted: var(--color-muted);
+  --color-content-faint: #9a938c;
+  --color-accent: var(--color-clay);
+  --color-accent-strong: var(--color-clay-deep);
+  --color-accent-soft: var(--color-clay-soft);
+  --color-border-subtle: var(--color-line);
+  --color-success: var(--color-sage);
+  --color-success-soft: var(--color-sage-soft);
+  --color-warning: var(--color-amber-w);
+  --color-warning-soft: var(--color-amber-soft);
+  --color-danger: #a3341f;
+  --color-danger-soft: #f2d9d2;
 }
 
 html {
   background: var(--color-paper);
   color: var(--color-ink);
-  font-family: var(--font-sans);
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* daisyUI paints :root with base-100; keep the page on the paper tone */
+:root {
+  --root-bg: var(--color-paper);
 }
 
 html,
@@ -44,7 +139,7 @@ body {
 
 /* film grain — fixed, pointer-events-none */
 .grain::after {
-  content: '';
+  content: "";
   position: fixed;
   inset: 0;
   z-index: 40;
@@ -96,7 +191,7 @@ body {
   position: relative;
 }
 .cell-lit::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: -1px;
   border-radius: 0.5rem;
@@ -121,7 +216,7 @@ body {
   pointer-events: none;
 }
 @property --lit-angle {
-  syntax: '<angle>';
+  syntax: "<angle>";
   initial-value: 0deg;
   inherits: false;
 }
@@ -146,7 +241,7 @@ body {
     background-color: transparent;
   }
   50% {
-    background-color: rgba(184, 73, 31, 0.05);
+    background-color: rgba(17, 17, 17, 0.04);
   }
 }
 

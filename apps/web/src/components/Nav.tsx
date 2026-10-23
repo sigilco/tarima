@@ -1,4 +1,4 @@
-import * as m from '../paraglide/messages.js'
+import * as m from "../paraglide/messages.js";
 
 export function Nav() {
   return (
@@ -15,36 +15,36 @@ export function Nav() {
             href="#jobs"
             className="inline-flex min-h-10 items-center rounded-full px-3.5 py-2 text-[13px] font-medium text-ink-2 transition-colors hover:text-ink"
           >
-            {m['nav.product']()}
+            {m["nav.product"]()}
           </a>
           <a
             href="#how"
             className="inline-flex min-h-10 items-center rounded-full px-3.5 py-2 text-[13px] font-medium text-ink-2 transition-colors hover:text-ink"
           >
-            {m['nav.how']()}
+            {m["nav.how"]()}
           </a>
           <a
             href="#pricing"
             className="inline-flex min-h-10 items-center rounded-full px-3.5 py-2 text-[13px] font-medium text-ink-2 transition-colors hover:text-ink"
           >
-            {m['nav.pricing']()}
+            {m["nav.pricing"]()}
           </a>
         </div>
         <div className="flex items-center gap-1 pl-4">
           <a
-            href="#access"
+            href="/login"
             className="hidden min-h-10 items-center rounded-full px-3.5 py-2 text-[13px] font-medium text-ink-2 transition-colors hover:text-ink sm:inline-flex"
           >
-            {m['nav.signin']()}
+            {m["nav.signin"]()}
           </a>
           <a
-            href="#access"
+            href="/login"
             className="inline-flex min-h-10 items-center rounded-full bg-ink px-4 py-2 text-[13px] font-medium text-paper transition-transform duration-300 ease-[cubic-bezier(0.34,1.4,0.4,1)] hover:scale-[1.03] active:scale-[0.97]"
           >
-            {m['nav.cta']()}
+            {m["nav.cta"]()}
           </a>
         </div>
       </nav>
     </header>
-  )
+  );
 }

@@ -1,0 +1,7 @@
+docs/
+research/
+*.md
+*.html
+node_modules/
+packages/copy/
+apps/web/src/routeTree.gen.ts

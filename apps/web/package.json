@@ -9,28 +9,39 @@
     "dev": "vite dev --port 3000",
     "generate-routes": "tsr generate",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "pnpm run compile-messages && tsc --noEmit",
+    "compile-messages": "paraglide-js compile --project ./project.inlang --outdir ./src/paraglide",
+    "cosmos": "cosmos"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.3.0",
-    "@fontsource/instrument-serif": "^5.3.0",
+    "@fontsource-variable/host-grotesk": "^5.3.0",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/react-router": "1.170.45",
     "@tanstack/react-start": "1.169.3",
+    "@tarima/contract": "workspace:*",
+    "daisyui": "^5.7.50",
+    "motion": "^14.6.0",
+    "nanostores": "^1.5.5",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "tailwindcss": "^4.3.3"
+    "react-rough-notation": "^1.0.8",
+    "tailwindcss": "^4.3.3",
+    "valibot": "catalog:"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "^1.64.0",
     "@inlang/paraglide-js": "^2.29.0",
     "@tanstack/router-cli": "^1.132.0",
     "@types/node": "^22.10.2",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^6.0.1",
+    "react-cosmos": "^7.4.1",
+    "react-cosmos-plugin-vite": "^7.4.0",
     "typescript": "^6.0.2",
     "vite": "^8.0.0",
-    "wrangler": "^4.151.1"
+    "vitest": "catalog:"
   }
 }
