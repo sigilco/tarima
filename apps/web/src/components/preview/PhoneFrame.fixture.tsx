@@ -1,4 +1,4 @@
-import { PhoneFrame } from './PhoneFrame';
+import { PhoneFrame } from "./PhoneFrame";
 
 function Preview() {
   return (

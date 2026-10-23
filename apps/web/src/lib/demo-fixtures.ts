@@ -6,7 +6,7 @@
  * Timestamps are derived from `Date.now()` at import time so
  * `relativeTime()` looks alive on every load.
  */
-import type { Channel, ChaseRowState } from "./chase.js";
+import type { Channel, ChaseRowState } from "@tarima/contract";
 import type { BoardRow } from "./board.js";
 
 const now = Date.now();

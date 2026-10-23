@@ -1,6 +1,6 @@
-@import '@fontsource-variable/geist';
-@import '@fontsource-variable/host-grotesk';
-@import 'tailwindcss';
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/host-grotesk";
+@import "tailwindcss";
 
 @plugin "daisyui" {
   themes: false;
@@ -12,7 +12,7 @@
  * Tonal layering + hairline borders, no drop shadows.
  */
 @plugin "daisyui/theme" {
-  name: 'tarima';
+  name: "tarima";
   default: true;
   prefersdark: false;
   color-scheme: light;
@@ -69,9 +69,9 @@
   --radius-btn: 12px;
 
   /* typography */
-  --font-display: 'Host Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-body: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Host Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
 
   /* motion */
   --ease-out-expo: cubic-bezier(0.32, 0.72, 0, 1);
@@ -115,7 +115,6 @@
   --color-danger-soft: #f2d9d2;
 }
 
-
 html {
   background: var(--color-paper);
   color: var(--color-ink);
@@ -137,7 +136,6 @@ body {
 body {
   margin: 0;
 }
-
 
 /* film grain — fixed, pointer-events-none */
 .grain::after {
@@ -193,7 +191,7 @@ body {
   position: relative;
 }
 .cell-lit::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: -1px;
   border-radius: 0.5rem;
@@ -218,7 +216,7 @@ body {
   pointer-events: none;
 }
 @property --lit-angle {
-  syntax: '<angle>';
+  syntax: "<angle>";
   initial-value: 0deg;
   inherits: false;
 }
