@@ -1,8 +1,7 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
-import { useState } from "react";
 import * as m from "../../../paraglide/messages.js";
 import { relativeTime, sortRows, type BoardRow } from "../../../lib/board";
-import { DEMO_PROJECT, DEMO_ROWS } from "../../../lib/demo-fixtures";
+import { DEMO_NOW, DEMO_PROJECT, DEMO_ROWS } from "../../../lib/demo-fixtures";
 import { StatusPill } from "../-StatusPill";
 
 /**
@@ -55,7 +54,6 @@ function RowDetail({ row }: { row: BoardRow }) {
 function DemoProject() {
   const { projectId } = useParams({ from: "/demo/p/$projectId" });
   const search = Route.useSearch();
-  const [now] = useState(() => Date.now());
 
   if (projectId !== DEMO_PROJECT.id) {
     return (
@@ -131,7 +129,7 @@ function DemoProject() {
                     <StatusPill status={row.status} />
                   </td>
                   <td className="py-3.5 text-[13px] text-content-faint">
-                    {relativeTime(row.updatedAt, now)}
+                    {relativeTime(row.updatedAt, DEMO_NOW)}
                   </td>
                 </tr>
               ))}

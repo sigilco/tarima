@@ -9,9 +9,14 @@
 import type { Channel, ChaseRowState } from "@tarima/contract";
 import type { BoardRow } from "./board.js";
 
-const now = Date.now();
+/**
+ * Single pinned "now" for all fixture timestamps. Sharing it between the
+ * fixture data and every `relativeTime()` call keeps SSR and client HTML
+ * identical (a fresh `Date.now()` per render caused hydration mismatches).
+ */
+export const DEMO_NOW = Date.now();
 /** ISO timestamp `minutes` before load time. */
-const ago = (minutes: number) => new Date(now - minutes * 60_000).toISOString();
+const ago = (minutes: number) => new Date(DEMO_NOW - minutes * 60_000).toISOString();
 
 /** The demo project the fixture rows belong to. */
 export const DEMO_PROJECT = {

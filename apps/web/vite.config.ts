@@ -37,6 +37,12 @@ const config = defineConfig({
   // Node SSR build consumed by apps/api/src/server.ts. No Cloudflare/wrangler.
   environments: {
     ssr: {
+      // Bundle browser-only deps (motion, react-rough-notation) into the
+      // SSR output: the Node artifact is loaded from apps/api/dist/server,
+      // where bare specifiers cannot be resolved at runtime.
+      resolve: {
+        noExternal: ["motion", "framer-motion", "react-rough-notation"],
+      },
       build: {
         outDir: "dist/ssr",
         rollupOptions: {

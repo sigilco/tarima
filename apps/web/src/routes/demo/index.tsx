@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import * as m from "../../paraglide/messages.js";
 import { boardView, relativeTime, type BoardBucket, type BoardRow } from "../../lib/board";
-import { DEMO_PROJECT, DEMO_ROWS } from "../../lib/demo-fixtures";
+import { DEMO_NOW, DEMO_PROJECT, DEMO_ROWS } from "../../lib/demo-fixtures";
 import { StatusPill } from "./-StatusPill";
 
 /**
@@ -64,7 +64,7 @@ function DemoTable({ rows }: { rows: readonly BoardRow[] }) {
                 {row.missing.length > 0 ? row.missing.join(", ") : m["board.noMissing"]()}
               </td>
               <td className="py-3.5 text-[13px] text-content-faint">
-                {relativeTime(row.updatedAt)}
+                {relativeTime(row.updatedAt, DEMO_NOW)}
               </td>
             </tr>
           ))}
