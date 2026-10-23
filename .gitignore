@@ -9,3 +9,7 @@ dist
 *.db-shm
 *.db-wal
 .worktrees
+
+# React Cosmos generated renderer
+apps/web/index.html
+apps/web/cosmos-export/
