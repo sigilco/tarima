@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as DemoIndexRouteImport } from './routes/demo/index'
 import { Route as AppPProjectIdRouteImport } from './routes/app/p/$projectId'
+import { Route as DemoPProjectIdRouteImport } from './routes/demo/p/$projectId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -29,9 +31,19 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/app/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DemoIndexRoute = DemoIndexRouteImport.update({
+  id: '/demo/',
+  path: '/demo/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppPProjectIdRoute = AppPProjectIdRouteImport.update({
   id: '/app/p/$projectId',
   path: '/app/p/$projectId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoPProjectIdRoute = DemoPProjectIdRouteImport.update({
+  id: '/demo/p/$projectId',
+  path: '/demo/p/$projectId',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -39,34 +51,61 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/app/': typeof AppIndexRoute
+  '/demo/': typeof DemoIndexRoute
   '/app/p/$projectId': typeof AppPProjectIdRoute
+  '/demo/p/$projectId': typeof DemoPProjectIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/app': typeof AppIndexRoute
+  '/demo': typeof DemoIndexRoute
   '/app/p/$projectId': typeof AppPProjectIdRoute
+  '/demo/p/$projectId': typeof DemoPProjectIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/app/': typeof AppIndexRoute
+  '/demo/': typeof DemoIndexRoute
   '/app/p/$projectId': typeof AppPProjectIdRoute
+  '/demo/p/$projectId': typeof DemoPProjectIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/app/' | '/app/p/$projectId'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/app/'
+    | '/demo/'
+    | '/app/p/$projectId'
+    | '/demo/p/$projectId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/app' | '/app/p/$projectId'
-  id: '__root__' | '/' | '/login' | '/app/' | '/app/p/$projectId'
+  to:
+    | '/'
+    | '/login'
+    | '/app'
+    | '/demo'
+    | '/app/p/$projectId'
+    | '/demo/p/$projectId'
+  id:
+    | '__root__'
+    | '/'
+    | '/login'
+    | '/app/'
+    | '/demo/'
+    | '/app/p/$projectId'
+    | '/demo/p/$projectId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
   AppIndexRoute: typeof AppIndexRoute
+  DemoIndexRoute: typeof DemoIndexRoute
   AppPProjectIdRoute: typeof AppPProjectIdRoute
+  DemoPProjectIdRoute: typeof DemoPProjectIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -92,11 +131,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/demo/': {
+      id: '/demo/'
+      path: '/demo'
+      fullPath: '/demo/'
+      preLoaderRoute: typeof DemoIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app/p/$projectId': {
       id: '/app/p/$projectId'
       path: '/app/p/$projectId'
       fullPath: '/app/p/$projectId'
       preLoaderRoute: typeof AppPProjectIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/p/$projectId': {
+      id: '/demo/p/$projectId'
+      path: '/demo/p/$projectId'
+      fullPath: '/demo/p/$projectId'
+      preLoaderRoute: typeof DemoPProjectIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -106,7 +159,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
   AppIndexRoute: AppIndexRoute,
+  DemoIndexRoute: DemoIndexRoute,
   AppPProjectIdRoute: AppPProjectIdRoute,
+  DemoPProjectIdRoute: DemoPProjectIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

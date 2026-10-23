@@ -147,12 +147,20 @@ function Login() {
   return (
     <main className="grain flex min-h-[100dvh] items-center justify-center bg-surface px-5 py-16 text-content">
       <div className="w-full max-w-sm">
-        <a href="/" className="flex items-center gap-2.5">
-          <img src="/mark.png" alt="" className="h-5 w-5 rounded-[5px]" />
-          <span className="font-display text-[19px] tracking-tight text-content">
-            {m["app.title"]()}
-          </span>
-        </a>
+        <div className="flex items-center justify-between gap-3">
+          <a href="/" className="flex items-center gap-2.5">
+            <img src="/mark.png" alt="" className="h-5 w-5 rounded-[5px]" />
+            <span className="font-display text-[19px] tracking-tight text-content">
+              {m["app.title"]()}
+            </span>
+          </a>
+          <a
+            href="/demo"
+            className="text-[13px] text-content-muted underline decoration-content-faint underline-offset-4 transition-colors duration-300 hover:text-content"
+          >
+            {m["demo.link"]()}
+          </a>
+        </div>
 
         {step === "email" ? (
           <form onSubmit={requestCode} className="mt-10">

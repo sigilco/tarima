@@ -97,6 +97,7 @@
   "footer.rights": "© {year} Tarima",
   "footer.contact": "Contact",
   "app.title": "Tarima",
+  "demo.link": "See a live demo",
   "app.projects": "Projects",
   "app.newProject": "New project",
   "app.newProjectName": "Project name, e.g. Spring hackathon sponsors",
