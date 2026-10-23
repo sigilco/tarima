@@ -4,21 +4,26 @@
  * Cosmos only renders components in the browser, so this file keeps just the
  * plugins the preview components need: react + tailwind.
  *
- * Paraglide is deliberately omitted: it requires the compiled
- * `src/paraglide` output and preview components stay copy-free for now. If a
- * preview variation needs messages, compile them first
- * (`pnpm --filter web exec paraglide compile`) and add
- * `paraglideVitePlugin({ project: './project.inlang', outdir:
- * './src/paraglide', strategy: ['baseLocale'] })` below.
+ * Paraglide is wired in because the landing hero imports compiled
+ * messages. Requires `compile-messages` to have run first.
  */
 import { defineConfig } from "vite";
 
+import { paraglideVitePlugin } from "@inlang/paraglide-js";
 import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 const config = defineConfig({
   resolve: { tsconfigPaths: true },
-  plugins: [tailwindcss(), viteReact()],
+  plugins: [
+    tailwindcss(),
+    paraglideVitePlugin({
+      project: "./project.inlang",
+      outdir: "./src/paraglide",
+      strategy: ["baseLocale"],
+    }),
+    viteReact(),
+  ],
 });
 
 export default config;
