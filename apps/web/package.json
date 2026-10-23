@@ -32,7 +32,6 @@
     "valibot": "catalog:"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "^1.64.0",
     "@inlang/paraglide-js": "^2.29.0",
     "@tanstack/router-cli": "^1.132.0",
     "@types/node": "^22.10.2",
@@ -43,7 +42,6 @@
     "react-cosmos-plugin-vite": "^7.4.0",
     "typescript": "^6.0.2",
     "vite": "^8.0.0",
-    "vitest": "catalog:",
-    "wrangler": "^4.151.1"
+    "vitest": "catalog:"
   }
 }

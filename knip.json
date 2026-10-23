@@ -22,7 +22,7 @@
       "entry": ["src/index.ts", "src/*.ts"]
     },
     "apps/web": {
-      "entry": ["src/**/*.{ts,tsx}"],
+      "entry": ["src/**/*.{ts,tsx}", "cosmos/**/*.ts"],
       "ignore": ["src/paraglide/**"],
       "ignoreUnresolved": ["../paraglide/messages.js"],
       "ignoreDependencies": ["@nanostores/react", "cloudflare"],
