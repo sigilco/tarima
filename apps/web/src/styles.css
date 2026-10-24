@@ -197,6 +197,32 @@ body {
   border-radius: 4px;
   transform: rotate(-0.7deg) skewX(-1deg);
   box-shadow: 0 0 10px rgba(253, 224, 71, 0.4);
+  transform-origin: left center;
+  animation: markerSwipe 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.15s;
+}
+
+/* The marker swipes left-to-right over the word, then settles into the
+   reference's static skew. transform/opacity only; scaleX keeps the skew
+   by composing it after the scale (rightmost op applies first). */
+@keyframes markerSwipe {
+  0% {
+    opacity: 0;
+    transform: rotate(-0.7deg) skewX(-1deg) scaleX(0);
+  }
+  60% {
+    opacity: 0.88;
+    transform: rotate(-0.7deg) skewX(-1deg) scaleX(1.06);
+  }
+  100% {
+    opacity: 0.88;
+    transform: rotate(-0.7deg) skewX(-1deg) scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marker-highlight::before {
+    animation: none;
+  }
 }
 
 /* Hand-drawn scribble animation */
