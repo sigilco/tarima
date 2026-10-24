@@ -1,5 +1,6 @@
 @import '@fontsource-variable/geist';
 @import '@fontsource/instrument-serif';
+@import '@fontsource-variable/inter';
 @import 'tailwindcss';
 
 @theme {
@@ -168,3 +169,88 @@ body {
 * {
   box-sizing: border-box;
 }
+
+/* ─────────────────────────────────────────────────────────────
+   Playful Hero (Aceternity 1:1 port) — scoped styles & keyframes
+   ───────────────────────────────────────────────────────────── */
+.playful-root {
+  font-family: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Organic marker highlighter effect */
+.marker-highlight {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  z-index: 1;
+}
+.marker-highlight::before {
+  content: '';
+  position: absolute;
+  left: -6px;
+  right: -8px;
+  top: 6px;
+  bottom: 2px;
+  background: #fde047;
+  opacity: 0.88;
+  z-index: -1;
+  border-radius: 4px;
+  transform: rotate(-0.7deg) skewX(-1deg);
+  box-shadow: 0 0 10px rgba(253, 224, 71, 0.4);
+}
+
+/* Hand-drawn scribble animation */
+@keyframes drawPath {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.hand-drawn-line {
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  animation: drawPath 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.3s;
+}
+
+/* Subtle floating animation for phone */
+@keyframes subtleFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+.floating-mockup {
+  animation: subtleFloat 7s ease-in-out infinite;
+}
+
+/* Chat bubble message entrance */
+@keyframes bubbleIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.animate-bubble-1 {
+  animation: bubbleIn 0.5s ease-out forwards 0.3s;
+}
+.animate-bubble-2 {
+  animation: bubbleIn 0.5s ease-out forwards 0.8s;
+}
+.animate-bubble-3 {
+  animation: bubbleIn 0.5s ease-out forwards 1.3s;
+}
+
+/* hide horizontal scrollbar on quick prompts */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+/* ────────────── end playful hero section ────────────── */
