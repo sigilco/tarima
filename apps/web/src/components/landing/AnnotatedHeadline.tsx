@@ -2,17 +2,21 @@ import { useEffect, useRef, useState } from "react";
 import { RoughNotation } from "react-rough-notation";
 
 /**
- * H1 with a rough-notation underline drawn on when scrolled into view.
- * Colors are literal hexes (rough-notation renders raw SVG, it cannot
- * read CSS variables). Reduced motion shows the annotation pre-drawn.
+ * H1 with hand-drawn annotations (marker highlight + underline) that draw
+ * themselves once the headline enters the viewport.
+ *
+ * Colors are literal hexes: rough-notation renders raw SVG and cannot read
+ * CSS variables. Reduced motion shows the annotations pre-drawn.
  */
 export function AnnotatedHeadline({
   pre,
   accent,
+  accent2,
   post,
 }: {
   pre: string;
   accent: string;
+  accent2: string;
   post: string;
 }) {
   const ref = useRef<HTMLHeadingElement>(null);
@@ -44,9 +48,20 @@ export function AnnotatedHeadline({
   return (
     <h1
       ref={ref}
-      className="font-display text-[clamp(3rem,6vw,5.25rem)] font-semibold leading-[1.02] tracking-[-0.04em] text-ink"
+      className="font-display text-[clamp(2.75rem,5.6vw,4.75rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-balance text-ink"
     >
       {pre}{" "}
+      <RoughNotation
+        type="highlight"
+        color="#f2e8cd"
+        strokeWidth={2.5}
+        padding={2}
+        iterations={2}
+        animationDuration={900}
+        show={show}
+      >
+        <span className="not-italic">{accent}</span>
+      </RoughNotation>{" "}
       <RoughNotation
         type="underline"
         color="#a8421d"
@@ -56,7 +71,7 @@ export function AnnotatedHeadline({
         animationDuration={700}
         show={show}
       >
-        <em className="not-italic">{accent}</em>
+        <span className="not-italic">{accent2}</span>
       </RoughNotation>{" "}
       {post}
     </h1>

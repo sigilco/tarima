@@ -1,5 +1,9 @@
 import * as m from "../paraglide/messages.js";
 
+/**
+ * Landing nav, single-section edition: logo pill + sign-in + Start free.
+ * No anchor links — the landing is one section only.
+ */
 export function Nav() {
   return (
     <header className="fixed inset-x-0 top-5 z-50 flex justify-center px-4">
@@ -10,26 +14,6 @@ export function Nav() {
             tarima
           </span>
         </a>
-        <div className="hidden items-center gap-1 md:flex">
-          <a
-            href="#jobs"
-            className="inline-flex min-h-10 items-center rounded-full px-3.5 py-2 text-[13px] font-medium text-ink-2 transition-colors hover:text-ink"
-          >
-            {m["nav.product"]()}
-          </a>
-          <a
-            href="#how"
-            className="inline-flex min-h-10 items-center rounded-full px-3.5 py-2 text-[13px] font-medium text-ink-2 transition-colors hover:text-ink"
-          >
-            {m["nav.how"]()}
-          </a>
-          <a
-            href="#pricing"
-            className="inline-flex min-h-10 items-center rounded-full px-3.5 py-2 text-[13px] font-medium text-ink-2 transition-colors hover:text-ink"
-          >
-            {m["nav.pricing"]()}
-          </a>
-        </div>
         <div className="flex items-center gap-1 pl-4">
           <a
             href="/login"
