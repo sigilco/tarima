@@ -4,7 +4,6 @@ import * as m from '../paraglide/messages.js'
 import { PlayfulHero, type PlayfulHeroCopy } from '../components/landing/playful/PlayfulHero'
 import { MinimalFooter } from '../components/landing/playful/MinimalFooter'
 import { Toast } from '../components/landing/playful/Toast'
-import { ChangelogModal, type ChangelogCopy } from '../components/landing/playful/ChangelogModal'
 import { useFitToViewport } from '../components/landing/playful/useFitToViewport'
 
 export const Route = createFileRoute('/')({ component: PlayfulLanding })
@@ -20,59 +19,58 @@ const HERO_COPY: PlayfulHeroCopy = {
   ctaLabel: m['playful.cta.label'](),
   ghostLabel: m['playful.ghost.label'](),
   rating: m['playful.rating.value'](),
-  downloads: m['playful.rating.downloads']({ count: 50000 }),
+  ratingNote: m['playful.rating.note'](),
   statusTime: m['playful.phone.statusTime'](),
   phone: {
     userMessage: m['playful.phone.userMessage'](),
     userMeta: m['playful.phone.userMeta'](),
     agentMessage: m['playful.phone.agentMessage'](),
     agentMeta: m['playful.phone.agentMeta'](),
-    galleryImages: [
-      {
-        src: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80',
-        alt: m['playful.phone.gallery.beachAlt'](),
-        chip: m['playful.phone.gallery.beachChip'](),
-      },
-      {
-        src: 'https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=400&q=80',
-        alt: m['playful.phone.gallery.sunsetAlt'](),
-        chip: m['playful.phone.gallery.sunsetChip'](),
-      },
-    ],
+    board: {
+      title: m['playful.phone.board.title'](),
+      filled: m['playful.phone.board.filled']({ count: 9 }),
+      rows: [
+        {
+          name: m['playful.phone.board.row1.name'](),
+          kind: m['playful.phone.board.row1.kind'](),
+          status: m['playful.phone.board.row1.status'](),
+        },
+        {
+          name: m['playful.phone.board.row2.name'](),
+          kind: m['playful.phone.board.row2.kind'](),
+          status: m['playful.phone.board.row2.status'](),
+        },
+        {
+          name: m['playful.phone.board.row3.name'](),
+          kind: m['playful.phone.board.row3.kind'](),
+          status: m['playful.phone.board.row3.status'](),
+        },
+      ],
+    },
     quickPrompts: [
-      { label: m['playful.phone.prompt.summarize'](), text: m['playful.phone.prompt.summarizeText']() },
-      { label: m['playful.phone.prompt.export'](), text: m['playful.phone.prompt.exportText']() },
+      { label: m['playful.phone.prompt.sponsors'](), text: m['playful.phone.prompt.sponsorsText']() },
+      { label: m['playful.phone.prompt.venues'](), text: m['playful.phone.prompt.venuesText']() },
     ],
     inputPlaceholder: m['playful.phone.inputPlaceholder'](),
     replyDefault: m['playful.phone.reply.default'](),
-    replyMeetings: m['playful.phone.reply.meetings'](),
-    replyTrip: m['playful.phone.reply.trip'](),
+    replyMeetings: m['playful.phone.reply.sponsors'](),
+    replyTrip: m['playful.phone.reply.venues'](),
     replyMeta: m['playful.phone.replyMeta'](),
   },
-}
-
-const CHANGELOG_COPY: ChangelogCopy = {
-  version: m['playful.changelog.version'](),
-  date: m['playful.changelog.date'](),
-  title: m['playful.changelog.title'](),
-  closeLabel: m['playful.changelog.close'](),
-  features: [
-    { title: m['playful.changelog.f1.t'](), text: m['playful.changelog.f1.d']() },
-    { title: m['playful.changelog.f2.t'](), text: m['playful.changelog.f2.d']() },
-    { title: m['playful.changelog.f3.t'](), text: m['playful.changelog.f3.d']() },
-  ],
 }
 
 const FOOTER_LINKS = [
   { label: m['playful.footer.privacy'](), href: '#' },
   { label: m['playful.footer.terms'](), href: '#' },
-  { label: m['playful.footer.docs'](), href: '#' },
 ]
+
+/** Reach out: a real destination works before the platform routes land. */
+const REACH_OUT_HREF =
+  'mailto:hello@tarima.app?subject=Tarima%20early%20access'
 
 function PlayfulLanding() {
   const [toastMessage, setToastMessage] = useState('')
   const [toastVisible, setToastVisible] = useState(false)
-  const [changelogOpen, setChangelogOpen] = useState(false)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const { mainRef, footerRef, leftRef, titleRef, phoneBoxRef, phoneRef } =
     useFitToViewport()
@@ -100,8 +98,8 @@ function PlayfulLanding() {
         <PlayfulHero
           refs={{ leftRef, titleRef, phoneBoxRef, phoneRef }}
           copy={HERO_COPY}
-          onCtaClick={() => showToast(m['playful.toast.cta']())}
-          onGhostClick={() => setChangelogOpen(true)}
+          ctaHref="/login"
+          ghostHref={REACH_OUT_HREF}
           onIslandClick={() => showToast(m['playful.toast.island']())}
         />
       </main>
@@ -113,11 +111,6 @@ function PlayfulLanding() {
       />
 
       <Toast message={toastMessage} visible={toastVisible} />
-      <ChangelogModal
-        open={changelogOpen}
-        onClose={() => setChangelogOpen(false)}
-        copy={CHANGELOG_COPY}
-      />
     </div>
   )
 }

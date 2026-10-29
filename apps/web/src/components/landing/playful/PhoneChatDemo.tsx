@@ -12,7 +12,11 @@ export type PhoneChatCopy = {
   userMeta: string
   agentMessage: string
   agentMeta: string
-  galleryImages: { src: string; alt: string; chip: string }[]
+  board: {
+    title: string
+    filled: string
+    rows: { name: string; kind: string; status: string }[]
+  }
   quickPrompts: { label: string; text: string }[]
   inputPlaceholder: string
   replyDefault: string
@@ -103,23 +107,30 @@ export function PhoneChatDemo({ copy }: PhoneChatDemoProps) {
           </span>
         </div>
 
-        {/* Chat Bubble 3 (Interactive Gallery Preview) */}
-        <div className="animate-bubble-3 mt-1 grid max-w-[92%] grid-cols-2 gap-2 opacity-0">
-          {copy.galleryImages.map((img) => (
-            <div
-              key={img.alt}
-              className="group relative aspect-[4/3] overflow-hidden rounded-xl bg-neutral-200"
-            >
-              <img
-                src={img.src}
-                alt={img.alt}
-                className="h-full w-full object-cover transition-transform group-hover:scale-105"
-              />
-              <span className="absolute bottom-1 right-1 rounded bg-black/60 px-1.5 py-0.5 text-[9px] text-white backdrop-blur-sm">
-                {img.chip}
-              </span>
+        {/* Chat Bubble 3 (Board Preview — the product itself) */}
+        <div className="animate-bubble-3 mt-1 max-w-[92%] opacity-0">
+          <div className="rounded-xl border border-neutral-100 bg-white p-3 shadow-sm">
+            <div className="flex items-baseline justify-between">
+              <span className="text-[11px] font-bold text-neutral-900">{copy.board.title}</span>
+              <span className="text-[10px] font-medium text-emerald-600">{copy.board.filled}</span>
             </div>
-          ))}
+            <div className="mt-2 space-y-1.5">
+              {copy.board.rows.map((row) => (
+                <div
+                  key={row.name}
+                  className="flex items-center justify-between gap-2 rounded-lg bg-neutral-50 px-2 py-1.5"
+                >
+                  <div className="min-w-0">
+                    <div className="truncate text-[11px] font-semibold text-neutral-800">{row.name}</div>
+                    <div className="text-[9px] text-neutral-400">{row.kind}</div>
+                  </div>
+                  <span className="shrink-0 rounded-full bg-amber-100 px-1.5 py-0.5 text-[9px] font-semibold text-amber-700">
+                    {row.status}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Dynamically appended messages */}

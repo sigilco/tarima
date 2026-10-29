@@ -25,7 +25,7 @@ export type PlayfulHeroCopy = {
   ctaLabel: string
   ghostLabel: string
   rating: string
-  downloads: string
+  ratingNote: string
   statusTime: string
   phone: PhoneChatCopy
 }
@@ -33,16 +33,18 @@ export type PlayfulHeroCopy = {
 type PlayfulHeroProps = {
   refs?: PlayfulHeroRefs
   copy: PlayfulHeroCopy
-  onCtaClick?: () => void
-  onGhostClick?: () => void
+  /** Primary CTA destination (platform entry). */
+  ctaHref: string
+  /** Ghost CTA destination (reach out). */
+  ghostHref: string
   onIslandClick?: () => void
 }
 
 export function PlayfulHero({
   refs,
   copy,
-  onCtaClick,
-  onGhostClick,
+  ctaHref,
+  ghostHref,
   onIslandClick,
 }: PlayfulHeroProps) {
   return (
@@ -79,25 +81,25 @@ export function PlayfulHero({
 
         {/* CTA Buttons */}
         <div className="mt-8 flex flex-wrap items-center gap-5 sm:gap-6">
-          <button
-            onClick={onCtaClick}
+          <a
+            href={ctaHref}
             className="flex items-center gap-2 rounded-xl bg-[#FACC15] px-6 py-3.5 text-sm font-bold text-neutral-950 shadow-sm transition-all hover:bg-[#EAB308] hover:shadow-md active:scale-[0.98]"
           >
             <span>{copy.ctaLabel}</span>
             <ArrowRightIcon className="h-4 w-4" />
-          </button>
+          </a>
 
-          <button
-            onClick={onGhostClick}
+          <a
+            href={ghostHref}
             className="group flex items-center gap-1.5 px-2 py-2 text-sm font-semibold text-neutral-800 transition-colors hover:text-black"
           >
             <span>{copy.ghostLabel}</span>
             <ChevronRightIcon className="h-4 w-4 text-neutral-400 transition-transform group-hover:translate-x-0.5" />
-          </button>
+          </a>
         </div>
 
-        {/* Rating & User Feedback Bar */}
-        <RatingBar rating={copy.rating} downloads={copy.downloads} />
+        {/* Trust Bar */}
+        <RatingBar rating={copy.rating} note={copy.ratingNote} />
       </div>
 
       {/* Right Column: iPhone 15 Pro Mockup */}
