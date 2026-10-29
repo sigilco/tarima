@@ -4,6 +4,7 @@ import { PlayfulHero } from '../components/landing/playful/PlayfulHero'
 import { MinimalFooter } from '../components/landing/playful/MinimalFooter'
 import { Toast } from '../components/landing/playful/Toast'
 import { ChangelogModal } from '../components/landing/playful/ChangelogModal'
+import { useFitToViewport } from '../components/landing/playful/useFitToViewport'
 
 export const Route = createFileRoute('/')({ component: PlayfulLanding })
 
@@ -12,6 +13,8 @@ function PlayfulLanding() {
   const [toastVisible, setToastVisible] = useState(false)
   const [changelogOpen, setChangelogOpen] = useState(false)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const { mainRef, footerRef, leftRef, titleRef, phoneBoxRef, phoneRef } =
+    useFitToViewport()
 
   useEffect(() => {
     return () => {
@@ -29,8 +32,12 @@ function PlayfulLanding() {
   return (
     <div className="playful-root flex min-h-screen flex-col justify-between bg-[#FAFAFA] text-neutral-900 antialiased selection:bg-[#FACC15] selection:text-black">
       {/* Hero Section */}
-      <main className="flex w-full flex-1 items-center justify-center overflow-hidden px-6 py-8 lg:py-16">
+      <main
+        ref={mainRef}
+        className="flex w-full flex-1 items-center justify-center overflow-hidden px-6 py-8 lg:py-16"
+      >
         <PlayfulHero
+          refs={{ leftRef, titleRef, phoneBoxRef, phoneRef }}
           onCtaClick={() => showToast('Redirecting to the iOS App Store & Google Play...')}
           onGhostClick={() => setChangelogOpen(true)}
           onIslandClick={() =>
@@ -39,7 +46,7 @@ function PlayfulLanding() {
         />
       </main>
 
-      <MinimalFooter />
+      <MinimalFooter ref={footerRef} />
 
       <Toast message={toastMessage} visible={toastVisible} />
       <ChangelogModal open={changelogOpen} onClose={() => setChangelogOpen(false)} />

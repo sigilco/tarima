@@ -5,8 +5,17 @@ import { RatingBar } from './RatingBar'
 import { PhoneMockup } from './PhoneMockup'
 import { PhoneChatDemo } from './PhoneChatDemo'
 import { ArrowRightIcon, ChevronRightIcon } from './icons'
+import type { RefObject } from 'react'
+
+export type PlayfulHeroRefs = {
+  leftRef: RefObject<HTMLDivElement | null>
+  titleRef: RefObject<HTMLHeadingElement | null>
+  phoneBoxRef: RefObject<HTMLDivElement | null>
+  phoneRef: RefObject<HTMLDivElement | null>
+}
 
 type PlayfulHeroProps = {
+  refs?: PlayfulHeroRefs
   headline?: [string, string, string]
   markerText?: string
   scribbleText?: string
@@ -22,6 +31,7 @@ type PlayfulHeroProps = {
 }
 
 export function PlayfulHero({
+  refs,
   headline = ['Your favourite', 'is now', 'available for mobile'],
   markerText = 'productivity tool',
   scribbleText = 'available for mobile',
@@ -41,9 +51,12 @@ export function PlayfulHero({
   return (
     <div className="grid w-full max-w-7xl grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-8">
       {/* Left Column: Copy & Actions */}
-      <div className="flex max-w-2xl flex-col items-start lg:col-span-7">
+      <div ref={refs?.leftRef} className="flex max-w-2xl flex-col items-start lg:col-span-7">
         {/* Big Bold Title with Marker Accents */}
-        <h1 className="text-4xl font-black leading-[1.08] tracking-tight text-neutral-900 sm:text-6xl lg:text-[4.25rem]">
+        <h1
+          ref={refs?.titleRef}
+          className="text-4xl font-black leading-[1.08] tracking-tight text-neutral-900 sm:text-6xl lg:text-[4.25rem]"
+        >
           {headline[0]}
           <br className="hidden sm:inline" />
           <MarkerHighlight>{markerText}</MarkerHighlight>
@@ -92,7 +105,11 @@ export function PlayfulHero({
 
       {/* Right Column: iPhone 15 Pro Mockup */}
       <div className="flex justify-center lg:col-span-5 lg:justify-end">
-        <PhoneMockup onIslandClick={onIslandClick}>
+        <PhoneMockup
+          ref={refs?.phoneRef}
+          boxRef={refs?.phoneBoxRef}
+          onIslandClick={onIslandClick}
+        >
           <PhoneChatDemo />
         </PhoneMockup>
       </div>
