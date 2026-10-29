@@ -1,10 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
-import { PlayfulNav } from '../components/landing/playful/PlayfulNav'
 import { PlayfulHero } from '../components/landing/playful/PlayfulHero'
 import { MinimalFooter } from '../components/landing/playful/MinimalFooter'
 import { Toast } from '../components/landing/playful/Toast'
-import { ChangelogModal, InfoModal } from '../components/landing/playful/ChangelogModal'
+import { ChangelogModal } from '../components/landing/playful/ChangelogModal'
 
 export const Route = createFileRoute('/')({ component: PlayfulLanding })
 
@@ -12,7 +11,6 @@ function PlayfulLanding() {
   const [toastMessage, setToastMessage] = useState('')
   const [toastVisible, setToastVisible] = useState(false)
   const [changelogOpen, setChangelogOpen] = useState(false)
-  const [infoOpen, setInfoOpen] = useState(false)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
@@ -30,8 +28,6 @@ function PlayfulLanding() {
 
   return (
     <div className="playful-root flex min-h-screen flex-col justify-between bg-[#FAFAFA] text-neutral-900 antialiased selection:bg-[#FACC15] selection:text-black">
-      <PlayfulNav onDetailsClick={() => setInfoOpen(true)} />
-
       {/* Hero Section */}
       <main className="flex w-full flex-1 items-center justify-center overflow-hidden px-6 py-8 lg:py-16">
         <PlayfulHero
@@ -47,7 +43,6 @@ function PlayfulLanding() {
 
       <Toast message={toastMessage} visible={toastVisible} />
       <ChangelogModal open={changelogOpen} onClose={() => setChangelogOpen(false)} />
-      <InfoModal open={infoOpen} onClose={() => setInfoOpen(false)} />
     </div>
   )
 }
