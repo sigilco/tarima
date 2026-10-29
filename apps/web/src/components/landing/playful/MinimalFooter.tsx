@@ -1,20 +1,12 @@
 import type { RefObject } from 'react'
 
 type MinimalFooterProps = {
-  copyright?: string
-  links?: { label: string; href: string }[]
+  copyright: string
+  links: { label: string; href: string }[]
   ref?: RefObject<HTMLDivElement | null>
 }
 
-export function MinimalFooter({
-  copyright = '© 2026 Aceternity AI. All rights reserved.',
-  links = [
-    { label: 'Privacy', href: '#' },
-    { label: 'Terms', href: '#' },
-    { label: 'Documentation', href: '#' },
-  ],
-  ref,
-}: MinimalFooterProps) {
+export function MinimalFooter({ copyright, links, ref }: MinimalFooterProps) {
   return (
     <footer
       ref={ref as RefObject<HTMLElement | null>}

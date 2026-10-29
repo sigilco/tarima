@@ -3,6 +3,7 @@ import { BatteryChargingIcon, SignalIcon, WifiIcon } from './icons'
 
 type PhoneMockupProps = {
   children: ReactNode
+  statusTime: string
   onIslandClick?: () => void
   /** The phone itself. The viewport-fit hook scales it. */
   ref?: RefObject<HTMLDivElement | null>
@@ -11,7 +12,7 @@ type PhoneMockupProps = {
   boxRef?: RefObject<HTMLDivElement | null>
 }
 
-export function PhoneMockup({ children, onIslandClick, ref, boxRef }: PhoneMockupProps) {
+export function PhoneMockup({ children, statusTime, onIslandClick, ref, boxRef }: PhoneMockupProps) {
   return (
     <div ref={boxRef} className="floating-mockup relative select-none">
       {/* Absolutely positioned so the unscaled phone does not drive the
@@ -28,7 +29,7 @@ export function PhoneMockup({ children, onIslandClick, ref, boxRef }: PhoneMocku
 
           {/* iOS Status Bar */}
           <div className="z-20 flex w-full items-center justify-between px-7 pt-3 text-[11px] font-semibold text-neutral-800">
-            <span>9:41</span>
+            <span>{statusTime}</span>
 
             {/* Dynamic Island Notch */}
             <div

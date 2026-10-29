@@ -1,14 +1,11 @@
 import { StarIcon } from './icons'
 
 type RatingBarProps = {
-  rating?: string
-  downloads?: string
+  rating: string
+  downloads: string
 }
 
-export function RatingBar({
-  rating = '4.9 / 5.0',
-  downloads = 'Over 50,000+ early downloads across iOS & Android',
-}: RatingBarProps) {
+export function RatingBar({ rating, downloads }: RatingBarProps) {
   return (
     <div className="mt-12 flex w-full flex-wrap items-center gap-6 border-t border-neutral-200/70 pt-6 text-xs text-neutral-500">
       <div className="flex items-center gap-1 text-amber-500">

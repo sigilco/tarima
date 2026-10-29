@@ -27,41 +27,35 @@ function ModalShell({ open, onClose, children }: ModalProps) {
   )
 }
 
+export type ChangelogCopy = {
+  version: string
+  date: string
+  title: string
+  closeLabel: string
+  features: { title: string; text: string }[]
+}
+
 type ChangelogModalProps = {
   open: boolean
   onClose: () => void
+  copy: ChangelogCopy
 }
 
-const CHANGELOG_FEATURES = [
-  {
-    icon: '⚡ Lightning Fast Sync',
-    text: 'Real-time sync between your macOS / Windows desktop client and iPhone / Android companion.',
-  },
-  {
-    icon: '🧠 Offline Context Vectors',
-    text: 'Query your notes, images, and workflows locally with privacy-first on-device embedding models.',
-  },
-  {
-    icon: '🎨 Custom Marker Highlights',
-    text: 'Interactive hand-drawn scribbles and annotation blocks right inside the editor.',
-  },
-]
-
-export function ChangelogModal({ open, onClose }: ChangelogModalProps) {
+export function ChangelogModal({ open, onClose, copy }: ChangelogModalProps) {
   return (
     <ModalShell open={open} onClose={onClose}>
       <div className="mb-2 flex items-center gap-2">
         <span className="rounded bg-[#FACC15] px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-neutral-900">
-          v2.4.0 Release
+          {copy.version}
         </span>
-        <span className="text-xs text-neutral-400">October 2026</span>
+        <span className="text-xs text-neutral-400">{copy.date}</span>
       </div>
-      <h3 className="text-xl font-bold text-neutral-900">What's new in Aceternity Mobile</h3>
+      <h3 className="text-xl font-bold text-neutral-900">{copy.title}</h3>
 
       <div className="mt-4 space-y-3 text-sm text-neutral-600">
-        {CHANGELOG_FEATURES.map((f) => (
-          <div key={f.icon} className="rounded-xl border border-neutral-100 bg-neutral-50 p-3">
-            <h4 className="mb-1 text-xs font-semibold text-neutral-900">{f.icon}</h4>
+        {copy.features.map((f) => (
+          <div key={f.title} className="rounded-xl border border-neutral-100 bg-neutral-50 p-3">
+            <h4 className="mb-1 text-xs font-semibold text-neutral-900">{f.title}</h4>
             <p className="text-xs text-neutral-500">{f.text}</p>
           </div>
         ))}
@@ -72,7 +66,7 @@ export function ChangelogModal({ open, onClose }: ChangelogModalProps) {
           onClick={onClose}
           className="rounded-lg bg-neutral-900 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-neutral-800"
         >
-          Close
+          {copy.closeLabel}
         </button>
       </div>
     </ModalShell>
