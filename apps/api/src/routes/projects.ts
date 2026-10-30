@@ -14,10 +14,18 @@
  */
 import { Hono } from "hono";
 import * as v from "valibot";
-import { createEntitySchema, createProjectSchema, projectGoalSchema } from "@tarima/contract";
+import {
+  approveRequestSchema,
+  createEntitySchema,
+  createProjectSchema,
+  projectGoalSchema,
+  stageRequestSchema,
+} from "@tarima/contract";
 import { db } from "../db";
 import { requireApiKey } from "../middleware/require-api-key";
 import { createEntity, listEntities } from "../services/entities";
+import { advanceStage, decideGate } from "../services/approval";
+import { curateProject } from "../services/curation";
 import { createProject, getProject, listProjects, updateProject } from "../services/projects";
 
 export const projectRoutes = new Hono()
@@ -73,4 +81,51 @@ export const projectRoutes = new Hono()
 
     const entity = createEntity(db, { ...parsed.output, projectId });
     return c.json({ entity }, 201);
+  })
+  // Bearer parity for the approval flow (contract stage.ts): the same
+  // service functions as the session surface, minimal by design. The
+  // UI routes under /api/ui/* are the primary surface.
+  .post("/api/projects/:projectId/stage", requireApiKey(["projects:write"]), async (c) => {
+    const projectId = c.req.param("projectId");
+    if (!getProject(db, projectId)) return c.json({ error: "not_found" }, 404);
+    const parsed = v.safeParse(stageRequestSchema, await c.req.json().catch(() => null));
+    if (!parsed.success) return c.json({ error: "invalid_request" }, 400);
+    const result = advanceStage(projectId, parsed.output.to);
+    if (!result.ok) return c.json({ error: result.error.code }, 409);
+    return c.json({
+      projectId,
+      stage: result.value.stage,
+      ...(result.value.pendingGate ? { pendingGate: result.value.pendingGate } : {}),
+    });
+  })
+  .post("/api/projects/:projectId/approve", requireApiKey(["projects:write"]), async (c) => {
+    const projectId = c.req.param("projectId");
+    if (!getProject(db, projectId)) return c.json({ error: "not_found" }, 404);
+    const parsed = v.safeParse(approveRequestSchema, await c.req.json().catch(() => null));
+    if (!parsed.success) return c.json({ error: "invalid_request" }, 400);
+    const { gate, decision, brief, entityIds } = parsed.output;
+    const result = decideGate(projectId, gate, decision, { brief, entityIds });
+    if (!result.ok) {
+      const status = result.error.code === "not_found" ? 404 : 409;
+      return c.json({ error: result.error.code }, status);
+    }
+    return c.json({
+      projectId,
+      stage: result.value.stage,
+      ...(result.value.pendingGate ? { pendingGate: result.value.pendingGate } : {}),
+      released: result.value.released,
+      discarded: result.value.discarded,
+    });
+  })
+  .post("/api/projects/:projectId/curate", requireApiKey(["projects:write"]), (c) => {
+    const projectId = c.req.param("projectId");
+    if (!getProject(db, projectId)) return c.json({ error: "not_found" }, 404);
+    try {
+      const { candidates } = curateProject(projectId);
+      return c.json({ projectId, candidates, stage: getProject(db, projectId)!.stage });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "curation failed";
+      if (message.includes("no confirmed brief")) return c.json({ error: "no_brief" }, 409);
+      return c.json({ error: "curation_failed" }, 500);
+    }
   });

@@ -9,6 +9,7 @@
     "dev": "tsx watch src/index.ts",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
+    "seed-venues": "tsx scripts/seed-venues.ts",
     "build": "node ./scripts/build.mjs",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"

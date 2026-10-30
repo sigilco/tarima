@@ -38,16 +38,38 @@ describe("chase on the engine", () => {
         { key: "chase.intake", input: { entityName: "Blue Note", to: "booker@bluenote.test" } },
       ],
     });
-    // Drive until done (state chain: intake->outreach->await_reply->parse->...)
+    // Drive until the run parks in the send gate. The staged draft must
+    // NOT appear in the outbox: nothing is sent before approval.
     for (let i = 0; i < 12; i++) {
       const ran = await runOnce(db, handlers);
       if (ran === 0) break;
     }
     const wf = getWorkflow(db, runId);
-    expect(wf?.status).toBe("done");
-    expect(wf?.state).toBe("done");
-    const outboxRows = db.run(sql`SELECT idempotency_key FROM outbox`);
-    expect(outboxRows).toBeDefined();
+    expect(wf?.status).toBe("running");
+    expect(wf?.state).toBe("outreach_staged");
+    // Only the effect echo rows exist; no email.send before approval.
+    const rows = db
+      .all<{ type: string }>(sql`SELECT type FROM outbox`)
+      .filter((r) => r.type === "email.send");
+    expect(rows).toHaveLength(0);
+
+    // The send gate approves: the run completes and the send lands.
+    const gate = listSteps(db, runId).find((s) => s.stepKey.startsWith("chase.outreach_staged"));
+    expect(gate).toBeDefined();
+    const draft = (gate!.input as { draft?: Record<string, unknown> }).draft ?? {};
+    // Re-enter the gate step the way the approve route does: the next
+    // step input carries the decision and the staged draft.
+    db.run(
+      sql`UPDATE steps SET status = 'pending', run_at = 0, output = NULL, input = ${JSON.stringify({ ...gate!.input, event: "SEND_APPROVED", draft })} WHERE id = ${gate!.id}`,
+    );
+    for (let i = 0; i < 12; i++) {
+      const ran = await runOnce(db, handlers);
+      if (ran === 0) break;
+    }
+    expect(getWorkflow(db, runId)?.status).toBe("done");
+    expect(getWorkflow(db, runId)?.state).toBe("done");
+    const outboxRows = db.all<{ idempotency_key: string }>(sql`SELECT idempotency_key FROM outbox`);
+    expect(outboxRows.map((r) => r.idempotency_key)).toContain(`chase:send:${runId}:initial`);
   });
 
   it("await_reply + followup branch enqueues delayed follow-up step", async () => {
@@ -102,6 +124,22 @@ describe("chase on the engine", () => {
     // Claim then die: leave the step running with an expired lease.
     db.run(
       sql`UPDATE steps SET status = 'running', lease_owner = 'dead', lease_expires_at = ${Date.now() - 1000}`,
+    );
+    for (let i = 0; i < 12; i++) {
+      const ran = await runOnce(db, handlers);
+      if (ran === 0) break;
+    }
+    // The run recovers into the send gate and parks there, still healthy.
+    expect(getWorkflow(db, runId)?.status).toBe("running");
+    expect(getWorkflow(db, runId)?.state).toBe("outreach_staged");
+    // Approve to let the recovered run finish.
+    const gate = listSteps(db, runId).find(
+      (s) => s.stepKey.startsWith("chase.outreach_staged") && s.status === "pending",
+    );
+    expect(gate).toBeDefined();
+    const draft = (gate!.input as { draft?: Record<string, unknown> }).draft ?? {};
+    db.run(
+      sql`UPDATE steps SET status = 'pending', run_at = 0, input = ${JSON.stringify({ ...gate!.input, event: "SEND_APPROVED", draft })} WHERE id = ${gate!.id}`,
     );
     for (let i = 0; i < 12; i++) {
       const ran = await runOnce(db, handlers);

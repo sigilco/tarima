@@ -52,3 +52,25 @@ ${JSON.stringify(input.goal, null, 2)}
 
 ${kind}`;
 }
+
+export const PARSE_BRIEF_SYSTEM = `You extract the structured spec of an event from a free-text brief.
+
+Answer with a JSON object:
+{"eventType": string, "city": string, "date": string, "headcount": number, "budgetAmount": number, "currency": string, "venueRequirements": string, "notes": string, "confidence": number}
+
+Rules:
+- "eventType" is one or two words (offsite, meetup, dinner, workshop, ...). Read it out of the text, do not invent a kind of event the text does not suggest.
+- "city" is the city name only, no country.
+- "date" is the event date as YYYY-MM-DD. Omit the key when the text names no date.
+- "headcount" is the expected number of attendees (default 20 when the text does not say).
+- "budgetAmount" is the total budget as a number (default 5000 when the text does not say). "5k" means 5000.
+- "currency" is the ISO 4217 code in upper case (EUR, USD, GBP). Judge it from the currency sign or the city.
+- "venueRequirements" carries the venue needs the text names (AV, accessibility, catering, private room). Omit when none.
+- "notes" carries any remaining context worth keeping, under 2000 characters.
+- "confidence" is between 0 and 1 and reflects how much you actually read out of the text versus defaulted.
+- Reply with the JSON object only. No prose, no code fences.`;
+
+export function parseBriefUser(text: string): string {
+  return `Event brief:
+${text}`;
+}
