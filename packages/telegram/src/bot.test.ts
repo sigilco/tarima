@@ -187,3 +187,69 @@ describe("createTelegramHandle", () => {
     expect(sent).toEqual([]);
   });
 });
+
+describe("connect codes", () => {
+  /** Deps with a resolver that accepts exactly the code ABCDEF. */
+  function connectDeps(store = new MemoryBindingStore()) {
+    const resolved: number[] = [];
+    return {
+      resolved,
+      botDeps: {
+        store,
+        source: {
+          async digest(projectId: string): Promise<DigestInput | null> {
+            return projectId === "p1" ? PROJECT : null;
+          },
+        },
+        connect: {
+          async resolve(code: string, chatId: number): Promise<string | null> {
+            if (code !== "ABCDEF") return null;
+            resolved.push(chatId);
+            return "Connected. This chat now gets your Tarima notifications.";
+          },
+        },
+      },
+    };
+  }
+
+  it("binds through /start <code>", async () => {
+    const { botDeps: deps, resolved } = connectDeps();
+    const reply = await handleCommand({ chatId: 9, text: "/start ABCDEF" }, deps);
+    expect(reply.text).toContain("Connected");
+    expect(resolved).toEqual([9]);
+  });
+
+  it("binds through a bare 6 char message", async () => {
+    const { botDeps: deps, resolved } = connectDeps();
+    const reply = await handleCommand({ chatId: 9, text: "ABCDEF" }, deps);
+    expect(reply.text).toContain("Connected");
+    expect(resolved).toEqual([9]);
+  });
+
+  it("binds through /bind when the argument looks like a code", async () => {
+    const { botDeps: deps } = connectDeps();
+    const reply = await handleCommand({ chatId: 9, text: "/bind ABCDEF" }, deps);
+    expect(reply.text).toContain("Connected");
+    expect(deps.store.get(9)).toBeUndefined();
+  });
+
+  it("rejects an invalid code without touching the store", async () => {
+    const { botDeps: deps } = connectDeps();
+    const reply = await handleCommand({ chatId: 9, text: "/start ZZZZZZ" }, deps);
+    expect(reply.text).toBe(usageText());
+    expect(deps.store.get(9)).toBeUndefined();
+  });
+
+  it("falls back to the usage text without a resolver", async () => {
+    const reply = await handleCommand({ chatId: 9, text: "/start ABCDEF" }, deps());
+    expect(reply.text).toBe(usageText());
+  });
+
+  it("keeps project binds working when the argument is not a code", async () => {
+    const store = new MemoryBindingStore();
+    const { botDeps: deps } = connectDeps(store);
+    const reply = await handleCommand({ chatId: 9, text: "/bind p1" }, deps);
+    expect(reply.text).toContain("p1");
+    expect(store.get(9)).toBe("p1");
+  });
+});

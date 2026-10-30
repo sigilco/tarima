@@ -41,6 +41,9 @@ const BOOTSTRAP_DDL = [
   "CREATE TABLE IF NOT EXISTS `venue_catalog` ( `id` text PRIMARY KEY NOT NULL, `city` text NOT NULL, `name` text NOT NULL, `area` text, `capacity` integer, `price_band` text, `source` text NOT NULL, `url` text, `created_at` integer NOT NULL );",
   "CREATE INDEX IF NOT EXISTS `idx_venue_catalog_city` ON `venue_catalog` (`city`);",
   "CREATE UNIQUE INDEX IF NOT EXISTS `idx_venue_catalog_city_name` ON `venue_catalog` (`city`,`name`);",
+  "CREATE TABLE IF NOT EXISTS `user_messages` ( `id` text PRIMARY KEY NOT NULL, `user_id` text NOT NULL, `project_id` text, `kind` text NOT NULL, `summary` text NOT NULL, `read_at` integer, `created_at` integer NOT NULL, FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade, FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON UPDATE no action ON DELETE cascade );",
+  "CREATE INDEX IF NOT EXISTS `idx_user_messages_user` ON `user_messages` (`user_id`,`created_at`);",
+  "CREATE INDEX IF NOT EXISTS `idx_user_messages_unread` ON `user_messages` (`user_id`,`read_at`);",
 ];
 
 for (const statement of BOOTSTRAP_DDL) {

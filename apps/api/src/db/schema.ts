@@ -328,3 +328,35 @@ export const venueCatalog = sqliteTable(
     uniqueIndex("idx_venue_catalog_city_name").on(t.city, t.name),
   ],
 );
+
+/**
+ * In-app inbox (Stage B, channels stream).
+ *
+ * The notify fanout writes one row per user per notification: the
+ * in-app copy of what also goes out to Telegram and WhatsApp. The
+ * `events` table was not reused: it is an append-only audit trail
+ * without an owner-scoped read path and without a read state, and the
+ * board SSE stream reads it. The inbox needs both.
+ */
+export const userMessages = sqliteTable(
+  "user_messages",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    projectId: text("project_id").references(() => projects.id, { onDelete: "cascade" }),
+    kind: text("kind").notNull().$type<"status_change" | "approval_needed" | "digest">(),
+    /** Short plain text, the same copy that goes to the chat channels. */
+    summary: text("summary").notNull(),
+    /** Read state of the in-app copy (the chat copies are fire and forget). */
+    readAt: integer("read_at"),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [
+    index("idx_user_messages_user").on(t.userId, t.createdAt),
+    index("idx_user_messages_unread").on(t.userId, t.readAt),
+  ],
+);
+
+export type UserMessage = typeof userMessages.$inferSelect;
