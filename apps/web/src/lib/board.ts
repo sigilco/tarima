@@ -34,12 +34,12 @@ export type BoardBucket = BoardStatus | "candidate";
 /** The filter values the board URL accepts. */
 export type BoardFilter = BoardBucket | "all";
 
-/** Every filter value, candidate included. */
-const FILTERS: readonly string[] = [...BOARD_STATUS, "candidate"];
+/** Every filter value, candidate included. A set for O(1) membership. */
+const FILTERS = new Set<string>([...BOARD_STATUS, "candidate"]);
 
 /** A filter value from a raw URL param, or "all" when it is not one. */
 export function parseFilter(raw: string | undefined): BoardFilter {
-  return FILTERS.includes(raw ?? "") ? (raw as BoardFilter) : "all";
+  return FILTERS.has(raw ?? "") ? (raw as BoardFilter) : "all";
 }
 
 /**
