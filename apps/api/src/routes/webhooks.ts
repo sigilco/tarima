@@ -45,6 +45,8 @@ import { emailAdapter, whatsappAdapter } from "../channels";
 import { db } from "../db";
 import { outreachMessages } from "../db/schema";
 import { enqueueParseStep, findActiveRunForContact } from "../services/runs";
+import { bindChannel } from "../services/bindings";
+import { resolveConnectCode } from "../services/connect-codes";
 
 export const webhookRoutes = new Hono();
 
@@ -156,6 +158,16 @@ webhookRoutes.post("/webhooks/whatsapp", async (c) => {
   const inbound = await whatsappAdapter().parseInbound(c.req.raw);
   if (!inbound) return c.json({ ok: true });
 
+  // The connect flow: the tester messages the number with the code the
+  // settings page showed. The message binds the number and is answered
+  // in-chat. This also opens the 24h customer service window, which is
+  // what lets the notify fanout send free-form text afterwards.
+  const connected = connectFromMessage("whatsapp", inbound.from, inbound.text ?? "");
+  if (connected) {
+    await confirmWhatsappBinding(inbound.from, connected);
+    return c.json({ ok: true });
+  }
+
   recordInbound({
     channel: "whatsapp",
     from: inbound.from,
@@ -167,3 +179,44 @@ webhookRoutes.post("/webhooks/whatsapp", async (c) => {
 
   return c.json({ ok: true });
 });
+
+/**
+ * The connect flow for an inbound chat message: the tester sends the
+ * code the settings page showed (as the whole message or as the first
+ * word). Returns the confirmation text when the code resolved, and null
+ * when the message was not a connect attempt.
+ */
+function connectFromMessage(
+  channel: "telegram" | "whatsapp",
+  externalId: string,
+  text: string,
+): string | null {
+  const candidate = text.trim().split(/\s+/)[0] ?? "";
+  if (!/^[A-Za-z0-9]{6}$/.test(candidate)) return null;
+
+  const resolved = resolveConnectCode(db, channel, candidate);
+  if (!resolved.ok) return null;
+
+  bindChannel(db, { userId: resolved.userId, channel, externalId });
+  return "Connected. This number now gets your Tarima notifications.";
+}
+
+/**
+ * Confirm a WhatsApp binding in the chat. The confirmation is a normal
+ * message, which the Cloud API only accepts inside the 24h window that
+ * the tester's own message just opened.
+ */
+async function confirmWhatsappBinding(to: string, text: string): Promise<void> {
+  try {
+    const result = await whatsappAdapter().send({
+      channel: "whatsapp",
+      to,
+      text,
+    });
+    if (!result.accepted) {
+      console.warn("[webhooks] whatsapp binding confirmation refused:", result.reason);
+    }
+  } catch (error) {
+    console.error("[webhooks] whatsapp binding confirmation failed", error);
+  }
+}

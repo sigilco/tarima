@@ -218,3 +218,141 @@ describe("POST /webhooks/whatsapp", () => {
     expect(parseSteps.length).toBeGreaterThanOrEqual(1);
   });
 });
+
+describe("whatsapp connect flow", () => {
+  it("binds the number when the tester sends the connect code", async () => {
+    const { createConnectCode } = await import("../services/connect-codes");
+    const { channelBindings } = await import("../db/schema");
+
+    const created = createConnectCode(db, "user-webhooks", "whatsapp");
+    const payload = {
+      object: "whatsapp_business_account",
+      entry: [
+        {
+          id: "WABA_ID",
+          changes: [
+            {
+              field: "messages",
+              value: {
+                messages: [
+                  {
+                    from: "34600999888",
+                    id: "wamid.CONNECT",
+                    timestamp: "1730000001",
+                    type: "text",
+                    text: { body: created.code },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+    };
+
+    const body = JSON.stringify(payload);
+    const res = await app.request("/webhooks/whatsapp", {
+      method: "POST",
+      headers: { "X-Hub-Signature-256": waSignature(body), "content-type": "application/json" },
+      body,
+    });
+    expect(res.status).toBe(200);
+
+    const bindings = db
+      .select()
+      .from(channelBindings)
+      .all()
+      .filter((row) => row.externalId === "34600999888");
+    expect(bindings).toHaveLength(1);
+    expect(bindings[0]?.userId).toBe("user-webhooks");
+    expect(bindings[0]?.channel).toBe("whatsapp");
+  });
+
+  it("does not bind on a message without a code", async () => {
+    const { channelBindings } = await import("../db/schema");
+    const before = db.select().from(channelBindings).all().length;
+
+    const payload = {
+      entry: [
+        {
+          changes: [
+            {
+              field: "messages",
+              value: {
+                messages: [
+                  {
+                    from: "34600777777",
+                    id: "wamid.HI",
+                    timestamp: "1730000002",
+                    type: "text",
+                    text: { body: "hi there" },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+    };
+    const body = JSON.stringify(payload);
+    await app.request("/webhooks/whatsapp", {
+      method: "POST",
+      headers: { "X-Hub-Signature-256": waSignature(body), "content-type": "application/json" },
+      body,
+    });
+
+    expect(db.select().from(channelBindings).all()).toHaveLength(before);
+  });
+
+  it("consumes the code, so a second send does not rebind", async () => {
+    const { createConnectCode } = await import("../services/connect-codes");
+    const { channelBindings } = await import("../db/schema");
+
+    const created = createConnectCode(db, "user-webhooks", "whatsapp");
+    const send = async (from: string) => {
+      const payload = {
+        entry: [
+          {
+            changes: [
+              {
+                field: "messages",
+                value: {
+                  messages: [
+                    {
+                      from,
+                      id: "wamid.X",
+                      timestamp: "1730000003",
+                      type: "text",
+                      text: { body: created.code },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        ],
+      };
+      const body = JSON.stringify(payload);
+      await app.request("/webhooks/whatsapp", {
+        method: "POST",
+        headers: { "X-Hub-Signature-256": waSignature(body), "content-type": "application/json" },
+        body,
+      });
+    };
+
+    await send("34600666666");
+    await send("34600555555");
+
+    const bindings = db
+      .select()
+      .from(channelBindings)
+      .all()
+      .filter(
+        (row) =>
+          row.channel === "whatsapp" &&
+          (row.externalId === "34600666666" || row.externalId === "34600555555"),
+      );
+    expect(bindings).toHaveLength(1);
+    expect(bindings[0]?.externalId).toBe("34600666666");
+  });
+});

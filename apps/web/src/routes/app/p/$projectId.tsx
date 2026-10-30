@@ -6,6 +6,7 @@ import { BoardHeader } from "../../../components/BoardHeader";
 import { BoardTable } from "../../../components/BoardTable";
 import { CsvModal } from "../../../components/CsvModal";
 import { RowModal } from "../../../components/RowModal";
+import { InboxPanel } from "../../../components/InboxPanel";
 import { boardView, parseFilter } from "../../../lib/board";
 import { briefLine } from "../../../lib/brief";
 import { projectBrief } from "../../../lib/api";
@@ -18,7 +19,8 @@ import {
   UnauthorizedError,
   unwrap,
 } from "../../../lib/api";
-import { fetchBoardFn } from "../../../lib/api-server";
+import { fetchBoardFn, fetchInboxFn } from "../../../lib/api-server";
+import type { InboxPayload } from "../../../lib/api";
 
 /**
  * /app/p/$projectId (Stage 5, T5.2): the chase board of screens/board.md.
@@ -44,7 +46,16 @@ export const Route = createFileRoute("/app/p/$projectId")({
   }),
   loader: async ({ params }) => {
     try {
-      return unwrap(await fetchBoardFn({ data: params.projectId }));
+      const board = unwrap(await fetchBoardFn({ data: params.projectId }));
+      // The inbox is optional on the board: a failed inbox read must
+      // not take the board down.
+      let inbox: InboxPayload = { messages: [], unread: 0 };
+      try {
+        inbox = unwrap(await fetchInboxFn());
+      } catch {
+        // Keep the empty inbox.
+      }
+      return { ...board, inbox };
     } catch (error) {
       if (error instanceof UnauthorizedError) {
         throw redirect({ to: "/login", search: { step: "email", email: "" } });
@@ -203,6 +214,8 @@ function Board() {
           filter={filter}
           emptyFiltered={filter !== "all"}
         />
+
+        <InboxPanel messages={payload.inbox.messages} unread={payload.inbox.unread} />
       </div>
 
       {row ? <RowModal projectId={projectId} row={row} filter={filter} /> : null}

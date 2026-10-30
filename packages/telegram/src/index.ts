@@ -6,7 +6,14 @@
  * rows) is injected through the seams, so the package has no db code.
  */
 export { digestForProject, DIGEST_MAX_ROWS } from "./digest.js";
-export type { BotCommand, BotDeps, CommandReply, DigestSource, ParsedCommand } from "./bot.js";
+export type {
+  BotCommand,
+  BotDeps,
+  CommandReply,
+  ConnectResolver,
+  DigestSource,
+  ParsedCommand,
+} from "./bot.js";
 export {
   createTelegram,
   createTelegramBot,
