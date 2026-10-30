@@ -248,4 +248,49 @@ describe("approval flow", () => {
     // the test above. The second gate did not add a second one.
     expect(firstRunDecisions).toHaveLength(1);
   });
+
+  it("rejecting the send gate clears the approval stamp", () => {
+    const p = createProject(db, { name: "Reject stamp" });
+    const entity = createEntity(db, {
+      projectId: p.id,
+      name: "Reject row",
+      status: "intake",
+      missing: [],
+    });
+    const runId = randomUUID();
+    db.insert(workflows)
+      .values({
+        id: runId,
+        type: "chase-deliverables",
+        status: "running",
+        state: "outreach_staged",
+        context: { entityId: entity.id, entityName: entity.name },
+        createdAt: Date.now(),
+      })
+      .run();
+    enqueueStep(db, runId, "chase.outreach_staged", {
+      entityName: entity.name,
+      draft: { subject: "s", body: "b" },
+    });
+
+    // Approve, then start over and reject.
+    db.update(projects).set({ stage: "send_review" }).where(eq(projects.id, p.id)).run();
+    expect(decideGate(p.id, "send", "approve").ok).toBe(true);
+    const approved = db
+      .select()
+      .from(projects)
+      .all()
+      .find((row) => row.id === p.id)!;
+    expect(approved.sendApprovedAt).not.toBeNull();
+
+    db.update(projects).set({ stage: "send_review" }).where(eq(projects.id, p.id)).run();
+    expect(decideGate(p.id, "send", "reject").ok).toBe(true);
+    const rejected = db
+      .select()
+      .from(projects)
+      .all()
+      .find((row) => row.id === p.id)!;
+    expect(rejected.sendApprovedAt).toBeNull();
+    expect(rejected.stage).toBe("curating");
+  });
 });

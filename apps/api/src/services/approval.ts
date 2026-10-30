@@ -285,13 +285,16 @@ function decideSend(projectId: string, decision: "approve" | "reject"): FlowResu
   }
 
   // Approve stamps the project: runs that stage AFTER the approval are
-  // auto-released by the park handler (one approval per project run,
-  // follow-ups inherit the approval). Reject clears nothing: the stage
-  // falls back to `curating` and the drafts are discarded.
+  // auto-released by the park path (one approval per project run,
+  // follow-ups inherit the approval). A reject clears the stamp and
+  // falls back to `curating`: the drafts are discarded and a later
+  // chase needs a new approval.
   const stage: ProjectStage = decision === "approve" ? "running" : "curating";
   setStage(projectId, stage);
   if (decision === "approve") {
     markSendApproved(projectId);
+  } else {
+    clearSendApproved(projectId);
   }
   return {
     ok: true,
@@ -308,6 +311,14 @@ function decideSend(projectId: string, decision: "approve" | "reject"): FlowResu
 function markSendApproved(projectId: string): void {
   db.update(projects)
     .set({ sendApprovedAt: Date.now(), updatedAt: Date.now() })
+    .where(eq(projects.id, projectId))
+    .run();
+}
+
+/** Clear the approval marker (the gate was rejected). */
+function clearSendApproved(projectId: string): void {
+  db.update(projects)
+    .set({ sendApprovedAt: null, updatedAt: Date.now() })
     .where(eq(projects.id, projectId))
     .run();
 }
