@@ -33,9 +33,9 @@ import type { ApiDb } from "./projects";
 import { searchCache, venueCatalog } from "../db/schema";
 
 /** Queries are fresh for 7 days. */
-export const QUERY_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+const QUERY_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 /** Venue rows are fresh for 30 days. */
-export const VENUE_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+const VENUE_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 
 /** The provider pair the service calls through. */
 export interface VenueSearchDeps {
@@ -43,6 +43,26 @@ export interface VenueSearchDeps {
   overpass: VenueEnrichProvider;
   /** Runs work after the response (the SWR refresh). Defaults to fire-and-forget. */
   background?(work: () => Promise<void>): void;
+}
+
+/**
+ * The provider pair in use, or null when no chain is wired.
+ *
+ * The chain is wired explicitly (the api's server boot does it with the
+ * public, keyless providers; a test injects stubs). Nothing falls back
+ * to a live provider on its own: a search that nobody asked for must
+ * not reach the network.
+ */
+let currentDeps: VenueSearchDeps | null = null;
+
+/** Swap the provider pair (the server boot wires the real one). */
+export function setVenueSearchDeps(deps: VenueSearchDeps | null): void {
+  currentDeps = deps;
+}
+
+/** The provider pair in use, or null when none is wired. */
+export function venueSearchDeps(): VenueSearchDeps | null {
+  return currentDeps;
 }
 
 /** The normalized query the cache is keyed on. */
@@ -313,14 +333,4 @@ export async function enrichVenue(
     const message = err instanceof Error ? err.message : "overpass failed";
     return { externalId: row.externalId, filled: {}, failed: message };
   }
-}
-
-/** The venues of a city that still have no contact (the "no contact" bucket). */
-export function venuesWithoutContact(db: ApiDb, city: string): VenueRow[] {
-  return db
-    .select()
-    .from(venueCatalog)
-    .where(and(eq(venueCatalog.city, city.trim())))
-    .all()
-    .filter((row) => !row.contactEmail);
 }

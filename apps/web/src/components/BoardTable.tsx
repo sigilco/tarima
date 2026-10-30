@@ -68,7 +68,7 @@ export function BoardTable({
                   </Link>
                 </td>
                 <td className="py-3.5 pr-4 text-[13.5px] text-content-muted">
-                  {row.contact ?? m["board.noContact"]()}
+                  {row.contact ?? m["row.needsContact"]()}
                 </td>
                 <td className="py-3.5 pr-4">
                   <span

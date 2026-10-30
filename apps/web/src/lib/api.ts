@@ -174,6 +174,18 @@ export function addRow(projectId: string, input: AddRowInput): Promise<{ entity:
   });
 }
 
+/** Set the contact of a board row (the "no contact" affordance). */
+export function setRowContact(
+  projectId: string,
+  entityId: string,
+  contact: string,
+): Promise<{ entity: BoardRow }> {
+  return call<{ entity: BoardRow }>(
+    `/api/ui/projects/${encodeURIComponent(projectId)}/entities/${encodeURIComponent(entityId)}/contact`,
+    { method: "PATCH", body: JSON.stringify({ contact }) },
+  );
+}
+
 /** Import a csv of entities into a project. */
 export function bulkIntake(projectId: string, csv: string): Promise<BulkIntakeResult> {
   return call<BulkIntakeResult>(`/api/ui/projects/${encodeURIComponent(projectId)}/entities/bulk`, {
