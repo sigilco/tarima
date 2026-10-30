@@ -5,7 +5,8 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:ui": "pnpm exec playwright test",
+    "test:ui": "pnpm --filter @tarima/api build && pnpm exec playwright test",
+    "test:ui:headed": "pnpm --filter @tarima/api build && pnpm exec playwright test --headed",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
