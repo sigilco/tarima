@@ -173,18 +173,24 @@ describe("ui routes: workflows", () => {
     });
     const detailBody = (await detail.json()) as {
       project: { stage: string; pendingGate?: string };
+      pendingGate?: string;
     };
     expect(detailBody.project.stage).toBe("send_review");
     expect(detailBody.project.pendingGate).toBe("send");
+    expect(detailBody.pendingGate).toBe("send");
 
     const board = await app.request(`/api/ui/projects/${flowId}/board`, {
       headers: { Cookie: cookie() },
     });
     const boardBody = (await board.json()) as {
       project: { stage: string; pendingGate?: string };
+      pendingGate?: string;
     };
     expect(boardBody.project.stage).toBe("send_review");
     expect(boardBody.project.pendingGate).toBe("send");
+    // The gate is at the root of the board payload too: the board reads
+    // it there, next to the project and the rows.
+    expect(boardBody.pendingGate).toBe("send");
   });
 });
 

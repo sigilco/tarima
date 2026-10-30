@@ -103,7 +103,11 @@ export const uiRoutes = new Hono()
   .get("/api/ui/projects/:projectId", (c) => {
     const project = getProject(db, c.req.param("projectId"), getSessionUser(c)?.userId ?? null);
     if (!project) return c.json({ error: "not_found" }, 404);
-    return c.json({ project: projectWithGate(project.stage, project) });
+    const pendingGate = GATE_FOR_STAGE[project.stage as ProjectStage];
+    return c.json({
+      project: projectWithGate(project.stage, project),
+      ...(pendingGate ? { pendingGate } : {}),
+    });
   })
   .get("/api/ui/projects/:projectId/entities", (c) => {
     const projectId = c.req.param("projectId");
@@ -119,8 +123,12 @@ export const uiRoutes = new Hono()
     if (!project) return c.json({ error: "not_found" }, 404);
 
     const entities = listEntities(db, projectId);
+    const pendingGate = GATE_FOR_STAGE[project.stage as ProjectStage];
     return c.json({
       project: projectWithGate(project.stage, project),
+      // The gate is also at the root of the payload: the board reads it
+      // there, next to the project and the rows.
+      ...(pendingGate ? { pendingGate } : {}),
       entities,
       summary: summarizeBoard(entities),
     });
