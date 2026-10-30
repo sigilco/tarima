@@ -244,12 +244,13 @@
   "stage.sendAll": "Send all",
   "stage.cancelSend": "Cancel",
   "stage.drafts": "{count} staged draft(s)",
-  "stage.noDrafts": "No draft is staged yet.",
+  "stage.noDrafts": "No draft is staged yet. Start the chase to draft the outreach, then come back here.",
   "stage.expandDraft": "Full draft",
   "stage.collapseDraft": "Hide draft",
   "stage.approved": "Approved. {count} row(s) released.",
   "stage.rejected": "Rejected. {count} row(s) dropped.",
   "stage.working": "Working…",
   "stage.shortlistSelected": "{count} of {total} selected",
-  "stage.candidate": "Candidate"
+  "stage.candidate": "Candidate",
+  "stage.noRecipient": "No contact address yet"
 }

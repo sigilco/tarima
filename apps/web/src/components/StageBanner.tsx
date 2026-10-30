@@ -90,8 +90,12 @@ export function StageBanner({
     : new Set(candidateRows(candidates).map((row) => row.id));
 
   function toggleCandidate(id: string) {
+    // The toggle flips against the effective selection, not the raw
+    // one: before the user touches a box every candidate is checked,
+    // so the first uncheck must see it as checked.
+    const current = effectiveChecked;
     setSelectionTouched(true);
-    setChecked((current) => {
+    setChecked(() => {
       const next = new Set(current);
       if (next.has(id)) next.delete(id);
       else next.add(id);
@@ -115,6 +119,7 @@ export function StageBanner({
       return;
     }
     setError(null);
+    // The edited brief replaces the stored one on approve.
     onDecide("approve", { brief: parsed });
   }
 
@@ -236,9 +241,14 @@ export function StageBanner({
               <div className="mt-4 flex flex-wrap gap-2">
                 <button
                   type="button"
-                  disabled={busy}
+                  disabled={busy || !brief}
                   data-testid="confirm-spec"
-                  onClick={() => onDecide("approve")}
+                  onClick={() => {
+                    // The stored brief rides on the decision: the api's
+                    // confirm falls back to the free-text notes only, so
+                    // the brief the tester wrote must be sent back.
+                    if (brief) onDecide("approve", { brief });
+                  }}
                   className="rounded-full bg-content px-4 py-2 text-[13px] font-medium text-surface disabled:opacity-60"
                 >
                   {busy ? m["stage.working"]() : m["stage.confirmSpec"]()}
@@ -313,7 +323,7 @@ export function StageBanner({
           <div className="mt-4 flex flex-wrap gap-2">
             <button
               type="button"
-              disabled={busy || selectedIds.length === 0}
+              disabled={busy || (candidatesForGate.length > 0 && selectedIds.length === 0)}
               data-testid="approve-shortlist"
               onClick={() => onDecide("approve", { entityIds: selectedIds })}
               className="rounded-full bg-content px-4 py-2 text-[13px] font-medium text-surface disabled:opacity-60"
@@ -361,7 +371,9 @@ export function StageBanner({
                     <span className="text-[13.5px] font-medium text-content">
                       {draft.entityName}
                     </span>
-                    <span className="text-[12.5px] text-content-muted">{draft.to}</span>
+                    <span className="text-[12.5px] text-content-muted">
+                      {draft.to || m["stage.noRecipient"]()}
+                    </span>
                   </div>
                   <p className="mt-1 text-[13.5px] text-content">{draft.subject}</p>
                   <p className="mt-1 text-[12.5px] leading-relaxed text-content-muted">
@@ -389,7 +401,7 @@ export function StageBanner({
           <div className="mt-4 flex flex-wrap gap-2">
             <button
               type="button"
-              disabled={busy || drafts.length === 0}
+              disabled={busy}
               data-testid="send-all"
               onClick={() => onDecide("approve")}
               className="rounded-full bg-content px-4 py-2 text-[13px] font-medium text-surface disabled:opacity-60"
