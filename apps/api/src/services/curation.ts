@@ -38,6 +38,24 @@ export interface CurateOutcome {
 }
 
 /**
+ * The venue category a brief asks for.
+ *
+ * The brief has no category field (contract `briefSchema` is frozen),
+ * so the category is derived from the free text: the first word that
+ * names a venue kind wins. The default is `bar`, the category the beta
+ * demo uses.
+ */
+export function categoryOf(brief: Brief, override?: string): string {
+  if (override?.trim()) return override.trim().toLowerCase();
+  const haystack =
+    `${brief.eventType} ${brief.venueRequirements ?? ""} ${brief.notes ?? ""}`.toLowerCase();
+  for (const category of ["bar", "cafe", "coffee", "restaurant", "museum", "gallery", "hotel"]) {
+    if (haystack.includes(category)) return category === "coffee" ? "cafe" : category;
+  }
+  return "bar";
+}
+
+/**
  * Run the provider chain for a city and category, when it is wired.
  * Errors are swallowed (a warn is logged): curation is cache-first and
  * a provider outage must not fail the stage move.
@@ -81,18 +99,12 @@ export async function curateProject(
   if (!brief) throw new Error(`project ${projectId} has no confirmed brief`);
 
   const city = normalizeCity(brief.city);
-  // Provider chain first (stream F): a catalog miss is now a live
-  // search that persists everything it finds, so the query below reads
-  // a fuller catalog. The seeded rows stay untouched.
-  if (
-    db
-      .select()
-      .from(venueCatalog)
-      .where(sql`lower(${venueCatalog.city}) = ${city}`)
-      .all().length === 0
-  ) {
-    await runProviderSearch(city, options.category ?? "bar");
-  }
+  // The provider chain first (stream F): curation is no longer a static
+  // seed list. The chain is cache-first, so a repeat curation of the
+  // same city and category costs one SQL read and no provider call, and
+  // everything it finds is persisted in the catalog. The seeded rows
+  // stay untouched.
+  await runProviderSearch(city, categoryOf(brief, options.category));
   const rows = db
     .select()
     .from(venueCatalog)

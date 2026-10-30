@@ -214,3 +214,32 @@ describe("enrichment", () => {
     expect(outcome!.failed).toMatch(/502/);
   });
 });
+
+describe("the recorded demo search", () => {
+  it("returns non-empty candidates for both cities, entirely from cache on the second run", async () => {
+    for (const [city, category, fixtureName] of [
+      ["sf", "cafe", "photon-sf.json"],
+      ["malaga", "restaurant", "photon-malaga.json"],
+    ] as const) {
+      const fetchImpl = fixtureFetch(fixtureName);
+      const cityDeps = {
+        photon: photonProvider({ fetchImpl }),
+        overpass: overpassProvider({ fetchImpl: async () => new Response("{}", { status: 200 }) }),
+      };
+
+      const first = await searchVenues(db, { city, category }, cityDeps);
+      expect(first.cache).toBe("miss");
+      expect(first.rows.length).toBeGreaterThan(0);
+      const callsAfterFirst = fetchImpl.calls;
+      expect(callsAfterFirst).toBeGreaterThan(0);
+
+      // The second identical search is served entirely from the cache:
+      // no provider call at all.
+      const second = await searchVenues(db, { city, category }, cityDeps);
+      expect(second.cache).toBe("hit");
+      expect(second.rows.length).toBeGreaterThan(0);
+      expect(second.rows.map((row) => row.id)).toEqual(first.rows.map((row) => row.id));
+      expect(fetchImpl.calls).toBe(callsAfterFirst);
+    }
+  });
+});

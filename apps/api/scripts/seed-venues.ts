@@ -31,6 +31,8 @@ for (const venue of [...SF_VENUES, ...MALAGA_VENUES]) {
       priceBand: venue.priceBand ?? null,
       source: venue.source,
       url: venue.url ?? null,
+      contactEmail: venue.contactEmail ?? null,
+      contactPhone: venue.contactPhone ?? null,
       createdAt: Date.now(),
     })
     .onConflictDoNothing()

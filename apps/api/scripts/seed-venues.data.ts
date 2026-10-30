@@ -14,6 +14,13 @@ export interface SeedVenue {
   priceBand?: "low" | "mid" | "high" | "premium";
   source: string;
   url?: string;
+  /**
+   * The contact, when the research doc carries one. Most rows have
+   * none: a venue without a contact lands in the board's "no contact"
+   * bucket for the user to fill, and the chase never sends to it.
+   */
+  contactEmail?: string;
+  contactPhone?: string;
 }
 
 export const SF_VENUES: SeedVenue[] = [
