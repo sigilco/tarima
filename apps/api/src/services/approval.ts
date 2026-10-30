@@ -61,10 +61,10 @@ function setStage(projectId: string, stage: ProjectStage): void {
  *     park in spec_review. The user confirms or edits at the gate.
  *   to=curating     legal once the spec gate approved; curation runs.
  */
-export function advanceStage(
+export async function advanceStage(
   projectId: string,
   to: "spec_review" | "curating",
-): FlowResult<GateOutcome> {
+): Promise<FlowResult<GateOutcome>> {
   const row = projectRow(projectId);
   if (!row) return { ok: false, error: { code: "not_found" } };
 
@@ -88,7 +88,7 @@ export function advanceStage(
     };
   }
   setStage(projectId, "curating");
-  const stage = runCuration(projectId);
+  const stage = await runCuration(projectId);
   return {
     ok: true,
     value: {
@@ -105,10 +105,10 @@ export function advanceStage(
  * `curating` (zero candidates); matching rows move it to the
  * shortlist gate.
  */
-function runCuration(projectId: string): ProjectStage {
+async function runCuration(projectId: string): Promise<ProjectStage> {
   let candidates = 0;
   try {
-    candidates = curateProject(projectId).candidates;
+    candidates = (await curateProject(projectId)).candidates;
   } catch (err) {
     console.warn("[flow] curation failed:", err instanceof Error ? err.message : err);
     return "curating";
@@ -127,12 +127,12 @@ function runCuration(projectId: string): ProjectStage {
  *   send      approve -> SEND_APPROVED on every staged run; reject ->
  *             SEND_REJECTED (the drafts are discarded).
  */
-export function decideGate(
+export async function decideGate(
   projectId: string,
   gate: ApprovalGate,
   decision: "approve" | "reject",
   opts: { brief?: Brief; entityIds?: string[] } = {},
-): FlowResult<GateOutcome> {
+): Promise<FlowResult<GateOutcome>> {
   const row = projectRow(projectId);
   if (!row) return { ok: false, error: { code: "not_found" } };
   const stage = row.stage as ProjectStage;
@@ -145,7 +145,7 @@ export function decideGate(
 
   switch (gate) {
     case "spec":
-      return decideSpec(projectId, decision, opts.brief);
+      return await decideSpec(projectId, decision, opts.brief);
     case "shortlist":
       return decideShortlist(projectId, decision, opts.entityIds);
     case "send":
@@ -154,11 +154,11 @@ export function decideGate(
 }
 
 /** Spec gate: store the (edited) brief, then curation runs. */
-function decideSpec(
+async function decideSpec(
   projectId: string,
   decision: "approve" | "reject",
   brief?: Brief,
-): FlowResult<GateOutcome> {
+): Promise<FlowResult<GateOutcome>> {
   if (decision === "reject") {
     setStage(projectId, "brief");
     return { ok: true, value: { stage: "brief", released: 0, discarded: 0 } };
@@ -174,7 +174,7 @@ function decideSpec(
   db.update(projects).set({ goal, updatedAt: Date.now() }).where(eq(projects.id, projectId)).run();
 
   setStage(projectId, "curating");
-  const stage = runCuration(projectId);
+  const stage = await runCuration(projectId);
   return {
     ok: true,
     value: {

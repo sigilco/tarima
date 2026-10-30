@@ -391,7 +391,12 @@ describe("ui routes: approval flow", () => {
       headers: { Cookie: cookie() },
     });
     expect(curate.status).toBe(200);
-    expect(await curate.json()).toEqual({ projectId: flowId, candidates: 0, stage: "curating" });
+    expect(await curate.json()).toEqual({
+      projectId: flowId,
+      candidates: 0,
+      noContact: 0,
+      stage: "curating",
+    });
   });
 
   it("rejects a gate decision for the wrong gate with 409", async () => {

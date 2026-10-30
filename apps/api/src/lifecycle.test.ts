@@ -105,8 +105,8 @@ describe("lifecycle: confirm -> curate -> approve -> send -> reply -> parse -> d
     async () => {
       // 1. Confirm: brief -> spec_review, the spec gate stores the edited
       //    brief; curation runs and lands the project at the shortlist.
-      expect(advanceStage(projectId, "spec_review").ok).toBe(true);
-      const spec = decideGate(projectId, "spec", "approve", {
+      expect((await advanceStage(projectId, "spec_review")).ok).toBe(true);
+      const spec = await decideGate(projectId, "spec", "approve", {
         brief: {
           eventType: "offsite",
           city: "Malaga",
@@ -128,7 +128,7 @@ describe("lifecycle: confirm -> curate -> approve -> send -> reply -> parse -> d
         .all()
         .find((row) => row.projectId === projectId);
       expect(candidate).toBeDefined();
-      const shortlist = decideGate(projectId, "shortlist", "approve", {
+      const shortlist = await decideGate(projectId, "shortlist", "approve", {
         entityIds: [candidate!.id],
       });
       expect(shortlist.ok).toBe(true);
@@ -180,7 +180,7 @@ describe("lifecycle: confirm -> curate -> approve -> send -> reply -> parse -> d
       );
 
       // 5. Send gate approve: the ONLY path that releases the draft.
-      const send = decideGate(projectId, "send", "approve");
+      const send = await decideGate(projectId, "send", "approve");
       expect(send.ok).toBe(true);
       if (send.ok) expect(send.value.released).toBe(1);
 
@@ -272,8 +272,8 @@ describe("lifecycle: confirm -> curate -> approve -> send -> reply -> parse -> d
         })
         .run();
 
-      expect(advanceStage(project2, "spec_review").ok).toBe(true);
-      const spec = decideGate(project2, "spec", "approve", {
+      expect((await advanceStage(project2, "spec_review")).ok).toBe(true);
+      const spec = await decideGate(project2, "spec", "approve", {
         brief: {
           eventType: "offsite",
           city: "Malaga",
@@ -290,7 +290,7 @@ describe("lifecycle: confirm -> curate -> approve -> send -> reply -> parse -> d
         .all()
         .find((row) => row.projectId === project2);
       expect(candidate).toBeDefined();
-      const shortlist = decideGate(project2, "shortlist", "approve", {
+      const shortlist = await decideGate(project2, "shortlist", "approve", {
         entityIds: [candidate!.id],
       });
       expect(shortlist.ok).toBe(true);
@@ -316,7 +316,7 @@ describe("lifecycle: confirm -> curate -> approve -> send -> reply -> parse -> d
         ),
       ).toBe(true);
 
-      const send = decideGate(project2, "send", "approve");
+      const send = await decideGate(project2, "send", "approve");
       expect(send.ok).toBe(true);
       await waitFor(() => outboundFor(candidate!.id).length > 0);
       expect(
@@ -435,7 +435,7 @@ describe("lifecycle: the send gate on a board that skipped the venue flow", () =
 
       // The gate decides while the run is still drafting: nothing is
       // staged yet, so the decision releases nothing.
-      const send = decideGate(projectId, "send", "approve");
+      const send = await decideGate(projectId, "send", "approve");
       expect(send.ok).toBe(true);
       if (send.ok) expect(send.value.released).toBe(0);
       expect(sendsFor(runId)).toHaveLength(0);
@@ -467,7 +467,7 @@ describe("lifecycle: the send gate on a board that skipped the venue flow", () =
       expect(sendsFor(runId)).toHaveLength(0);
       expect(outboundFor(entityId)).toHaveLength(0);
 
-      const send = decideGate(projectId, "send", "approve");
+      const send = await decideGate(projectId, "send", "approve");
       expect(send.ok).toBe(true);
       if (send.ok) expect(send.value.released).toBe(1);
 

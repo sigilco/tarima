@@ -57,16 +57,16 @@ beforeAll(() => {
 });
 
 describe("approval flow", () => {
-  it("rejects gate decisions while no gate is pending", () => {
-    const result = decideGate(projectId, "spec", "approve");
+  it("rejects gate decisions while no gate is pending", async () => {
+    const result = await decideGate(projectId, "spec", "approve");
     expect(result.ok).toBe(false);
   });
 
-  it("moves brief -> spec_review and stores the edited brief at the spec gate", () => {
-    const staged = advanceStage(projectId, "spec_review");
+  it("moves brief -> spec_review and stores the edited brief at the spec gate", async () => {
+    const staged = await advanceStage(projectId, "spec_review");
     expect(staged.ok).toBe(true);
 
-    const approved = decideGate(projectId, "spec", "approve", {
+    const approved = await decideGate(projectId, "spec", "approve", {
       brief: {
         eventType: "offsite",
         city: "Malaga",
@@ -82,9 +82,9 @@ describe("approval flow", () => {
     expect(brief.headcount).toBe(40);
   });
 
-  it("curation is idempotent and filters by capacity", () => {
+  it("curation is idempotent and filters by capacity", async () => {
     // The spec gate already ran curation over the stored brief.
-    expect(curateProject(projectId).candidates).toBe(0);
+    expect((await curateProject(projectId)).candidates).toBe(0);
     const rows = db
       .select()
       .from(entities)
@@ -94,7 +94,7 @@ describe("approval flow", () => {
     expect(rows[0]!.status).toBe("candidate");
   });
 
-  it("the shortlist gate cuts nothing kept and opens the send gate", () => {
+  it("the shortlist gate cuts nothing kept and opens the send gate", async () => {
     db.update(projects).set({ stage: "shortlist_review" }).where(eq(projects.id, projectId)).run();
     const candidate = db
       .select()
@@ -102,7 +102,9 @@ describe("approval flow", () => {
       .all()
       .find((r) => r.projectId === projectId)!;
 
-    const result = decideGate(projectId, "shortlist", "approve", { entityIds: [candidate.id] });
+    const result = await decideGate(projectId, "shortlist", "approve", {
+      entityIds: [candidate.id],
+    });
     expect(result.ok).toBe(true);
     if (result.ok) {
       expect(result.value.released).toBe(1);
@@ -118,7 +120,7 @@ describe("approval flow", () => {
     ).toBe("pending");
   });
 
-  it("the send gate enqueues decisions and never writes an email.send row", () => {
+  it("the send gate enqueues decisions and never writes an email.send row", async () => {
     // Seed a staged run the way the engine leaves it after outreach:
     // parked in outreach_staged with the draft in the gate step input.
     const candidate = db
@@ -149,7 +151,7 @@ describe("approval flow", () => {
       .filter((r) => r.type === "email.send");
     expect(sendsBefore).toHaveLength(0);
 
-    const result = decideGate(projectId, "send", "approve");
+    const result = await decideGate(projectId, "send", "approve");
     expect(result.ok).toBe(true);
     if (result.ok) expect(result.value.released).toBe(1);
 
@@ -164,12 +166,12 @@ describe("approval flow", () => {
     expect(project().stage).toBe("running");
   });
 
-  it("rejecting the send gate discards the drafts", () => {
-    const result = decideGate(projectId, "send", "reject");
+  it("rejecting the send gate discards the drafts", async () => {
+    const result = await decideGate(projectId, "send", "reject");
     expect(result.ok).toBe(false); // stage moved past send_review; gate closed
   });
 
-  it("the send gate only releases the staged runs of its own project", () => {
+  it("the send gate only releases the staged runs of its own project", async () => {
     // A second project with its own staged run: the gate of the first
     // project must not touch it.
     const otherId = createProject(db, { name: "Other flow project" }).id;
@@ -199,7 +201,7 @@ describe("approval flow", () => {
     // decidable.
     db.update(projects).set({ stage: "send_review" }).where(eq(projects.id, otherId)).run();
 
-    const other = decideGate(otherId, "send", "approve");
+    const other = await decideGate(otherId, "send", "approve");
     expect(other.ok).toBe(true);
     if (other.ok) expect(other.value.released).toBe(1);
 
@@ -249,7 +251,7 @@ describe("approval flow", () => {
     expect(firstRunDecisions).toHaveLength(1);
   });
 
-  it("rejecting the send gate clears the approval stamp", () => {
+  it("rejecting the send gate clears the approval stamp", async () => {
     const p = createProject(db, { name: "Reject stamp" });
     const entity = createEntity(db, {
       projectId: p.id,
@@ -275,7 +277,7 @@ describe("approval flow", () => {
 
     // Approve, then start over and reject.
     db.update(projects).set({ stage: "send_review" }).where(eq(projects.id, p.id)).run();
-    expect(decideGate(p.id, "send", "approve").ok).toBe(true);
+    expect((await decideGate(p.id, "send", "approve")).ok).toBe(true);
     const approved = db
       .select()
       .from(projects)
@@ -284,7 +286,7 @@ describe("approval flow", () => {
     expect(approved.sendApprovedAt).not.toBeNull();
 
     db.update(projects).set({ stage: "send_review" }).where(eq(projects.id, p.id)).run();
-    expect(decideGate(p.id, "send", "reject").ok).toBe(true);
+    expect((await decideGate(p.id, "send", "reject")).ok).toBe(true);
     const rejected = db
       .select()
       .from(projects)
@@ -292,5 +294,79 @@ describe("approval flow", () => {
       .find((row) => row.id === p.id)!;
     expect(rejected.sendApprovedAt).toBeNull();
     expect(rejected.stage).toBe("curating");
+  });
+});
+
+describe("the no-contact send release", () => {
+  it("flags a curated row without a contact instead of sending", async () => {
+    // A project whose candidate has no contact anywhere: the shortlist
+    // and send gates approve, the draft is released, but no email.send
+    // may ever be enqueued. The row lands in the "no contact" bucket
+    // (blocked) with the contact flagged as missing.
+    const p = createProject(db, { name: "No contact project" });
+    const entity = createEntity(db, {
+      projectId: p.id,
+      name: "Bar No Email",
+      status: "candidate",
+      missing: ["contact"], // curation flags a venue OSM has no email for
+      // no contact on purpose
+    });
+
+    // Shortlist and send gates pass.
+    db.update(projects).set({ stage: "shortlist_review" }).where(eq(projects.id, p.id)).run();
+    expect((await decideGate(p.id, "shortlist", "approve")).ok).toBe(true);
+    const approved = await decideGate(p.id, "send", "approve");
+    expect(approved.ok).toBe(true);
+
+    // Seed the staged run the way the engine leaves it, with the run
+    // context carrying NO contactEmail.
+    const runId = randomUUID();
+    db.insert(workflows)
+      .values({
+        id: runId,
+        type: "chase-deliverables",
+        status: "running",
+        state: "outreach_staged",
+        context: { entityId: entity.id, entityName: entity.name },
+        createdAt: Date.now(),
+      })
+      .run();
+    enqueueStep(db, runId, "chase.outreach_staged", {
+      entityName: entity.name,
+      draft: { subject: "s", body: "b" },
+    });
+
+    // Drive the engine like the api runner does (the wrapper flags the
+    // entity when the release had no address).
+    const { runOnce } = await import("@tarima/engine/runner");
+    const { apiChaseHandlers } = await import("../chase-handlers");
+    const { stubLlm } = await import("@tarima/chase/llm");
+    for (let i = 0; i < 10; i++) {
+      const ran = await runOnce(db, apiChaseHandlers(stubLlm));
+      if (ran === 0) break;
+    }
+
+    // No send was enqueued.
+    const sends = db
+      .select()
+      .from(outbox)
+      .all()
+      .filter((r) => r.type === "email.send");
+    expect(sends).toHaveLength(0);
+    // The run did not park in await_reply: it finished blocked.
+    const wf = db
+      .select()
+      .from(workflows)
+      .all()
+      .find((row) => row.id === runId)!;
+    expect(wf.state).toBe("failed");
+    // The row is visible as needing a contact, not as waiting.
+    const row = db
+      .select()
+      .from(entities)
+      .all()
+      .find((r) => r.id === entity.id)!;
+    expect(row.status).toBe("failed");
+    expect((row.goal as Record<string, unknown>).missing).toContain("contact");
   });
 });

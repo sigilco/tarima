@@ -73,7 +73,24 @@ export {
   notifyPayloadSchema,
 } from "./notify.js";
 export type { BindingChannel, ChannelBinding, NotifyKind, NotifyPayload } from "./notify.js";
-export { PRICE_BANDS, priceBandSchema, venueSchema } from "./venue.js";
-export type { PriceBand, Venue } from "./venue.js";
+export {
+  PRICE_BANDS,
+  catalogVenueSchema,
+  priceBandSchema,
+  venueContactRequestSchema,
+  venueContactResponseSchema,
+  venueSchema,
+  venueSearchRequestSchema,
+  venueSearchResponseSchema,
+} from "./venue.js";
+export type {
+  CatalogVenue,
+  PriceBand,
+  Venue,
+  VenueContactRequest,
+  VenueContactResponse,
+  VenueSearchRequest,
+  VenueSearchResponse,
+} from "./venue.js";
 export { NOT_ALLOWLISTED_ERROR, USER_ROLES, isAllowlisted, parseAllowlist } from "./beta.js";
 export type { UserRole } from "./beta.js";

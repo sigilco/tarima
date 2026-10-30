@@ -36,23 +36,53 @@ import {
   createProjectSchema,
   projectGoalSchema,
   stageRequestSchema,
+  venueContactRequestSchema,
+  venueSearchRequestSchema,
 } from "@tarima/contract";
 import { db } from "../db";
+import { eq } from "drizzle-orm";
+import { entities, venueCatalog } from "../db/schema";
 import { requireSession, getSessionUser } from "../middleware/require-session";
 import { createProject, getProject, listProjects } from "../services/projects";
-import { createEntity, listEntities } from "../services/entities";
+import { createEntity, getEntity, listEntities } from "../services/entities";
 import { triggerWorkflow, WORKFLOW_TEMPLATES } from "../services/workflows";
 import { listDrafts } from "../services/drafts";
 import { handleBulkIntake } from "../services/bulk-intake";
 import { advanceStage, decideGate } from "../services/approval";
 import { curateProject } from "../services/curation";
+import { searchVenues, venueSearchDeps, type VenueRow } from "../services/venue-search";
 import { summarizeBoard } from "../lib/board";
-import { GATE_FOR_STAGE, type ApprovalGate, type ProjectStage } from "@tarima/contract";
+import {
+  GATE_FOR_STAGE,
+  type ApprovalGate,
+  type CatalogVenue,
+  type ProjectStage,
+} from "@tarima/contract";
 
 const bulkBodySchema = v.object({ csv: v.pipe(v.string(), v.maxLength(1_000_000)) });
 const workflowBodySchema = v.object({
   template: v.pipe(v.string(), v.minLength(1), v.maxLength(100)),
 });
+
+/** A catalog row in the contract's wire shape (the honesty flags included). */
+function toCatalogVenue(row: VenueRow): CatalogVenue {
+  const contact = row.contactEmail ?? undefined;
+  return {
+    id: row.id,
+    city: row.city,
+    name: row.name,
+    ...(row.area ? { area: row.area } : {}),
+    ...(row.capacity !== null ? { capacity: row.capacity } : {}),
+    ...(row.priceBand ? { priceBand: row.priceBand } : {}),
+    source: row.source,
+    ...(row.url ? { url: row.url } : {}),
+    ...(row.externalId ? { externalId: row.externalId } : {}),
+    ...(contact ? { contactEmail: contact } : {}),
+    ...(row.contactPhone ? { contactPhone: row.contactPhone } : {}),
+    ...(row.website ? { website: row.website } : {}),
+    needsContact: !contact,
+  };
+}
 
 /** The project payload plus the gate waiting on the user, if any. */
 function projectWithGate(
@@ -162,6 +192,42 @@ export const uiRoutes = new Hono()
     });
     return c.json({ entity }, 201);
   })
+  /**
+   * Set the contact of one board row (the "no contact" affordance): a
+   * curated venue OSM had no email for is filled here, so the chase can
+   * reach it. Clears the contact flag when an address lands.
+   */
+  .patch("/api/ui/projects/:projectId/entities/:entityId/contact", async (c) => {
+    const projectId = c.req.param("projectId");
+    if (!getProject(db, projectId, getSessionUser(c)?.userId ?? null)) {
+      return c.json({ error: "not_found" }, 404);
+    }
+
+    const parsed = v.safeParse(
+      v.object({ contact: v.pipe(v.string(), v.trim(), v.email()) }),
+      await c.req.json().catch(() => null),
+    );
+    if (!parsed.success) return c.json({ error: "invalid_request" }, 400);
+
+    const row = db
+      .select()
+      .from(entities)
+      .where(eq(entities.id, c.req.param("entityId")))
+      .get();
+    if (!row || row.projectId !== projectId) return c.json({ error: "not_found" }, 404);
+
+    const goal = { ...row.goal };
+    const missing = Array.isArray(goal.missing)
+      ? (goal.missing as unknown[]).filter((item) => item !== "contact")
+      : [];
+    goal.missing = missing;
+    db.update(entities)
+      .set({ contactEmail: parsed.output.contact, goal, updatedAt: Date.now() })
+      .where(eq(entities.id, row.id))
+      .run();
+
+    return c.json({ entity: getEntity(db, row.id) });
+  })
   .post("/api/ui/projects/:projectId/entities/bulk", async (c) => {
     const projectId = c.req.param("projectId");
     if (!getProject(db, projectId, getSessionUser(c)?.userId ?? null)) {
@@ -212,7 +278,7 @@ export const uiRoutes = new Hono()
     const parsed = v.safeParse(stageRequestSchema, await c.req.json().catch(() => null));
     if (!parsed.success) return c.json({ error: "invalid_request" }, 400);
 
-    const result = advanceStage(projectId, parsed.output.to);
+    const result = await advanceStage(projectId, parsed.output.to);
     if (!result.ok) return c.json({ error: result.error.code }, 409);
     return c.json({
       projectId,
@@ -228,7 +294,7 @@ export const uiRoutes = new Hono()
     if (!parsed.success) return c.json({ error: "invalid_request" }, 400);
 
     const { gate, decision, brief, entityIds } = parsed.output;
-    const result = decideGate(projectId, gate, decision, { brief, entityIds });
+    const result = await decideGate(projectId, gate, decision, { brief, entityIds });
     if (!result.ok) {
       const status = result.error.code === "not_found" ? 404 : 409;
       return c.json({ error: result.error.code }, status);
@@ -241,17 +307,73 @@ export const uiRoutes = new Hono()
       discarded: result.value.discarded,
     });
   })
-  .post("/api/ui/projects/:projectId/curate", (c) => {
+  .post("/api/ui/projects/:projectId/curate", async (c) => {
     const projectId = c.req.param("projectId");
     if (!getProject(db, projectId)) return c.json({ error: "not_found" }, 404);
 
     try {
-      const { candidates } = curateProject(projectId);
+      const { candidates, noContact } = await curateProject(projectId);
       const project = getProject(db, projectId)!;
-      return c.json({ projectId, candidates, stage: project.stage });
+      return c.json({ projectId, candidates, noContact, stage: project.stage });
     } catch (err) {
       const message = err instanceof Error ? err.message : "curation failed";
       if (message.includes("no confirmed brief")) return c.json({ error: "no_brief" }, 409);
       return c.json({ error: "curation_failed" }, 500);
     }
+  })
+  /**
+   * Venue search (stream F, contract `venueSearchResponseSchema`):
+   * cache-first lookup over the provider chain. A hit costs one SQL
+   * read; a miss calls Photon and persists every result. Used by the
+   * curation flow and by the venue picker.
+   */
+  .post("/api/ui/venues/search", async (c) => {
+    const parsed = v.safeParse(venueSearchRequestSchema, await c.req.json().catch(() => null));
+    if (!parsed.success) return c.json({ error: "invalid_request" }, 400);
+
+    const { city, category, limit } = parsed.output;
+    const deps = venueSearchDeps();
+    if (!deps) return c.json({ error: "no_provider" }, 503);
+    const result = await searchVenues(
+      db,
+      { city, category: category ?? "bar", ...(limit ? { limit } : {}) },
+      deps,
+    );
+    return c.json({
+      city: result.rows[0]?.city ?? city,
+      category: category ?? "",
+      cache: result.cache,
+      refreshing: result.refreshing,
+      venues: result.rows.map(toCatalogVenue),
+    });
+  })
+  /**
+   * Fill the contact of one catalog venue by hand (contract
+   * `venueContactResponseSchema`). This is the affordance that closes
+   * the "no contact" bucket: OSM rarely carries a contact, so the user
+   * enters one and every future curation of that venue is chaseable.
+   */
+  .patch("/api/ui/venues/:venueId/contact", async (c) => {
+    const parsed = v.safeParse(venueContactRequestSchema, await c.req.json().catch(() => null));
+    if (!parsed.success) return c.json({ error: "invalid_request" }, 400);
+
+    const row = db
+      .select()
+      .from(venueCatalog)
+      .where(eq(venueCatalog.id, c.req.param("venueId")))
+      .get();
+    if (!row) return c.json({ error: "not_found" }, 404);
+
+    const patch = parsed.output;
+    db.update(venueCatalog)
+      .set({
+        contactEmail: patch.contactEmail ?? row.contactEmail,
+        contactPhone: patch.contactPhone ?? row.contactPhone,
+        website: patch.website ?? row.website,
+      })
+      .where(eq(venueCatalog.id, row.id))
+      .run();
+
+    const updated = db.select().from(venueCatalog).where(eq(venueCatalog.id, row.id)).get()!;
+    return c.json({ venue: toCatalogVenue(updated) });
   });
