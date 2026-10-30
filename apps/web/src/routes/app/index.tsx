@@ -1,8 +1,11 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import * as v from "valibot";
+import { BRIEF_GOAL_KEY } from "@tarima/contract";
 import * as m from "../../paraglide/messages.js";
+import { BriefForm } from "../../components/BriefForm";
 import { createProject, UnauthorizedError, unwrap } from "../../lib/api";
+import { EMPTY_BRIEF_FORM, parseBriefForm, type BriefFormValues } from "../../lib/brief";
 import { fetchProjectsFn } from "../../lib/api-server";
 
 /**
@@ -11,6 +14,10 @@ import { fetchProjectsFn } from "../../lib/api-server";
  * The loader fetches the projects on the server (SSR) and hands the
  * payload to the component; a 401 means "no session", so the loader
  * redirects to /login.
+ *
+ * The new-project form carries the brief: the structured fields of the
+ * contract's `briefSchema` are validated in the browser and written into
+ * `projects.goal.brief`, so the board starts with the event in context.
  */
 
 export const Route = createFileRoute("/app/")({
@@ -34,6 +41,7 @@ function AppHome() {
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
+  const [briefValues, setBriefValues] = useState<BriefFormValues>(EMPTY_BRIEF_FORM);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -45,14 +53,19 @@ function AppHome() {
       setError(m["login.invalidEmail"]());
       return;
     }
+    const brief = parseBriefForm(briefValues);
+    if (!brief) {
+      setError(m["brief.invalid"]());
+      return;
+    }
     setBusy(true);
     setError(null);
     try {
-      const { project } = await createProject(parsed.output);
+      const { project } = await createProject(parsed.output, { [BRIEF_GOAL_KEY]: brief });
       await navigate({
         to: "/app/p/$projectId",
         params: { projectId: project.id },
-        search: { filter: undefined, row: undefined, csv: undefined },
+        search: { filter: undefined, row: undefined, csv: undefined, add: undefined },
       });
     } catch {
       setError(m["errors.offline"]());
@@ -78,26 +91,27 @@ function AppHome() {
           {m["app.projects"]()}
         </h1>
 
-        <form
-          onSubmit={onCreate}
-          className="mt-8 flex flex-col gap-3 rounded-2xl border border-border-subtle bg-surface-raised p-4 sm:flex-row"
-        >
-          <input
-            type="text"
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder={m["app.newProjectName"]()}
-            aria-label={m["app.newProjectName"]()}
-            className="min-w-0 flex-1 rounded-xl border border-border-subtle bg-surface px-4 py-2.5 text-[15px] text-content outline-none placeholder:text-content-faint focus:border-content-faint"
-          />
-          <button
-            type="submit"
-            disabled={busy}
-            className="shrink-0 rounded-full bg-content px-5 py-2.5 text-[14px] font-medium text-surface transition-transform duration-300 ease-[cubic-bezier(0.34,1.4,0.4,1)] hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60"
-          >
-            {m["app.newProjectSubmit"]()}
-          </button>
+        <form onSubmit={onCreate} className="mt-8 flex flex-col gap-3">
+          <div className="flex flex-col gap-3 rounded-2xl border border-border-subtle bg-surface-raised p-4 sm:flex-row">
+            <input
+              type="text"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder={m["app.newProjectName"]()}
+              aria-label={m["app.newProjectName"]()}
+              className="min-w-0 flex-1 rounded-xl border border-border-subtle bg-surface px-4 py-2.5 text-[15px] text-content outline-none placeholder:text-content-faint focus:border-content-faint"
+            />
+            <button
+              type="submit"
+              disabled={busy}
+              className="shrink-0 rounded-full bg-content px-5 py-2.5 text-[14px] font-medium text-surface transition-transform duration-300 ease-[cubic-bezier(0.34,1.4,0.4,1)] hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60"
+            >
+              {m["app.newProjectSubmit"]()}
+            </button>
+          </div>
+
+          <BriefForm values={briefValues} onChange={setBriefValues} />
         </form>
         {error ? <p className="mt-2 text-[13px] text-danger">{error}</p> : null}
 
