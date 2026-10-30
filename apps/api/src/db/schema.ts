@@ -326,13 +326,50 @@ export const venueCatalog = sqliteTable(
     priceBand: text("price_band").$type<"low" | "mid" | "high" | "premium">(),
     source: text("source").notNull(),
     url: text("url"),
+    // Stream F provider columns: filled by the venue-search service
+    // (Photon discovery, Overpass enrichment). Null stays null: the
+    // honesty rule is that no provider ever invents a contact, and a
+    // venue without one lands in the board's "no contact" bucket.
+    externalId: text("external_id"),
+    contactEmail: text("contact_email"),
+    contactPhone: text("contact_phone"),
+    website: text("website"),
+    // Epoch ms of the last Overpass enrichment pass (null = never).
+    enrichedAt: integer("enriched_at"),
     createdAt: integer("created_at").notNull().$defaultFn(nowMs),
   },
   (t) => [
     index("idx_venue_catalog_city").on(t.city),
     uniqueIndex("idx_venue_catalog_city_name").on(t.city, t.name),
+    // The provider idempotency key: a venue found twice by a search is
+    // upserted once (`onConflictDoNothing` on this column).
+    uniqueIndex("idx_venue_catalog_external").on(t.externalId),
   ],
 );
+
+/**
+ * The search cache (stream F): one row per normalized provider query.
+ * A hit returns the cached venue rows from the catalog; a miss calls
+ * Photon, upserts every result and records the query here. Rows are
+ * fresh for 7 days; a stale hit still answers from the cache and the
+ * refresh runs in the background (SWR).
+ */
+export const searchCache = sqliteTable("search_cache", {
+  /** The normalized query hash (see services/venue-search.ts). */
+  queryHash: text("query_hash").primaryKey(),
+  /** The human-readable normalized query (for ops and debugging). */
+  query: text("query").notNull(),
+  /** The external ids the search returned, as a json array. */
+  venueIds: text("venue_ids", { mode: "json" })
+    .notNull()
+    .default(sql`'[]'`)
+    .$type<string[]>(),
+  createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+  refreshedAt: integer("refreshed_at").notNull().$defaultFn(nowMs),
+});
+
+export type SearchCache = typeof searchCache.$inferSelect;
+export type VenueCatalogRow = typeof venueCatalog.$inferSelect;
 
 /**
  * In-app inbox (Stage B, channels stream).

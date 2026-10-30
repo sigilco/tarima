@@ -29,6 +29,7 @@
     "@tarima/llm": "workspace:*",
     "@tarima/obs": "workspace:*",
     "@tarima/telegram": "workspace:*",
+    "@tarima/venuesearch": "workspace:*",
     "better-sqlite3": "^13.0.3",
     "drizzle-orm": "^0.45.4",
     "grammy": "catalog:",

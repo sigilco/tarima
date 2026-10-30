@@ -101,6 +101,9 @@ importers:
       '@tarima/telegram':
         specifier: workspace:*
         version: link:../../packages/telegram
+      '@tarima/venuesearch':
+        specifier: workspace:*
+        version: link:../../packages/venuesearch
       better-sqlite3:
         specifier: ^13.0.3
         version: 13.0.3
