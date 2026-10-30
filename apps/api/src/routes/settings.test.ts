@@ -30,11 +30,11 @@ const PROJECT_ID = randomUUID();
 const app = new Hono().route("/", settingsRoutes);
 
 /** A request with the session cookie of the test user. */
-function call(path: string, init?: RequestInit): Promise<Response> {
+async function call(path: string, init?: RequestInit): Promise<Response> {
   const cookie = createSessionToken(USER_ID, "test-secret");
   return app.request(path, {
     ...init,
-    headers: { ...(init?.headers ?? {}), cookie: `tarima_session=${cookie}` },
+    headers: { ...init?.headers, cookie: `tarima_session=${cookie}` },
   });
 }
 

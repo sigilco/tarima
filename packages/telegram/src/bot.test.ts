@@ -190,7 +190,7 @@ describe("createTelegramHandle", () => {
 
 describe("connect codes", () => {
   /** Deps with a resolver that accepts exactly the code ABCDEF. */
-  function connectDeps(store = new MemoryBindingStore()) {
+  function makeConnectDeps(store = new MemoryBindingStore()) {
     const resolved: number[] = [];
     return {
       resolved,
@@ -213,28 +213,28 @@ describe("connect codes", () => {
   }
 
   it("binds through /start <code>", async () => {
-    const { botDeps: deps, resolved } = connectDeps();
+    const { botDeps: deps, resolved } = makeConnectDeps();
     const reply = await handleCommand({ chatId: 9, text: "/start ABCDEF" }, deps);
     expect(reply.text).toContain("Connected");
     expect(resolved).toEqual([9]);
   });
 
   it("binds through a bare 6 char message", async () => {
-    const { botDeps: deps, resolved } = connectDeps();
+    const { botDeps: deps, resolved } = makeConnectDeps();
     const reply = await handleCommand({ chatId: 9, text: "ABCDEF" }, deps);
     expect(reply.text).toContain("Connected");
     expect(resolved).toEqual([9]);
   });
 
   it("binds through /bind when the argument looks like a code", async () => {
-    const { botDeps: deps } = connectDeps();
+    const { botDeps: deps } = makeConnectDeps();
     const reply = await handleCommand({ chatId: 9, text: "/bind ABCDEF" }, deps);
     expect(reply.text).toContain("Connected");
     expect(deps.store.get(9)).toBeUndefined();
   });
 
   it("rejects an invalid code without touching the store", async () => {
-    const { botDeps: deps } = connectDeps();
+    const { botDeps: deps } = makeConnectDeps();
     const reply = await handleCommand({ chatId: 9, text: "/start ZZZZZZ" }, deps);
     expect(reply.text).toBe(usageText());
     expect(deps.store.get(9)).toBeUndefined();
@@ -247,7 +247,7 @@ describe("connect codes", () => {
 
   it("keeps project binds working when the argument is not a code", async () => {
     const store = new MemoryBindingStore();
-    const { botDeps: deps } = connectDeps(store);
+    const { botDeps: deps } = makeConnectDeps(store);
     const reply = await handleCommand({ chatId: 9, text: "/bind p1" }, deps);
     expect(reply.text).toContain("p1");
     expect(store.get(9)).toBe("p1");

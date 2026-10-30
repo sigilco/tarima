@@ -25,7 +25,7 @@ import { entities, projects, userMessages } from "../db/schema";
 import { boundExternalIds } from "./bindings";
 
 /** A channel that can carry a message to one endpoint. */
-interface NotifySender {
+export interface NotifySender {
   /** Deliver the text to the endpoint (a chat id or a phone number). */
   send(externalId: string, text: string): Promise<void>;
 }
