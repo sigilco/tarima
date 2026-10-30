@@ -1,0 +1,74 @@
+# Continuous integration for the tarima workspace.
+#
+# Two jobs:
+#
+#   validate   the full static and unit gate (`pnpm validate`)
+#   e2e        the api-level end-to-end suite, which boots the real api
+#              process against a throwaway database, with the loopback
+#              mail domain and the deterministic stub LLM
+#
+# The browser suite (Playwright) is not run here: it needs the browser
+# binaries and a built web bundle, and it is the laptop gate. It runs
+# with `pnpm --filter @tarima/e2e test:ui`.
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - "beta/**"
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.21.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: install
+        run: pnpm install --frozen-lockfile
+
+      - name: validate
+        run: pnpm validate
+
+  e2e:
+    name: e2e (api level)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.21.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: install
+        run: pnpm install --frozen-lockfile
+
+      - name: build the web bundle
+        # The api process serves the ui from the built bundle, so the
+        # browser suite has an artifact to run against.
+        run: pnpm --filter web build
+
+      - name: run the api-level end-to-end suite
+        run: pnpm --filter @tarima/e2e test
