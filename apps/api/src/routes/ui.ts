@@ -42,15 +42,26 @@ import { requireSession, getSessionUser } from "../middleware/require-session";
 import { createProject, getProject, listProjects } from "../services/projects";
 import { createEntity, listEntities } from "../services/entities";
 import { triggerWorkflow, WORKFLOW_TEMPLATES } from "../services/workflows";
+import { listDrafts } from "../services/drafts";
 import { handleBulkIntake } from "../services/bulk-intake";
 import { advanceStage, decideGate } from "../services/approval";
 import { curateProject } from "../services/curation";
 import { summarizeBoard } from "../lib/board";
+import { GATE_FOR_STAGE, type ApprovalGate, type ProjectStage } from "@tarima/contract";
 
 const bulkBodySchema = v.object({ csv: v.pipe(v.string(), v.maxLength(1_000_000)) });
 const workflowBodySchema = v.object({
   template: v.pipe(v.string(), v.minLength(1), v.maxLength(100)),
 });
+
+/** The project payload plus the gate waiting on the user, if any. */
+function projectWithGate(
+  stage: string,
+  project: ReturnType<typeof getProject> & {},
+): Record<string, unknown> {
+  const pendingGate = GATE_FOR_STAGE[stage as ProjectStage] as ApprovalGate | undefined;
+  return { ...project, ...(pendingGate ? { pendingGate } : {}) };
+}
 
 /**
  * The body of a manual row.
@@ -92,7 +103,7 @@ export const uiRoutes = new Hono()
   .get("/api/ui/projects/:projectId", (c) => {
     const project = getProject(db, c.req.param("projectId"), getSessionUser(c)?.userId ?? null);
     if (!project) return c.json({ error: "not_found" }, 404);
-    return c.json({ project });
+    return c.json({ project: projectWithGate(project.stage, project) });
   })
   .get("/api/ui/projects/:projectId/entities", (c) => {
     const projectId = c.req.param("projectId");
@@ -108,7 +119,21 @@ export const uiRoutes = new Hono()
     if (!project) return c.json({ error: "not_found" }, 404);
 
     const entities = listEntities(db, projectId);
-    return c.json({ project, entities, summary: summarizeBoard(entities) });
+    return c.json({
+      project: projectWithGate(project.stage, project),
+      entities,
+      summary: summarizeBoard(entities),
+    });
+  })
+  .get("/api/ui/projects/:projectId/drafts", (c) => {
+    const view = listDrafts(db, c.req.param("projectId"), getSessionUser(c)?.userId ?? null);
+    if (!view) return c.json({ error: "not_found" }, 404);
+    return c.json({
+      projectId: view.project.id,
+      stage: view.project.stage,
+      ...(view.pendingGate ? { pendingGate: view.pendingGate } : {}),
+      drafts: view.drafts,
+    });
   })
   .post("/api/ui/projects/:projectId/entities", async (c) => {
     const projectId = c.req.param("projectId");
@@ -157,7 +182,17 @@ export const uiRoutes = new Hono()
     }
 
     const runs = triggerWorkflow(db, projectId, template);
-    return c.json({ runs }, 201);
+    const project = getProject(db, projectId)!;
+    return c.json(
+      {
+        runs,
+        stage: project.stage,
+        ...(GATE_FOR_STAGE[project.stage as ProjectStage]
+          ? { pendingGate: GATE_FOR_STAGE[project.stage as ProjectStage] }
+          : {}),
+      },
+      201,
+    );
   })
   // Approval flow (contract stage.ts). advanceStage / decideGate own
   // the semantics; curation for a catalog miss is explicit here so the

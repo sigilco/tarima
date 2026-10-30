@@ -79,6 +79,11 @@ export const projects = sqliteTable("projects", {
     .$type<Record<string, unknown>>(),
   // Approval-flow stage (contract PROJECT_STAGES).
   stage: text("stage").notNull().default("brief"),
+  // Epoch ms the send gate was approved (null = not approved). One
+  // approval per project run: a chase started after the approval
+  // inherits it and its staged drafts are released without a second
+  // gate decision.
+  sendApprovedAt: integer("send_approved_at"),
   createdAt: integer("created_at").notNull().$defaultFn(nowMs),
   updatedAt: integer("updated_at").notNull().$defaultFn(nowMs),
 });

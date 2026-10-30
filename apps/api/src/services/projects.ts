@@ -123,6 +123,7 @@ export function createProject(db: ApiDb, input: CreateProjectInput): ProjectWire
     description: null,
     goal: input.goal ?? {},
     stage: "brief",
+    sendApprovedAt: null,
     createdAt: now,
     updatedAt: now,
   };

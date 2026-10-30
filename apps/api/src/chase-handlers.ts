@@ -24,6 +24,7 @@
 import { chaseHandlers } from "@tarima/chase/handlers";
 import type { ChaseLlm } from "@tarima/chase/llm";
 import type { HandlerRegistry, StepContext, StepResult } from "@tarima/engine/types";
+import { sendApprovedForEntity } from "./services/approval";
 
 /** Delay before the first follow-up goes out (48h, the SFM default). */
 const FOLLOW_UP_DELAY_MS = Number(process.env.ENGINE_FOLLOW_UP_DELAY_MS ?? 48 * 60 * 60 * 1000);
@@ -46,6 +47,27 @@ function hasBody(input: Record<string, unknown>): boolean {
  */
 export function apiChaseHandlers(llm: ChaseLlm): HandlerRegistry {
   const base = chaseHandlers(llm);
+
+  const outreachStaged = async (ctx: StepContext): Promise<StepResult> => {
+    // Park path: no gate event in the input means the run just staged
+    // its draft. When the project's send gate is already approved (the
+    // user approved while this run was still drafting, or approved an
+    // earlier chase of the same project run), the draft inherits that
+    // approval and is released immediately: one approval per project
+    // run, no stranded drafts, still zero unstaged sends (the release
+    // goes through the same SEND_APPROVED transition as a click).
+    const event = ctx.input.event as string | undefined;
+    if (ctx.state === "outreach_staged" && event === undefined) {
+      const entityId = ctx.context.entityId;
+      if (typeof entityId === "string" && sendApprovedForEntity(entityId)) {
+        return base["chase.outreach_staged"]({
+          ...ctx,
+          input: { ...ctx.input, event: "SEND_APPROVED" },
+        });
+      }
+    }
+    return base["chase.outreach_staged"](ctx);
+  };
 
   const awaitReply = async (ctx: StepContext): Promise<StepResult> => {
     // The gate decision and the keep-alive timer can complete in either
@@ -132,6 +154,7 @@ export function apiChaseHandlers(llm: ChaseLlm): HandlerRegistry {
 
   return {
     ...base,
+    "chase.outreach_staged": outreachStaged,
     "chase.await_reply": awaitReply,
     "chase.parse": parse,
   };

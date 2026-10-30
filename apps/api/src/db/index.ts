@@ -56,5 +56,8 @@ const projectColumns = sqlite.prepare("PRAGMA table_info(`projects`)").all() as 
 if (!projectColumns.some((c) => c.name === "stage")) {
   sqlite.exec("ALTER TABLE `projects` ADD `stage` text DEFAULT 'brief' NOT NULL;");
 }
+if (!projectColumns.some((c) => c.name === "send_approved_at")) {
+  sqlite.exec("ALTER TABLE `projects` ADD `send_approved_at` integer;");
+}
 
 export const db = drizzle(sqlite, { schema });

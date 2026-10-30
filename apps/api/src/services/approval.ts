@@ -259,15 +259,16 @@ function decideShortlist(
  * key unique while resolving to the same gate handler); the chase
  * handler does the rest, and the outbox idempotency key keeps a
  * double-click harmless.
+ *
+ * An approval also stamps `projects.send_approved_at`: runs that reach
+ * `outreach_staged` AFTER the approval (the gate decided while a run
+ * was still drafting) are auto-released by the park path, so one
+ * approval covers the whole project run, follow-ups included.
  */
 function decideSend(projectId: string, decision: "approve" | "reject"): FlowResult<GateOutcome> {
-  const running = db
-    .select()
-    .from(workflows)
-    .where(and(eq(workflows.type, "chase-deliverables"), eq(workflows.status, "running")))
-    .all()
-    .filter((run) => run.state === "outreach_staged");
+  const running = stagedRuns(projectId);
 
+  const decisionEvent = decision === "approve" ? "SEND_APPROVED" : "SEND_REJECTED";
   let touched = 0;
   for (const run of running) {
     const step = stagedGateStep(run.id);
@@ -278,13 +279,20 @@ function decideSend(projectId: string, decision: "approve" | "reject"): FlowResu
     const suffix = pendingSuffix(db, run.id);
     enqueueStep(db, run.id, `chase.outreach_staged#${suffix}`, {
       ...step.input,
-      event: decision === "approve" ? "SEND_APPROVED" : "SEND_REJECTED",
+      event: decisionEvent,
     });
     touched++;
   }
 
+  // Approve stamps the project: runs that stage AFTER the approval are
+  // auto-released by the park handler (one approval per project run,
+  // follow-ups inherit the approval). Reject clears nothing: the stage
+  // falls back to `curating` and the drafts are discarded.
   const stage: ProjectStage = decision === "approve" ? "running" : "curating";
   setStage(projectId, stage);
+  if (decision === "approve") {
+    markSendApproved(projectId);
+  }
   return {
     ok: true,
     value: {
@@ -294,6 +302,70 @@ function decideSend(projectId: string, decision: "approve" | "reject"): FlowResu
       discarded: decision === "approve" ? 0 : touched,
     },
   };
+}
+
+/** Stamp `send_approved_at` on the project (the durable approval marker). */
+function markSendApproved(projectId: string): void {
+  db.update(projects)
+    .set({ sendApprovedAt: Date.now(), updatedAt: Date.now() })
+    .where(eq(projects.id, projectId))
+    .run();
+}
+
+/** True when the project's send gate has been approved at least once. */
+export function sendApproved(projectId: string): boolean {
+  const row = db
+    .select({ at: projects.sendApprovedAt })
+    .from(projects)
+    .where(eq(projects.id, projectId))
+    .get();
+  return row?.at != null;
+}
+
+/**
+ * True when the send gate of the project the entity belongs to has
+ * been approved.
+ *
+ * The engine asks this when a run parks in `outreach_staged`: a run
+ * that stages AFTER the approval inherits it (one approval per
+ * project run, follow-ups included) and is released without a second
+ * gate decision.
+ */
+export function sendApprovedForEntity(entityId: string): boolean {
+  const row = db
+    .select({ projectId: entities.projectId })
+    .from(entities)
+    .where(eq(entities.id, entityId))
+    .get();
+  if (!row) return false;
+  return sendApproved(row.projectId);
+}
+
+/**
+ * The staged chase runs of one project: running runs parked in
+ * `outreach_staged`, joined to the project through the entity id the
+ * run context carries.
+ */
+function stagedRuns(projectId: string) {
+  const entityIds = new Set(
+    db
+      .select({ id: entities.id })
+      .from(entities)
+      .where(eq(entities.projectId, projectId))
+      .all()
+      .map((row) => row.id),
+  );
+  return db
+    .select()
+    .from(workflows)
+    .where(and(eq(workflows.type, "chase-deliverables"), eq(workflows.status, "running")))
+    .all()
+    .filter(
+      (run) =>
+        run.state === "outreach_staged" &&
+        typeof (run.context as Record<string, unknown> | undefined)?.entityId === "string" &&
+        entityIds.has((run.context as Record<string, unknown>).entityId as string),
+    );
 }
 
 /** A fresh numeric suffix for a run's gate decision step. */
