@@ -45,7 +45,7 @@ export interface CurateOutcome {
  * names a venue kind wins. The default is `bar`, the category the beta
  * demo uses.
  */
-export function categoryOf(brief: Brief, override?: string): string {
+function categoryOf(brief: Brief, override?: string): string {
   if (override?.trim()) return override.trim().toLowerCase();
   const haystack =
     `${brief.eventType} ${brief.venueRequirements ?? ""} ${brief.notes ?? ""}`.toLowerCase();
