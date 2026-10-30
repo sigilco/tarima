@@ -14,6 +14,7 @@ import type { BucketCount } from "../lib/board";
 /** The label of a bucket chip, kept out of the template string so the
  * paraglide keys stay statically typed. */
 const CHIP_LABEL: Record<string, (count: number) => string> = {
+  candidate: (count) => m["board.candidates.n"]({ count: String(count) }),
   chasing: (count) => m["board.chasing.n"]({ count: String(count) }),
   replied: (count) => m["board.replied.n"]({ count: String(count) }),
   blocked: (count) => m["board.blocked.n"]({ count: String(count) }),

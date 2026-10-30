@@ -12,13 +12,15 @@
  * answers 404 for an unknown project, which is NOT a session problem.
  */
 import type { BoardRow } from "./board";
-import type { Brief } from "@tarima/contract";
+import type { ApprovalGate, Brief, ProjectStage } from "@tarima/contract";
 
 /** The wire shape of a project (contract `projectSchema`). */
 export interface ProjectWire {
   id: string;
   name: string;
   goal: Record<string, unknown>;
+  /** Approval-flow stage (contract `projectStageSchema`), absent on old rows. */
+  stage?: ProjectStage;
   createdAt: string;
 }
 
@@ -39,11 +41,43 @@ export interface BoardPayload {
   project: ProjectWire;
   entities: BoardRow[];
   summary: { buckets: BucketCount[]; total: number };
+  /** The gate waiting on the user, when the api sends it (contract stage.ts). */
+  pendingGate?: ApprovalGate;
 }
 
 /** The project list payload. */
 export interface ProjectsPayload {
   projects: ProjectWire[];
+}
+
+/** One staged outreach draft, as the send gate lists it. */
+export interface DraftWire {
+  entityId: string;
+  entityName: string;
+  to: string;
+  subject: string;
+  body: string;
+}
+
+/** The drafts payload: the staged drafts of a project. */
+export interface DraftsPayload {
+  drafts: DraftWire[];
+}
+
+/** The answer of a stage move (contract `stageResponseSchema`). */
+export interface StageResult {
+  projectId: string;
+  stage: ProjectStage;
+  pendingGate?: ApprovalGate;
+}
+
+/** The answer of a gate decision (contract `approveResponseSchema`). */
+export interface ApproveResult {
+  projectId: string;
+  stage: ProjectStage;
+  pendingGate?: ApprovalGate;
+  released: number;
+  discarded: number;
 }
 
 /** One rejected csv row, as the import modal reports it. */
@@ -224,4 +258,53 @@ export function markMessagesRead(ids?: string[]): Promise<{ unread: number }> {
     method: "POST",
     body: JSON.stringify(ids ? { ids } : {}),
   });
+}
+
+/** The project id path segment, encoded. */
+function projectPath(projectId: string): string {
+  return `/api/ui/projects/${encodeURIComponent(projectId)}`;
+}
+
+/** Move the project forward (contract `stageRequestSchema`). */
+export function advanceStage(
+  projectId: string,
+  to: "spec_review" | "curating",
+): Promise<StageResult> {
+  return call<StageResult>(`${projectPath(projectId)}/stage`, {
+    method: "POST",
+    body: JSON.stringify({ to }),
+  });
+}
+
+/** Decide the pending gate (contract `approveRequestSchema`). */
+export function decideGate(
+  projectId: string,
+  input: {
+    gate: ApprovalGate;
+    decision: "approve" | "reject";
+    brief?: Brief;
+    entityIds?: string[];
+  },
+): Promise<ApproveResult> {
+  return call<ApproveResult>(`${projectPath(projectId)}/approve`, {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
+/** Run curation against the venue catalog (contract `curateResponseSchema`). */
+export function curate(projectId: string): Promise<{
+  projectId: string;
+  candidates: number;
+  stage: ProjectStage;
+}> {
+  return call<{ projectId: string; candidates: number; stage: ProjectStage }>(
+    `${projectPath(projectId)}/curate`,
+    { method: "POST" },
+  );
+}
+
+/** The staged drafts of a project (the send gate list). */
+export function fetchDrafts(projectId: string): Promise<DraftsPayload> {
+  return call<DraftsPayload>(`${projectPath(projectId)}/drafts`);
 }
