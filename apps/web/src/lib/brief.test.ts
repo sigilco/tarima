@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { EMPTY_BRIEF_FORM, briefToForm, parseBriefForm } from "./brief";
+import { EMPTY_BRIEF_FORM, briefLine, briefToForm, parseBriefForm } from "./brief";
 
 const FULL = {
   ...EMPTY_BRIEF_FORM,
@@ -57,5 +57,16 @@ describe("briefToForm", () => {
   it("round trips a brief back into the form values", () => {
     const brief = parseBriefForm(FULL);
     expect(briefToForm(brief!)).toEqual(FULL);
+  });
+});
+
+describe("briefLine", () => {
+  it("summarises a brief into one line", () => {
+    const brief = parseBriefForm(FULL);
+    expect(briefLine(brief)).toBe("founder dinner in Paris, 25 people, EUR 3,500");
+  });
+
+  it("is undefined without a brief", () => {
+    expect(briefLine(undefined)).toBeUndefined();
   });
 });

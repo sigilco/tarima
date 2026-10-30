@@ -7,6 +7,8 @@ import { BoardTable } from "../../../components/BoardTable";
 import { CsvModal } from "../../../components/CsvModal";
 import { RowModal } from "../../../components/RowModal";
 import { boardView, parseFilter } from "../../../lib/board";
+import { briefLine } from "../../../lib/brief";
+import { projectBrief } from "../../../lib/api";
 import { boardLive, bumpBoardRevision } from "../../../lib/stores";
 import {
   addRow,
@@ -154,6 +156,7 @@ function Board() {
         <BoardHeader
           projectId={projectId}
           projectName={payload.project.name}
+          briefLine={briefLine(projectBrief(payload.project))}
           buckets={buckets}
           live={live}
           onImport={openCsv}

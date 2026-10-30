@@ -66,3 +66,16 @@ export function briefToForm(brief: Brief): BriefFormValues {
     notes: brief.notes ?? "",
   };
 }
+
+/** One human line for the board header: "founder dinner in Paris, 25 people". */
+export function briefLine(brief: Brief | undefined): string | undefined {
+  if (!brief) return undefined;
+  const parts = [`${brief.eventType} in ${brief.city}`];
+  const numbers: string[] = [];
+  if (brief.headcount) numbers.push(`${brief.headcount} people`);
+  if (brief.budgetAmount > 0) {
+    numbers.push(`${brief.currency} ${brief.budgetAmount.toLocaleString("en-GB")}`);
+  }
+  if (numbers.length > 0) parts.push(numbers.join(", "));
+  return parts.join(", ");
+}

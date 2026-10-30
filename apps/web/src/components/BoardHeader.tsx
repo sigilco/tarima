@@ -23,6 +23,7 @@ const CHIP_LABEL: Record<string, (count: number) => string> = {
 export function BoardHeader({
   projectId,
   projectName,
+  briefLine,
   buckets,
   live,
   onImport,
@@ -30,6 +31,7 @@ export function BoardHeader({
 }: {
   projectId: string;
   projectName: string;
+  briefLine?: string;
   buckets: readonly BucketCount[];
   live: "connecting" | "live" | "down";
   onImport: () => void;
@@ -92,6 +94,15 @@ export function BoardHeader({
           </button>
         </div>
       </div>
+
+      {briefLine ? (
+        <p className="pb-3 text-[13px] leading-relaxed text-content-muted">
+          <span className="mr-2 text-[10px] font-medium uppercase tracking-[0.16em] text-content-faint">
+            {m["board.briefLabel"]()}
+          </span>
+          {briefLine}
+        </p>
+      ) : null}
 
       <div className="flex flex-wrap items-center gap-2 pb-5">
         {buckets.map(({ bucket, count }) => (
