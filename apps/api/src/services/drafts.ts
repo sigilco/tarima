@@ -17,9 +17,6 @@ import { entities, workflows } from "../db/schema";
 import type { ApiDb } from "./projects";
 import { getProject, type ProjectWire } from "./projects";
 
-/** The drafts read shape (contract `stagedDraftSchema`). */
-export type { StagedDraft };
-
 /** Drafts of a project: the staged list plus the project's gate state. */
 export interface DraftsView {
   project: ProjectWire;

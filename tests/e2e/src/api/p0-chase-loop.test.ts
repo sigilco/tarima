@@ -83,13 +83,54 @@ describe("P0 chase loop", () => {
     expect(db.goal(rows[0]!.id)).toMatchObject({ missing: ["menu", "deposit"] });
   });
 
-  it("starts the chase and sends the outreach email through the loopback transport", async () => {
-    const answer = await client.post<{ runs: Array<{ runId: string; entityId: string }> }>(
-      `/api/ui/projects/${projectId}/workflows`,
-      { template: "chase-deliverables" },
-    );
+  it("starts the chase and parks the drafts at the send gate", async () => {
+    const answer = await client.post<{
+      runs: Array<{ runId: string; entityId: string }>;
+      stage: string;
+      pendingGate?: string;
+    }>(`/api/ui/projects/${projectId}/workflows`, { template: "chase-deliverables" });
     expect(answer.status).toBe(201);
     expect(answer.body.runs).toHaveLength(2);
+
+    // The board skipped the venue flow (CSV intake only), so the start
+    // of the chase opens the send gate for it.
+    expect(answer.body.stage).toBe("send_review");
+    expect(answer.body.pendingGate).toBe("send");
+
+    // The runs draft their outreach and park at the gate. Nothing is
+    // sent before the user approves.
+    await waitFor(
+      () => {
+        const runs = db.runs(projectId);
+        return runs.length === 2 && runs.every((run) => run.state === "outreach_staged")
+          ? runs
+          : undefined;
+      },
+      { message: "the runs never parked in outreach_staged" },
+    );
+
+    // The hard assertion over the wire: the loopback inbox of the
+    // contact is still empty.
+    expect(await readInbox(api.baseUrl, CONTACT_EMAIL)).toHaveLength(0);
+
+    // The drafts endpoint lists what would go out.
+    const drafts = await client.get<{
+      drafts: Array<{ entityId: string; entityName: string; to: string; subject: string }>;
+    }>(`/api/ui/projects/${projectId}/drafts`);
+    expect(drafts.status).toBe(200);
+    expect(drafts.body.drafts).toHaveLength(2);
+    expect(drafts.body.drafts[0]!.to).toBe(CONTACT_EMAIL);
+    expect(drafts.body.drafts[0]!.subject).toContain(CONTACT_NAME);
+  });
+
+  it("approves the send gate and releases the drafts", async () => {
+    const approved = await client.post<{ stage: string; released: number }>(
+      `/api/ui/projects/${projectId}/approve`,
+      { gate: "send", decision: "approve" },
+    );
+    expect(approved.status).toBe(200);
+    expect(approved.body.stage).toBe("running");
+    expect(approved.body.released).toBe(2);
 
     // The outreach email landed in the loopback inbox of the contact.
     const inbox = await waitFor(
@@ -102,7 +143,8 @@ describe("P0 chase loop", () => {
     expect(inbox[0]!.subject).toContain(CONTACT_NAME);
 
     // The send was recorded on the entity as an outbound message.
-    const entityId = answer.body.runs[0]!.entityId;
+    const runs = db.runs(projectId);
+    const entityId = JSON.parse(runs[0]!.context).entityId as string;
     await waitFor(
       () => {
         const outbound = db.messages(entityId).filter((row) => row.direction === "outbound");

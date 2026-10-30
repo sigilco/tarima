@@ -150,6 +150,87 @@ describe("ui routes: workflows", () => {
     const body = (await good.json()) as { runs: { entityId: string }[] };
     expect(body.runs.length).toBeGreaterThan(0);
   });
+
+  it("opens the send gate when the chase starts on a brief-stage project", async () => {
+    const flowId = (
+      (await (await app.request("/api/ui/projects", json({ name: "Gate opening" }))).json()) as {
+        project: { id: string };
+      }
+    ).project.id;
+
+    const answer = await app.request(
+      `/api/ui/projects/${flowId}/workflows`,
+      json({ template: "chase-deliverables" }),
+    );
+    expect(answer.status).toBe(201);
+    const body = (await answer.json()) as { stage: string; pendingGate?: string };
+    expect(body.stage).toBe("send_review");
+    expect(body.pendingGate).toBe("send");
+
+    // The project detail and the board carry the stage and the gate.
+    const detail = await app.request(`/api/ui/projects/${flowId}`, {
+      headers: { Cookie: cookie() },
+    });
+    const detailBody = (await detail.json()) as {
+      project: { stage: string; pendingGate?: string };
+    };
+    expect(detailBody.project.stage).toBe("send_review");
+    expect(detailBody.project.pendingGate).toBe("send");
+
+    const board = await app.request(`/api/ui/projects/${flowId}/board`, {
+      headers: { Cookie: cookie() },
+    });
+    const boardBody = (await board.json()) as {
+      project: { stage: string; pendingGate?: string };
+    };
+    expect(boardBody.project.stage).toBe("send_review");
+    expect(boardBody.project.pendingGate).toBe("send");
+  });
+});
+
+describe("ui routes: staged drafts", () => {
+  it("answers an empty list for a project without staged drafts", async () => {
+    const flowId = (
+      (await (await app.request("/api/ui/projects", json({ name: "Drafts" }))).json()) as {
+        project: { id: string };
+      }
+    ).project.id;
+
+    const res = await app.request(`/api/ui/projects/${flowId}/drafts`, {
+      headers: { Cookie: cookie() },
+    });
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as {
+      projectId: string;
+      stage: string;
+      pendingGate?: string;
+      drafts: unknown[];
+    };
+    expect(body.projectId).toBe(flowId);
+    expect(body.stage).toBe("brief");
+    expect(body.drafts).toEqual([]);
+  });
+
+  it("answers 404 for another owner's project and for an unknown id", async () => {
+    const otherId = "user-drafts-other";
+    db.insert(users)
+      .values({ id: otherId, email: "drafts-other@tarima.test", createdAt: Date.now() })
+      .onConflictDoNothing()
+      .run();
+    const { createProject } = await import("../services/projects");
+    const theirs = createProject(db, { name: "not mine", ownerId: otherId });
+
+    const mine = await app.request(`/api/ui/projects/${theirs.id}/drafts`, {
+      headers: { Cookie: cookie() },
+    });
+    expect(mine.status).toBe(404);
+
+    const unknown = await app.request(
+      "/api/ui/projects/55555555-5555-4555-8555-555555555555/drafts",
+      { headers: { Cookie: cookie() } },
+    );
+    expect(unknown.status).toBe(404);
+  });
 });
 
 describe("ui routes: manual add row", () => {
@@ -308,8 +389,16 @@ describe("ui routes: approval flow", () => {
   });
 
   it("rejects a gate decision for the wrong gate with 409", async () => {
+    // A project that never started a chase is at `brief`, where no gate
+    // is pending at all.
+    const flowId = (
+      (await (await app.request("/api/ui/projects", json({ name: "Wrong gate" }))).json()) as {
+        project: { id: string };
+      }
+    ).project.id;
+
     const res = await app.request(
-      `/api/ui/projects/${projectId}/approve`,
+      `/api/ui/projects/${flowId}/approve`,
       json({ gate: "send", decision: "approve" }),
     );
     expect(res.status).toBe(409);

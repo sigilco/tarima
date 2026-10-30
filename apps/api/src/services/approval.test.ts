@@ -21,10 +21,11 @@ process.env.NODE_ENV = "test";
 
 const { randomUUID } = await import("node:crypto");
 const { db } = await import("../db");
-const { entities, outbox, projects, venueCatalog, workflows } = await import("../db/schema");
+const { entities, outbox, projects, steps, venueCatalog, workflows } = await import("../db/schema");
 const { enqueueStep } = await import("@tarima/engine/journal");
 const { advanceStage, decideGate } = await import("./approval");
 const { curateProject } = await import("./curation");
+const { createEntity } = await import("./entities");
 const { createProject } = await import("./projects");
 
 afterAll(() => rmSync(dir, { recursive: true, force: true }));
@@ -166,5 +167,85 @@ describe("approval flow", () => {
   it("rejecting the send gate discards the drafts", () => {
     const result = decideGate(projectId, "send", "reject");
     expect(result.ok).toBe(false); // stage moved past send_review; gate closed
+  });
+
+  it("the send gate only releases the staged runs of its own project", () => {
+    // A second project with its own staged run: the gate of the first
+    // project must not touch it.
+    const otherId = createProject(db, { name: "Other flow project" }).id;
+    const otherEntity = createEntity(db, {
+      projectId: otherId,
+      name: "Other row",
+      status: "intake",
+      missing: [],
+    });
+    const otherRunId = randomUUID();
+    db.insert(workflows)
+      .values({
+        id: otherRunId,
+        type: "chase-deliverables",
+        status: "running",
+        state: "outreach_staged",
+        context: { entityId: otherEntity.id, entityName: otherEntity.name },
+        createdAt: Date.now(),
+      })
+      .run();
+    enqueueStep(db, otherRunId, "chase.outreach_staged", {
+      entityName: otherEntity.name,
+      draft: { subject: "s", body: "b" },
+    });
+
+    // The other project is at the send gate too, so its gate is
+    // decidable.
+    db.update(projects).set({ stage: "send_review" }).where(eq(projects.id, otherId)).run();
+
+    const other = decideGate(otherId, "send", "approve");
+    expect(other.ok).toBe(true);
+    if (other.ok) expect(other.value.released).toBe(1);
+
+    // The other project's draft was released, and the first project's
+    // staged run (from the test above) was left alone.
+    const otherSteps = db
+      .select()
+      .from(steps)
+      .all()
+      .filter((step) => step.runId === otherRunId && step.stepKey.includes("outreach_staged"));
+    // The decision step of the other project carries the approval.
+    expect(
+      otherSteps.some(
+        (step) =>
+          step.stepKey.includes("#") &&
+          (step.input as { event?: string }).event === "SEND_APPROVED",
+      ),
+    ).toBe(true);
+
+    // The other project's draft was released, and the first project's
+    // staged run was left alone: no new decision step landed on it.
+    const firstProjectRunIds = db
+      .select()
+      .from(workflows)
+      .all()
+      .filter(
+        (run) =>
+          (run.context as Record<string, unknown> | undefined)?.entityId ===
+          db
+            .select()
+            .from(entities)
+            .all()
+            .find((row) => row.projectId === projectId)?.id,
+      )
+      .map((run) => run.id);
+    const firstRunDecisions = db
+      .select()
+      .from(steps)
+      .all()
+      .filter(
+        (step) =>
+          firstProjectRunIds.includes(step.runId) &&
+          (step.input as { event?: string }).event === "SEND_APPROVED",
+      );
+    // Exactly one: the decision the first project's own gate made in
+    // the test above. The second gate did not add a second one.
+    expect(firstRunDecisions).toHaveLength(1);
   });
 });

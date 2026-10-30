@@ -83,3 +83,27 @@ export const curateResponseSchema = v.object({
   stage: projectStageSchema,
 });
 export type CurateResponse = v.InferOutput<typeof curateResponseSchema>;
+
+/**
+ * One staged outreach draft, as the send gate shows it. A draft exists
+ * only in the journal until the gate approves; the drafts endpoint is
+ * the read path for it.
+ */
+export const stagedDraftSchema = v.object({
+  entityId: v.pipe(v.string(), v.uuid()),
+  entityName: v.pipe(v.string(), v.minLength(1), v.maxLength(200)),
+  /** The address the draft would go to; empty when the row has no contact. */
+  to: v.pipe(v.string(), v.maxLength(320)),
+  subject: v.pipe(v.string(), v.maxLength(500)),
+  body: v.pipe(v.string(), v.maxLength(50_000)),
+});
+export type StagedDraft = v.InferOutput<typeof stagedDraftSchema>;
+
+/** Response: GET /api/ui/projects/:id/drafts (the send gate's read path). */
+export const draftsResponseSchema = v.object({
+  projectId: v.pipe(v.string(), v.uuid()),
+  stage: projectStageSchema,
+  pendingGate: v.optional(approvalGateSchema),
+  drafts: v.array(stagedDraftSchema),
+});
+export type DraftsResponse = v.InferOutput<typeof draftsResponseSchema>;

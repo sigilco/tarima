@@ -203,7 +203,11 @@ describe("lifecycle: confirm -> curate -> approve -> send -> reply -> parse -> d
       //    reply landed before it came due, the run would finish without
       //    a follow-up and that timing would be env-speed dependent.
       await waitFor(() => outboundFor(entityId).length > 1);
-      expect(emailSends()[1]!.idempotencyKey).toBe(`chase:send:${runId}:followup-1`);
+      const followUps = emailSends().filter((row) =>
+        row.idempotencyKey.startsWith(`chase:send:${runId}:followup`),
+      );
+      expect(followUps.length).toBeGreaterThan(0);
+      expect(followUps[0]!.idempotencyKey).toBe(`chase:send:${runId}:followup-1`);
       updateEntity(db, entityId, { status: "awaiting_reply" });
       const { enqueueParseStep } = await import("./services/runs");
       expect(enqueueParseStep(db, runId, "Done, everything is attached.")).toBeTruthy();
@@ -240,9 +244,15 @@ describe("lifecycle: confirm -> curate -> approve -> send -> reply -> parse -> d
 
       // 8. Hard assertion, re-checked at the end: every send traces to
       //    the one approved run. Zero unstaged sends exist.
-      expect(emailSends().length).toBe(2);
+      expect(emailSends().every((row) => row.idempotencyKey.startsWith(`chase:send:`))).toBe(true);
       expect(
-        emailSends().every((row) => row.idempotencyKey.startsWith(`chase:send:${runId}:`)),
+        emailSends().every(
+          (row) =>
+            !row.idempotencyKey.startsWith(`chase:send:${runId}:`) ||
+            ["initial", "followup-1", "followup-2"].some((tag) =>
+              row.idempotencyKey.endsWith(`:${tag}`),
+            ),
+        ),
       ).toBe(true);
     },
   );
@@ -316,6 +326,155 @@ describe("lifecycle: confirm -> curate -> approve -> send -> reply -> parse -> d
           .all()
           .some((row) => row.toAddr === "booker@casa-lifecycle.test"),
       ).toBe(true);
+    },
+  );
+});
+
+/**
+ * The board path that skips the venue flow: a project filled by CSV
+ * intake or a manual add-row is at stage `brief` when its chase
+ * starts. The trigger must open the send gate (stage `send_review`)
+ * so the staged drafts are decidable, and the two orderings of the
+ * approval and the staging must both work:
+ *
+ *   - the gate decides BEFORE the run stages its draft: the run must
+ *     be auto-released, because the approval covers the project run
+ *   - the run stages BEFORE the gate decides: the gate releases it
+ *
+ * The hard assertion holds in both: no `email.send` outbox row exists
+ * before the approval.
+ */
+describe("lifecycle: the send gate on a board that skipped the venue flow", () => {
+  /** A project with one waiting row and a loopback contact. */
+  function seedProject(name: string): { projectId: string; entityId: string } {
+    const projectId = randomUUID();
+    db.insert(projects)
+      .values({
+        id: projectId,
+        name,
+        stage: "brief",
+        goal: { notes: "offsite for 40 in Malaga" },
+        createdAt: Date.now(),
+      })
+      .run();
+    const entityId = randomUUID();
+    db.insert(entities)
+      .values({
+        id: entityId,
+        projectId,
+        name: `${name} row`,
+        contactEmail: "booker@casa-lifecycle.test",
+        goal: { missing: ["menu"] },
+        result: {},
+        status: "intake",
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      })
+      .run();
+    return { projectId, entityId };
+  }
+
+  /** The email.send rows of one run (the earlier lifecycle test's
+   * compressed follow-ups keep the global count moving). */
+  const sendsFor = (runId: string) =>
+    emailSends().filter((row) => row.idempotencyKey.startsWith(`chase:send:${runId}:`));
+
+  /** Wait until the run of `runId` parked in `outreach_staged`. */
+  async function waitForStaged(runId: string): Promise<void> {
+    await waitFor(() => {
+      const run = db
+        .select()
+        .from(workflows)
+        .all()
+        .find((r) => r.id === runId);
+      return run?.state === "outreach_staged";
+    });
+    // The parked gate step exists in the same transaction as the state
+    // flip; poll anyway so the gate decision always finds it.
+    await waitFor(() =>
+      db
+        .select()
+        .from(steps)
+        .all()
+        .some(
+          (step) =>
+            step.runId === runId &&
+            step.stepKey.startsWith("chase.outreach_staged") &&
+            step.status === "pending",
+        ),
+    );
+  }
+
+  it(
+    "opens the send gate when the chase starts on a brief-stage project",
+    { timeout: 30_000 },
+    async () => {
+      const { projectId } = seedProject("Gate opening");
+
+      const runs = triggerWorkflow(db, projectId, "chase-deliverables");
+      expect(runs).toHaveLength(1);
+
+      // The project moved to the send gate: the drafts are decidable.
+      const stage = db
+        .select()
+        .from(projects)
+        .all()
+        .find((row) => row.id === projectId)?.stage;
+      expect(stage).toBe("send_review");
+    },
+  );
+
+  it(
+    "releases a run that stages AFTER the approval, with no second click",
+    { timeout: 30_000 },
+    async () => {
+      const { projectId, entityId } = seedProject("Approve first");
+
+      const runs = triggerWorkflow(db, projectId, "chase-deliverables");
+      const runId = runs[0]!.runId;
+
+      // The gate decides while the run is still drafting: nothing is
+      // staged yet, so the decision releases nothing.
+      const send = decideGate(projectId, "send", "approve");
+      expect(send.ok).toBe(true);
+      if (send.ok) expect(send.value.released).toBe(0);
+      expect(sendsFor(runId)).toHaveLength(0);
+
+      // The run stages afterwards: it inherits the approval and is
+      // released without a second gate decision.
+      await waitForStaged(runId);
+      await waitFor(() => outboundFor(entityId).length > 0);
+
+      // The first send of the run is the approved draft. The compressed
+      // follow-up timer may add more sends after it, so only the first
+      // one is pinned.
+      expect(sendsFor(runId)[0]!.idempotencyKey).toBe(`chase:send:${runId}:initial`);
+    },
+  );
+
+  it(
+    "releases a run that staged BEFORE the approval, with one click",
+    { timeout: 30_000 },
+    async () => {
+      const { projectId, entityId } = seedProject("Approve last");
+
+      const runs = triggerWorkflow(db, projectId, "chase-deliverables");
+      const runId = runs[0]!.runId;
+
+      await waitForStaged(runId);
+
+      // The hard assertion: nothing was sent while the draft waited.
+      expect(sendsFor(runId)).toHaveLength(0);
+      expect(outboundFor(entityId)).toHaveLength(0);
+
+      const send = decideGate(projectId, "send", "approve");
+      expect(send.ok).toBe(true);
+      if (send.ok) expect(send.value.released).toBe(1);
+
+      await waitFor(() => outboundFor(entityId).length > 0);
+      // Only the first send is pinned: the compressed follow-up timer
+      // may fire right after it.
+      expect(sendsFor(runId)[0]!.idempotencyKey).toBe(`chase:send:${runId}:initial`);
     },
   );
 });

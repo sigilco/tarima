@@ -45,7 +45,9 @@ export {
   approveRequestSchema,
   approveResponseSchema,
   curateResponseSchema,
+  draftsResponseSchema,
   projectStageSchema,
+  stagedDraftSchema,
   stageRequestSchema,
   stageResponseSchema,
 } from "./stage.js";
@@ -54,7 +56,9 @@ export type {
   ApproveRequest,
   ApproveResponse,
   CurateResponse,
+  DraftsResponse,
   ProjectStage,
+  StagedDraft,
   StageRequest,
   StageResponse,
 } from "./stage.js";

@@ -44,12 +44,7 @@ const CHASE_INTAKE_STEP = "chase.intake";
 const INTAKE_STATUSES: EntityStatus[] = ["pending", "intake"];
 
 /** Stages a start-chase moves out of into the send gate. */
-export const PRE_GATE_STAGES: readonly string[] = [
-  "brief",
-  "spec_review",
-  "curating",
-  "shortlist_review",
-];
+const PRE_GATE_STAGES: readonly string[] = ["brief", "spec_review", "curating", "shortlist_review"];
 
 /** A triggered run, as returned to the caller. */
 export interface TriggeredRun {

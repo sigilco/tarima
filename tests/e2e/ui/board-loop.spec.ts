@@ -109,6 +109,15 @@ test("login, import a csv, start the chase and see the row move", async ({ page 
   await page.getByRole("button", { name: "Start chase" }).click();
   await expect(page.getByText(/chase/i).first()).toBeVisible();
 
+  // The runs stage their drafts and park at the send gate: the api
+  // moved the project to send_review, so the banner shows the send
+  // decision and nothing has been sent yet.
+  await expect(page.getByText(/nothing has been sent yet/i)).toBeVisible({ timeout: 20_000 });
+
+  // Approve the send gate from the banner.
+  await page.getByRole("button", { name: /send all/i }).click();
+  await expect(page.getByText(/approved/i).first()).toBeVisible({ timeout: 20_000 });
+
   // The engine stamps the row's status only when the parse reaches the
   // update step, so the board still shows the intake pill before the
   // reply lands.

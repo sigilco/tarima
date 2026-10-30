@@ -313,7 +313,7 @@ function markSendApproved(projectId: string): void {
 }
 
 /** True when the project's send gate has been approved at least once. */
-export function sendApproved(projectId: string): boolean {
+function sendApproved(projectId: string): boolean {
   const row = db
     .select({ at: projects.sendApprovedAt })
     .from(projects)
