@@ -22,6 +22,7 @@ import { stubLlm, type ChaseLlm } from "@tarima/chase/llm";
 import { dispatchOutbox, pendingOutbox, recoverExpiredLeases } from "@tarima/engine/journal";
 import { startRunner } from "@tarima/engine/runner";
 import { createLLM } from "@tarima/llm";
+import type { NotifyPayload } from "@tarima/contract";
 import { apiChaseHandlers } from "./chase-handlers";
 import { channelsRouter } from "./channels";
 import { db } from "./db";
@@ -146,6 +147,34 @@ function applyEntityUpdate(effect: OutboxRow): void {
       createdAt: Date.now(),
     })
     .run();
+
+  // A board status change is a notification: the user wants to know
+  // without opening the board. The fanout never throws.
+  void fanoutNotify(
+    db,
+    statusChangePayload(entityId, row.name, row.projectId, fields),
+    notifySenders(),
+  ).catch((err) => console.error("[engine] status change notify failed", err));
+}
+
+/**
+ * The status-change notification of an updated entity. The copy
+ * front-loads the news (the entity name and its new state) so the
+ * reader sees the point in the first line.
+ */
+function statusChangePayload(
+  entityId: string,
+  entityName: string,
+  projectId: string,
+  fields: Record<string, unknown>,
+): NotifyPayload {
+  const changed = Object.keys(fields)[0];
+  const value = changed ? fields[changed] : undefined;
+  const detail = typeof value === "string" ? value : undefined;
+  const summary = detail
+    ? `${entityName}: ${changed} ${detail}`.slice(0, 280)
+    : `${entityName}: updated`.slice(0, 280);
+  return { projectId, entityId, kind: "status_change", summary };
 }
 
 /**
