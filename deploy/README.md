@@ -111,13 +111,13 @@ Inbound (the chase reply path):
 The unit runs `litestream replicate` against R2 with credentials from
 `litestream.env`. After the first deploy:
 
-    systemctl status tarima-litestream        # active, no restart loop
-    litestream replicas -config /opt/tarima/app/deploy/litestream/litestream.yml
+    systemctl status tarima-litestream                       # active, no restart loop
+    litestream status -config /opt/tarima/app/deploy/litestream/litestream.yml
 
-The replicas output must show the R2 replica with a recent generation and
-non-zero lag-free sync. In the Cloudflare R2 dashboard the `tarima-backups`
-bucket must show objects under `litestream/` newer than the deploy. Never
-point at a bucket with a lifecycle delete rule.
+The status output must show the replica synced with a recent lag. In the
+Cloudflare R2 dashboard the `tarima-backups` bucket must show objects
+under `litestream/` newer than the deploy. Never point at a bucket with a
+lifecycle delete rule.
 
 ## One-command rollback
 
