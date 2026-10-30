@@ -56,13 +56,23 @@ export function projectOwner(db: ApiDb, projectId: string): string | null {
 /**
  * Write the in-app copy of a notification. The unread counter is the
  * count of rows with `read_at IS NULL` for that user.
+ *
+ * The project id is a foreign key, so a payload for a project that no
+ * longer exists is stored without one rather than rejected: the
+ * notification itself is still worth delivering.
  */
 export function storeInAppMessage(db: ApiDb, userId: string, payload: NotifyPayload): void {
+  const project = db
+    .select({ id: projects.id })
+    .from(projects)
+    .where(eq(projects.id, payload.projectId))
+    .get();
+
   db.insert(userMessages)
     .values({
       id: randomUUID(),
       userId,
-      projectId: payload.projectId,
+      projectId: project?.id ?? null,
       kind: payload.kind,
       summary: payload.summary,
     })
@@ -85,7 +95,15 @@ export async function fanoutNotify(
     return { inApp: false, delivered: 0, failed: 0 };
   }
 
-  storeInAppMessage(db, userId, payload);
+  let inApp = true;
+  try {
+    storeInAppMessage(db, userId, payload);
+  } catch (error) {
+    // A deleted user (or a project that vanished mid-flight) must not
+    // stop the chat delivery: the message still reaches the phone.
+    inApp = false;
+    console.error("[notify] in-app copy failed:", error instanceof Error ? error.message : error);
+  }
 
   let delivered = 0;
   let failed = 0;
@@ -108,7 +126,7 @@ export async function fanoutNotify(
     }
   }
 
-  return { inApp: true, delivered, failed };
+  return { inApp, delivered, failed };
 }
 
 /**
