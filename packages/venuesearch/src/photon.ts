@@ -86,11 +86,28 @@ export function photonUrl(query: VenueSearchQuery, baseUrl = PHOTON_BASE_URL): s
   return url.toString();
 }
 
-/** The osm id of a Photon feature: `<type>/<id>` (e.g. `node/9684320117`). */
+/** The OSM object types, in the full names the providers agree on. */
+const OSM_TYPES: Record<string, string> = {
+  n: "node",
+  node: "node",
+  w: "way",
+  way: "way",
+  r: "relation",
+  relation: "relation",
+};
+
+/**
+ * The osm id of a Photon feature: `<type>/<id>` (e.g. `node/9684320117`).
+ *
+ * Photon carries the short type (`N`), Overpass wants the full name
+ * (`node`), so the id is stored in the full form: it is the catalog key
+ * and the enrichment key, and both providers must agree on it.
+ */
 export function osmIdOf(properties: PhotonProperties): OsmId | undefined {
   if (!properties.osm_type || properties.osm_id === undefined) return undefined;
-  // Lowercase, because the Overpass query syntax wants `node/123`.
-  return `${String(properties.osm_type).toLowerCase()}/${properties.osm_id}`;
+  const raw = String(properties.osm_type).toLowerCase();
+  const type = OSM_TYPES[raw] ?? raw;
+  return `${type}/${properties.osm_id}`;
 }
 
 /** The street address of a feature, when OSM has one. */

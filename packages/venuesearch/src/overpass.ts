@@ -43,9 +43,17 @@ export interface OverpassOptions {
   sleep?: (ms: number) => Promise<void>;
 }
 
-/** The Overpass QL query for one osm id. */
+/**
+ * The Overpass QL query for one osm id.
+ *
+ * The osm id is the provider identity in the form `<type>/<id>` (e.g.
+ * `node/9684320117`). Overpass wants the type and the id as separate
+ * selectors, so the form is `node(id:9684320117)`.
+ */
 export function overpassQuery(osmId: OsmId): string {
-  return `[out:json][timeout:25];(${osmId};);out body tags;`;
+  const [type, id] = osmId.split("/");
+  if (!type || !id) return `[out:json][timeout:25];(id:${osmId};);out body tags;`;
+  return `[out:json][timeout:25];(${type}(id:${id}););out body tags;`;
 }
 
 /** The tags of one element, as a flat record. */

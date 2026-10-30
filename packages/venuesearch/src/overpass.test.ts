@@ -18,7 +18,12 @@ const NODE_TAGS = {
 describe("overpass query", () => {
   it("targets one osm id", () => {
     expect(overpassQuery("node/2766723153")).toContain("[out:json]");
-    expect(overpassQuery("node/2766723153")).toContain("node/2766723153");
+    // The provider identity splits into an Overpass type selector.
+    expect(overpassQuery("node/2766723153")).toContain("node(id:2766723153)");
+  });
+
+  it("keeps a junk id inside the query instead of throwing", () => {
+    expect(overpassQuery("junk")).toContain("[out:json]");
   });
 });
 
