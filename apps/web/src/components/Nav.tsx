@@ -1,6 +1,13 @@
 import * as m from "../paraglide/messages.js";
 
-export function Nav() {
+/**
+ * The landing nav.
+ *
+ * "Sign in" points at the login page, not at an anchor on the landing
+ * page: the nav is the way into the platform. A visitor who already
+ * holds a session gets one "Open the app" link instead.
+ */
+export function Nav({ signedIn = false }: { signedIn?: boolean }) {
   return (
     <header className="fixed inset-x-0 top-5 z-50 flex justify-center px-4">
       <nav className="flex max-w-full items-center gap-1 rounded-full bg-paper/80 py-1.5 pl-5 pr-1.5 ring-1 ring-ink/10 backdrop-blur-xl">
@@ -31,17 +38,26 @@ export function Nav() {
           </a>
         </div>
         <div className="flex items-center gap-1 pl-4">
+          {signedIn ? (
+            <a
+              href="/app"
+              className="hidden min-h-10 items-center rounded-full px-3.5 py-2 text-[13px] font-medium text-ink-2 transition-colors hover:text-ink sm:inline-flex"
+            >
+              {m["nav.openApp"]()}
+            </a>
+          ) : (
+            <a
+              href="/login"
+              className="hidden min-h-10 items-center rounded-full px-3.5 py-2 text-[13px] font-medium text-ink-2 transition-colors hover:text-ink sm:inline-flex"
+            >
+              {m["nav.signin"]()}
+            </a>
+          )}
           <a
-            href="#access"
-            className="hidden min-h-10 items-center rounded-full px-3.5 py-2 text-[13px] font-medium text-ink-2 transition-colors hover:text-ink sm:inline-flex"
-          >
-            {m["nav.signin"]()}
-          </a>
-          <a
-            href="#access"
+            href={signedIn ? "/app" : "#access"}
             className="inline-flex min-h-10 items-center rounded-full bg-ink px-4 py-2 text-[13px] font-medium text-paper transition-transform duration-300 ease-[cubic-bezier(0.34,1.4,0.4,1)] hover:scale-[1.03] active:scale-[0.97]"
           >
-            {m["nav.cta"]()}
+            {signedIn ? m["nav.openApp"]() : m["nav.cta"]()}
           </a>
         </div>
       </nav>

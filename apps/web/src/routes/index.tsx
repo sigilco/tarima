@@ -5,8 +5,14 @@ import { Nav } from "../components/Nav";
 import { Reveal } from "../components/Reveal";
 import { AccessForm } from "../components/AccessForm";
 import { AgentBoard } from "../components/AgentBoard";
+import { fetchSessionFn } from "../lib/api-server";
 
-export const Route = createFileRoute("/")({ component: Landing });
+export const Route = createFileRoute("/")({
+  // The landing reads the session on the server so the nav can offer
+  // "Open the app" to a signed-in visitor instead of "Sign in".
+  loader: async () => fetchSessionFn(),
+  component: Landing,
+});
 
 const HOW_STEPS = [
   { t: m["how.s1t"], d: m["how.s1d"] },
@@ -44,10 +50,11 @@ function Eyebrow({ children }: { children: string }) {
 
 function Landing() {
   const [job, setJob] = useState<"venues" | "sponsors">("venues");
+  const { signedIn } = Route.useLoaderData();
 
   return (
     <div className="grain min-h-[100dvh] overflow-x-clip bg-paper text-ink">
-      <Nav />
+      <Nav signedIn={signedIn} />
 
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="mx-auto max-w-7xl px-5 pb-20 pt-32 md:pt-40 lg:px-8">

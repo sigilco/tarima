@@ -23,7 +23,7 @@ export function AccessForm({ compact = false }: { compact?: boolean }) {
 
   if (state === "done") {
     return (
-      <div className="inline-flex items-center gap-3 rounded-full bg-sage-soft px-6 py-3.5 text-sage ring-1 ring-sage/20">
+      <div className="inline-flex flex-wrap items-center gap-3 rounded-full bg-sage-soft px-6 py-3.5 text-sage ring-1 ring-sage/20">
         <svg
           width="18"
           height="18"
@@ -37,6 +37,12 @@ export function AccessForm({ compact = false }: { compact?: boolean }) {
           <path d="M20 6 9 17l-5-5" />
         </svg>
         <span className="text-sm font-medium">{m["hero.ctaDone"]()}</span>
+        <a
+          href="/login"
+          className="rounded-full bg-sage px-4 py-2 text-[13px] font-medium text-paper transition-transform duration-300 ease-[cubic-bezier(0.34,1.4,0.4,1)] hover:scale-[1.02]"
+        >
+          {m["hero.ctaDoneNext"]()}
+        </a>
       </div>
     );
   }

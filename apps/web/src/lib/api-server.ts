@@ -75,3 +75,18 @@ export const fetchBoardFn = createServerFn({ method: "GET", strict: false })
       body: (await res.json().catch(() => null)) as BoardPayload | null,
     };
   });
+
+/**
+ * Whether the incoming request carries a valid session.
+ *
+ * The landing page uses it to offer "Open the app" to a signed-in
+ * visitor instead of a sign-in link. The check reuses the api's own
+ * answer (a 200 on the project list means the session cookie is good),
+ * so the browser never has to read the HttpOnly cookie.
+ */
+export const fetchSessionFn = createServerFn({ method: "GET" }).handler(
+  async (): Promise<{ signedIn: boolean }> => {
+    const res = await apiGet("/api/ui/projects");
+    return { signedIn: res.status === 200 };
+  },
+);
