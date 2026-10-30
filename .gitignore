@@ -9,3 +9,7 @@ dist
 *.db-shm
 *.db-wal
 .worktrees
+coverage
+test-results
+playwright-report
+*.tsbuildinfo
