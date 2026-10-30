@@ -1,13 +1,21 @@
 import { createFileRoute, redirect, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import * as m from "../../../paraglide/messages.js";
+import { AddRowModal } from "../../../components/AddRowModal";
 import { BoardHeader } from "../../../components/BoardHeader";
 import { BoardTable } from "../../../components/BoardTable";
 import { CsvModal } from "../../../components/CsvModal";
 import { RowModal } from "../../../components/RowModal";
 import { boardView, parseFilter } from "../../../lib/board";
 import { boardLive, bumpBoardRevision } from "../../../lib/stores";
-import { bulkIntake, eventsUrl, startChase, UnauthorizedError, unwrap } from "../../../lib/api";
+import {
+  addRow,
+  bulkIntake,
+  eventsUrl,
+  startChase,
+  UnauthorizedError,
+  unwrap,
+} from "../../../lib/api";
 import { fetchBoardFn } from "../../../lib/api-server";
 
 /**
@@ -17,6 +25,7 @@ import { fetchBoardFn } from "../../../lib/api-server";
  *   ?filter=<bucket>   the status bucket the table shows
  *   ?row=<entityId>    the detail modal (screens/row-modal.md)
  *   ?csv=open          the csv import modal
+ *   ?add=open          the manual add-row modal
  *
  * The loader fetches the board payload (project, rows, bucket counts) on
  * the server. The SSE stream then keeps it fresh: every event bumps the
@@ -29,6 +38,7 @@ export const Route = createFileRoute("/app/p/$projectId")({
     filter: typeof search.filter === "string" ? search.filter : undefined,
     row: typeof search.row === "string" ? search.row : undefined,
     csv: typeof search.csv === "string" ? search.csv : undefined,
+    add: typeof search.add === "string" ? search.add : undefined,
   }),
   loader: async ({ params }) => {
     try {
@@ -85,7 +95,7 @@ function Board() {
     navigate({
       to: "/app/p/$projectId",
       params: { projectId },
-      search: { filter: search.filter, row: undefined, csv: "open" },
+      search: { filter: search.filter, row: undefined, csv: "open", add: undefined },
     });
   }
 
@@ -93,7 +103,15 @@ function Board() {
     navigate({
       to: "/app/p/$projectId",
       params: { projectId },
-      search: { filter: search.filter, row: undefined, csv: undefined },
+      search: { filter: search.filter, row: undefined, csv: undefined, add: undefined },
+    });
+  }
+
+  function openAdd() {
+    navigate({
+      to: "/app/p/$projectId",
+      params: { projectId },
+      search: { filter: search.filter, row: undefined, csv: undefined, add: "open" },
     });
   }
 
@@ -102,6 +120,17 @@ function Board() {
     bumpBoardRevision();
     void router.invalidate();
     return result;
+  }
+
+  async function onAddRow(input: {
+    name: string;
+    contact?: string;
+    channel?: "email" | "telegram" | "manual";
+    missing?: string[];
+  }) {
+    await addRow(projectId, input);
+    bumpBoardRevision();
+    void router.invalidate();
   }
 
   async function onStartChase() {
@@ -128,6 +157,7 @@ function Board() {
           buckets={buckets}
           live={live}
           onImport={openCsv}
+          onAddRow={openAdd}
         />
 
         <div className="flex flex-wrap items-center justify-between gap-3 py-5">
@@ -177,6 +207,10 @@ function Board() {
       {search.csv === "open" ? (
         <CsvModal projectId={projectId} filter={filter} onImport={onImport} onClose={closeCsv} />
       ) : null}
+
+      {search.add === "open" ? (
+        <AddRowModal projectId={projectId} filter={filter} onAdd={onAddRow} />
+      ) : null}
     </main>
   );
 }
@@ -204,6 +238,7 @@ function FilterLink({
             filter: bucket,
             row: undefined,
             csv: undefined,
+            add: undefined,
           },
         })
       }

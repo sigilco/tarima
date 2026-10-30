@@ -12,6 +12,7 @@
  * answers 404 for an unknown project, which is NOT a session problem.
  */
 import type { BoardRow } from "./board";
+import type { Brief } from "@tarima/contract";
 
 /** The wire shape of a project (contract `projectSchema`). */
 export interface ProjectWire {
@@ -19,6 +20,12 @@ export interface ProjectWire {
   name: string;
   goal: Record<string, unknown>;
   createdAt: string;
+}
+
+/** The brief of a project, as it sits under `goal.brief`. */
+export function projectBrief(project: ProjectWire): Brief | undefined {
+  const brief = project.goal?.brief;
+  return brief as Brief | undefined;
 }
 
 /** One bucket's count, as the header chips render it. */
@@ -114,6 +121,22 @@ export function createProject(
   return call<{ project: ProjectWire }>("/api/ui/projects", {
     method: "POST",
     body: JSON.stringify(goal ? { name, goal } : { name }),
+  });
+}
+
+/** The body of a manual row (the api fills in projectId, status, missing). */
+export interface AddRowInput {
+  name: string;
+  contact?: string;
+  channel?: "email" | "telegram" | "manual";
+  missing?: string[];
+}
+
+/** Add one row to a project by hand. */
+export function addRow(projectId: string, input: AddRowInput): Promise<{ entity: BoardRow }> {
+  return call<{ entity: BoardRow }>(`/api/ui/projects/${encodeURIComponent(projectId)}/entities`, {
+    method: "POST",
+    body: JSON.stringify(input),
   });
 }
 

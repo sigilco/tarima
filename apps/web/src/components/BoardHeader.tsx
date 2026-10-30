@@ -26,12 +26,14 @@ export function BoardHeader({
   buckets,
   live,
   onImport,
+  onAddRow,
 }: {
   projectId: string;
   projectName: string;
   buckets: readonly BucketCount[];
   live: "connecting" | "live" | "down";
   onImport: () => void;
+  onAddRow: () => void;
 }) {
   const liveLabel =
     live === "live"
@@ -76,6 +78,13 @@ export function BoardHeader({
           </span>
           <button
             type="button"
+            onClick={onAddRow}
+            className="rounded-full border border-border-subtle px-4 py-2 text-[13px] font-medium text-content transition-colors hover:bg-surface-raised"
+          >
+            {m["board.addRow"]()}
+          </button>
+          <button
+            type="button"
             onClick={onImport}
             className="rounded-full border border-border-subtle px-4 py-2 text-[13px] font-medium text-content transition-colors hover:bg-surface-raised"
           >
@@ -90,7 +99,7 @@ export function BoardHeader({
             key={bucket}
             to="/app/p/$projectId"
             params={{ projectId }}
-            search={{ filter: bucket, row: undefined, csv: undefined }}
+            search={{ filter: bucket, row: undefined, csv: undefined, add: undefined }}
             className="rounded-full bg-surface-raised px-3.5 py-1.5 text-[12.5px] text-content-muted ring-1 ring-border-subtle transition-colors hover:text-content"
           >
             {CHIP_LABEL[bucket]?.(count) ?? `${bucket} ${count}`}

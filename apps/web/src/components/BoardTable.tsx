@@ -59,7 +59,7 @@ export function BoardTable({
                   <Link
                     to="/app/p/$projectId"
                     params={{ projectId }}
-                    search={{ filter, row: row.id, csv: undefined }}
+                    search={{ filter, row: row.id, csv: undefined, add: undefined }}
                     className="inline-flex items-center gap-2 text-[14.5px] text-content transition-colors hover:text-accent-strong"
                   >
                     <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-content-faint" />

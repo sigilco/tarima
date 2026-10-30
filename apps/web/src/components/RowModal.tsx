@@ -31,7 +31,7 @@ export function RowModal({
           <Link
             to="/app/p/$projectId"
             params={{ projectId }}
-            search={{ filter, row: undefined, csv: undefined }}
+            search={{ filter, row: undefined, csv: undefined, add: undefined }}
             aria-label={m["row.close"]()}
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface-raised text-content-muted transition-colors hover:text-content"
           >
