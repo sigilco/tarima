@@ -98,3 +98,55 @@ app.post("/webhooks/whatsapp", async (c) => {
 - Business-initiated messages outside a 24h customer-service window require an approved template; in the prototype just have the recipient message first (or within the window after they do).
 - Temporary access tokens expire every 24h during dev. Permanent tokens need Business Verification; defer that until the prototype is proven.
 - If you later move to production, you'll register a real phone number (replacing the test number) and can request a business-initiated conversation tier increase.
+
+## 4. Beta status (Stage B, channels stream, 2026-10-30)
+
+The channel hardening shipped the WhatsApp side of the connect flow and the notify fanout. What works today:
+
+- The settings page (`/app/settings`) mints a 6-char connect code for the WhatsApp channel. The code is stored hashed, expires after 15 minutes and works once.
+- The tester sends the code as a plain message to the test number. `POST /webhooks/whatsapp` resolves the code, writes the `channel_bindings` row and confirms in-chat ("Connected. This number now gets your Tarima notifications.").
+- That inbound message opens the 24 hour customer service window, which is what lets the notify fanout send free-form text afterwards. The fanout sends plain text; a refusal is counted as failed, never fatal.
+- The adapter refuses a send when `WHATSAPP_TOKEN` or `WHATSAPP_PHONE_NUMBER_ID` is missing, so a misconfigured deploy degrades to "no WhatsApp", not to an error loop.
+
+### Constraints that shape the flow
+
+- The test number allows 5 recipients. Every tester who connects a number must be added as a test recipient on the API Setup page first, otherwise the Graph API refuses the send.
+- The tester must message first. The Cloud API only accepts free-form text inside the 24 hour window that starts when the user messages the business. The connect flow depends on this: the connect code arrives as an inbound message, so the window is open by the time the first notification goes out.
+- Temporary access tokens expire every 24 hours during dev. A tester who connects on day 2 may find the fanout silently failing until the token is regenerated.
+
+### Template application path (followup, not blocking the beta)
+
+When the beta testers want notifications outside the 24 hour window (a digest the next morning, for instance), the send has to carry an approved template. The path is:
+
+1. Meta Business Suite: WhatsApp Manager, then Message Templates, then Create. Pick a category (UTILITY for a status update), a name, and a body with one `{{1}}` placeholder for the notification text.
+2. Submit the template for review. Utility templates are usually approved within minutes; marketing ones take longer.
+3. Once approved, the send becomes a template message instead of a text message. The Graph API call changes shape: `type` goes from `text` to `template`, and the body carries `name`, `language` and `parameters` instead of `text.body`.
+4. The adapter needs a second branch for that shape. The seam is small: `packages/channels/src/providers/whatsapp.ts` builds the request body today, so the template branch belongs there, driven by `msg.meta.template`.
+5. The notification copy then has to fit the template's placeholders, which means the fanout can no longer send an arbitrary summary. The template decides the shape of the message, so the copy rule ("front-load the important line") moves into the template body.
+
+Until then: no template is applied, and the notify fanout only reaches a number inside the 24 hour window.
+
+### Live gate (not run yet)
+
+The live phone gates could not run on the VPS during the stream. The orchestrator has to run them on a real phone:
+
+1. Telegram ping: send a notification to a bound chat and confirm it arrives.
+2. WhatsApp test send: send a notification to a bound number inside the 24 hour window and confirm it arrives.
+3. Inbound "hi" creates a binding: send a message with a live code and confirm the confirmation reply and the `channel_bindings` row.
+
+### Secrets the deploy needs (owner: the deploy stream)
+
+The channel keys are not in `deploy/secrets-manifest.toml` yet, because that file belongs to the deploy stream. The change it needs is additive:
+
+```toml
+[key_sets]
+channels = ["TELEGRAM_BOT_TOKEN", "WHATSAPP_TOKEN", "WHATSAPP_PHONE_NUMBER_ID", "WHATSAPP_APP_SECRET", "WHATSAPP_VERIFY_TOKEN"]
+```
+
+```toml
+sources = [{ path = "/email", keys = "app" }, { path = "/ai", keys = "ai" }, { path = "/channels", keys = "channels" }]
+```
+
+`WHATSAPP_VERIFY_TOKEN` is a random string the deploy picks, not a Meta value. `TELEGRAM_BOT_TOKEN` comes from the BotFather. The other three come from the Meta API Setup page.
+
+Without those keys the api still boots: the Telegram bot is a no-op without its token, and the WhatsApp adapter refuses its sends. Nothing crashes, but the channels stay silent.
