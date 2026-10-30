@@ -77,11 +77,14 @@ export const projects = sqliteTable("projects", {
     .notNull()
     .default(sql`'{}'`)
     .$type<Record<string, unknown>>(),
+  // Approval-flow stage (contract PROJECT_STAGES).
+  stage: text("stage").notNull().default("brief"),
   createdAt: integer("created_at").notNull().$defaultFn(nowMs),
   updatedAt: integer("updated_at").notNull().$defaultFn(nowMs),
 });
 
 export const entityStatuses = [
+  "candidate",
   "pending",
   "intake",
   "chasing",
@@ -267,3 +270,61 @@ export const otpCodes = sqliteTable(
 
 export type OtpCode = typeof otpCodes.$inferSelect;
 export type NewOtpCode = typeof otpCodes.$inferInsert;
+
+// ---------- Beta workstreams (contract freeze) ----------
+
+/** A user's bound notification channel (Telegram chat, WhatsApp number). */
+export const channelBindings = sqliteTable(
+  "channel_bindings",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    channel: text("channel").notNull().$type<"telegram" | "whatsapp">(),
+    externalId: text("external_id").notNull(),
+    label: text("label"),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [
+    uniqueIndex("idx_channel_bindings_ext").on(t.channel, t.externalId),
+    index("idx_channel_bindings_user").on(t.userId),
+  ],
+);
+
+/** Single-use connect code (stored hashed) a user sends to the bot to bind a channel. */
+export const connectCodes = sqliteTable(
+  "connect_codes",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    channel: text("channel").notNull().$type<"telegram" | "whatsapp">(),
+    codeHash: text("code_hash").notNull(),
+    expiresAt: integer("expires_at").notNull(),
+    consumedAt: integer("consumed_at"),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [uniqueIndex("idx_connect_codes_hash").on(t.codeHash)],
+);
+
+/** Seed venues the curate service matches a brief against. */
+export const venueCatalog = sqliteTable(
+  "venue_catalog",
+  {
+    id: text("id").primaryKey(),
+    city: text("city").notNull(),
+    name: text("name").notNull(),
+    area: text("area"),
+    capacity: integer("capacity"),
+    priceBand: text("price_band").$type<"low" | "mid" | "high" | "premium">(),
+    source: text("source").notNull(),
+    url: text("url"),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [
+    index("idx_venue_catalog_city").on(t.city),
+    uniqueIndex("idx_venue_catalog_city_name").on(t.city, t.name),
+  ],
+);

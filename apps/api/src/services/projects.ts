@@ -74,6 +74,7 @@ export function createProject(db: ApiDb, input: CreateProjectInput): ProjectWire
     name: input.name,
     description: null,
     goal: input.goal ?? {},
+    stage: "brief",
     createdAt: now,
     updatedAt: now,
   };

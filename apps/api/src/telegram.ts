@@ -45,6 +45,7 @@ const DIGEST_BUCKET: Partial<Record<EntityStatus, keyof Omit<DigestTotals, "tota
  * land on this branch.
  */
 const TO_WIRE: Record<EntityStatus, string> = {
+  candidate: "candidate",
   pending: "intake",
   intake: "intake",
   chasing: "chasing",

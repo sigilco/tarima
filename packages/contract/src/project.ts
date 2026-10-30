@@ -1,5 +1,6 @@
 /** Project: a chase board scope (one event, one venue group, ...). */
 import * as v from "valibot";
+import { projectStageSchema } from "./stage.js";
 import { chaseRowStateSchema, channelSchema } from "./chase.js";
 
 export const projectSchema = v.object({
@@ -7,6 +8,8 @@ export const projectSchema = v.object({
   name: v.pipe(v.string(), v.minLength(1), v.maxLength(200)),
   /** Free-form goal; engine reads it as JSON (plan: entities w/ JSON goal fields). */
   goal: v.optional(v.record(v.string(), v.unknown())),
+  /** Approval-flow stage; absent on payloads from before the stage existed. */
+  stage: v.optional(projectStageSchema),
   createdAt: v.pipe(v.string(), v.isoTimestamp()),
 });
 export type Project = v.InferOutput<typeof projectSchema>;

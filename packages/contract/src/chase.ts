@@ -7,6 +7,8 @@
 import * as v from "valibot";
 
 export const CHASE_ROW_STATES = [
+  /** Curated by the agent, waiting for the user to approve the shortlist. */
+  "candidate",
   "intake",
   "outreach",
   "awaiting_reply",

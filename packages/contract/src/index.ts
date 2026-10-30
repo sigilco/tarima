@@ -35,3 +35,41 @@ export { messageDirectionSchema, outreachMessageSchema } from "./outreach-messag
 export type { MessageDirection, OutreachMessage } from "./outreach-message.js";
 export { mcpToolNames, mcpToolSchemas } from "./mcp.js";
 export type { McpToolArgs, McpToolName } from "./mcp.js";
+export { BRIEF_GOAL_KEY, briefSchema, projectGoalSchema, sponsorsSchema } from "./brief.js";
+export type { Brief, ProjectGoal, Sponsors } from "./brief.js";
+export {
+  APPROVAL_GATES,
+  GATE_FOR_STAGE,
+  PROJECT_STAGES,
+  approvalGateSchema,
+  approveRequestSchema,
+  approveResponseSchema,
+  curateResponseSchema,
+  projectStageSchema,
+  stageRequestSchema,
+  stageResponseSchema,
+} from "./stage.js";
+export type {
+  ApprovalGate,
+  ApproveRequest,
+  ApproveResponse,
+  CurateResponse,
+  ProjectStage,
+  StageRequest,
+  StageResponse,
+} from "./stage.js";
+export {
+  BINDING_CHANNELS,
+  CONNECT_CODE_TTL_SEC,
+  NOTIFY_KINDS,
+  bindingChannelSchema,
+  channelBindingSchema,
+  connectCodeSchema,
+  notifyKindSchema,
+  notifyPayloadSchema,
+} from "./notify.js";
+export type { BindingChannel, ChannelBinding, NotifyKind, NotifyPayload } from "./notify.js";
+export { PRICE_BANDS, priceBandSchema, venueSchema } from "./venue.js";
+export type { PriceBand, Venue } from "./venue.js";
+export { NOT_ALLOWLISTED_ERROR, USER_ROLES, isAllowlisted, parseAllowlist } from "./beta.js";
+export type { UserRole } from "./beta.js";

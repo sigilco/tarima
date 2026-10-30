@@ -36,6 +36,7 @@ export type BoardFilter = BoardBucket | "all";
  * bucket.
  */
 const TO_BUCKET: Record<ChaseRowState, BoardBucket> = {
+  candidate: "chasing",
   intake: "chasing",
   outreach: "chasing",
   awaiting_reply: "chasing",

@@ -17,6 +17,7 @@ import { entityStatuses, type EntityStatus } from "../db/schema";
 
 /** Wire state -> database state. */
 const TO_DB: Record<ChaseRowState, EntityStatus> = {
+  candidate: "candidate",
   intake: "intake",
   outreach: "chasing",
   awaiting_reply: "await_reply",
@@ -33,6 +34,7 @@ const TO_DB: Record<ChaseRowState, EntityStatus> = {
 /** Database state -> wire state. The inverse of TO_DB, chosen deterministically
  *  when several wire states collapse onto one db state. */
 const TO_WIRE: Record<EntityStatus, ChaseRowState> = {
+  candidate: "candidate",
   pending: "intake",
   intake: "intake",
   chasing: "chasing",
