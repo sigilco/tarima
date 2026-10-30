@@ -27,6 +27,8 @@ import { channelsRouter } from "./channels";
 import { db } from "./db";
 import { entities, events, outbox, outreachMessages, workflows } from "./db/schema";
 import { pushDigest } from "./telegram";
+import { fanoutNotify, payloadFromEffect, type NotifySenders } from "./services/notify";
+import { telegramSender, whatsappSender } from "./services/notify-channels";
 
 /** Handle returned by `startEngine`; `stop` drains the loops. */
 export interface EngineHandle {
@@ -146,7 +148,13 @@ function applyEntityUpdate(effect: OutboxRow): void {
     .run();
 }
 
-/** A `notify` effect becomes an audit event plus a Telegram digest push. */
+/**
+ * A `notify` effect: journal the audit event, then hand the payload to
+ * the fanout service (in-app inbox + Telegram + WhatsApp). The chase
+ * handler today emits only a run id; `payloadFromEffect` translates
+ * that into a contract payload from the run's entity. The Telegram
+ * digest push stays, so the chats bound for digests keep working.
+ */
 async function applyNotify(effect: OutboxRow): Promise<void> {
   const runId = runIdFromKey(effect.idempotencyKey) ?? String(effect.payload.runId ?? "");
   const entityId = runId ? entityIdForRun(runId) : null;
@@ -163,8 +171,24 @@ async function applyNotify(effect: OutboxRow): Promise<void> {
     .run();
   if (entityId) {
     const entity = db.select().from(entities).where(eq(entities.id, entityId)).get();
-    if (entity) await pushDigest(entity.projectId);
+    if (entity) {
+      await pushDigest(entity.projectId);
+      const payload =
+        payloadFromEffect(db, {
+          payload: { ...effect.payload, entityId, projectId: entity.projectId },
+        }) ?? null;
+      if (payload) await fanoutNotify(db, payload, notifySenders());
+    }
   }
+}
+
+/**
+ * The channels a notification fans out to. A channel without
+ * configuration simply has no binding rows, so the loop over the
+ * bindings delivers nothing for it.
+ */
+function notifySenders(): NotifySenders {
+  return { telegram: telegramSender, whatsapp: whatsappSender };
 }
 
 /**
