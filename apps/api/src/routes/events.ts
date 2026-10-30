@@ -25,7 +25,7 @@
 import { Hono } from "hono";
 import { streamSSE } from "hono/streaming";
 import { db } from "../db";
-import { requireSession } from "../middleware/require-session";
+import { requireSession, getSessionUser } from "../middleware/require-session";
 import { getProject } from "../services/projects";
 import { advanceCursor, cursorNow, pollBoardEvents } from "../lib/events";
 
@@ -40,7 +40,8 @@ export const eventRoutes = new Hono().get(
   requireSession(),
   (c) => {
     const projectId = c.req.param("projectId");
-    if (!getProject(db, projectId)) return c.json({ error: "not_found" }, 404);
+    const ownerId = getSessionUser(c)?.userId ?? null;
+    if (!getProject(db, projectId, ownerId)) return c.json({ error: "not_found" }, 404);
 
     return streamSSE(c, async (stream) => {
       // The stream starts at "now": only changes that happen while the
