@@ -151,3 +151,105 @@ describe("ui routes: workflows", () => {
     expect(body.runs.length).toBeGreaterThan(0);
   });
 });
+
+describe("ui routes: manual add row", () => {
+  it("creates a row with contact, channel and missing and lists it on the board", async () => {
+    const res = await app.request(
+      `/api/ui/projects/${projectId}/entities`,
+      json({ name: "Manual Venue", contact: "hi@venue.test", channel: "email", missing: ["menu"] }),
+    );
+    expect(res.status).toBe(201);
+    const { entity } = (await res.json()) as {
+      entity: { name: string; contact: string; channel: string; missing: string[] };
+    };
+    expect(entity.name).toBe("Manual Venue");
+    expect(entity.contact).toBe("hi@venue.test");
+    expect(entity.channel).toBe("email");
+    expect(entity.missing).toEqual(["menu"]);
+
+    const board = await app.request(`/api/ui/projects/${projectId}/board`, {
+      headers: { Cookie: cookie() },
+    });
+    const body = (await board.json()) as { entities: { name: string }[] };
+    expect(body.entities.map((e) => e.name)).toContain("Manual Venue");
+  });
+
+  it("rejects a row without a name or with a bad channel", async () => {
+    const noName = await app.request(
+      `/api/ui/projects/${projectId}/entities`,
+      json({ contact: "x@y.test" }),
+    );
+    expect(noName.status).toBe(400);
+
+    const badChannel = await app.request(
+      `/api/ui/projects/${projectId}/entities`,
+      json({ name: "X", channel: "fax" }),
+    );
+    expect(badChannel.status).toBe(400);
+  });
+
+  it("answers 404 for an unknown project", async () => {
+    const res = await app.request(
+      "/api/ui/projects/55555555-5555-4555-8555-555555555555/entities",
+      json({ name: "X" }),
+    );
+    expect(res.status).toBe(404);
+  });
+});
+
+describe("ui routes: owner scoping", () => {
+  it("hides another owner's project and project list entries", async () => {
+    const otherId = "user-other";
+    db.insert(users)
+      .values({ id: otherId, email: "other@tarima.test", createdAt: Date.now() })
+      .onConflictDoNothing()
+      .run();
+
+    // A project owned by the other user, created directly in the db.
+    const { createProject } = await import("../services/projects");
+    const theirs = createProject(db, { name: "not mine", ownerId: otherId });
+
+    const listed = await app.request("/api/ui/projects", { headers: { Cookie: cookie() } });
+    const body = (await listed.json()) as { projects: { id: string }[] };
+    expect(body.projects.map((p) => p.id)).not.toContain(theirs.id);
+
+    const detail = await app.request(`/api/ui/projects/${theirs.id}`, {
+      headers: { Cookie: cookie() },
+    });
+    expect(detail.status).toBe(404);
+
+    const board = await app.request(`/api/ui/projects/${theirs.id}/board`, {
+      headers: { Cookie: cookie() },
+    });
+    expect(board.status).toBe(404);
+  });
+});
+
+describe("ui routes: brief on create", () => {
+  it("accepts a project with a valid brief and rejects a malformed one", async () => {
+    const good = await app.request(
+      "/api/ui/projects",
+      json({
+        name: "Briefed",
+        goal: {
+          brief: {
+            eventType: "founder dinner",
+            city: "Paris",
+            headcount: 25,
+            budgetAmount: 3500,
+            currency: "EUR",
+          },
+        },
+      }),
+    );
+    expect(good.status).toBe(201);
+    const { project } = (await good.json()) as { project: { goal: Record<string, unknown> } };
+    expect(project.goal.brief).toBeTruthy();
+
+    const bad = await app.request(
+      "/api/ui/projects",
+      json({ name: "Bad brief", goal: { brief: { eventType: "dinner" } } }),
+    );
+    expect(bad.status).toBe(400);
+  });
+});

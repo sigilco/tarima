@@ -14,7 +14,7 @@
  */
 import { Hono } from "hono";
 import * as v from "valibot";
-import { createEntitySchema, createProjectSchema } from "@tarima/contract";
+import { createEntitySchema, createProjectSchema, projectGoalSchema } from "@tarima/contract";
 import { db } from "../db";
 import { requireApiKey } from "../middleware/require-api-key";
 import { createEntity, listEntities } from "../services/entities";
@@ -28,6 +28,13 @@ export const projectRoutes = new Hono()
   .post("/api/projects", requireApiKey(["projects:write"]), async (c) => {
     const parsed = v.safeParse(createProjectSchema, await c.req.json().catch(() => null));
     if (!parsed.success) return c.json({ error: "invalid_request" }, 400);
+
+    // The goal carries the brief (contract `projectGoalSchema`). The same
+    // check runs on the browser surface, so both surfaces agree.
+    const goal = parsed.output.goal;
+    if (goal !== undefined && !v.safeParse(projectGoalSchema, goal).success) {
+      return c.json({ error: "invalid_request" }, 400);
+    }
 
     const project = createProject(db, parsed.output);
     return c.json({ project }, 201);

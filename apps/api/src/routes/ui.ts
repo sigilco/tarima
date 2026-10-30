@@ -10,6 +10,7 @@
  *   GET  /api/ui/projects/:projectId          -> { project } | 404
  *   GET  /api/ui/projects/:projectId/entities -> { entities } | 404
  *   GET  /api/ui/projects/:projectId/board    -> { project, entities, summary }
+ *   POST /api/ui/projects/:projectId/entities -> { entity }                 201
  *   POST /api/ui/projects/:projectId/entities/bulk   { csv } -> { created, entities, errors }
  *   POST /api/ui/projects/:projectId/workflows { template } -> { runs }      201
  *
@@ -20,15 +21,24 @@
  * Writes are validated with the contract valibot schemas, exactly like the
  * Bearer surface, so both surfaces cannot drift.
  *
+ * OWNERSHIP: every project route is scoped to the session user. A project
+ * of another owner reads as unknown (404), never as forbidden, so the
+ * board of another tester is not discoverable.
+ *
  * SSE lives in `routes/events.ts` (also session-authenticated).
  */
 import { Hono } from "hono";
 import * as v from "valibot";
-import { createProjectSchema } from "@tarima/contract";
+import {
+  channelSchema,
+  chaseRowStateSchema,
+  createProjectSchema,
+  projectGoalSchema,
+} from "@tarima/contract";
 import { db } from "../db";
 import { requireSession, getSessionUser } from "../middleware/require-session";
 import { createProject, getProject, listProjects } from "../services/projects";
-import { listEntities } from "../services/entities";
+import { createEntity, listEntities } from "../services/entities";
 import { triggerWorkflow, WORKFLOW_TEMPLATES } from "../services/workflows";
 import { handleBulkIntake } from "../services/bulk-intake";
 import { summarizeBoard } from "../lib/board";
@@ -38,40 +48,88 @@ const workflowBodySchema = v.object({
   template: v.pipe(v.string(), v.minLength(1), v.maxLength(100)),
 });
 
+/**
+ * The body of a manual row.
+ *
+ * Same shape as the contract's `createEntitySchema` minus the fields the
+ * server owns (`projectId`), with two conveniences for the human form:
+ * `status` defaults to `intake` and `missing` defaults to an empty list,
+ * so the form only asks what the organizer actually knows.
+ */
+const addRowBodySchema = v.object({
+  name: v.pipe(v.string(), v.trim(), v.minLength(1), v.maxLength(200)),
+  contact: v.optional(v.pipe(v.string(), v.trim(), v.email())),
+  channel: v.optional(channelSchema),
+  missing: v.optional(v.array(v.pipe(v.string(), v.trim(), v.maxLength(200)))),
+  status: v.optional(chaseRowStateSchema),
+});
+
 export const uiRoutes = new Hono()
   .use("/api/ui/*", requireSession())
   .get("/api/ui/projects", (c) => {
-    return c.json({ projects: listProjects(db) });
+    const ownerId = getSessionUser(c)?.userId ?? null;
+    return c.json({ projects: listProjects(db, ownerId) });
   })
   .post("/api/ui/projects", async (c) => {
     const parsed = v.safeParse(createProjectSchema, await c.req.json().catch(() => null));
     if (!parsed.success) return c.json({ error: "invalid_request" }, 400);
+
+    // The goal carries the brief (contract `projectGoalSchema`). A brief
+    // that does not hold is a client error, not a 500.
+    const goal = parsed.output.goal;
+    if (goal !== undefined && !v.safeParse(projectGoalSchema, goal).success) {
+      return c.json({ error: "invalid_request" }, 400);
+    }
 
     const user = getSessionUser(c);
     const project = createProject(db, { ...parsed.output, ownerId: user?.userId ?? null });
     return c.json({ project }, 201);
   })
   .get("/api/ui/projects/:projectId", (c) => {
-    const project = getProject(db, c.req.param("projectId"));
+    const project = getProject(db, c.req.param("projectId"), getSessionUser(c)?.userId ?? null);
     if (!project) return c.json({ error: "not_found" }, 404);
     return c.json({ project });
   })
   .get("/api/ui/projects/:projectId/entities", (c) => {
     const projectId = c.req.param("projectId");
-    if (!getProject(db, projectId)) return c.json({ error: "not_found" }, 404);
-    return c.json({ entities: listEntities(db, projectId) });
+    if (!getProject(db, projectId, getSessionUser(c)?.userId ?? null)) {
+      return c.json({ error: "not_found" }, 404);
+    }
+    const entities = listEntities(db, projectId);
+    return c.json({ entities });
   })
   .get("/api/ui/projects/:projectId/board", (c) => {
     const projectId = c.req.param("projectId");
-    const project = getProject(db, projectId);
+    const project = getProject(db, projectId, getSessionUser(c)?.userId ?? null);
     if (!project) return c.json({ error: "not_found" }, 404);
 
     const entities = listEntities(db, projectId);
     return c.json({ project, entities, summary: summarizeBoard(entities) });
   })
+  .post("/api/ui/projects/:projectId/entities", async (c) => {
+    const projectId = c.req.param("projectId");
+    if (!getProject(db, projectId, getSessionUser(c)?.userId ?? null)) {
+      return c.json({ error: "not_found" }, 404);
+    }
+
+    const parsed = v.safeParse(addRowBodySchema, await c.req.json().catch(() => null));
+    if (!parsed.success) return c.json({ error: "invalid_request" }, 400);
+
+    const entity = createEntity(db, {
+      projectId,
+      name: parsed.output.name,
+      ...(parsed.output.contact ? { contact: parsed.output.contact } : {}),
+      ...(parsed.output.channel ? { channel: parsed.output.channel } : {}),
+      missing: parsed.output.missing ?? [],
+      status: parsed.output.status ?? "intake",
+    });
+    return c.json({ entity }, 201);
+  })
   .post("/api/ui/projects/:projectId/entities/bulk", async (c) => {
     const projectId = c.req.param("projectId");
-    if (!getProject(db, projectId)) return c.json({ error: "not_found" }, 404);
+    if (!getProject(db, projectId, getSessionUser(c)?.userId ?? null)) {
+      return c.json({ error: "not_found" }, 404);
+    }
 
     const parsed = v.safeParse(bulkBodySchema, await c.req.json().catch(() => null));
     if (!parsed.success) return c.json({ error: "invalid_request" }, 400);
@@ -82,7 +140,9 @@ export const uiRoutes = new Hono()
   })
   .post("/api/ui/projects/:projectId/workflows", async (c) => {
     const projectId = c.req.param("projectId");
-    if (!getProject(db, projectId)) return c.json({ error: "not_found" }, 404);
+    if (!getProject(db, projectId, getSessionUser(c)?.userId ?? null)) {
+      return c.json({ error: "not_found" }, 404);
+    }
 
     const parsed = v.safeParse(workflowBodySchema, await c.req.json().catch(() => null));
     if (!parsed.success) return c.json({ error: "invalid_request" }, 400);
