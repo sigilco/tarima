@@ -13,6 +13,7 @@ import { bucketOf, relativeTime, type BoardRow } from "../lib/board";
  */
 
 const STATUS_TONE: Record<string, string> = {
+  candidate: "bg-warning-soft text-warning",
   chasing: "bg-accent-soft text-accent-strong",
   replied: "bg-success-soft text-success",
   blocked: "bg-danger-soft text-danger",
@@ -71,11 +72,12 @@ export function BoardTable({
                 </td>
                 <td className="py-3.5 pr-4">
                   <span
+                    data-testid={row.status === "candidate" ? "candidate-chip" : undefined}
                     className={`pill inline-block rounded-full px-2.5 py-1 text-[12px] ${
                       STATUS_TONE[bucket] ?? STATUS_TONE.chasing
                     }`}
                   >
-                    {row.status}
+                    {row.status === "candidate" ? m["stage.candidate"]() : row.status}
                   </span>
                 </td>
                 <td className="py-3.5 pr-4 text-[13.5px] text-content-muted">

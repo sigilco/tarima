@@ -7,20 +7,26 @@ import { BoardTable } from "../../../components/BoardTable";
 import { CsvModal } from "../../../components/CsvModal";
 import { RowModal } from "../../../components/RowModal";
 import { InboxPanel } from "../../../components/InboxPanel";
+import { StageBanner } from "../../../components/StageBanner";
 import { boardView, parseFilter } from "../../../lib/board";
 import { briefLine } from "../../../lib/brief";
 import { projectBrief } from "../../../lib/api";
+import { stageUiState, candidateRows } from "../../../lib/stage";
 import { boardLive, bumpBoardRevision } from "../../../lib/stores";
 import {
   addRow,
+  advanceStage,
   bulkIntake,
+  curate,
+  decideGate,
   eventsUrl,
   startChase,
   UnauthorizedError,
   unwrap,
 } from "../../../lib/api";
-import { fetchBoardFn, fetchInboxFn } from "../../../lib/api-server";
-import type { InboxPayload } from "../../../lib/api";
+import { fetchBoardFn, fetchDraftsFn, fetchInboxFn } from "../../../lib/api-server";
+import type { ApproveResult, DraftWire, InboxPayload } from "../../../lib/api";
+import type { Brief } from "@tarima/contract";
 
 /**
  * /app/p/$projectId (Stage 5, T5.2): the chase board of screens/board.md.
@@ -47,15 +53,22 @@ export const Route = createFileRoute("/app/p/$projectId")({
   loader: async ({ params }) => {
     try {
       const board = unwrap(await fetchBoardFn({ data: params.projectId }));
-      // The inbox is optional on the board: a failed inbox read must
-      // not take the board down.
+      // The inbox and the staged drafts are optional on the board: a
+      // failed read of either must not take the board down.
       let inbox: InboxPayload = { messages: [], unread: 0 };
+      let drafts: DraftWire[] = [];
       try {
         inbox = unwrap(await fetchInboxFn());
       } catch {
         // Keep the empty inbox.
       }
-      return { ...board, inbox };
+      try {
+        const served = await fetchDraftsFn({ data: params.projectId });
+        drafts = served.body ?? [];
+      } catch {
+        // Keep the empty draft list.
+      }
+      return { ...board, inbox, drafts };
     } catch (error) {
       if (error instanceof UnauthorizedError) {
         throw redirect({ to: "/login", search: { step: "email", email: "" } });
@@ -77,6 +90,14 @@ function Board() {
   const { visible, buckets } = boardView(payload.entities, filter);
   const [live, setLive] = useState<"connecting" | "live" | "down">("connecting");
   const [notice, setNotice] = useState<string | null>(null);
+  const [stageBusy, setStageBusy] = useState(false);
+
+  const brief = projectBrief(payload.project);
+  const stageState = stageUiState({
+    stage: payload.project.stage,
+    pendingGate: payload.pendingGate,
+    hasBrief: brief !== undefined,
+  });
 
   // The live stream keeps the board fresh: every event invalidates the
   // route, so the loader refetches the payload with the URL unchanged.
@@ -161,17 +182,90 @@ function Board() {
     }
   }
 
+  /** Reload the board after a stage move or a gate decision. */
+  function refresh() {
+    bumpBoardRevision();
+    void router.invalidate();
+  }
+
+  async function onSubmitBrief() {
+    setStageBusy(true);
+    setNotice(null);
+    try {
+      await advanceStage(projectId, "spec_review");
+      setNotice(m["stage.briefSubmitted"]());
+      refresh();
+    } catch {
+      setNotice(m["errors.offline"]());
+    } finally {
+      setStageBusy(false);
+    }
+  }
+
+  async function onCurate() {
+    setStageBusy(true);
+    setNotice(null);
+    try {
+      const result = await curate(projectId);
+      setNotice(m["stage.candidatesFound"]({ count: String(result.candidates) }));
+      refresh();
+    } catch {
+      setNotice(m["errors.offline"]());
+    } finally {
+      setStageBusy(false);
+    }
+  }
+
+  async function onDecide(
+    decision: "approve" | "reject",
+    extra?: { brief?: Brief; entityIds?: string[] },
+  ) {
+    if (!stageState.gate) return;
+    setStageBusy(true);
+    setNotice(null);
+    try {
+      const result: ApproveResult = await decideGate(projectId, {
+        gate: stageState.gate,
+        decision,
+        ...(extra?.brief ? { brief: extra.brief } : {}),
+        ...(extra?.entityIds ? { entityIds: extra.entityIds } : {}),
+      });
+      setNotice(
+        decision === "approve"
+          ? m["stage.approved"]({ count: String(result.released) })
+          : m["stage.rejected"]({ count: String(result.discarded) }),
+      );
+      refresh();
+    } catch {
+      setNotice(m["errors.offline"]());
+    } finally {
+      setStageBusy(false);
+    }
+  }
+
   return (
     <main className="grain min-h-[100dvh] bg-surface px-5 py-8 text-content lg:px-8">
       <div className="mx-auto max-w-5xl">
         <BoardHeader
           projectId={projectId}
           projectName={payload.project.name}
-          briefLine={briefLine(projectBrief(payload.project))}
+          briefLine={briefLine(brief)}
           buckets={buckets}
           live={live}
           onImport={openCsv}
           onAddRow={openAdd}
+        />
+
+        <StageBanner
+          ui={stageState}
+          brief={brief}
+          candidates={candidateRows(payload.entities)}
+          drafts={payload.drafts}
+          busy={stageBusy}
+          notice={notice}
+          onSubmitBrief={onSubmitBrief}
+          onCurate={onCurate}
+          onDecide={onDecide}
         />
 
         <div className="flex flex-wrap items-center justify-between gap-3 py-5">

@@ -13,7 +13,14 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import * as v from "valibot";
-import type { BoardPayload, InboxPayload, ProjectsPayload, Served, SettingsPayload } from "./api";
+import type {
+  BoardPayload,
+  DraftWire,
+  InboxPayload,
+  ProjectsPayload,
+  Served,
+  SettingsPayload,
+} from "./api";
 
 /** The incoming request's cookie header, or undefined outside a request. */
 function requestCookies(): string | undefined {
@@ -80,6 +87,36 @@ export const fetchBoardFn = createServerFn({ method: "GET", strict: false })
       body: (await res.json().catch(() => null)) as BoardPayload | null,
     };
   });
+
+/**
+ * The staged drafts of one project (the send gate list).
+ *
+ * The api answers with the draft list; both shapes are accepted (a bare
+ * array and a `{ drafts }` envelope), and a project without drafts reads
+ * as an empty list. A 404 is not fatal: the drafts endpoint is optional,
+ * so a board without it still renders.
+ */
+export const fetchDraftsFn = createServerFn({ method: "GET", strict: false })
+  .validator((raw: unknown) => v.parse(projectIdSchema, raw))
+  .handler(async ({ data }): Promise<Served<DraftWire[]>> => {
+    const res = await apiGet(`/api/ui/projects/${encodeURIComponent(data)}/drafts`);
+    if (res.status === 404) return { status: 404, body: [] };
+    const body = (await res.json().catch(() => null)) as unknown;
+    return { status: res.status, body: normalizeDrafts(body) };
+  });
+
+/** The drafts of a payload, whichever shape the api used. */
+function normalizeDrafts(body: unknown): DraftWire[] {
+  const list = Array.isArray(body)
+    ? body
+    : Array.isArray((body as { drafts?: unknown } | null)?.drafts)
+      ? (body as { drafts: unknown[] }).drafts
+      : [];
+  return list.filter((draft): draft is DraftWire => {
+    const record = draft as Partial<DraftWire> | null;
+    return typeof record === "object" && record !== null && typeof record.entityId === "string";
+  });
+}
 
 /**
  * Whether the incoming request carries a valid session.
