@@ -9,3 +9,6 @@ dist
 *.db-shm
 *.db-wal
 .worktrees
+*.tsbuildinfo
+apps/web/test-results
+apps/web/playwright-report
