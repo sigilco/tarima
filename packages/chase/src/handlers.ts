@@ -53,13 +53,33 @@ export function chaseHandlers(llm: ChaseLlm) {
       const event = ctx.input.event as ChaseEvent | undefined;
       if (event === "SEND_APPROVED") {
         const draft = (ctx.input.draft ?? {}) as { subject?: string; body?: string };
+        // The no-contact guard: the run's context carries the contact
+        // the outreach would go to. Without one there is nothing to
+        // send to, and emitting the effect would park the run in
+        // await_reply with a send that can never leave. The run is
+        // parked as `blocked` on the board instead (the failed state,
+        // the same bucket a row the user cannot reach lands in) and the
+        // draft is kept in the output, so the row stays visible as
+        // needing a contact.
+        const to = ctx.input.to ?? ctx.context.contactEmail;
+        if (typeof to !== "string" || to.length === 0) {
+          return {
+            output: {
+              released: false,
+              blocked: "no_contact",
+              draft,
+            },
+            nextState: "failed",
+            finish: true,
+          };
+        }
         return apply(ctx, "SEND_APPROVED", llm, {
           output: { released: true },
           emit: [
             {
               idempotencyKey: `chase:send:${ctx.runId}:initial`,
               type: "email.send",
-              payload: { ...draft, to: ctx.input.to ?? ctx.context.contactEmail },
+              payload: { ...draft, to },
             },
           ],
         });
@@ -104,13 +124,23 @@ export function chaseHandlers(llm: ChaseLlm) {
         goal: (ctx.input.goal ?? {}) as Record<string, unknown>,
         isFollowUp: true,
       });
+      // Same no-contact guard as the initial send: a follow-up without
+      // an address cannot leave, and the run must not pretend it did.
+      const to = ctx.input.to ?? ctx.context.contactEmail;
+      if (typeof to !== "string" || to.length === 0) {
+        return {
+          output: { draft, blocked: "no_contact" },
+          nextState: "failed",
+          finish: true,
+        };
+      }
       return apply(ctx, "FOLLOWUP_SENT", llm, {
         output: { draft },
         emit: [
           {
             idempotencyKey: `chase:send:${ctx.runId}:followup-${ctx.context.followUps ?? 1}`,
             type: "email.send",
-            payload: { ...draft, to: ctx.input.to ?? ctx.context.contactEmail },
+            payload: { ...draft, to },
           },
         ],
       });

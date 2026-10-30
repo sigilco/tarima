@@ -391,7 +391,12 @@ describe("ui routes: approval flow", () => {
       headers: { Cookie: cookie() },
     });
     expect(curate.status).toBe(200);
-    expect(await curate.json()).toEqual({ projectId: flowId, candidates: 0, stage: "curating" });
+    expect(await curate.json()).toEqual({
+      projectId: flowId,
+      candidates: 0,
+      noContact: 0,
+      stage: "curating",
+    });
   });
 
   it("rejects a gate decision for the wrong gate with 409", async () => {
@@ -416,5 +421,123 @@ describe("ui routes: approval flow", () => {
       json({ to: "spec_review" }),
     );
     expect(res.status).toBe(404);
+  });
+});
+
+describe("ui routes: venue search and the contact affordance", () => {
+  it("answers 503 when no provider chain is wired and 400 for a bad body", async () => {
+    const res = await app.request("/api/ui/venues/search", json({ city: "sf" }));
+    expect(res.status).toBe(503);
+  });
+
+  it("serves a search through a wired stub chain and reports cache hits", async () => {
+    const { setVenueSearchDeps } = await import("../services/venue-search");
+    const { photonProvider } = await import("@tarima/venuesearch/photon");
+    const { overpassProvider } = await import("@tarima/venuesearch/overpass");
+    const { readFileSync } = await import("node:fs");
+    const { fileURLToPath } = await import("node:url");
+    const fixture = readFileSync(
+      fileURLToPath(
+        new URL("../../../../packages/venuesearch/fixtures/photon-sf.json", import.meta.url),
+      ),
+      "utf8",
+    );
+    let calls = 0;
+    setVenueSearchDeps({
+      photon: photonProvider({
+        fetchImpl: async () => {
+          calls++;
+          return new Response(fixture, { status: 200 });
+        },
+      }),
+      overpass: overpassProvider({ fetchImpl: async () => new Response("{}", { status: 200 }) }),
+    });
+    try {
+      const first = await app.request(
+        "/api/ui/venues/search",
+        json({ city: "sf", category: "bar" }),
+      );
+      expect(first.status).toBe(200);
+      const firstBody = (await first.json()) as {
+        cache: string;
+        venues: { id: string; needsContact: boolean }[];
+      };
+      expect(firstBody.cache).toBe("miss");
+      expect(firstBody.venues.length).toBeGreaterThan(0);
+      // Honesty rule: no fabricated contacts on fresh provider rows.
+      expect(firstBody.venues.every((venue) => venue.needsContact)).toBe(true);
+
+      const second = await app.request(
+        "/api/ui/venues/search",
+        json({ city: "SF", category: "bar" }),
+      );
+      const secondBody = (await second.json()) as { cache: string };
+      expect(secondBody.cache).toBe("hit");
+      expect(calls).toBe(1);
+    } finally {
+      setVenueSearchDeps(null);
+    }
+  });
+
+  it("fills the contact of a catalog venue and clears the needsContact flag", async () => {
+    const { randomUUID } = await import("node:crypto");
+    const { venueCatalog } = await import("../db/schema");
+    const venueId = randomUUID();
+    db.insert(venueCatalog)
+      .values({
+        id: venueId,
+        city: "Malaga",
+        name: "Bar Sin Contacto",
+        source: "osm:node/1",
+        externalId: "node/1",
+        createdAt: Date.now(),
+      })
+      .onConflictDoNothing()
+      .run();
+
+    const res = await app.request(`/api/ui/venues/${venueId}/contact`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json", Cookie: cookie() },
+      body: JSON.stringify({ contactEmail: "hola@barsincontacto.es" }),
+    });
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as { venue: { contactEmail?: string; needsContact: boolean } };
+    expect(body.venue.contactEmail).toBe("hola@barsincontacto.es");
+    expect(body.venue.needsContact).toBe(false);
+
+    // Unknown venue: 404.
+    const missing = await app.request(`/api/ui/venues/${randomUUID()}/contact`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json", Cookie: cookie() },
+      body: JSON.stringify({ contactEmail: "x@y.test" }),
+    });
+    expect(missing.status).toBe(404);
+  });
+
+  it("sets the contact of a board row and clears the contact flag", async () => {
+    const created = await app.request(
+      "/api/ui/projects",
+      json({ name: "Contact affordance project" }),
+    );
+    const id = ((await created.json()) as { project: { id: string } }).project.id;
+    const added = await app.request(`/api/ui/projects/${id}/entities`, json({ name: "Gamma Inc" }));
+    const entity = ((await added.json()) as { entity: { id: string } }).entity.id;
+
+    const res = await app.request(`/api/ui/projects/${id}/entities/${entity}/contact`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json", Cookie: cookie() },
+      body: JSON.stringify({ contact: "ops@gamma.test" }),
+    });
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as { entity: { contact?: string } };
+    expect(body.entity.contact).toBe("ops@gamma.test");
+
+    // A bad address is a 400, never a silent store.
+    const bad = await app.request(`/api/ui/projects/${id}/entities/${entity}/contact`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json", Cookie: cookie() },
+      body: JSON.stringify({ contact: "not-an-email" }),
+    });
+    expect(bad.status).toBe(400);
   });
 });

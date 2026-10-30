@@ -81,6 +81,12 @@ export const curateResponseSchema = v.object({
   /** Candidate rows created (`candidate` status) for the shortlist gate. */
   candidates: v.pipe(v.number(), v.integer(), v.minValue(0)),
   stage: projectStageSchema,
+  /**
+   * Candidate rows created WITHOUT a contact (stream F, additive after
+   * the freeze). They land in the board's "no contact" bucket and wait
+   * for the user to fill an address; they are never sent to.
+   */
+  noContact: v.optional(v.pipe(v.number(), v.integer(), v.minValue(0))),
 });
 export type CurateResponse = v.InferOutput<typeof curateResponseSchema>;
 

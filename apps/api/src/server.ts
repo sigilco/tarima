@@ -12,6 +12,8 @@ import { serveStatic } from "@hono/node-server/serve-static";
 import { db } from "./db";
 import { accessRequests } from "./db/schema";
 import { startEngine } from "./engine";
+import { setVenueSearchDeps } from "./services/venue-search";
+import { defaultProviders } from "@tarima/venuesearch/providers";
 import { sendMail } from "./mail";
 import { apiKeyRoutes } from "./routes/api-keys";
 import { authRoutes } from "./routes/auth";
@@ -108,6 +110,11 @@ const port = Number(process.env.PORT ?? 3001);
 // listens: a triggered workflow must find a worker already claiming
 // steps, and a crash-recovery sweep runs before the first claim.
 startEngine();
+
+// The venue provider chain (stream F): curation falls back to a live
+// search when the catalog has nothing for the city. The providers are
+// the public, keyless ones (Photon discovery, Overpass enrichment).
+setVenueSearchDeps(defaultProviders());
 
 serve({ fetch: app.fetch, port, hostname: "127.0.0.1" }, (info) => {
   console.log(`tarima listening on :${info.port}`);

@@ -21,10 +21,14 @@
  *
  * The chase package itself is untouched.
  */
+import { randomUUID } from "node:crypto";
+import { eq } from "drizzle-orm";
 import { chaseHandlers } from "@tarima/chase/handlers";
 import type { ChaseLlm } from "@tarima/chase/llm";
 import type { HandlerRegistry, StepContext, StepResult } from "@tarima/engine/types";
 import { sendApprovedForEntity } from "./services/approval";
+import { db } from "./db";
+import { entities, events } from "./db/schema";
 
 /** Delay before the first follow-up goes out (48h, the SFM default). */
 const FOLLOW_UP_DELAY_MS = Number(process.env.ENGINE_FOLLOW_UP_DELAY_MS ?? 48 * 60 * 60 * 1000);
@@ -60,13 +64,56 @@ export function apiChaseHandlers(llm: ChaseLlm): HandlerRegistry {
     if (ctx.state === "outreach_staged" && event === undefined) {
       const entityId = ctx.context.entityId;
       if (typeof entityId === "string" && sendApprovedForEntity(entityId)) {
-        return base["chase.outreach_staged"]({
-          ...ctx,
-          input: { ...ctx.input, event: "SEND_APPROVED" },
-        });
+        return releaseWithGuard(ctx, { ...ctx.input, event: "SEND_APPROVED" });
       }
     }
+    if (ctx.state === "outreach_staged" && event === "SEND_APPROVED") {
+      // The gate decision step: the same release path, and the same
+      // no-contact guard.
+      return releaseWithGuard(ctx, ctx.input);
+    }
     return base["chase.outreach_staged"](ctx);
+  };
+
+  /**
+   * Release a staged draft and flag the row when the release had no
+   * address to send to. The no-contact guard fires inside the chase
+   * package: the run finishes `failed` without emitting a send, so the
+   * board row is flipped to `blocked` here and reads as needing a
+   * contact, never as waiting for a reply.
+   */
+  const releaseWithGuard = async (
+    ctx: StepContext,
+    input: Record<string, unknown>,
+  ): Promise<StepResult> => {
+    const result = await base["chase.outreach_staged"]({ ...ctx, input });
+    if (result.output && result.output.blocked === "no_contact") {
+      const entityId = ctx.context.entityId;
+      if (typeof entityId === "string") flagNoContact(entityId, ctx.context.entityName);
+    }
+    return result;
+  };
+
+  /** Flip a board row to `blocked` with the no-contact flag in its goal bag. */
+  const flagNoContact = (entityId: string, name: unknown): void => {
+    const row = db.select().from(entities).where(eq(entities.id, entityId)).get();
+    if (!row) return;
+    const goal = { ...row.goal, missing: ["contact"] };
+    db.update(entities)
+      .set({ goal, status: "failed", updatedAt: Date.now() })
+      .where(eq(entities.id, entityId))
+      .run();
+    db.insert(events)
+      .values({
+        id: randomUUID(),
+        actor: "engine",
+        type: "chase.blocked_no_contact",
+        subjectType: "entity",
+        subjectId: entityId,
+        data: { entityName: typeof name === "string" ? name : row.name },
+        createdAt: Date.now(),
+      })
+      .run();
   };
 
   const awaitReply = async (ctx: StepContext): Promise<StepResult> => {

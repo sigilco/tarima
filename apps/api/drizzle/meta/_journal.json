@@ -43,6 +43,13 @@
       "when": 1793334555279,
       "tag": "0005_project_send_approval",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1793342638649,
+      "tag": "0006_venue_search",
+      "breakpoints": true
     }
   ]
 }
