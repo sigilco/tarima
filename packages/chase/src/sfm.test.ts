@@ -8,7 +8,8 @@ describe("chase SFM transitions", () => {
     let state: ChaseState = "intake";
     const steps: Array<[ChaseState, Parameters<typeof transition>[1]]> = [
       ["intake", "INTAKE_OK"],
-      ["outreach", "DRAFT_SENT"],
+      ["outreach", "OUTREACH_STAGED"],
+      ["outreach_staged", "SEND_APPROVED"],
       ["await_reply", "REPLY_RECEIVED"],
       ["parse", "REPLY_PARSED"],
       ["validate", "VALIDATED"],
@@ -45,5 +46,45 @@ describe("chase SFM transitions", () => {
   it("send_outreach effect carries followup flag", () => {
     const t = transition("await_reply", "FOLLOWUP_DUE", ctx({ followUps: 1 }));
     expect(t?.effects).toEqual([{ kind: "send_outreach", followUp: true }]);
+  });
+});
+
+describe("chase SFM send gate", () => {
+  it("stages the draft and parks until the gate decides", () => {
+    const t = transition("outreach", "OUTREACH_STAGED", ctx());
+    expect(t?.next).toBe("outreach_staged");
+    expect(t?.effects).toEqual([{ kind: "stage_outreach" }]);
+    // No legal self-transition: the run parks until the gate event.
+    expect(transition("outreach_staged", "DRAFT_SENT", ctx())).toBeNull();
+  });
+
+  it("releases the staged send on approval and discards it on rejection", () => {
+    const ok = transition("outreach_staged", "SEND_APPROVED", ctx());
+    expect(ok?.next).toBe("await_reply");
+    expect(ok?.effects).toEqual([{ kind: "send_outreach", followUp: false }]);
+    const no = transition("outreach_staged", "SEND_REJECTED", ctx());
+    expect(no?.next).toBe("done");
+    expect(no?.effects).toEqual([{ kind: "give_up" }]);
+  });
+
+  it("keeps the approved happy path intact through the gate", () => {
+    let state: ChaseState = "intake";
+    const steps: Array<[ChaseState, Parameters<typeof transition>[1]]> = [
+      ["intake", "INTAKE_OK"],
+      ["outreach", "OUTREACH_STAGED"],
+      ["outreach_staged", "SEND_APPROVED"],
+      ["await_reply", "REPLY_RECEIVED"],
+      ["parse", "REPLY_PARSED"],
+      ["validate", "VALIDATED"],
+      ["update", "ENTITY_UPDATED"],
+      ["notify", "NOTIFIED"],
+    ];
+    for (const [expectedState, event] of steps) {
+      expect(state).toBe(expectedState);
+      const t = transition(state, event, ctx());
+      expect(t).not.toBeNull();
+      state = t!.next;
+    }
+    expect(state).toBe("done");
   });
 });
