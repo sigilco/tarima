@@ -151,3 +151,73 @@ describe("ui routes: workflows", () => {
     expect(body.runs.length).toBeGreaterThan(0);
   });
 });
+
+describe("ui routes: approval flow", () => {
+  it("walks stage -> approve(spec with brief) -> curate through the session surface", async () => {
+    const flowId = (
+      (await (
+        await app.request("/api/ui/projects", json({ name: "Approval Flow Project" }))
+      ).json()) as { project: { id: string } }
+    ).project.id;
+
+    const staged = await app.request(
+      `/api/ui/projects/${flowId}/stage`,
+      json({ to: "spec_review" }),
+    );
+    expect(staged.status).toBe(200);
+    expect(await staged.json()).toEqual({
+      projectId: flowId,
+      stage: "spec_review",
+      pendingGate: "spec",
+    });
+
+    // Curation before the spec exists is a 409, not a silent empty set.
+    const early = await app.request(`/api/ui/projects/${flowId}/curate`, {
+      method: "POST",
+      headers: { Cookie: cookie() },
+    });
+    expect(early.status).toBe(409);
+
+    const approved = await app.request(
+      `/api/ui/projects/${flowId}/approve`,
+      json({
+        gate: "spec",
+        decision: "approve",
+        brief: {
+          eventType: "meetup",
+          city: "Nowhere",
+          headcount: 20,
+          budgetAmount: 1000,
+          currency: "EUR",
+        },
+      }),
+    );
+    expect(approved.status).toBe(200);
+    const approvedBody = (await approved.json()) as { stage: string; released: number };
+    expect(approvedBody.stage).toBe("curating"); // catalog miss: parked
+    expect(approvedBody.released).toBe(0);
+
+    const curate = await app.request(`/api/ui/projects/${flowId}/curate`, {
+      method: "POST",
+      headers: { Cookie: cookie() },
+    });
+    expect(curate.status).toBe(200);
+    expect(await curate.json()).toEqual({ projectId: flowId, candidates: 0, stage: "curating" });
+  });
+
+  it("rejects a gate decision for the wrong gate with 409", async () => {
+    const res = await app.request(
+      `/api/ui/projects/${projectId}/approve`,
+      json({ gate: "send", decision: "approve" }),
+    );
+    expect(res.status).toBe(409);
+  });
+
+  it("answers 404 for an unknown project", async () => {
+    const res = await app.request(
+      "/api/ui/projects/55555555-5555-4555-8555-555555555555/stage",
+      json({ to: "spec_review" }),
+    );
+    expect(res.status).toBe(404);
+  });
+});

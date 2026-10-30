@@ -69,9 +69,11 @@ export function chaseHandlers(llm: ChaseLlm) {
       }
       // Park: hold the staged draft and keep the run alive with a
       // keep-alive timer (no pending step would auto-complete the run).
+      // No nextState: the state is already `outreach_staged`, and a
+      // stale-snapshot write here could revert the state a gate decision
+      // advanced when steps complete out of order.
       return {
         output: { staged: true },
-        nextState: "outreach_staged",
         nextSteps: [
           {
             key: "chase.outreach_staged",

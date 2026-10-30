@@ -24,13 +24,15 @@
  */
 import { Hono } from "hono";
 import * as v from "valibot";
-import { createProjectSchema } from "@tarima/contract";
+import { approveRequestSchema, createProjectSchema, stageRequestSchema } from "@tarima/contract";
 import { db } from "../db";
 import { requireSession, getSessionUser } from "../middleware/require-session";
 import { createProject, getProject, listProjects } from "../services/projects";
 import { listEntities } from "../services/entities";
 import { triggerWorkflow, WORKFLOW_TEMPLATES } from "../services/workflows";
 import { handleBulkIntake } from "../services/bulk-intake";
+import { advanceStage, decideGate } from "../services/approval";
+import { curateProject } from "../services/curation";
 import { summarizeBoard } from "../lib/board";
 
 const bulkBodySchema = v.object({ csv: v.pipe(v.string(), v.maxLength(1_000_000)) });
@@ -94,4 +96,57 @@ export const uiRoutes = new Hono()
 
     const runs = triggerWorkflow(db, projectId, template);
     return c.json({ runs }, 201);
+  })
+  // Approval flow (contract stage.ts). advanceStage / decideGate own
+  // the semantics; curation for a catalog miss is explicit here so the
+  // provider chain has one seam to hook into.
+  .post("/api/ui/projects/:projectId/stage", async (c) => {
+    const projectId = c.req.param("projectId");
+    if (!getProject(db, projectId)) return c.json({ error: "not_found" }, 404);
+
+    const parsed = v.safeParse(stageRequestSchema, await c.req.json().catch(() => null));
+    if (!parsed.success) return c.json({ error: "invalid_request" }, 400);
+
+    const result = advanceStage(projectId, parsed.output.to);
+    if (!result.ok) return c.json({ error: result.error.code }, 409);
+    return c.json({
+      projectId,
+      stage: result.value.stage,
+      ...(result.value.pendingGate ? { pendingGate: result.value.pendingGate } : {}),
+    });
+  })
+  .post("/api/ui/projects/:projectId/approve", async (c) => {
+    const projectId = c.req.param("projectId");
+    if (!getProject(db, projectId)) return c.json({ error: "not_found" }, 404);
+
+    const parsed = v.safeParse(approveRequestSchema, await c.req.json().catch(() => null));
+    if (!parsed.success) return c.json({ error: "invalid_request" }, 400);
+
+    const { gate, decision, brief, entityIds } = parsed.output;
+    const result = decideGate(projectId, gate, decision, { brief, entityIds });
+    if (!result.ok) {
+      const status = result.error.code === "not_found" ? 404 : 409;
+      return c.json({ error: result.error.code }, status);
+    }
+    return c.json({
+      projectId,
+      stage: result.value.stage,
+      ...(result.value.pendingGate ? { pendingGate: result.value.pendingGate } : {}),
+      released: result.value.released,
+      discarded: result.value.discarded,
+    });
+  })
+  .post("/api/ui/projects/:projectId/curate", (c) => {
+    const projectId = c.req.param("projectId");
+    if (!getProject(db, projectId)) return c.json({ error: "not_found" }, 404);
+
+    try {
+      const { candidates } = curateProject(projectId);
+      const project = getProject(db, projectId)!;
+      return c.json({ projectId, candidates, stage: project.stage });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "curation failed";
+      if (message.includes("no confirmed brief")) return c.json({ error: "no_brief" }, 409);
+      return c.json({ error: "curation_failed" }, 500);
+    }
   });

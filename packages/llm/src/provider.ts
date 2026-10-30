@@ -2,12 +2,20 @@ import { createOpenAiCompatible } from "./openai-compatible";
 import type { OpenAiCompatibleClient } from "./openai-compatible";
 import {
   buildDraftOutreachPrompt,
+  buildParseBriefPrompt,
   buildParseReplyPrompt,
   extractJson,
   validateOutreachDraft,
+  validateParsedBrief,
   validateParsedReply,
 } from "./tasks";
-import type { DraftOutreachInput, LlmProvider, OutreachDraft, ParsedReply } from "./types";
+import type {
+  DraftOutreachInput,
+  LlmProvider,
+  OutreachDraft,
+  ParsedBrief,
+  ParsedReply,
+} from "./types";
 
 export interface LlmEnv {
   /** OpenAI-compatible base url, e.g. https://host/v1 */
@@ -79,6 +87,23 @@ export function createLLM(env: LlmEnv = {}, options: LlmProviderOptions = {}): L
         temperature: 0.4,
       });
       return validateOutreachDraft(extractJson(res.content));
+    },
+
+    async parseBrief(text: string): Promise<ParsedBrief> {
+      if (!instructModelId) {
+        throw new Error("llm is not configured: LLM_INSTRUCT_MODEL_ID is required");
+      }
+      const prompt = buildParseBriefPrompt(text);
+      const res = await getClient().complete({
+        model: instructModelId,
+        messages: [
+          { role: "system", content: prompt.system },
+          { role: "user", content: prompt.user },
+        ],
+        json: true,
+        temperature: 0,
+      });
+      return validateParsedBrief(extractJson(res.content));
     },
   };
 }

@@ -26,7 +26,28 @@ export interface ParsedReply {
   confidence: number;
 }
 
+/**
+ * A free-text event brief parsed into the structured spec the confirm
+ * step parks for user review. Mirrors the optional shape of the
+ * contract's brief record (date and the long free-text fields are the
+ * parser's best effort; the api validates against `briefSchema`
+ * before storing and shows the result for confirmation either way).
+ */
+export interface ParsedBrief {
+  eventType: string;
+  city: string;
+  date?: string;
+  headcount: number;
+  budgetAmount: number;
+  currency: string;
+  venueRequirements?: string;
+  notes?: string;
+  confidence: number;
+}
+
 export interface LlmProvider {
   draftOutreach(i: DraftOutreachInput): Promise<OutreachDraft>;
   parseReply(body: string, goal: Record<string, unknown>): Promise<ParsedReply>;
+  /** Parse a free-text event brief into the confirm-step spec. */
+  parseBrief(text: string): Promise<ParsedBrief>;
 }

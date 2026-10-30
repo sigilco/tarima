@@ -26,6 +26,8 @@ export interface ProjectWire {
   id: string;
   name: string;
   goal: Record<string, unknown>;
+  /** Approval-flow stage (contract PROJECT_STAGES). */
+  stage: string;
   createdAt: string;
 }
 
@@ -39,6 +41,7 @@ function toWire(row: typeof projects.$inferSelect): ProjectWire {
     id: row.id,
     name: row.name,
     goal: row.goal ?? {},
+    stage: row.stage,
     createdAt: toIso(row.createdAt),
   };
 }
