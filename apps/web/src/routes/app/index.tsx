@@ -1,4 +1,4 @@
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import * as v from "valibot";
 import * as m from "../../paraglide/messages.js";
@@ -71,7 +71,12 @@ function AppHome() {
               {m["app.title"]()}
             </span>
           </a>
-          <span className="text-[13px] text-content-faint">{m["app.projects"]()}</span>
+          <span className="flex items-center gap-4 text-[13px] text-content-faint">
+            <Link to="/app/settings" className="transition-colors hover:text-content">
+              {m["board.settings"]()}
+            </Link>
+            {m["app.projects"]()}
+          </span>
         </header>
 
         <h1 className="mt-12 font-display text-4xl leading-tight text-content">

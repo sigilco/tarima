@@ -139,3 +139,66 @@ export function startChase(
 export function eventsUrl(projectId: string): string {
   return `${apiOrigin()}/api/ui/projects/${encodeURIComponent(projectId)}/events`;
 }
+
+/** The channels a user can bind (contract `BINDING_CHANNELS`). */
+export type BindingChannel = "telegram" | "whatsapp";
+
+/** One bound channel (contract `channelBindingSchema`, plus the endpoint). */
+export interface BindingWire {
+  id: string;
+  channel: BindingChannel;
+  label: string | null;
+  externalId: string;
+  createdAt: string;
+}
+
+/** A freshly minted connect code (shown once, valid for 15 minutes). */
+export interface ConnectCodeWire {
+  code: string;
+  expiresAt: string;
+}
+
+/** One in-app inbox message. */
+export interface MessageWire {
+  id: string;
+  projectId: string | null;
+  kind: "status_change" | "approval_needed" | "digest";
+  summary: string;
+  read: boolean;
+  createdAt: string;
+}
+
+/** The settings payload: the bound channels and the unread counter. */
+export interface SettingsPayload {
+  bindings: BindingWire[];
+  unread: number;
+}
+
+/** The inbox payload: the messages and the unread counter. */
+export interface InboxPayload {
+  messages: MessageWire[];
+  unread: number;
+}
+
+/** Mint a connect code for one channel. */
+export function createConnectCode(channel: BindingChannel): Promise<ConnectCodeWire> {
+  return call<ConnectCodeWire>("/api/ui/settings/connect-code", {
+    method: "POST",
+    body: JSON.stringify({ channel }),
+  });
+}
+
+/** Drop one binding. */
+export function removeBinding(bindingId: string): Promise<{ ok: boolean }> {
+  return call<{ ok: boolean }>(`/api/ui/settings/bindings/${encodeURIComponent(bindingId)}`, {
+    method: "DELETE",
+  });
+}
+
+/** Mark the given messages read (or every message when ids is omitted). */
+export function markMessagesRead(ids?: string[]): Promise<{ unread: number }> {
+  return call<{ unread: number }>("/api/ui/settings/messages/read", {
+    method: "POST",
+    body: JSON.stringify(ids ? { ids } : {}),
+  });
+}

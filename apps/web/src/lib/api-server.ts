@@ -13,7 +13,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import * as v from "valibot";
-import type { BoardPayload, ProjectsPayload, Served } from "./api";
+import type { BoardPayload, InboxPayload, ProjectsPayload, Served, SettingsPayload } from "./api";
 
 /** The incoming request's cookie header, or undefined outside a request. */
 function requestCookies(): string | undefined {
@@ -26,6 +26,11 @@ function requestCookies(): string | undefined {
 
 /** The project id of the board route. */
 const projectIdSchema = v.pipe(v.string(), v.minLength(1));
+
+// Every GET server fn in this module runs with `strict: false`: the
+// payloads carry the contract's free-form `goal` record, which the SSR
+// serializer's static serializable union cannot type. The runtime
+// payload is plain json either way.
 
 /**
  * The origin of the api when the server function runs on the server.
@@ -55,7 +60,7 @@ async function apiGet(path: string): Promise<Response> {
 }
 
 /** The project list payload (see lib/api.ts for the shapes). */
-export const fetchProjectsFn = createServerFn({ method: "GET" }).handler(
+export const fetchProjectsFn = createServerFn({ method: "GET", strict: false }).handler(
   async (): Promise<Served<ProjectsPayload>> => {
     const res = await apiGet("/api/ui/projects");
     return {
@@ -75,3 +80,25 @@ export const fetchBoardFn = createServerFn({ method: "GET", strict: false })
       body: (await res.json().catch(() => null)) as BoardPayload | null,
     };
   });
+
+/** The settings payload of the signed in user. */
+export const fetchSettingsFn = createServerFn({ method: "GET", strict: false }).handler(
+  async (): Promise<Served<SettingsPayload>> => {
+    const res = await apiGet("/api/ui/settings");
+    return {
+      status: res.status,
+      body: (await res.json().catch(() => null)) as SettingsPayload | null,
+    };
+  },
+);
+
+/** The in-app inbox of the signed in user. */
+export const fetchInboxFn = createServerFn({ method: "GET", strict: false }).handler(
+  async (): Promise<Served<InboxPayload>> => {
+    const res = await apiGet("/api/ui/settings/messages");
+    return {
+      status: res.status,
+      body: (await res.json().catch(() => null)) as InboxPayload | null,
+    };
+  },
+);
