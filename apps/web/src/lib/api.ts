@@ -12,13 +12,22 @@
  * answers 404 for an unknown project, which is NOT a session problem.
  */
 import type { BoardRow } from "./board";
+import type { ApprovalGate, Brief, ProjectStage } from "@tarima/contract";
 
 /** The wire shape of a project (contract `projectSchema`). */
 export interface ProjectWire {
   id: string;
   name: string;
   goal: Record<string, unknown>;
+  /** Approval-flow stage (contract `projectStageSchema`), absent on old rows. */
+  stage?: ProjectStage;
   createdAt: string;
+}
+
+/** The brief of a project, as it sits under `goal.brief`. */
+export function projectBrief(project: ProjectWire): Brief | undefined {
+  const brief = project.goal?.brief;
+  return brief as Brief | undefined;
 }
 
 /** One bucket's count, as the header chips render it. */
@@ -32,11 +41,43 @@ export interface BoardPayload {
   project: ProjectWire;
   entities: BoardRow[];
   summary: { buckets: BucketCount[]; total: number };
+  /** The gate waiting on the user, when the api sends it (contract stage.ts). */
+  pendingGate?: ApprovalGate;
 }
 
 /** The project list payload. */
 export interface ProjectsPayload {
   projects: ProjectWire[];
+}
+
+/** One staged outreach draft, as the send gate lists it. */
+export interface DraftWire {
+  entityId: string;
+  entityName: string;
+  to: string;
+  subject: string;
+  body: string;
+}
+
+/** The drafts payload: the staged drafts of a project. */
+export interface DraftsPayload {
+  drafts: DraftWire[];
+}
+
+/** The answer of a stage move (contract `stageResponseSchema`). */
+export interface StageResult {
+  projectId: string;
+  stage: ProjectStage;
+  pendingGate?: ApprovalGate;
+}
+
+/** The answer of a gate decision (contract `approveResponseSchema`). */
+export interface ApproveResult {
+  projectId: string;
+  stage: ProjectStage;
+  pendingGate?: ApprovalGate;
+  released: number;
+  discarded: number;
 }
 
 /** One rejected csv row, as the import modal reports it. */
@@ -117,6 +158,34 @@ export function createProject(
   });
 }
 
+/** The body of a manual row (the api fills in projectId, status, missing). */
+export interface AddRowInput {
+  name: string;
+  contact?: string;
+  channel?: "email" | "telegram" | "manual";
+  missing?: string[];
+}
+
+/** Add one row to a project by hand. */
+export function addRow(projectId: string, input: AddRowInput): Promise<{ entity: BoardRow }> {
+  return call<{ entity: BoardRow }>(`/api/ui/projects/${encodeURIComponent(projectId)}/entities`, {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
+/** Set the contact of a board row (the "no contact" affordance). */
+export function setRowContact(
+  projectId: string,
+  entityId: string,
+  contact: string,
+): Promise<{ entity: BoardRow }> {
+  return call<{ entity: BoardRow }>(
+    `/api/ui/projects/${encodeURIComponent(projectId)}/entities/${encodeURIComponent(entityId)}/contact`,
+    { method: "PATCH", body: JSON.stringify({ contact }) },
+  );
+}
+
 /** Import a csv of entities into a project. */
 export function bulkIntake(projectId: string, csv: string): Promise<BulkIntakeResult> {
   return call<BulkIntakeResult>(`/api/ui/projects/${encodeURIComponent(projectId)}/entities/bulk`, {
@@ -138,4 +207,116 @@ export function startChase(
 /** The url of the board's event stream. */
 export function eventsUrl(projectId: string): string {
   return `${apiOrigin()}/api/ui/projects/${encodeURIComponent(projectId)}/events`;
+}
+
+/** The channels a user can bind (contract `BINDING_CHANNELS`). */
+export type BindingChannel = "telegram" | "whatsapp";
+
+/** One bound channel (contract `channelBindingSchema`, plus the endpoint). */
+export interface BindingWire {
+  id: string;
+  channel: BindingChannel;
+  label: string | null;
+  externalId: string;
+  createdAt: string;
+}
+
+/** A freshly minted connect code (shown once, valid for 15 minutes). */
+export interface ConnectCodeWire {
+  code: string;
+  expiresAt: string;
+}
+
+/** One in-app inbox message. */
+export interface MessageWire {
+  id: string;
+  projectId: string | null;
+  kind: "status_change" | "approval_needed" | "digest";
+  summary: string;
+  read: boolean;
+  createdAt: string;
+}
+
+/** The settings payload: the bound channels and the unread counter. */
+export interface SettingsPayload {
+  bindings: BindingWire[];
+  unread: number;
+}
+
+/** The inbox payload: the messages and the unread counter. */
+export interface InboxPayload {
+  messages: MessageWire[];
+  unread: number;
+}
+
+/** Mint a connect code for one channel. */
+export function createConnectCode(channel: BindingChannel): Promise<ConnectCodeWire> {
+  return call<ConnectCodeWire>("/api/ui/settings/connect-code", {
+    method: "POST",
+    body: JSON.stringify({ channel }),
+  });
+}
+
+/** Drop one binding. */
+export function removeBinding(bindingId: string): Promise<{ ok: boolean }> {
+  return call<{ ok: boolean }>(`/api/ui/settings/bindings/${encodeURIComponent(bindingId)}`, {
+    method: "DELETE",
+  });
+}
+
+/** Mark the given messages read (or every message when ids is omitted). */
+export function markMessagesRead(ids?: string[]): Promise<{ unread: number }> {
+  return call<{ unread: number }>("/api/ui/settings/messages/read", {
+    method: "POST",
+    body: JSON.stringify(ids ? { ids } : {}),
+  });
+}
+
+/** The project id path segment, encoded. */
+function projectPath(projectId: string): string {
+  return `/api/ui/projects/${encodeURIComponent(projectId)}`;
+}
+
+/** Move the project forward (contract `stageRequestSchema`). */
+export function advanceStage(
+  projectId: string,
+  to: "spec_review" | "curating",
+): Promise<StageResult> {
+  return call<StageResult>(`${projectPath(projectId)}/stage`, {
+    method: "POST",
+    body: JSON.stringify({ to }),
+  });
+}
+
+/** Decide the pending gate (contract `approveRequestSchema`). */
+export function decideGate(
+  projectId: string,
+  input: {
+    gate: ApprovalGate;
+    decision: "approve" | "reject";
+    brief?: Brief;
+    entityIds?: string[];
+  },
+): Promise<ApproveResult> {
+  return call<ApproveResult>(`${projectPath(projectId)}/approve`, {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
+/** Run curation against the venue catalog (contract `curateResponseSchema`). */
+export function curate(projectId: string): Promise<{
+  projectId: string;
+  candidates: number;
+  stage: ProjectStage;
+}> {
+  return call<{ projectId: string; candidates: number; stage: ProjectStage }>(
+    `${projectPath(projectId)}/curate`,
+    { method: "POST" },
+  );
+}
+
+/** The staged drafts of a project (the send gate list). */
+export function fetchDrafts(projectId: string): Promise<DraftsPayload> {
+  return call<DraftsPayload>(`${projectPath(projectId)}/drafts`);
 }

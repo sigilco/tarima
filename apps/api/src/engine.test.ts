@@ -93,12 +93,44 @@ describe("engine boot", () => {
 
   it("sends the outreach email through the outbox and records it", async () => {
     // The service layer triggers runs the same way; here the seed run
-    // is reused by enqueueing its intake step directly.
+    // is reused by enqueueing its intake step directly. The draft is
+    // STAGED first: no email.send may land before the send gate.
     enqueueStep(db, runId, "chase.intake", {
       entityId,
       entityName: "Blue Note",
       to: "booker@bluenote.test",
       goal: {},
+    });
+
+    await waitFor(() => {
+      const run = db
+        .select()
+        .from(workflows)
+        .all()
+        .find((row) => row.id === runId);
+      return run?.state === "outreach_staged";
+    });
+
+    const staged = db
+      .select()
+      .from(outbox)
+      .all()
+      .filter((row) => row.type === "email.send");
+    expect(staged).toHaveLength(0);
+
+    // The send gate approves: find the staged draft on the parked gate
+    // step and re-enter it with the decision (what the approve route
+    // does through decideGate).
+    const gate = db
+      .select()
+      .from(steps)
+      .all()
+      .filter((step) => step.runId === runId && step.status === "pending")
+      .find((step) => step.stepKey.startsWith("chase.outreach_staged"));
+    expect(gate).toBeDefined();
+    enqueueStep(db, runId, `${gate!.stepKey}#2`, {
+      ...gate!.input,
+      event: "SEND_APPROVED",
     });
 
     await waitFor(() => {

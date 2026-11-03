@@ -21,6 +21,7 @@ import {
   createSessionToken,
   sessionCookieHeader,
 } from "@tarima/auth-core/session";
+import { NOT_ALLOWLISTED_ERROR, isAllowlisted } from "@tarima/contract";
 import { audit } from "@tarima/obs";
 import { db } from "../db";
 import { loopbackInbox, otpCodes, sessions, users } from "../db/schema";
@@ -128,6 +129,15 @@ export const authRoutes = new Hono()
           .run();
       }
       return invalid();
+    }
+
+    // Beta gate: when BETA_ALLOWLIST is set, only listed emails verify.
+    // The check runs after the code check, so a wrong code still reads as
+    // a wrong code and only a correct code for an unlisted address
+    // answers 403.
+    if (!isAllowlisted(process.env.BETA_ALLOWLIST, email)) {
+      recordFailedVerify(email);
+      return c.json({ error: NOT_ALLOWLISTED_ERROR }, 403);
     }
 
     db.update(otpCodes).set({ consumedAt: Date.now() }).where(eq(otpCodes.id, row.id)).run();

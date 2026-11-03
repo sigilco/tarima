@@ -12,6 +12,8 @@ import { serveStatic } from "@hono/node-server/serve-static";
 import { db } from "./db";
 import { accessRequests } from "./db/schema";
 import { startEngine } from "./engine";
+import { setVenueSearchDeps } from "./services/venue-search";
+import { defaultProviders } from "@tarima/venuesearch/providers";
 import { sendMail } from "./mail";
 import { apiKeyRoutes } from "./routes/api-keys";
 import { authRoutes } from "./routes/auth";
@@ -21,6 +23,7 @@ import { entityRoutes } from "./routes/entities";
 import { eventRoutes } from "./routes/events";
 import { mcpRoutes } from "./routes/mcp";
 import { projectRoutes } from "./routes/projects";
+import { settingsRoutes } from "./routes/settings";
 import { uiRoutes } from "./routes/ui";
 import { webhookRoutes } from "./routes/webhooks";
 import { workflowRoutes } from "./routes/workflows";
@@ -83,6 +86,7 @@ app.route("/", csvRoutes);
 app.route("/", mcpRoutes);
 app.route("/", capabilityRoutes);
 app.route("/", uiRoutes);
+app.route("/", settingsRoutes);
 app.route("/", eventRoutes);
 
 // Static client assets (vite build output) and the SSR handler for
@@ -106,6 +110,11 @@ const port = Number(process.env.PORT ?? 3001);
 // listens: a triggered workflow must find a worker already claiming
 // steps, and a crash-recovery sweep runs before the first claim.
 startEngine();
+
+// The venue provider chain (stream F): curation falls back to a live
+// search when the catalog has nothing for the city. The providers are
+// the public, keyless ones (Photon discovery, Overpass enrichment).
+setVenueSearchDeps(defaultProviders());
 
 serve({ fetch: app.fetch, port, hostname: "127.0.0.1" }, (info) => {
   console.log(`tarima listening on :${info.port}`);

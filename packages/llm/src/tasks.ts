@@ -2,10 +2,12 @@ import * as v from "valibot";
 import {
   DRAFT_OUTREACH_SYSTEM,
   PARSE_REPLY_SYSTEM,
+  PARSE_BRIEF_SYSTEM,
   draftOutreachUser,
+  parseBriefUser,
   parseReplyUser,
 } from "./prompts";
-import type { DraftOutreachInput, OutreachDraft, ParsedReply } from "./types";
+import type { DraftOutreachInput, OutreachDraft, ParsedBrief, ParsedReply } from "./types";
 
 /**
  * The two chase tasks. Both are schema-validated on the way back in: a
@@ -51,6 +53,23 @@ export function validateParsedReply(value: unknown): ParsedReply {
   };
 }
 
+export const parsedBriefSchema = v.object({
+  eventType: v.string(),
+  city: v.string(),
+  date: v.optional(v.string()),
+  headcount: v.pipe(v.number(), v.integer(), v.minValue(1)),
+  budgetAmount: v.pipe(v.number(), v.minValue(0)),
+  currency: v.pipe(v.string(), v.regex(/^[A-Z]{3}$/)),
+  venueRequirements: v.optional(v.string()),
+  notes: v.optional(v.string()),
+  confidence: v.pipe(v.number(), v.minValue(0), v.maxValue(1)),
+});
+
+/** Validate a parseBrief model response. */
+export function validateParsedBrief(value: unknown): ParsedBrief {
+  return v.parse(parsedBriefSchema, value);
+}
+
 /** Validate a draftOutreach model response. */
 export function validateOutreachDraft(value: unknown): OutreachDraft {
   const parsed = v.parse(outreachDraftSchema, value);
@@ -74,4 +93,9 @@ export function buildDraftOutreachPrompt(input: DraftOutreachInput): {
   user: string;
 } {
   return { system: DRAFT_OUTREACH_SYSTEM, user: draftOutreachUser(input) };
+}
+
+/** Prompt text for the parseBrief task. */
+export function buildParseBriefPrompt(text: string): { system: string; user: string } {
+  return { system: PARSE_BRIEF_SYSTEM, user: parseBriefUser(text) };
 }

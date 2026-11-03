@@ -1,0 +1,1 @@
+ALTER TABLE `projects` ADD `send_approved_at` integer;

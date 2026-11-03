@@ -37,7 +37,7 @@ export const Route = createFileRoute("/login")({
   component: Login,
 });
 
-type LoginError = "invalid_email" | "invalid_code" | "offline" | null;
+type LoginError = "invalid_email" | "invalid_code" | "not_allowlisted" | "offline" | null;
 
 function Login() {
   const navigate = useNavigate();
@@ -54,9 +54,11 @@ function Login() {
   const codeError =
     error === "invalid_code"
       ? m["login.invalidCode"]()
-      : error === "offline"
-        ? m["errors.offline"]()
-        : "";
+      : error === "not_allowlisted"
+        ? m["login.notAllowlisted"]()
+        : error === "offline"
+          ? m["errors.offline"]()
+          : "";
 
   async function requestCode(e: FormEvent) {
     e.preventDefault();
@@ -114,6 +116,11 @@ function Login() {
       });
       if (res.status === 401) {
         setError("invalid_code");
+        return;
+      }
+      if (res.status === 403) {
+        // The beta gate: the code was right, the address is not on the list.
+        setError("not_allowlisted");
         return;
       }
       if (!res.ok) throw new Error(String(res.status));

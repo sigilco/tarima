@@ -21,21 +21,37 @@ export interface BoardRow {
   updatedAt: string;
 }
 
-/** The bucket a wire row state belongs to. */
-export type BoardBucket = BoardStatus;
+/**
+ * The bucket a wire row state belongs to.
+ *
+ * `candidate` gets its own bucket on the web: curated venues wait for
+ * the shortlist approval, so they are not chasing work yet. The api
+ * still buckets them under chasing (its summary mirrors the four
+ * contract buckets); the web count is the one the header renders.
+ */
+export type BoardBucket = BoardStatus | "candidate";
 
 /** The filter values the board URL accepts. */
 export type BoardFilter = BoardBucket | "all";
+
+/** Every filter value, candidate included. A set for O(1) membership. */
+const FILTERS = new Set<string>([...BOARD_STATUS, "candidate"]);
+
+/** A filter value from a raw URL param, or "all" when it is not one. */
+export function parseFilter(raw: string | undefined): BoardFilter {
+  return FILTERS.has(raw ?? "") ? (raw as BoardFilter) : "all";
+}
 
 /**
  * Wire state -> bucket.
  *
  * The pre-reply states (intake through notifying) are work in progress:
- * they count as "chasing" because the row is being worked. Only a row
- * that answered, that is stuck, or that is finished lands in its own
- * bucket.
+ * they count as "chasing" because the row is being worked. `candidate`
+ * is the exception: a curated venue waits for the shortlist gate, so it
+ * lands in its own bucket and never inflates the chasing counter.
  */
 const TO_BUCKET: Record<ChaseRowState, BoardBucket> = {
+  candidate: "candidate",
   intake: "chasing",
   outreach: "chasing",
   awaiting_reply: "chasing",
@@ -54,11 +70,6 @@ export function bucketOf(status: ChaseRowState): BoardBucket {
   return TO_BUCKET[status] ?? "chasing";
 }
 
-/** A filter value from a raw URL param, or "all" when it is not one. */
-export function parseFilter(raw: string | undefined): BoardFilter {
-  return BOARD_STATUS.includes(raw as BoardStatus) ? (raw as BoardFilter) : "all";
-}
-
 /** The rows that pass the filter. */
 export function filterRows(rows: readonly BoardRow[], filter: BoardFilter): BoardRow[] {
   if (filter === "all") return [...rows];
@@ -67,12 +78,15 @@ export function filterRows(rows: readonly BoardRow[], filter: BoardFilter): Boar
 
 /**
  * Deterministic board order: the stuck and unreplied work first (blocked,
- * then chasing), the answered rows after, finished last; within a bucket
- * the oldest row leads and the id breaks ties, so the table never
- * reshuffles between two loads of the same data.
+ * then chasing), the answered rows after, finished last; candidates sit
+ * with the chasing work because the shortlist gate treats them as a
+ * decision, not as finished business. Within a bucket the oldest row
+ * leads and the id breaks ties, so the table never reshuffles between
+ * two loads of the same data.
  */
 const BUCKET_ORDER: Record<BoardBucket, number> = {
   blocked: 0,
+  candidate: 1,
   chasing: 1,
   replied: 2,
   done: 3,
@@ -93,14 +107,18 @@ export interface BucketCount {
   count: number;
 }
 
-/** The counts of every bucket, in the contract's declaration order. */
+/** The counts of every bucket, candidate first then the contract order. */
 export function countBuckets(rows: readonly BoardRow[]): BucketCount[] {
-  const counts = new Map<BoardBucket, number>(BOARD_STATUS.map((bucket) => [bucket, 0]));
+  const counts = new Map<BoardBucket, number>(
+    (["candidate"] as BoardBucket[]).concat(BOARD_STATUS).map((bucket) => [bucket, 0]),
+  );
   for (const row of rows) {
     const bucket = bucketOf(row.status);
     counts.set(bucket, (counts.get(bucket) ?? 0) + 1);
   }
-  return BOARD_STATUS.map((bucket) => ({ bucket, count: counts.get(bucket) ?? 0 }));
+  return (["candidate"] as BoardBucket[])
+    .concat(BOARD_STATUS)
+    .map((bucket) => ({ bucket, count: counts.get(bucket) ?? 0 }));
 }
 
 /** The filter+sort pipeline the table renders. */

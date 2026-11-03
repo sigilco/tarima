@@ -36,6 +36,10 @@ describe("bucketOf", () => {
     }
   });
 
+  it("keeps candidates out of the chasing bucket", () => {
+    expect(bucketOf("candidate")).toBe("candidate");
+  });
+
   it("gives replied, blocked and done their own buckets", () => {
     expect(bucketOf("replied")).toBe("replied");
     expect(bucketOf("blocked")).toBe("blocked");
@@ -47,6 +51,7 @@ describe("parseFilter", () => {
   it("accepts a board bucket and rejects anything else", () => {
     expect(parseFilter("chasing")).toBe("chasing");
     expect(parseFilter("done")).toBe("done");
+    expect(parseFilter("candidate")).toBe("candidate");
     expect(parseFilter("intake")).toBe("all");
     expect(parseFilter(undefined)).toBe("all");
     expect(parseFilter("DROP TABLE")).toBe("all");
@@ -112,18 +117,29 @@ describe("sortRows", () => {
 });
 
 describe("countBuckets", () => {
-  it("always reports all four buckets in contract order", () => {
+  it("always reports all buckets, candidate first", () => {
     const buckets = countBuckets([
       row({ id: "1", status: "chasing" }),
       row({ id: "2", status: "intake" }),
       row({ id: "3", status: "done" }),
+      row({ id: "4", status: "candidate" }),
     ]);
     expect(buckets).toEqual([
+      { bucket: "candidate", count: 1 },
       { bucket: "chasing", count: 2 },
       { bucket: "replied", count: 0 },
       { bucket: "blocked", count: 0 },
       { bucket: "done", count: 1 },
     ]);
+  });
+
+  it("keeps candidates out of the chasing counter", () => {
+    const buckets = countBuckets([
+      row({ id: "1", status: "candidate" }),
+      row({ id: "2", status: "candidate" }),
+    ]);
+    expect(buckets.find((b) => b.bucket === "chasing")?.count).toBe(0);
+    expect(buckets.find((b) => b.bucket === "candidate")?.count).toBe(2);
   });
 });
 

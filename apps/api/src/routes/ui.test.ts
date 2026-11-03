@@ -150,4 +150,394 @@ describe("ui routes: workflows", () => {
     const body = (await good.json()) as { runs: { entityId: string }[] };
     expect(body.runs.length).toBeGreaterThan(0);
   });
+
+  it("opens the send gate when the chase starts on a brief-stage project", async () => {
+    const flowId = (
+      (await (await app.request("/api/ui/projects", json({ name: "Gate opening" }))).json()) as {
+        project: { id: string };
+      }
+    ).project.id;
+
+    const answer = await app.request(
+      `/api/ui/projects/${flowId}/workflows`,
+      json({ template: "chase-deliverables" }),
+    );
+    expect(answer.status).toBe(201);
+    const body = (await answer.json()) as { stage: string; pendingGate?: string };
+    expect(body.stage).toBe("send_review");
+    expect(body.pendingGate).toBe("send");
+
+    // The project detail and the board carry the stage and the gate.
+    const detail = await app.request(`/api/ui/projects/${flowId}`, {
+      headers: { Cookie: cookie() },
+    });
+    const detailBody = (await detail.json()) as {
+      project: { stage: string; pendingGate?: string };
+      pendingGate?: string;
+    };
+    expect(detailBody.project.stage).toBe("send_review");
+    expect(detailBody.project.pendingGate).toBe("send");
+    expect(detailBody.pendingGate).toBe("send");
+
+    const board = await app.request(`/api/ui/projects/${flowId}/board`, {
+      headers: { Cookie: cookie() },
+    });
+    const boardBody = (await board.json()) as {
+      project: { stage: string; pendingGate?: string };
+      pendingGate?: string;
+    };
+    expect(boardBody.project.stage).toBe("send_review");
+    expect(boardBody.project.pendingGate).toBe("send");
+    // The gate is at the root of the board payload too: the board reads
+    // it there, next to the project and the rows.
+    expect(boardBody.pendingGate).toBe("send");
+  });
+});
+
+describe("ui routes: staged drafts", () => {
+  it("answers an empty list for a project without staged drafts", async () => {
+    const flowId = (
+      (await (await app.request("/api/ui/projects", json({ name: "Drafts" }))).json()) as {
+        project: { id: string };
+      }
+    ).project.id;
+
+    const res = await app.request(`/api/ui/projects/${flowId}/drafts`, {
+      headers: { Cookie: cookie() },
+    });
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as {
+      projectId: string;
+      stage: string;
+      pendingGate?: string;
+      drafts: unknown[];
+    };
+    expect(body.projectId).toBe(flowId);
+    expect(body.stage).toBe("brief");
+    expect(body.drafts).toEqual([]);
+  });
+
+  it("answers 404 for another owner's project and for an unknown id", async () => {
+    const otherId = "user-drafts-other";
+    db.insert(users)
+      .values({ id: otherId, email: "drafts-other@tarima.test", createdAt: Date.now() })
+      .onConflictDoNothing()
+      .run();
+    const { createProject } = await import("../services/projects");
+    const theirs = createProject(db, { name: "not mine", ownerId: otherId });
+
+    const mine = await app.request(`/api/ui/projects/${theirs.id}/drafts`, {
+      headers: { Cookie: cookie() },
+    });
+    expect(mine.status).toBe(404);
+
+    const unknown = await app.request(
+      "/api/ui/projects/55555555-5555-4555-8555-555555555555/drafts",
+      { headers: { Cookie: cookie() } },
+    );
+    expect(unknown.status).toBe(404);
+  });
+});
+
+describe("ui routes: manual add row", () => {
+  it("creates a row with contact, channel and missing and lists it on the board", async () => {
+    const res = await app.request(
+      `/api/ui/projects/${projectId}/entities`,
+      json({ name: "Manual Venue", contact: "hi@venue.test", channel: "email", missing: ["menu"] }),
+    );
+    expect(res.status).toBe(201);
+    const { entity } = (await res.json()) as {
+      entity: { name: string; contact: string; channel: string; missing: string[] };
+    };
+    expect(entity.name).toBe("Manual Venue");
+    expect(entity.contact).toBe("hi@venue.test");
+    expect(entity.channel).toBe("email");
+    expect(entity.missing).toEqual(["menu"]);
+
+    const board = await app.request(`/api/ui/projects/${projectId}/board`, {
+      headers: { Cookie: cookie() },
+    });
+    const body = (await board.json()) as { entities: { name: string }[] };
+    expect(body.entities.map((e) => e.name)).toContain("Manual Venue");
+  });
+
+  it("rejects a row without a name or with a bad channel", async () => {
+    const noName = await app.request(
+      `/api/ui/projects/${projectId}/entities`,
+      json({ contact: "x@y.test" }),
+    );
+    expect(noName.status).toBe(400);
+
+    const badChannel = await app.request(
+      `/api/ui/projects/${projectId}/entities`,
+      json({ name: "X", channel: "fax" }),
+    );
+    expect(badChannel.status).toBe(400);
+  });
+
+  it("answers 404 for an unknown project", async () => {
+    const res = await app.request(
+      "/api/ui/projects/55555555-5555-4555-8555-555555555555/entities",
+      json({ name: "X" }),
+    );
+    expect(res.status).toBe(404);
+  });
+});
+
+describe("ui routes: owner scoping", () => {
+  it("hides another owner's project and project list entries", async () => {
+    const otherId = "user-other";
+    db.insert(users)
+      .values({ id: otherId, email: "other@tarima.test", createdAt: Date.now() })
+      .onConflictDoNothing()
+      .run();
+
+    // A project owned by the other user, created directly in the db.
+    const { createProject } = await import("../services/projects");
+    const theirs = createProject(db, { name: "not mine", ownerId: otherId });
+
+    const listed = await app.request("/api/ui/projects", { headers: { Cookie: cookie() } });
+    const body = (await listed.json()) as { projects: { id: string }[] };
+    expect(body.projects.map((p) => p.id)).not.toContain(theirs.id);
+
+    const detail = await app.request(`/api/ui/projects/${theirs.id}`, {
+      headers: { Cookie: cookie() },
+    });
+    expect(detail.status).toBe(404);
+
+    const board = await app.request(`/api/ui/projects/${theirs.id}/board`, {
+      headers: { Cookie: cookie() },
+    });
+    expect(board.status).toBe(404);
+  });
+});
+
+describe("ui routes: brief on create", () => {
+  it("accepts a project with a valid brief and rejects a malformed one", async () => {
+    const good = await app.request(
+      "/api/ui/projects",
+      json({
+        name: "Briefed",
+        goal: {
+          brief: {
+            eventType: "founder dinner",
+            city: "Paris",
+            headcount: 25,
+            budgetAmount: 3500,
+            currency: "EUR",
+          },
+        },
+      }),
+    );
+    expect(good.status).toBe(201);
+    const { project } = (await good.json()) as { project: { goal: Record<string, unknown> } };
+    expect(project.goal.brief).toBeTruthy();
+
+    const bad = await app.request(
+      "/api/ui/projects",
+      json({ name: "Bad brief", goal: { brief: { eventType: "dinner" } } }),
+    );
+    expect(bad.status).toBe(400);
+  });
+});
+
+describe("ui routes: approval flow", () => {
+  it("walks stage -> approve(spec with brief) -> curate through the session surface", async () => {
+    const flowId = (
+      (await (
+        await app.request("/api/ui/projects", json({ name: "Approval Flow Project" }))
+      ).json()) as { project: { id: string } }
+    ).project.id;
+
+    const staged = await app.request(
+      `/api/ui/projects/${flowId}/stage`,
+      json({ to: "spec_review" }),
+    );
+    expect(staged.status).toBe(200);
+    expect(await staged.json()).toEqual({
+      projectId: flowId,
+      stage: "spec_review",
+      pendingGate: "spec",
+    });
+
+    // Curation before the spec exists is a 409, not a silent empty set.
+    const early = await app.request(`/api/ui/projects/${flowId}/curate`, {
+      method: "POST",
+      headers: { Cookie: cookie() },
+    });
+    expect(early.status).toBe(409);
+
+    const approved = await app.request(
+      `/api/ui/projects/${flowId}/approve`,
+      json({
+        gate: "spec",
+        decision: "approve",
+        brief: {
+          eventType: "meetup",
+          city: "Nowhere",
+          headcount: 20,
+          budgetAmount: 1000,
+          currency: "EUR",
+        },
+      }),
+    );
+    expect(approved.status).toBe(200);
+    const approvedBody = (await approved.json()) as { stage: string; released: number };
+    expect(approvedBody.stage).toBe("curating"); // catalog miss: parked
+    expect(approvedBody.released).toBe(0);
+
+    const curate = await app.request(`/api/ui/projects/${flowId}/curate`, {
+      method: "POST",
+      headers: { Cookie: cookie() },
+    });
+    expect(curate.status).toBe(200);
+    expect(await curate.json()).toEqual({
+      projectId: flowId,
+      candidates: 0,
+      noContact: 0,
+      stage: "curating",
+    });
+  });
+
+  it("rejects a gate decision for the wrong gate with 409", async () => {
+    // A project that never started a chase is at `brief`, where no gate
+    // is pending at all.
+    const flowId = (
+      (await (await app.request("/api/ui/projects", json({ name: "Wrong gate" }))).json()) as {
+        project: { id: string };
+      }
+    ).project.id;
+
+    const res = await app.request(
+      `/api/ui/projects/${flowId}/approve`,
+      json({ gate: "send", decision: "approve" }),
+    );
+    expect(res.status).toBe(409);
+  });
+
+  it("answers 404 for an unknown project", async () => {
+    const res = await app.request(
+      "/api/ui/projects/55555555-5555-4555-8555-555555555555/stage",
+      json({ to: "spec_review" }),
+    );
+    expect(res.status).toBe(404);
+  });
+});
+
+describe("ui routes: venue search and the contact affordance", () => {
+  it("answers 503 when no provider chain is wired and 400 for a bad body", async () => {
+    const res = await app.request("/api/ui/venues/search", json({ city: "sf" }));
+    expect(res.status).toBe(503);
+  });
+
+  it("serves a search through a wired stub chain and reports cache hits", async () => {
+    const { setVenueSearchDeps } = await import("../services/venue-search");
+    const { photonProvider } = await import("@tarima/venuesearch/photon");
+    const { overpassProvider } = await import("@tarima/venuesearch/overpass");
+    const { readFileSync } = await import("node:fs");
+    const { fileURLToPath } = await import("node:url");
+    const fixture = readFileSync(
+      fileURLToPath(
+        new URL("../../../../packages/venuesearch/fixtures/photon-sf.json", import.meta.url),
+      ),
+      "utf8",
+    );
+    let calls = 0;
+    setVenueSearchDeps({
+      photon: photonProvider({
+        fetchImpl: async () => {
+          calls++;
+          return new Response(fixture, { status: 200 });
+        },
+      }),
+      overpass: overpassProvider({ fetchImpl: async () => new Response("{}", { status: 200 }) }),
+    });
+    try {
+      const first = await app.request(
+        "/api/ui/venues/search",
+        json({ city: "sf", category: "bar" }),
+      );
+      expect(first.status).toBe(200);
+      const firstBody = (await first.json()) as {
+        cache: string;
+        venues: { id: string; needsContact: boolean }[];
+      };
+      expect(firstBody.cache).toBe("miss");
+      expect(firstBody.venues.length).toBeGreaterThan(0);
+      // Honesty rule: no fabricated contacts on fresh provider rows.
+      expect(firstBody.venues.every((venue) => venue.needsContact)).toBe(true);
+
+      const second = await app.request(
+        "/api/ui/venues/search",
+        json({ city: "SF", category: "bar" }),
+      );
+      const secondBody = (await second.json()) as { cache: string };
+      expect(secondBody.cache).toBe("hit");
+      expect(calls).toBe(1);
+    } finally {
+      setVenueSearchDeps(null);
+    }
+  });
+
+  it("fills the contact of a catalog venue and clears the needsContact flag", async () => {
+    const { randomUUID } = await import("node:crypto");
+    const { venueCatalog } = await import("../db/schema");
+    const venueId = randomUUID();
+    db.insert(venueCatalog)
+      .values({
+        id: venueId,
+        city: "Malaga",
+        name: "Bar Sin Contacto",
+        source: "osm:node/1",
+        externalId: "node/1",
+        createdAt: Date.now(),
+      })
+      .onConflictDoNothing()
+      .run();
+
+    const res = await app.request(`/api/ui/venues/${venueId}/contact`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json", Cookie: cookie() },
+      body: JSON.stringify({ contactEmail: "hola@barsincontacto.es" }),
+    });
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as { venue: { contactEmail?: string; needsContact: boolean } };
+    expect(body.venue.contactEmail).toBe("hola@barsincontacto.es");
+    expect(body.venue.needsContact).toBe(false);
+
+    // Unknown venue: 404.
+    const missing = await app.request(`/api/ui/venues/${randomUUID()}/contact`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json", Cookie: cookie() },
+      body: JSON.stringify({ contactEmail: "x@y.test" }),
+    });
+    expect(missing.status).toBe(404);
+  });
+
+  it("sets the contact of a board row and clears the contact flag", async () => {
+    const created = await app.request(
+      "/api/ui/projects",
+      json({ name: "Contact affordance project" }),
+    );
+    const id = ((await created.json()) as { project: { id: string } }).project.id;
+    const added = await app.request(`/api/ui/projects/${id}/entities`, json({ name: "Gamma Inc" }));
+    const entity = ((await added.json()) as { entity: { id: string } }).entity.id;
+
+    const res = await app.request(`/api/ui/projects/${id}/entities/${entity}/contact`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json", Cookie: cookie() },
+      body: JSON.stringify({ contact: "ops@gamma.test" }),
+    });
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as { entity: { contact?: string } };
+    expect(body.entity.contact).toBe("ops@gamma.test");
+
+    // A bad address is a 400, never a silent store.
+    const bad = await app.request(`/api/ui/projects/${id}/entities/${entity}/contact`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json", Cookie: cookie() },
+      body: JSON.stringify({ contact: "not-an-email" }),
+    });
+    expect(bad.status).toBe(400);
+  });
 });

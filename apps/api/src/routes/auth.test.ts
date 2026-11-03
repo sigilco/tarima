@@ -110,3 +110,47 @@ describe("otp auth", () => {
     expect(codes.some((r) => r.status === 429)).toBe(true);
   });
 });
+
+describe("beta allowlist", () => {
+  it("refuses a listed-outside address with the contract error", async () => {
+    _resetRateLimitsForTests();
+    process.env.BETA_ALLOWLIST = "allowed@tarima.test";
+    try {
+      const code = await issueCode("outside@tarima.test");
+      const res = await authRoutes.request(
+        "/auth/verify-otp",
+        json({ email: "outside@tarima.test", code }),
+      );
+      expect(res.status).toBe(403);
+      expect(await res.json()).toEqual({ error: "not_allowlisted" });
+    } finally {
+      delete process.env.BETA_ALLOWLIST;
+    }
+  });
+
+  it("lets a listed address through", async () => {
+    _resetRateLimitsForTests();
+    process.env.BETA_ALLOWLIST = "allowed@tarima.test";
+    try {
+      const code = await issueCode("allowed@tarima.test");
+      const res = await authRoutes.request(
+        "/auth/verify-otp",
+        json({ email: "allowed@tarima.test", code }),
+      );
+      expect(res.status).toBe(200);
+    } finally {
+      delete process.env.BETA_ALLOWLIST;
+    }
+  });
+
+  it("keeps login open when the list is unset", async () => {
+    _resetRateLimitsForTests();
+    delete process.env.BETA_ALLOWLIST;
+    const code = await issueCode("open@tarima.test");
+    const res = await authRoutes.request(
+      "/auth/verify-otp",
+      json({ email: "open@tarima.test", code }),
+    );
+    expect(res.status).toBe(200);
+  });
+});

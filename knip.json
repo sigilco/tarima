@@ -39,6 +39,10 @@
     },
     "packages/chase": {
       "entry": ["src/sfm.ts", "src/template.ts", "src/handlers.ts", "src/llm.ts", "src/register.ts"]
+    },
+    "tests/e2e": {
+      "entry": ["src/api/helpers/*.ts", "src/api/**/*.test.ts", "ui/**/*.ts"],
+      "ignoreDependencies": ["@playwright/test"]
     }
   },
   "ignore": ["apps/api/src/server.ts", "apps/api/src/db/index.test.ts"],

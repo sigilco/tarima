@@ -1,24 +1,24 @@
 /**
- * Telegram bot wiring for the api (Stage 5, T5.1).
+ * Telegram bot wiring for the api (Stage 5, T5.1; Stage B channels).
  *
  * Reads `TELEGRAM_BOT_TOKEN` (and the optional `TELEGRAM_API_BASE`) from
  * the environment, builds the bot over the db-backed digest source and
  * starts long polling. Without a token the module is a no-op, so local
  * dev and CI run Telegram-free.
  *
- * Bindings are in-memory for now: they reset on restart. The sqlite
- * backed store lands with the Stage 3 service layer, which owns the db
- * conventions this branch does not have yet.
+ * Bindings are persisted in the `channel_bindings` table (Stage B): a
+ * restart no longer loses the chats a user connected. The digest bot
+ * itself stays db-free; the api binds it to sqlite through
+ * `SqliteBindingStore`.
  *
- * TODO(stage3-merge): swap the MemoryBindingStore for a sqlite-backed
- * BindingStore and reuse services/status-map for the state translation.
+ * The bot doubles as the connect flow: a tester sends the code the
+ * settings page showed (`/start ABC123`) and the api resolves it,
+ * writes the binding and confirms in-chat.
  */
 import { eq } from "drizzle-orm";
 import {
-  MemoryBindingStore,
   createTelegram,
   startLongPoll,
-  type BindingStore,
   type DigestInput,
   type DigestRow,
   type DigestTotals,
@@ -26,6 +26,9 @@ import {
 } from "@tarima/telegram";
 import { db } from "./db";
 import { entities, projects, type EntityStatus } from "./db/schema";
+import { SqliteBindingStore } from "./services/telegram-bindings";
+import { bindChannel } from "./services/bindings";
+import { resolveConnectCode } from "./services/connect-codes";
 
 /**
  * Digest bucket of a db status. Only the four board buckets count;
@@ -45,6 +48,7 @@ const DIGEST_BUCKET: Partial<Record<EntityStatus, keyof Omit<DigestTotals, "tota
  * land on this branch.
  */
 const TO_WIRE: Record<EntityStatus, string> = {
+  candidate: "candidate",
   pending: "intake",
   intake: "intake",
   chasing: "chasing",
@@ -93,6 +97,25 @@ async function digestFor(projectId: string): Promise<DigestInput | null> {
 let running: TelegramBot | undefined;
 
 /**
+ * Resolve a connect code a tester sent to the bot. On success the chat
+ * is bound to the user and the confirmation line is returned; an
+ * invalid or stale code returns null (the bot then answers with the
+ * usage text).
+ */
+async function resolveConnect(code: string, chatId: number): Promise<string | null> {
+  const resolved = resolveConnectCode(db, "telegram", code);
+  if (!resolved.ok) return null;
+
+  bindChannel(db, {
+    userId: resolved.userId,
+    channel: "telegram",
+    externalId: String(chatId),
+  });
+
+  return "Connected. This chat now gets your Tarima notifications.";
+}
+
+/**
  * Push the digest of a project to every chat bound to it. Callers (a
  * cron tick, a workflow step) invoke this after the board changes.
  * Without a running bot this is a no-op.
@@ -100,6 +123,15 @@ let running: TelegramBot | undefined;
 export async function pushDigest(projectId: string): Promise<void> {
   if (!running) return;
   await running.pushDigest(projectId);
+}
+
+/**
+ * Send one plain message to one Telegram chat. Used by the notify
+ * fanout. Throws when the send fails, so the fanout can count it.
+ */
+export async function sendTelegramMessage(chatId: string, text: string): Promise<void> {
+  if (!running) return;
+  await running.send(Number(chatId), text);
 }
 
 /**
@@ -111,10 +143,13 @@ export async function startTelegram(): Promise<void> {
   const botToken = process.env.TELEGRAM_BOT_TOKEN?.trim();
   if (!botToken) return;
 
-  const store: BindingStore = new MemoryBindingStore();
   const handle = createTelegram(
     { botToken, apiBase: process.env.TELEGRAM_API_BASE?.trim() || undefined },
-    { store, source: { digest: digestFor } },
+    {
+      store: new SqliteBindingStore(db),
+      source: { digest: digestFor },
+      connect: { resolve: resolveConnect },
+    },
   );
   if (!handle) return;
   running = handle;

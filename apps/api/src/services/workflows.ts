@@ -14,6 +14,14 @@
  * already advanced (`chasing`, `await_reply`, ...) are left alone, so
  * triggering twice does not duplicate outreach.
  *
+ * Stage interaction: a project filled by CSV intake or a manual add-row
+ * never walks brief -> spec -> curate -> shortlist, so its stage would
+ * stay `brief` and the send gate would never be decidable. Starting a
+ * chase on such a project moves it to `send_review` (the stages below
+ * the gate); a project already past the gate (`running`, `done`) keeps
+ * its stage, so a re-trigger inherits the earlier approval. The
+ * shortlist path itself is untouched.
+ *
  * The initial step key is `chase.intake`, which is the step the chase
  * handler registry (`@tarima/chase/register`) resolves for the intake
  * state of the chase-deliverables template.
@@ -21,7 +29,7 @@
 import { eq } from "drizzle-orm";
 import { createRun, enqueueStep, getWorkflow, listSteps } from "@tarima/engine/journal";
 import { CHASE_DELIVERABLES } from "@tarima/chase/template";
-import { entities, type EntityStatus } from "../db/schema";
+import { entities, projects, type EntityStatus } from "../db/schema";
 import { listEntitiesByStatus } from "./entities";
 import type { ApiDb } from "./projects";
 
@@ -35,6 +43,9 @@ const CHASE_INTAKE_STEP = "chase.intake";
 /** Db statuses that still wait for a chase run. */
 const INTAKE_STATUSES: EntityStatus[] = ["pending", "intake"];
 
+/** Stages a start-chase moves out of into the send gate. */
+const PRE_GATE_STAGES: readonly string[] = ["brief", "spec_review", "curating", "shortlist_review"];
+
 /** A triggered run, as returned to the caller. */
 export interface TriggeredRun {
   runId: string;
@@ -45,6 +56,11 @@ export interface TriggeredRun {
  * Start a chase-deliverables run for every entity of `projectId` that is
  * still waiting. The run context carries what the chase handlers need:
  * the entity id, its name, its contact email and its goal.
+ *
+ * A project that has not reached the send gate yet moves to
+ * `send_review`, so the staged drafts are decidable at the gate. A
+ * project already `running` or `done` keeps its stage, so a re-trigger
+ * inherits the earlier approval.
  */
 export function triggerWorkflow(
   db: ApiDb,
@@ -77,6 +93,14 @@ export function triggerWorkflow(
       goal,
     });
     runs.push({ runId, entityId: entity.id });
+  }
+
+  const project = db.select().from(projects).where(eq(projects.id, projectId)).get();
+  if (project && PRE_GATE_STAGES.includes(project.stage)) {
+    db.update(projects)
+      .set({ stage: "send_review", updatedAt: Date.now() })
+      .where(eq(projects.id, projectId))
+      .run();
   }
 
   return runs;

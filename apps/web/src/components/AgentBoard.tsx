@@ -78,12 +78,12 @@ const STATUS_LABEL: Record<Status, () => string> = {
 };
 
 const STATUS_CLASS: Record<Status, string> = {
-  idle: "bg-transparent text-ink-3",
-  calling: "bg-amber-soft text-amber-w",
-  emailed: "bg-paper-2 text-ink-2",
-  replied: "bg-sage-soft text-sage",
-  quoted: "bg-sage text-paper",
-  approval: "bg-clay text-paper",
+  idle: "bg-transparent text-content-faint",
+  calling: "bg-warning-soft text-warning",
+  emailed: "bg-surface-raised text-content-muted",
+  replied: "bg-success-soft text-success",
+  quoted: "bg-success text-surface",
+  approval: "bg-accent text-surface",
 };
 
 export function AgentBoard({
@@ -184,29 +184,31 @@ export function AgentBoard({
 
   return (
     <div
-      className={`rounded-[1.9rem] bg-ink/[0.045] p-1.5 ring-1 ring-ink/10 shadow-[0_40px_80px_-40px_rgba(26,22,19,0.35)] ${className}`}
+      className={`rounded-[1.9rem] bg-content/[0.045] p-1.5 ring-1 ring-content/10 shadow-[0_40px_80px_-40px_rgba(26,22,19,0.35)] ${className}`}
     >
       <div
         ref={boardRef}
-        className="relative overflow-hidden rounded-[calc(1.9rem-0.375rem)] bg-white"
+        className="relative overflow-hidden rounded-[calc(1.9rem-0.375rem)] bg-surface"
       >
         {/* brief bar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-3.5">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border-subtle px-5 py-3.5">
           <div
             data-anchor="brief"
-            className="inline-flex max-w-full items-center gap-2.5 rounded-full bg-paper-2 px-3.5 py-1.5 ring-1 ring-line"
+            className="inline-flex max-w-full items-center gap-2.5 rounded-full bg-surface-raised px-3.5 py-1.5 ring-1 ring-border-subtle"
           >
-            <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-ink-3">
+            <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-content-faint">
               {m["board.briefLabel"]()}
             </span>
-            <span className="truncate text-[13px] font-medium text-ink">{brief}</span>
+            <span className="truncate text-[13px] font-medium text-content">{brief}</span>
           </div>
-          <div className="inline-flex items-center gap-2 rounded-full bg-clay-soft px-3 py-1.5">
+          <div className="inline-flex items-center gap-2 rounded-full bg-accent-soft px-3 py-1.5">
             <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-clay opacity-60" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-clay" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
             </span>
-            <span className="text-[11px] font-medium text-clay-deep">{m["board.agentChip"]()}</span>
+            <span className="text-[11px] font-medium text-accent-strong">
+              {m["board.agentChip"]()}
+            </span>
           </div>
         </div>
 
@@ -214,7 +216,7 @@ export function AgentBoard({
         <div className="overflow-x-auto">
           <div className="min-w-[400px] px-5 pb-5 pt-2">
             <div
-              className={`grid ${gridCols} items-center gap-x-3 border-b border-line py-2 text-[10px] font-medium uppercase tracking-[0.16em] text-ink-3`}
+              className={`grid ${gridCols} items-center gap-x-3 border-b border-border-subtle py-2 text-[10px] font-medium uppercase tracking-[0.16em] text-content-faint`}
             >
               <span>{isVenues ? m["board.colName"]() : m["board.colSponsor"]()}</span>
               <span className="max-[560px]:hidden">
@@ -230,18 +232,18 @@ export function AgentBoard({
               return (
                 <div
                   key={row.name}
-                  className={`grid ${gridCols} items-center gap-x-3 border-b border-line/60 py-2.5 text-[13px] transition-colors ${
+                  className={`grid ${gridCols} items-center gap-x-3 border-b border-border-subtle/60 py-2.5 text-[13px] transition-colors ${
                     workingRow === i ? "row-working" : ""
                   }`}
                 >
-                  <span className="truncate font-medium text-ink">{row.name}</span>
-                  <span className="truncate text-ink-2 max-[560px]:hidden">{row.area}</span>
+                  <span className="truncate font-medium text-content">{row.name}</span>
+                  <span className="truncate text-content-muted max-[560px]:hidden">{row.area}</span>
                   {isVenues && (
-                    <span className="text-right tabular-nums text-ink-2">{row.seats}</span>
+                    <span className="text-right tabular-nums text-content-muted">{row.seats}</span>
                   )}
                   <span
-                    className={`truncate rounded-md px-1.5 py-0.5 text-ink-2 transition-all duration-500 ${
-                      termsFilled[i] ? "bg-sage-soft/60 text-ink" : "text-ink-3"
+                    className={`truncate rounded-md px-1.5 py-0.5 text-content-muted transition-all duration-500 ${
+                      termsFilled[i] ? "bg-success-soft/60 text-content" : "text-content-faint"
                     } ${termsLit[i] ? "cell-lit" : ""}`}
                   >
                     {termsFilled[i] ? row.terms : "· · ·"}
@@ -264,7 +266,7 @@ export function AgentBoard({
 
         {/* approval card */}
         <div
-          className={`pointer-events-none absolute inset-x-4 bottom-4 flex items-center justify-between gap-3 rounded-2xl bg-ink px-4 py-3 text-paper shadow-[0_24px_50px_-20px_rgba(26,22,19,0.55)] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+          className={`pointer-events-none absolute inset-x-4 bottom-4 flex items-center justify-between gap-3 rounded-2xl bg-content px-4 py-3 text-surface shadow-[0_24px_50px_-20px_rgba(26,22,19,0.55)] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${
             showApproval ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
           }`}
         >
@@ -274,11 +276,11 @@ export function AgentBoard({
           <span className="flex shrink-0 items-center gap-2">
             <span
               data-anchor="approve"
-              className="pointer-events-auto rounded-full bg-paper px-3.5 py-1.5 text-[12px] font-semibold text-ink"
+              className="pointer-events-auto rounded-full bg-surface px-3.5 py-1.5 text-[12px] font-semibold text-content"
             >
               {m["board.approveYes"]()}
             </span>
-            <span className="rounded-full bg-paper/10 px-3.5 py-1.5 text-[12px] font-medium text-paper/80 ring-1 ring-paper/15">
+            <span className="rounded-full bg-surface/10 px-3.5 py-1.5 text-[12px] font-medium text-surface/80 ring-1 ring-surface/15">
               {m["board.approveNo"]()}
             </span>
           </span>

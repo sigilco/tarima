@@ -13,6 +13,7 @@
  */
 import { Hono } from "hono";
 import * as v from "valibot";
+import { GATE_FOR_STAGE, type ProjectStage } from "@tarima/contract";
 import { db } from "../db";
 import { requireApiKey } from "../middleware/require-api-key";
 import { getProject } from "../services/projects";
@@ -36,7 +37,16 @@ export const workflowRoutes = new Hono()
     }
 
     const runs = triggerWorkflow(db, projectId, template);
-    return c.json({ runs }, 201);
+    const project = getProject(db, projectId)!;
+    const pendingGate = GATE_FOR_STAGE[project.stage as ProjectStage];
+    return c.json(
+      {
+        runs,
+        stage: project.stage,
+        ...(pendingGate ? { pendingGate } : {}),
+      },
+      201,
+    );
   })
   .get("/api/workflows/:runId", requireApiKey(["workflows:read"]), (c) => {
     const view = getWorkflowView(db, c.req.param("runId"));

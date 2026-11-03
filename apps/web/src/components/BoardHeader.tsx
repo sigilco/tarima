@@ -14,6 +14,7 @@ import type { BucketCount } from "../lib/board";
 /** The label of a bucket chip, kept out of the template string so the
  * paraglide keys stay statically typed. */
 const CHIP_LABEL: Record<string, (count: number) => string> = {
+  candidate: (count) => m["board.candidates.n"]({ count: String(count) }),
   chasing: (count) => m["board.chasing.n"]({ count: String(count) }),
   replied: (count) => m["board.replied.n"]({ count: String(count) }),
   blocked: (count) => m["board.blocked.n"]({ count: String(count) }),
@@ -23,15 +24,19 @@ const CHIP_LABEL: Record<string, (count: number) => string> = {
 export function BoardHeader({
   projectId,
   projectName,
+  briefLine,
   buckets,
   live,
   onImport,
+  onAddRow,
 }: {
   projectId: string;
   projectName: string;
+  briefLine?: string;
   buckets: readonly BucketCount[];
   live: "connecting" | "live" | "down";
   onImport: () => void;
+  onAddRow: () => void;
 }) {
   const liveLabel =
     live === "live"
@@ -76,6 +81,13 @@ export function BoardHeader({
           </span>
           <button
             type="button"
+            onClick={onAddRow}
+            className="rounded-full border border-border-subtle px-4 py-2 text-[13px] font-medium text-content transition-colors hover:bg-surface-raised"
+          >
+            {m["board.addRow"]()}
+          </button>
+          <button
+            type="button"
             onClick={onImport}
             className="rounded-full border border-border-subtle px-4 py-2 text-[13px] font-medium text-content transition-colors hover:bg-surface-raised"
           >
@@ -84,13 +96,22 @@ export function BoardHeader({
         </div>
       </div>
 
+      {briefLine ? (
+        <p className="pb-3 text-[13px] leading-relaxed text-content-muted">
+          <span className="mr-2 text-[10px] font-medium uppercase tracking-[0.16em] text-content-faint">
+            {m["board.briefLabel"]()}
+          </span>
+          {briefLine}
+        </p>
+      ) : null}
+
       <div className="flex flex-wrap items-center gap-2 pb-5">
         {buckets.map(({ bucket, count }) => (
           <Link
             key={bucket}
             to="/app/p/$projectId"
             params={{ projectId }}
-            search={{ filter: bucket, row: undefined, csv: undefined }}
+            search={{ filter: bucket, row: undefined, csv: undefined, add: undefined }}
             className="rounded-full bg-surface-raised px-3.5 py-1.5 text-[12.5px] text-content-muted ring-1 ring-border-subtle transition-colors hover:text-content"
           >
             {CHIP_LABEL[bucket]?.(count) ?? `${bucket} ${count}`}

@@ -1,15 +1,20 @@
 /**
  * Chase-deliverables state machine (SFM).
  *
- * States: intake -> outreach -> await_reply -> parse -> validate -> update
- * -> notify. await_reply can branch to followup (with backoff) before
- * returning to parse. All transitions are pure: (state, event, ctx) ->
- * { next, effects }. No I/O, no clock reads (ctx.now passed in).
+ * States: intake -> outreach -> outreach_staged -> await_reply -> parse
+ * -> validate -> update -> notify. outreach stages the draft; the run
+ * parks in outreach_staged until the send gate approves (releasing the
+ * staged send) or rejects (discarding it). await_reply can branch to
+ * followup (with backoff) before returning to parse. Approved sends
+ * cover the follow-ups of the same run: one approval per run. All
+ * transitions are pure: (state, event, ctx) -> { next, effects }. No
+ * I/O, no clock reads (ctx.now passed in).
  */
 
 export type ChaseState =
   | "intake"
   | "outreach"
+  | "outreach_staged"
   | "await_reply"
   | "followup"
   | "parse"
@@ -21,6 +26,9 @@ export type ChaseState =
 
 export type ChaseEvent =
   | "INTAKE_OK"
+  | "OUTREACH_STAGED"
+  | "SEND_APPROVED"
+  | "SEND_REJECTED"
   | "DRAFT_SENT"
   | "REPLY_RECEIVED"
   | "FOLLOWUP_DUE"
@@ -47,6 +55,7 @@ export interface ChaseContext {
 
 export type ChaseEffect =
   | { kind: "draft_outreach" }
+  | { kind: "stage_outreach" }
   | { kind: "send_outreach"; followUp: boolean }
   | { kind: "parse_reply" }
   | { kind: "validate_reply" }
@@ -74,8 +83,18 @@ export function transition(
     case "intake":
       if (event === "INTAKE_OK") return { next: "outreach", effects: [{ kind: "draft_outreach" }] };
       break;
+    // Outreach is a two-phase state: the draft is staged (held in the
+    // step output, nothing emitted), then the user's approval decision
+    // at the send gate releases it. A rejection terminates the run as
+    // `done` with a give_up effect; the row was never contacted.
     case "outreach":
-      if (event === "DRAFT_SENT") return { next: "await_reply", effects: [] };
+      if (event === "OUTREACH_STAGED")
+        return { next: "outreach_staged", effects: [{ kind: "stage_outreach" }] };
+      break;
+    case "outreach_staged":
+      if (event === "SEND_APPROVED")
+        return { next: "await_reply", effects: [{ kind: "send_outreach", followUp: false }] };
+      if (event === "SEND_REJECTED") return { next: "done", effects: [{ kind: "give_up" }] };
       break;
     case "await_reply":
       if (event === "REPLY_RECEIVED") return { next: "parse", effects: [{ kind: "parse_reply" }] };
@@ -124,6 +143,7 @@ export function transition(
 export const CHASE_STATES: readonly ChaseState[] = [
   "intake",
   "outreach",
+  "outreach_staged",
   "await_reply",
   "followup",
   "parse",

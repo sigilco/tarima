@@ -77,11 +77,19 @@ export const projects = sqliteTable("projects", {
     .notNull()
     .default(sql`'{}'`)
     .$type<Record<string, unknown>>(),
+  // Approval-flow stage (contract PROJECT_STAGES).
+  stage: text("stage").notNull().default("brief"),
+  // Epoch ms the send gate was approved (null = not approved). One
+  // approval per project run: a chase started after the approval
+  // inherits it and its staged drafts are released without a second
+  // gate decision.
+  sendApprovedAt: integer("send_approved_at"),
   createdAt: integer("created_at").notNull().$defaultFn(nowMs),
   updatedAt: integer("updated_at").notNull().$defaultFn(nowMs),
 });
 
 export const entityStatuses = [
+  "candidate",
   "pending",
   "intake",
   "chasing",
@@ -267,3 +275,130 @@ export const otpCodes = sqliteTable(
 
 export type OtpCode = typeof otpCodes.$inferSelect;
 export type NewOtpCode = typeof otpCodes.$inferInsert;
+
+// ---------- Beta workstreams (contract freeze) ----------
+
+/** A user's bound notification channel (Telegram chat, WhatsApp number). */
+export const channelBindings = sqliteTable(
+  "channel_bindings",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    channel: text("channel").notNull().$type<"telegram" | "whatsapp">(),
+    externalId: text("external_id").notNull(),
+    label: text("label"),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [
+    uniqueIndex("idx_channel_bindings_ext").on(t.channel, t.externalId),
+    index("idx_channel_bindings_user").on(t.userId),
+  ],
+);
+
+/** Single-use connect code (stored hashed) a user sends to the bot to bind a channel. */
+export const connectCodes = sqliteTable(
+  "connect_codes",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    channel: text("channel").notNull().$type<"telegram" | "whatsapp">(),
+    codeHash: text("code_hash").notNull(),
+    expiresAt: integer("expires_at").notNull(),
+    consumedAt: integer("consumed_at"),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [uniqueIndex("idx_connect_codes_hash").on(t.codeHash)],
+);
+
+/** Seed venues the curate service matches a brief against. */
+export const venueCatalog = sqliteTable(
+  "venue_catalog",
+  {
+    id: text("id").primaryKey(),
+    city: text("city").notNull(),
+    name: text("name").notNull(),
+    area: text("area"),
+    capacity: integer("capacity"),
+    priceBand: text("price_band").$type<"low" | "mid" | "high" | "premium">(),
+    source: text("source").notNull(),
+    url: text("url"),
+    // Stream F provider columns: filled by the venue-search service
+    // (Photon discovery, Overpass enrichment). Null stays null: the
+    // honesty rule is that no provider ever invents a contact, and a
+    // venue without one lands in the board's "no contact" bucket.
+    externalId: text("external_id"),
+    contactEmail: text("contact_email"),
+    contactPhone: text("contact_phone"),
+    website: text("website"),
+    // Epoch ms of the last Overpass enrichment pass (null = never).
+    enrichedAt: integer("enriched_at"),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [
+    index("idx_venue_catalog_city").on(t.city),
+    uniqueIndex("idx_venue_catalog_city_name").on(t.city, t.name),
+    // The provider idempotency key: a venue found twice by a search is
+    // upserted once (`onConflictDoNothing` on this column).
+    uniqueIndex("idx_venue_catalog_external").on(t.externalId),
+  ],
+);
+
+/**
+ * The search cache (stream F): one row per normalized provider query.
+ * A hit returns the cached venue rows from the catalog; a miss calls
+ * Photon, upserts every result and records the query here. Rows are
+ * fresh for 7 days; a stale hit still answers from the cache and the
+ * refresh runs in the background (SWR).
+ */
+export const searchCache = sqliteTable("search_cache", {
+  /** The normalized query hash (see services/venue-search.ts). */
+  queryHash: text("query_hash").primaryKey(),
+  /** The human-readable normalized query (for ops and debugging). */
+  query: text("query").notNull(),
+  /** The external ids the search returned, as a json array. */
+  venueIds: text("venue_ids", { mode: "json" })
+    .notNull()
+    .default(sql`'[]'`)
+    .$type<string[]>(),
+  createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+  refreshedAt: integer("refreshed_at").notNull().$defaultFn(nowMs),
+});
+
+export type SearchCache = typeof searchCache.$inferSelect;
+export type VenueCatalogRow = typeof venueCatalog.$inferSelect;
+
+/**
+ * In-app inbox (Stage B, channels stream).
+ *
+ * The notify fanout writes one row per user per notification: the
+ * in-app copy of what also goes out to Telegram and WhatsApp. The
+ * `events` table was not reused: it is an append-only audit trail
+ * without an owner-scoped read path and without a read state, and the
+ * board SSE stream reads it. The inbox needs both.
+ */
+export const userMessages = sqliteTable(
+  "user_messages",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    projectId: text("project_id").references(() => projects.id, { onDelete: "cascade" }),
+    kind: text("kind").notNull().$type<"status_change" | "approval_needed" | "digest">(),
+    /** Short plain text, the same copy that goes to the chat channels. */
+    summary: text("summary").notNull(),
+    /** Read state of the in-app copy (the chat copies are fire and forget). */
+    readAt: integer("read_at"),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [
+    index("idx_user_messages_user").on(t.userId, t.createdAt),
+    index("idx_user_messages_unread").on(t.userId, t.readAt),
+  ],
+);
+
+export type UserMessage = typeof userMessages.$inferSelect;

@@ -53,6 +53,7 @@ export function usageText(): string {
     "",
     "Commands:",
     "/start - show this help",
+    "/start <code> - connect this chat to your Tarima account",
     "/bind <projectId> - bind this chat to a project",
     "/status [projectId] - show the project digest",
     "/unbind - unbind this chat from its project",
@@ -65,11 +66,27 @@ export interface DigestSource {
   digest(projectId: string): Promise<import("./types.js").DigestInput | null>;
 }
 
+/**
+ * Connect-code seam: the host resolves a code a tester sent as
+ * `/start <code>` (or as a bare message) into a channel binding. The
+ * package never sees the code store; it only shuttles the text and the
+ * confirmation line back.
+ */
+export interface ConnectResolver {
+  /** The confirmation text, or null when the code is invalid or stale. */
+  resolve(code: string, chatId: number): Promise<string | null>;
+}
+
 /** What the bot needs from its host. */
 export interface BotDeps {
   store: BindingStore;
   source: DigestSource;
+  /** Optional: without it `/start <code>` answers with the usage text. */
+  connect?: ConnectResolver;
 }
+
+/** A connect code is 6 characters (contract `connectCodeSchema`). */
+const CONNECT_CODE_RE = /^[A-Z0-9]{6}$/;
 
 /** The answer to a command, ready to send back to the chat. */
 export interface CommandReply {
@@ -87,13 +104,36 @@ export async function handleCommand(
 ): Promise<CommandReply> {
   const { command, arg } = parseCommand(ctx.text);
 
+  // A bare connect code (no slash, no command word) is the flow a tester
+  // uses when they just paste the code the settings page showed. It is
+  // tried before the command switch, because the switch would answer
+  // the usage text for an unknown command word.
+  const bare = (ctx.text ?? "").trim().toUpperCase();
+  if (deps.connect && CONNECT_CODE_RE.test(bare)) {
+    const text = await deps.connect.resolve(bare, ctx.chatId);
+    if (text) return { text };
+  }
+
   switch (command) {
     case "start":
-    case "help":
+    case "help": {
+      // `/start <code>` is the bind flow: the settings page shows the
+      // code, the tester sends it here, the host binds the chat.
+      if (arg && deps.connect) {
+        const text = await deps.connect.resolve(arg.toUpperCase(), ctx.chatId);
+        if (text) return { text };
+      }
       return { text: usageText() };
+    }
 
     case "bind": {
       if (!arg) return { text: "Usage: /bind <projectId>" };
+      // A 6-char alphanumeric argument is a connect code, not a project
+      // id, so a tester typing `/bind ABC123` lands in the same flow.
+      if (CONNECT_CODE_RE.test(arg.toUpperCase()) && deps.connect) {
+        const text = await deps.connect.resolve(arg.toUpperCase(), ctx.chatId);
+        if (text) return { text };
+      }
       deps.store.set(ctx.chatId, arg);
       return { text: `Bound this chat to project ${arg}.` };
     }
@@ -148,8 +188,20 @@ function registerHandlers(bot: Bot, deps: BotDeps): void {
   });
 
   // Any other message answers with the usage text, so a stranger typing
-  // "hi" gets a hint instead of silence.
+  // "hi" gets a hint instead of silence. A message that matches a
+  // connect code goes to the host's resolver instead: that is the
+  // bind flow for a tester who pastes the settings code as plain text.
   bot.on("message:text", async (ctx) => {
+    // A bare connect code (the WhatsApp habit, kept working here) binds
+    // the chat before the usage fallback answers.
+    const bare = (ctx.message.text ?? "").trim().toUpperCase();
+    if (deps.connect && CONNECT_CODE_RE.test(bare)) {
+      const text = await deps.connect.resolve(bare, ctx.chat.id);
+      if (text) {
+        await ctx.reply(text);
+        return;
+      }
+    }
     const reply = await handleCommand({ chatId: ctx.chat.id, text: ctx.message.text }, deps);
     await ctx.reply(reply.text);
   });
@@ -203,6 +255,12 @@ export interface TelegramBot {
    * the fan-out.
    */
   pushDigest(projectId: string): Promise<void>;
+  /**
+   * Send one plain message to one chat. The notify fanout uses this to
+   * deliver a notification to a chat the user bound for notifications.
+   * Throws when the send fails, so the fanout can count it as failed.
+   */
+  send(chatId: number, text: string): Promise<void>;
 }
 
 /**
@@ -220,6 +278,9 @@ export function createTelegramHandle(bot: Bot, deps: BotDeps): TelegramBot {
       // Sent one chat at a time on purpose: parallel sends trip the
       // Telegram flood limits.
       await sendToChats(bot, deps.store.listForProject(projectId), text, 0);
+    },
+    async send(chatId: number, text: string) {
+      await bot.api.sendMessage(chatId, text);
     },
   };
 }
