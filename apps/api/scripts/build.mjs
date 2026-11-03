@@ -19,6 +19,7 @@ await build({
   // bindings (better-sqlite3) and node builtins stay as real requires.
   packages: "external",
   alias: {
+    "@tarima/api/db/schema": join(apiRoot, "src/db/schema.ts"),
     "@tarima/obs": join(apiRoot, "../../packages/obs/src/index.ts"),
     "@tarima/auth-core/otp": join(apiRoot, "../../packages/auth-core/src/otp.ts"),
     "@tarima/auth-core/rate-limit": join(apiRoot, "../../packages/auth-core/src/rate-limit.ts"),

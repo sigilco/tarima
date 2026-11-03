@@ -1,7 +1,18 @@
-# Public site: auto-HTTPS via Let's Encrypt (HTTP-01 on :80) and reverse
-# proxy to the single tarima Node process on loopback.
-tarima.events, tarima.illo.fyi {
-	encode zstd gzip
-
+# Port 80 plain HTTP reverse proxy to tarima Node process
+:80 {
 	reverse_proxy 127.0.0.1:3001
 }
+
+# IP-based HTTPS with internal self-signed cert
+https://37.187.62.157, https://100.105.198.36 {
+	tls internal
+	encode zstd gzip
+	reverse_proxy 127.0.0.1:3001
+}
+
+# Public site: auto-HTTPS via Let's Encrypt once DNS A records point to VPS
+# (uncomment once tarima.illo.fyi or tarima.events resolves to 37.187.62.157)
+# tarima.events, tarima.illo.fyi {
+# 	encode zstd gzip
+# 	reverse_proxy 127.0.0.1:3001
+# }

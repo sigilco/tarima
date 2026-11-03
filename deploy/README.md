@@ -3,10 +3,12 @@
 One Node process serves the API and the web app.
 
 - Artifact: `apps/api/dist/server/` (API bundle + web SSR and client builds).
-- Runtime: `tarima.service`, WorkingDirectory `/opt/tarima/app`, env from
-  `/opt/tarima/shared/app.env`, port 3001 on loopback.
-- TLS: Caddy (see `caddy/Caddyfile`) proxies the public domains.
-- Backups: `tarima-litestream.service` replicates the SQLite WAL to R2.
+- Runtime: `tarima.service`, WorkingDirectory `/opt/tarima2/app`, env from
+  `/opt/tarima2/shared/app.env`, port 3001 on loopback.
+- TLS: Caddy (see `deploy/caddy/Caddyfile`) reverse proxies ports 80 and 443 to port 3001.
+  - Active: `https://37.187.62.157` (public IP, internal TLS) and `https://100.105.198.36` (Tailscale IP, internal TLS).
+  - Ready for Public CA: `tarima.events` and `tarima.illo.fyi` once DNS A records point to `37.187.62.157`.
+- Backups: `tarima-litestream.service` replicates the SQLite WAL to R2 (pending R2 credentials).
 
 Secrets: `secrets-manifest.toml` + `scripts/render_secrets.py` render
 `app.env` (Infisical folders `email/`, `ai/`, `beta/`, `webhooks/` and
@@ -14,36 +16,31 @@ Secrets: `secrets-manifest.toml` + `scripts/render_secrets.py` render
 fail-hard on missing keys. Validate with
 `python3 deploy/scripts/validate_secrets_manifest.py`.
 
-First run of `deploy.sh`: see the header comment in `deploy/deploy.sh` for
-the one-time VPS provisioning steps (user, directories, systemd + Caddy
-install, Infisical machine-identity login).
+The laptop infisical CLI renders the secrets (`render_secrets.py --phase base`) and `deploy.sh` uploads them to `/opt/tarima2/shared/` mode 0600 owned by `web-services:web-services`.
 
-## The public domain
+## Active Endpoints and Ports
 
-Every URL below uses `PUBLIC_DOMAIN`, a variable with two values:
-
-- now: `tarima.illo.fyi` (staging, what testers hit on Monday)
-- later: `tarima.events` (production, when the domain is ready)
-
-Replace `$PUBLIC_DOMAIN` in the commands with the one in play. To move from
-one to the other: add the new name to `deploy/caddy/Caddyfile`, point its
-DNS at the VPS, set `API_BASE` in `apps/inbound-worker/wrangler.jsonc` to
-the new origin, redeploy the worker, update the WhatsApp webhook URL in
-the Meta dashboard, then `systemctl reload caddy`. Nothing else hardcodes
-the domain: the API is origin agnostic.
+- Internal Node app: `127.0.0.1:3001`
+- Bifrost LLM gateway: `127.0.0.1:8317` (model `minimax-coding-plan/MiniMax-M3.1-Flash`)
+- Public HTTPS: `https://37.187.62.157/` (Caddy reverse proxy with internal TLS)
+- Public HTTP: `http://37.187.62.157/` (Caddy 308 redirect to HTTPS)
+- Tailscale HTTPS: `https://100.105.198.36/` (Caddy internal TLS)
 
 ## Deploy steps
 
-On the laptop (the script builds, renders, uploads, restarts and health
-checks; run it manually, the repo never deploys by itself):
+On the laptop (the script builds, renders, uploads, restarts and health checks; run it manually, the repo never deploys by itself):
 
-    pnpm build
-    ./deploy/deploy.sh
+```bash
+mise exec -- pnpm build
+./deploy/deploy.sh
+```
 
 The script uses `VPS_HOST` (default `ovhcloud`) and prints each step. After
 it prints `deployed`, run the smoke test:
 
-    scripts/smoke.sh https://$PUBLIC_DOMAIN tester@illo.fyi
+```bash
+scripts/smoke.sh https://37.187.62.157 tester@illo.fyi
+```
 
 ## Real email (Brevo in, replies through Cloudflare)
 
@@ -52,8 +49,10 @@ Outbound:
 1. In Brevo, verify the prod sender (`MAIL_FROM` in Infisical `/email`)
    and keep the API key in the same folder.
 2. The API posts to Brevo when `BREVO_API_KEY` is set and the recipient is
-   not on a loopback domain (`EMAIL_LOOPBACK_DOMAINS` in app.env).
-3. Test: request an OTP from the login page for a real address and confirm
+   not on a loopback domain (`EMAIL_LOOPBACK_DOMAINS` in `app.env`).
+3. **Brevo IP Whitelist**: Brevo requires adding the VPS IP (`37.187.62.157` / `2001:41d0:52:200::763`)
+   in [Brevo Authorized IPs](https://app.brevo.com/security/authorised_ips).
+4. Test: request an OTP from the login page for a real address and confirm
    the mail arrives from the prod sender.
 
 Inbound (the chase reply path):
@@ -61,11 +60,9 @@ Inbound (the chase reply path):
 1. The Cloudflare Email Worker (`apps/inbound-worker`) posts every inbound
    chase mail to `POST /webhooks/email` with the header
    `X-Webhook-Secret: <INBOUND_WEBHOOK_SECRET>`.
-2. Deploy it: `pnpm -C apps/inbound-worker exec wrangler secret put
-   INBOUND_WEBHOOK_SECRET`, then `pnpm -C apps/inbound-worker exec wrangler
-   deploy`. `API_BASE` in `wrangler.jsonc` must be the public origin.
+2. Deploy it: `pnpm -C apps/inbound-worker exec wrangler secret put INBOUND_WEBHOOK_SECRET`, then `pnpm -C apps/inbound-worker exec wrangler deploy`. `API_BASE` in `wrangler.jsonc` must be the public origin.
 3. In the Cloudflare dashboard, on the zone matching the subdomain used
-   for chase replies (e.g. `venue@$PUBLIC_DOMAIN`), enable Email Routing
+   for chase replies (e.g. `venue@tarima.illo.fyi`), enable Email Routing
    and set a catch-all rule with action "Send to Worker" pointing at
    `tarima-email`.
 4. `INBOUND_WEBHOOK_SECRET` must hold the same value in Infisical
@@ -82,7 +79,7 @@ Inbound (the chase reply path):
    `WHATSAPP_PHONE_NUMBER_ID`, `WHATSAPP_APP_SECRET`. `WHATSAPP_VERIFY_TOKEN`
    is a random string the operator picks, not a Meta value.
 2. Webhook subscription: in the dashboard, WhatsApp, Configuration, set
-   the callback URL to `https://$PUBLIC_DOMAIN/webhooks/whatsapp` and the
+   the callback URL to `https://<PUBLIC_DOMAIN>/webhooks/whatsapp` and the
    verify token to the same `WHATSAPP_VERIFY_TOKEN`. Meta sends
    `GET /webhooks/whatsapp` with `hub.mode=subscribe` and echoes
    `hub.challenge` when the token matches.
@@ -102,17 +99,20 @@ Inbound (the chase reply path):
 1. BotFather: create the bot, take the token, store it in Infisical
    `/channels` as `TELEGRAM_BOT_TOKEN`.
 2. The bot long-polls (no public webhook needed); it starts with the API
-   process and is a no-op without the token.
+   process and is active as `@tarima_events_bot`.
 3. Test: a tester opens `/app/settings`, mints a connect code, sends it to
    the bot, and the bot confirms the binding in chat.
 
 ## Litestream replication check
 
 The unit runs `litestream replicate` against R2 with credentials from
-`litestream.env`. After the first deploy:
+`litestream.env`. Once real R2 credentials are added to Infisical `/infra/litestream`:
 
-    systemctl status tarima-litestream                       # active, no restart loop
-    litestream status -config /opt/tarima/app/deploy/litestream/litestream.yml
+```bash
+sudo systemctl enable --now tarima-litestream.service
+sudo systemctl status tarima-litestream
+litestream status -config /opt/tarima2/app/deploy/litestream/litestream.yml
+```
 
 The status output must show the replica synced with a recent lag. In the
 Cloudflare R2 dashboard the `tarima-backups` bucket must show objects
@@ -124,35 +124,22 @@ lifecycle delete rule.
 `deploy/deploy.sh` snapshots the running artifact on the VPS before it
 uploads the new one, so the rollback is exactly one command over ssh:
 
-    ssh $VPS_HOST 'rm -rf /opt/tarima/app/dist/server && cp -a /opt/tarima/app/dist/server.previous /opt/tarima/app/dist/server && sudo systemctl restart tarima.service'
+```bash
+ssh $VPS_HOST 'rm -rf /opt/tarima2/app/dist/server && cp -a /opt/tarima2/app/dist/server.previous /opt/tarima2/app/dist/server && sudo systemctl restart tarima.service'
+```
 
-The snapshot lives at `/opt/tarima/app/dist/server.previous` (the copy the
-deploy script makes with `cp -a` right before the rsync). A rsync form
-works too when the previous artifact was uploaded from a laptop:
-
-    rsync -az --delete ./apps/api/dist/server.previous/ $VPS_HOST:/opt/tarima/app/dist/server/
+The snapshot lives at `/opt/tarima2/app/dist/server.previous`.
 
 Database restores go through Litestream, not rsync: stop the services,
-then `litestream restore -o /opt/tarima/shared/data/tarima.db
-s3://tarima-backups/litestream` and start them again.
+then `litestream restore -o /opt/tarima2/shared/data/tarima.db s3://tarima-backups/litestream` and start them again.
 
 ## Operator checklist (human, after deploy.sh is green)
 
-- [ ] Infisical folders exist and are non-empty: `/email`, `/ai`,
-      `/infra/litestream`, `/beta`, `/webhooks`, `/channels` (names in
-      `secrets-manifest.toml`).
-- [ ] `BETA_ALLOWLIST` lists the tester emails (comma separated).
-- [ ] `SESSION_SECRET` is a long random string, not the dev default.
-- [ ] DNS for `$PUBLIC_DOMAIN` points at the VPS; Caddy obtained a
-      certificate (`systemctl status caddy`, hit
-      `https://$PUBLIC_DOMAIN/api/health`).
-- [ ] Brevo sender verified and a real OTP mail received.
-- [ ] Cloudflare Email Routing catch-all routes to the `tarima-email`
-      worker; a reply lands in the engine.
-- [ ] WhatsApp webhook verified and subscribed; a test phone connected
-      through the settings page.
-- [ ] Telegram bot token set; a connect code bound a chat.
-- [ ] Litestream replicas show a fresh R2 generation.
-- [ ] `scripts/smoke.sh https://$PUBLIC_DOMAIN <allowlisted email>` green.
-- [ ] Rollback path rehearsed once: `dist/server.previous` exists on the
-      VPS and the restore command above completes.
+- [x] Infisical folders exist: `/email`, `/ai`, `/infra/litestream`, `/beta`, `/webhooks`, `/channels`.
+- [x] `BETA_ALLOWLIST` and `SESSION_SECRET` generated and configured.
+- [x] `LLM_BASE_URL` (Bifrost `http://127.0.0.1:8317/v1`) and `LLM_API_KEY` wired to Bifrost.
+- [ ] Add VPS IPs (`37.187.62.157`, `2001:41d0:52:200::763`) to [Brevo Authorized IPs](https://app.brevo.com/security/authorised_ips).
+- [ ] DNS: Configure A record for `tarima.illo.fyi` or `tarima.events` pointing to `37.187.62.157`. Once active, uncomment domain block in `/etc/caddy/Caddyfile` and `sudo systemctl reload caddy`.
+- [ ] Inbound email worker: deploy `apps/inbound-worker` to Cloudflare and wire Email Routing catch-all rule on `illo.fyi`.
+- [ ] Meta/WhatsApp Cloud API: configure webhook callback and put credentials in Infisical `/channels`.
+- [ ] Cloudflare R2: create `tarima-backups` bucket and configure `S3_ACCESS_KEY` / `S3_SECRET_KEY` in Infisical `/infra/litestream`.

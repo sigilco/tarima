@@ -4,16 +4,14 @@
 #
 # First-time requirements (run once as root on the VPS, before the first
 # deploy):
-#   useradd -r -m -d /opt/tarima web-services   (or your chosen service user)
-#   mkdir -p /opt/tarima/shared/{data,folders} && chown -R web-services: /opt/tarima/shared
+#   useradd -r -m -d /opt/tarima2 web-services   (or your chosen service user)
+#   mkdir -p /opt/tarima2/shared/{data,folders} && chown -R web-services: /opt/tarima2/shared
 #   install -m 644 deploy/systemd/tarima.service /etc/systemd/system/
 #   install -m 644 deploy/litestream/tarima-litestream.service /etc/systemd/system/
 #   install -m 644 deploy/caddy/Caddyfile /etc/caddy/Caddyfile
-#   install -m 644 deploy/litestream/litestream.yml /opt/tarima/app/deploy/litestream/
-#   ln -s /opt/tarima/app/deploy/litestream/litestream.yml ... (paths must match the units)
-#   systemctl daemon-reload && systemctl enable --now tarima tarima-litestream
-# The deploy user also needs the infisical CLI logged in with the machine
-# identity (universal auth) for the render step.
+#   install -m 644 deploy/litestream/litestream.yml /opt/tarima2/app/deploy/litestream/
+#   systemctl daemon-reload && systemctl enable --now tarima
+# Secrets render on laptop (or via Infisical machine-identity on VPS).
 #
 # Environment:
 #   VPS_HOST      the ssh alias of the VPS (default ovhcloud)
@@ -24,12 +22,13 @@
 set -euo pipefail
 
 VPS_HOST="${VPS_HOST:-ovhcloud}"
-VPS_APP_DIR="${VPS_APP_DIR:-/opt/tarima/app}"
-VPS_SHARED_DIR="${VPS_SHARED_DIR:-/opt/tarima/shared}"
+VPS_APP_DIR="${VPS_APP_DIR:-/opt/tarima2/app}"
+VPS_SHARED_DIR="${VPS_SHARED_DIR:-/opt/tarima2/shared}"
 ARTIFACT="apps/api/dist/server"
 ARTIFACT_ENTRY="index.mjs"
 UNIT="tarima.service"
 PUBLIC_BASE_URL="${PUBLIC_BASE_URL:-https://tarima.illo.fyi}"
+INFISICAL_PROJECT_ID="${INFISICAL_PROJECT_ID:-76492067-b7c2-4a47-9b2d-f87ef68b1a8e}"
 
 cd "$(dirname "$0")/.."
 
@@ -38,7 +37,7 @@ pnpm build
 
 echo "==> verifying the build output"
 # The artifact is what the systemd unit execs (node dist/server/index.mjs
-# from /opt/tarima/app), so a build that did not produce it must stop the
+# from /opt/tarima2/app), so a build that did not produce it must stop the
 # deploy here, not break the service on the VPS.
 if [ ! -f "$ARTIFACT/$ARTIFACT_ENTRY" ]; then
   echo "deploy: the artifact entry $ARTIFACT/$ARTIFACT_ENTRY is missing after pnpm build" >&2
@@ -53,29 +52,31 @@ echo "ok   $ARTIFACT/$ARTIFACT_ENTRY and the web bundle are present"
 echo "==> rendering secrets from Infisical"
 tmpdir="$(mktemp -d)"
 trap 'rm -rf "$tmpdir"' EXIT
-python3 deploy/scripts/render_secrets.py --out "$tmpdir" --phase base
+INFISICAL_PROJECT_ID="$INFISICAL_PROJECT_ID" python3 deploy/scripts/render_secrets.py --out "$tmpdir" --phase base
 
 echo "==> uploading artifact"
 # Keep the previous artifact on the VPS: the one-command rollback in
 # deploy/README.md rsyncs dist/server.previous back into place.
-ssh "$VPS_HOST" "rm -rf $VPS_APP_DIR/dist/server.previous && cp -a $VPS_APP_DIR/dist/server $VPS_APP_DIR/dist/server.previous"
+ssh "$VPS_HOST" "rm -rf $VPS_APP_DIR/dist/server.previous && [ -d $VPS_APP_DIR/dist/server ] && cp -a $VPS_APP_DIR/dist/server $VPS_APP_DIR/dist/server.previous || true"
 rsync -az --delete "$ARTIFACT/" "$VPS_HOST:$VPS_APP_DIR/dist/server/"
-rsync -az "$tmpdir/app.env" "$VPS_HOST:$VPS_SHARED_DIR/app.env.new"
-rsync -az "$tmpdir/litestream.env" "$VPS_HOST:$VPS_SHARED_DIR/litestream.env.new"
+rsync -az "$tmpdir/app.env" "$VPS_HOST:/tmp/app.env.new"
+rsync -az "$tmpdir/litestream.env" "$VPS_HOST:/tmp/litestream.env.new"
 
 echo "==> activating on the VPS"
 ssh "$VPS_HOST" "set -eu
   sudo install -m 600 -o web-services -g web-services \\
-    $VPS_SHARED_DIR/app.env.new $VPS_SHARED_DIR/app.env
+    /tmp/app.env.new $VPS_SHARED_DIR/app.env
   sudo install -m 600 -o web-services -g web-services \\
-    $VPS_SHARED_DIR/litestream.env.new $VPS_SHARED_DIR/litestream.env
-  rm -f $VPS_SHARED_DIR/app.env.new $VPS_SHARED_DIR/litestream.env.new
+    /tmp/litestream.env.new $VPS_SHARED_DIR/litestream.env
+  rm -f /tmp/app.env.new /tmp/litestream.env.new
   cd $VPS_APP_DIR
   # drizzle push is idempotent; add generated migrations here once Stage 2 lands.
   sudo -u web-services env DATABASE_URL=$VPS_SHARED_DIR/data/tarima.db \\
     node_modules/.bin/drizzle-kit push || echo 'drizzle push skipped (no migrations yet)'
   sudo systemctl restart $UNIT
-  sudo systemctl restart tarima-litestream.service
+  if [ -f $VPS_SHARED_DIR/litestream.env ] && ! sudo grep -q 'unconfigured' $VPS_SHARED_DIR/litestream.env; then
+    sudo systemctl restart tarima-litestream.service || true
+  fi
   sleep 2
   curl -fsS http://127.0.0.1:3001/api/health
 "
