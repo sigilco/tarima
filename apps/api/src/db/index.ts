@@ -45,6 +45,9 @@ const BOOTSTRAP_DDL = [
   "CREATE TABLE IF NOT EXISTS `user_messages` ( `id` text PRIMARY KEY NOT NULL, `user_id` text NOT NULL, `project_id` text, `kind` text NOT NULL, `summary` text NOT NULL, `read_at` integer, `created_at` integer NOT NULL, FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade, FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON UPDATE no action ON DELETE cascade );",
   "CREATE INDEX IF NOT EXISTS `idx_user_messages_user` ON `user_messages` (`user_id`,`created_at`);",
   "CREATE INDEX IF NOT EXISTS `idx_user_messages_unread` ON `user_messages` (`user_id`,`read_at`);",
+  "CREATE TABLE IF NOT EXISTS `room_share_links` ( `id` text PRIMARY KEY NOT NULL, `project_id` text NOT NULL, `room_id` text, `token` text NOT NULL, `created_by` text, `created_at` integer NOT NULL, `expires_at` integer, `revoked_at` integer, `view_count` integer DEFAULT 0 NOT NULL, `last_viewed_at` integer, FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON UPDATE no action ON DELETE cascade, FOREIGN KEY (`created_by`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE set null );",
+  "CREATE UNIQUE INDEX IF NOT EXISTS `idx_room_share_links_token` ON `room_share_links` (`token`);",
+  "CREATE INDEX IF NOT EXISTS `idx_room_share_links_project` ON `room_share_links` (`project_id`);",
 ];
 
 for (const statement of BOOTSTRAP_DDL) {

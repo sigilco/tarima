@@ -18,6 +18,7 @@ import type {
   DraftWire,
   InboxPayload,
   ProjectsPayload,
+  RoomPayload,
   Served,
   SettingsPayload,
 } from "./api";
@@ -158,3 +159,15 @@ export const fetchInboxFn = createServerFn({ method: "GET", strict: false }).han
     };
   },
 );
+
+/** The negotiation room payload (for owner or observer). */
+export const fetchRoomFn = createServerFn({ method: "GET", strict: false })
+  .validator((raw: unknown) => raw as { projectId: string; shareToken?: string })
+  .handler(async ({ data }): Promise<Served<RoomPayload>> => {
+    const query = data.shareToken ? `?share_token=${encodeURIComponent(data.shareToken)}` : "";
+    const res = await apiGet(`/api/ui/projects/${encodeURIComponent(data.projectId)}/room${query}`);
+    return {
+      status: res.status,
+      body: (await res.json().catch(() => null)) as RoomPayload | null,
+    };
+  });

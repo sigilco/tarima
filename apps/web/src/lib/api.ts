@@ -205,8 +205,68 @@ export function startChase(
 }
 
 /** The url of the board's event stream. */
-export function eventsUrl(projectId: string): string {
-  return `${apiOrigin()}/api/ui/projects/${encodeURIComponent(projectId)}/events`;
+export function eventsUrl(projectId: string, shareToken?: string): string {
+  const base = `${apiOrigin()}/api/ui/projects/${encodeURIComponent(projectId)}/events`;
+  return shareToken ? `${base}?share_token=${encodeURIComponent(shareToken)}` : base;
+}
+
+export interface RoomPayload {
+  project: {
+    id: string;
+    name: string;
+    description: string | null;
+    stage: string;
+    goal: Record<string, unknown>;
+  };
+  room: {
+    id: string;
+    name: string;
+    status: string;
+    terms?: Record<string, unknown>;
+  };
+  access: {
+    role: "owner" | "observer";
+    readOnly: boolean;
+    expiresAt: number | null;
+    sharedByName?: string | null;
+  };
+}
+
+export interface MintRoomLinkResult {
+  link: {
+    id: string;
+    projectId: string;
+    token: string;
+    shareUrl: string;
+    createdAt: number;
+    expiresAt: number | null;
+    viewCount: number;
+  };
+  shareUrl: string;
+}
+
+/** Mint or retrieve the live room observer link for a project. */
+export function mintRoomLink(projectId: string, ttlDays?: number): Promise<MintRoomLinkResult> {
+  return call<MintRoomLinkResult>(`/api/ui/projects/${encodeURIComponent(projectId)}/room-link`, {
+    method: "POST",
+    body: JSON.stringify(ttlDays ? { ttlDays } : {}),
+  });
+}
+
+/** Revoke the active room observer link for a project. */
+export function revokeRoomLink(projectId: string): Promise<{ ok: boolean; revokedAt: number }> {
+  return call<{ ok: boolean; revokedAt: number }>(
+    `/api/ui/projects/${encodeURIComponent(projectId)}/room-link`,
+    {
+      method: "DELETE",
+    },
+  );
+}
+
+/** Fetch negotiation room state (for owner or observer). */
+export function fetchRoom(projectId: string, shareToken?: string): Promise<RoomPayload> {
+  const query = shareToken ? `?share_token=${encodeURIComponent(shareToken)}` : "";
+  return call<RoomPayload>(`/api/ui/projects/${encodeURIComponent(projectId)}/room${query}`);
 }
 
 /** The channels a user can bind (contract `BINDING_CHANNELS`). */

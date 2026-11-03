@@ -94,3 +94,21 @@ export type {
 } from "./venue.js";
 export { NOT_ALLOWLISTED_ERROR, USER_ROLES, isAllowlisted, parseAllowlist } from "./beta.js";
 export type { UserRole } from "./beta.js";
+export {
+  mintRoomLinkRequestSchema,
+  mintRoomLinkResponseSchema,
+  observerLinkSchema,
+  resolveRoomQuerySchema,
+  resolveRoomResponseSchema,
+  revokeRoomLinkResponseSchema,
+  roomObserverUrl,
+  shareTokenSchema,
+} from "./observer-link.js";
+export type {
+  MintRoomLinkRequest,
+  MintRoomLinkResponse,
+  ObserverLink,
+  ResolveRoomQuery,
+  ResolveRoomResponse,
+  RevokeRoomLinkResponse,
+} from "./observer-link.js";

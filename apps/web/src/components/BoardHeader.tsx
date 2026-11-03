@@ -29,6 +29,7 @@ export function BoardHeader({
   live,
   onImport,
   onAddRow,
+  onShareRoom,
 }: {
   projectId: string;
   projectName: string;
@@ -37,6 +38,7 @@ export function BoardHeader({
   live: "connecting" | "live" | "down";
   onImport: () => void;
   onAddRow: () => void;
+  onShareRoom?: () => void;
 }) {
   const liveLabel =
     live === "live"
@@ -93,6 +95,23 @@ export function BoardHeader({
           >
             {m["board.importCsv"]()}
           </button>
+          {onShareRoom ? (
+            <button
+              type="button"
+              onClick={onShareRoom}
+              className="rounded-full border border-border-subtle px-4 py-2 text-[13px] font-medium text-content transition-colors hover:bg-surface-raised"
+            >
+              Share Room
+            </button>
+          ) : null}
+          <Link
+            to="/app/p/$projectId/room"
+            params={{ projectId }}
+            search={{ share_token: undefined }}
+            className="rounded-full border border-border-subtle px-4 py-2 text-[13px] font-medium text-content transition-colors hover:bg-surface-raised"
+          >
+            Negotiation Room
+          </Link>
         </div>
       </div>
 
