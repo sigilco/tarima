@@ -23,7 +23,7 @@
     },
     "apps/web": {
       "entry": ["src/**/*.{ts,tsx}"],
-      "ignore": ["src/paraglide/**"],
+      "ignore": ["src/paraglide/**", "public/_worker.js"],
       "ignoreUnresolved": ["../paraglide/messages.js"],
       "ignoreDependencies": ["@nanostores/react", "cloudflare"],
       "ignoreBinaries": ["tsgo"]

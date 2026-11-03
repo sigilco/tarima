@@ -63,7 +63,11 @@ async function apiGet(path: string): Promise<Response> {
   const cookie = requestCookies();
   if (cookie) headers.set("cookie", cookie);
   const origin = apiOrigin();
-  return fetch(origin ? `${origin}${path}` : path, { headers });
+  try {
+    return await fetch(origin ? `${origin}${path}` : path, { headers });
+  } catch {
+    return new Response(null, { status: 503 });
+  }
 }
 
 /** The project list payload (see lib/api.ts for the shapes). */

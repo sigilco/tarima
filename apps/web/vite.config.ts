@@ -15,7 +15,17 @@ const config = defineConfig({
       outdir: "./src/paraglide",
       strategy: ["preferredLanguage", "baseLocale"],
     }),
-    tanstackStart({ srcDirectory: "src", server: { entry: "server.ts" } }),
+    tanstackStart({
+      srcDirectory: "src",
+      server: { entry: "server.ts" },
+      prerender: {
+        enabled: true,
+        crawlLinks: false,
+        autoStaticPathsDiscovery: false,
+        filter: (page) => page.path === "/",
+      },
+      pages: [{ path: "/" }],
+    }),
     viteReact(),
   ],
   server: {
