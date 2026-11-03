@@ -26,3 +26,10 @@ onlyBuiltDependencies:
   - esbuild
   - lightningcss
 dangerouslyAllowAllBuilds: true
+
+# One node type version everywhere. @types/papaparse declares
+# "@types/node: *", which resolved to 22 while vitest and the catalog sit on
+# 24: both copies then loaded into one program (venuesearch typecheck) and
+# each declared a different global Response out of its own undici-types.
+overrides:
+  "@types/node": ^24.19.2
