@@ -150,6 +150,8 @@ export async function decideGate(
       return decideShortlist(projectId, decision, opts.entityIds);
     case "send":
       return decideSend(projectId, decision);
+    case "negotiation":
+      throw new Error("negotiation gate decision is not implemented in this slice");
   }
 }
 

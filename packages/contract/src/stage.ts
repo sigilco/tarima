@@ -4,8 +4,8 @@
  * additive.
  *
  * Flow: brief -> spec_review -> curating -> shortlist_review -> send_review
- * -> running -> done. Nothing is sent to a third party before `send_review`
- * is approved.
+ * -> running -> negotiating -> done. Nothing is sent to a third party before `send_review`
+ * is approved. Phase 2 adds `negotiating` before `done` with a `negotiation` gate.
  *
  * Routes (session surface; bearer routes mirror them):
  *   POST /api/ui/projects/:id/stage    advance the stage ({@link stageRequestSchema})
@@ -22,13 +22,15 @@ export const PROJECT_STAGES = [
   "shortlist_review",
   "send_review",
   "running",
+  /** Added for Phase 2 negotiation room. Follows running and precedes done. */
+  "negotiating",
   "done",
 ] as const;
 export const projectStageSchema = v.picklist(PROJECT_STAGES);
 export type ProjectStage = v.InferOutput<typeof projectStageSchema>;
 
 /** The gates a user can decide. */
-export const APPROVAL_GATES = ["spec", "shortlist", "send"] as const;
+export const APPROVAL_GATES = ["spec", "shortlist", "send", "negotiation"] as const;
 export const approvalGateSchema = v.picklist(APPROVAL_GATES);
 export type ApprovalGate = v.InferOutput<typeof approvalGateSchema>;
 
@@ -37,6 +39,7 @@ export const GATE_FOR_STAGE: Partial<Record<ProjectStage, ApprovalGate>> = {
   spec_review: "spec",
   shortlist_review: "shortlist",
   send_review: "send",
+  negotiating: "negotiation",
 };
 
 /** Request: move a project forward. Only user-initiated transitions. */
