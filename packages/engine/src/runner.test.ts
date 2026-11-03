@@ -85,7 +85,7 @@ describe("runner", () => {
     expect(seen).toEqual(["step1:1", "step1:2"]);
   });
 
-  it("interval runner picks up delayed follow-up steps (backoff branch)", async () => {
+  it("claims a delayed follow-up step only once it is due (backoff branch)", async () => {
     const { db } = setup();
     const runId = createRun(db, {
       type: "fake-backoff",
@@ -95,10 +95,16 @@ describe("runner", () => {
       send: () => ({ nextSteps: [{ key: "followup", delayMs: 40 }] }),
       followup: () => ({ finish: true }),
     };
-    const handle = startRunner(db, handlers, { pollIntervalMs: 10 });
-    await new Promise((r) => setTimeout(r, 200));
-    await handle.stop();
-    expect(getWorkflow(db, runId)?.status).toBe("done");
+    // send runs and schedules the follow-up 40ms out.
+    await runOnce(db, handlers);
+    // The follow-up is scheduled but not yet due: nothing runs, run stays open.
+    await runOnce(db, handlers);
+    expect(getWorkflow(db, runId)?.status).toBe("running");
+    // Time passes: backdate run_at so the step is due, deterministically.
+    db.run(sql`UPDATE steps SET run_at = ${Date.now() - 1} WHERE step_key = 'followup'`);
+    await runOnce(db, handlers);
+    const wf = getWorkflow(db, runId);
+    expect(wf?.status).toBe("done");
   });
 
   it("startRunner recovers expired leases on boot", async () => {
