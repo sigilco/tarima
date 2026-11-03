@@ -8,4 +8,5 @@ dist
 .output
 *.db-shm
 *.db-wal
-.worktrees
+.worktrees/
+.playwright-cli/
