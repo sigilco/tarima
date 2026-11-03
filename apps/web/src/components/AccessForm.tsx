@@ -48,42 +48,58 @@ export function AccessForm({ compact = false }: { compact?: boolean }) {
   }
 
   return (
-    <form
-      onSubmit={onSubmit}
-      className={`group flex items-center gap-2 rounded-full bg-ink/[0.04] p-1.5 ring-1 ring-ink/10 transition-shadow focus-within:ring-ink/25 max-[420px]:flex-col max-[420px]:rounded-[1.4rem] max-[420px]:items-stretch ${
-        compact ? "w-full max-w-md" : "w-full max-w-xl"
-      }`}
-    >
-      <input
-        type="email"
-        required
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder={m["hero.placeholder"]()}
-        className="min-w-0 flex-1 bg-transparent px-4 py-2.5 text-[15px] text-ink outline-none placeholder:text-ink-3 max-[420px]:py-3"
-      />
-      <button
-        type="submit"
-        disabled={state === "sending"}
-        className="flex shrink-0 items-center gap-2.5 rounded-full bg-ink py-2.5 pl-5 pr-1.5 text-sm font-medium text-paper transition-transform duration-300 ease-[cubic-bezier(0.34,1.4,0.4,1)] hover:scale-[1.02] active:scale-[0.97] disabled:opacity-60 max-[420px]:w-full max-[420px]:justify-between"
+    <div className={compact ? "w-full max-w-md mx-auto" : "w-full max-w-xl"}>
+      <form
+        onSubmit={onSubmit}
+        className={`group flex items-center gap-2 rounded-full bg-ink/[0.04] p-1.5 ring-1 ${
+          state === "error" ? "ring-clay/40" : "ring-ink/10"
+        } transition-shadow focus-within:ring-ink/25 max-[420px]:flex-col max-[420px]:rounded-[1.4rem] max-[420px]:items-stretch w-full`}
       >
-        {state === "sending" ? "…" : m["hero.cta"]()}
-        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-paper/15 transition-transform duration-300 ease-[cubic-bezier(0.34,1.4,0.4,1)] group-hover:translate-x-0.5 group-hover:-translate-y-px">
-          <svg
-            width="13"
-            height="13"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+        <input
+          type="email"
+          required
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            if (state === "error") setState("idle");
+          }}
+          placeholder={m["hero.placeholder"]()}
+          className="min-w-0 flex-1 bg-transparent px-4 py-2.5 text-[15px] text-ink outline-none placeholder:text-ink-3 max-[420px]:py-3"
+        />
+        <button
+          type="submit"
+          disabled={state === "sending"}
+          className="flex shrink-0 items-center gap-2.5 rounded-full bg-ink py-2.5 pl-5 pr-1.5 text-sm font-medium text-paper transition-transform duration-300 ease-[cubic-bezier(0.34,1.4,0.4,1)] hover:scale-[1.02] active:scale-[0.97] disabled:opacity-60 max-[420px]:w-full max-[420px]:justify-between"
+        >
+          {state === "sending" ? "…" : m["hero.cta"]()}
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-paper/15 transition-transform duration-300 ease-[cubic-bezier(0.34,1.4,0.4,1)] group-hover:translate-x-0.5 group-hover:-translate-y-px">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M7 17 17 7" />
+              <path d="M8 7h9v9" />
+            </svg>
+          </span>
+        </button>
+      </form>
+      {state === "error" && (
+        <p className="mt-2.5 text-left text-[13px] text-clay">
+          {m["errors.offline2"]()}{" "}
+          <a
+            href={`mailto:hello@tarima.events?subject=${encodeURIComponent("Early access request: " + email)}&body=${encodeURIComponent("Hi Tarima team,\n\nPlease add " + email + " to early access.")}`}
+            className="font-medium underline hover:text-ink"
           >
-            <path d="M7 17 17 7" />
-            <path d="M8 7h9v9" />
-          </svg>
-        </span>
-      </button>
-    </form>
+            Email us directly &rarr;
+          </a>
+        </p>
+      )}
+    </div>
   );
 }

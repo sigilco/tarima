@@ -14,3 +14,4 @@ dist
 apps/web/test-results
 apps/web/playwright-report
 coverage
+.wrangler
