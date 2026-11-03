@@ -7,51 +7,41 @@ type Message = {
   meta: string;
 };
 
-type PhoneChatDemoProps = {
-  initialMessages?: Message[];
-  galleryImages?: { src: string; alt: string; chip: string }[];
-  quickPrompts?: { label: string; text: string }[];
-  inputPlaceholder?: string;
+export type PhoneChatCopy = {
+  userMessage: string;
+  userMeta: string;
+  agentMessage: string;
+  agentMeta: string;
+  board: {
+    title: string;
+    filled: string;
+    rows: { name: string; kind: string; status: string }[];
+  };
+  quickPrompts: { label: string; text: string }[];
+  inputPlaceholder: string;
+  replyDefault: string;
+  replyMeetings: string;
+  replyTrip: string;
+  replyMeta: string;
 };
 
-export function PhoneChatDemo({
-  initialMessages = [
-    {
-      id: 1,
-      text: "Hey! Please show me my latest images from my latest trip.",
-      meta: "9:40 AM",
-    },
-    {
-      id: 2,
-      text: "Sure, here are the latest images from your trip to the island of deez nuts.",
-      meta: "9:41 AM · Aceternity AI",
-    },
-  ],
-  galleryImages = [
-    {
-      src: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80",
-      alt: "Tropical Beach",
-      chip: "Beach",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=400&q=80",
-      alt: "Sunset Island",
-      chip: "Sunset",
-    },
-  ],
-  quickPrompts = [
-    { label: "📝 Summarize meetings", text: "Summarize today's meetings" },
-    { label: "✈️ Export trip", text: "Export trip itinerary to PDF" },
-  ],
-  inputPlaceholder = "Ask Aceternity AI...",
-}: PhoneChatDemoProps) {
+type PhoneChatDemoProps = {
+  copy: PhoneChatCopy;
+};
+
+export function PhoneChatDemo({ copy }: PhoneChatDemoProps) {
+  const initialMessages: Message[] = [
+    { id: 1, text: copy.userMessage, meta: copy.userMeta },
+    { id: 2, text: copy.agentMessage, meta: copy.agentMeta },
+  ];
+
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [input, setInput] = useState("");
   const timelineRef = useRef<HTMLDivElement>(null);
   const idRef = useRef(3);
 
   const scrollToBottom = () => {
-    // matches the HTML: scroll the phone screen container (timeline's parent)
+    // scroll the phone screen container (timeline's parent)
     const el = timelineRef.current?.parentElement;
     if (el) el.scrollTop = el.scrollHeight;
   };
@@ -65,18 +55,15 @@ export function PhoneChatDemo({
     requestAnimationFrame(scrollToBottom);
 
     const lower = query.toLowerCase();
-    let reply = "I've organized that into your mobile workspace!";
+    let reply = copy.replyDefault;
     if (lower.includes("meeting") || lower.includes("summarize")) {
-      reply = "Meeting notes synced. 3 key action items flagged for today.";
+      reply = copy.replyMeetings;
     } else if (lower.includes("trip") || lower.includes("itinerary")) {
-      reply = "Export complete: Trip_Itinerary.pdf ready in your files.";
+      reply = copy.replyTrip;
     }
 
     setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        { id: idRef.current++, text: reply, meta: "Just now · Aceternity AI" },
-      ]);
+      setMessages((prev) => [...prev, { id: idRef.current++, text: reply, meta: copy.replyMeta }]);
       requestAnimationFrame(scrollToBottom);
     }, 700);
   };
@@ -110,23 +97,32 @@ export function PhoneChatDemo({
           <span className="ml-1 mt-1 text-[10px] text-neutral-400">{initialMessages[1]?.meta}</span>
         </div>
 
-        {/* Chat Bubble 3 (Interactive Gallery Preview) */}
-        <div className="animate-bubble-3 mt-1 grid max-w-[92%] grid-cols-2 gap-2 opacity-0">
-          {galleryImages.map((img) => (
-            <div
-              key={img.alt}
-              className="group relative aspect-[4/3] overflow-hidden rounded-xl bg-neutral-200"
-            >
-              <img
-                src={img.src}
-                alt={img.alt}
-                className="h-full w-full object-cover transition-transform group-hover:scale-105"
-              />
-              <span className="absolute bottom-1 right-1 rounded bg-black/60 px-1.5 py-0.5 text-[9px] text-white backdrop-blur-sm">
-                {img.chip}
-              </span>
+        {/* Chat Bubble 3 (Board Preview — the product itself) */}
+        <div className="animate-bubble-3 mt-1 max-w-[92%] opacity-0">
+          <div className="rounded-xl border border-neutral-100 bg-white p-3 shadow-sm">
+            <div className="flex items-baseline justify-between">
+              <span className="text-[11px] font-bold text-neutral-900">{copy.board.title}</span>
+              <span className="text-[10px] font-medium text-emerald-600">{copy.board.filled}</span>
             </div>
-          ))}
+            <div className="mt-2 space-y-1.5">
+              {copy.board.rows.map((row) => (
+                <div
+                  key={row.name}
+                  className="flex items-center justify-between gap-2 rounded-lg bg-neutral-50 px-2 py-1.5"
+                >
+                  <div className="min-w-0">
+                    <div className="truncate text-[11px] font-semibold text-neutral-800">
+                      {row.name}
+                    </div>
+                    <div className="text-[9px] text-neutral-400">{row.kind}</div>
+                  </div>
+                  <span className="shrink-0 rounded-full bg-amber-100 px-1.5 py-0.5 text-[9px] font-semibold text-amber-700">
+                    {row.status}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Dynamically appended messages */}
@@ -144,7 +140,7 @@ export function PhoneChatDemo({
       <div className="flex flex-col gap-2 border-t border-neutral-100 pt-3">
         {/* Suggested Quick Prompts */}
         <div className="no-scrollbar flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px]">
-          {quickPrompts.map((p) => (
+          {copy.quickPrompts.map((p) => (
             <button
               key={p.label}
               onClick={() => send(p.text)}
@@ -165,7 +161,7 @@ export function PhoneChatDemo({
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder={inputPlaceholder}
+            placeholder={copy.inputPlaceholder}
             className="w-full bg-transparent text-xs text-neutral-800 placeholder-neutral-400 focus:outline-none"
           />
           <button
