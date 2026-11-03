@@ -35,7 +35,7 @@
       "entry": ["src/**/*.ts"]
     },
     "packages/engine": {
-      "entry": ["src/journal.ts", "src/runner.ts", "src/store.ts", "src/db.ts", "src/types.ts"]
+      "entry": ["src/journal.ts", "src/runner.ts", "src/db.ts", "src/schema.ts", "src/types.ts"]
     },
     "packages/chase": {
       "entry": ["src/sfm.ts", "src/template.ts", "src/handlers.ts", "src/llm.ts", "src/register.ts"]

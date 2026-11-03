@@ -1,6 +1,6 @@
 import { and, eq, inArray, isNull, lte, or, sql, like } from "drizzle-orm";
 import type { EngineDb } from "./db";
-import { outbox, steps, workflows } from "@tarima/api/db/schema";
+import { outbox, steps, workflows } from "./schema.js";
 import type { ClaimedStep, StepResult, StepStatus, WorkflowStatus } from "./types";
 
 export function nowMs(): number {

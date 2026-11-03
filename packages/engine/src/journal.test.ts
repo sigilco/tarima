@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { sql } from "drizzle-orm";
 import { openDb } from "./db";
-import { outbox } from "@tarima/api/db/schema";
+import { outbox } from "./schema.js";
 import {
   claimDueSteps,
   completeStep,

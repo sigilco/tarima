@@ -13,3 +13,15 @@ run = "pnpm validate --quick"
 [tasks.dev]
 description = "Run web + api dev servers"
 run = "pnpm dev"
+
+[tasks.build]
+description = "Build the web (incl. the prerendered landing in apps/web/dist/client) and the api artifact (apps/api/dist/server)"
+run = "pnpm build"
+
+[tasks."build:web"]
+description = "Build only the web app; output lands in apps/web/dist/client (Pages) and apps/web/dist/ssr"
+run = "pnpm --filter web build"
+
+[tasks."build:api"]
+description = "Build only the api artifact; output lands in apps/api/dist/server"
+run = "pnpm --filter @tarima/api build"

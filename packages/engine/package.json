@@ -7,15 +7,14 @@
     "./types": "./src/types.ts",
     "./journal": "./src/journal.ts",
     "./runner": "./src/runner.ts",
-    "./store": "./src/store.ts",
-    "./db": "./src/db.ts"
+    "./db": "./src/db.ts",
+    "./schema": "./src/schema.ts"
   },
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@tarima/api": "workspace:*",
     "better-sqlite3": "^13.0.3",
     "drizzle-orm": "^0.45.4"
   },
