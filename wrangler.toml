@@ -1,0 +1,18 @@
+# Cloudflare Pages configuration for this project.
+#
+# The Pages project is configured in a dashboard we do not control, so the
+# environment variables and the output directory are declared here instead.
+# Pages reads this file (the "Wrangler configuration file" beta) and
+# prefers it over the dashboard settings.
+#
+# Build output: apps/web/dist/client. Tarima has no Nitro, so the Nitro path
+# apps/web/.output/public does not apply here; the prerendered landing lands
+# in apps/web/dist/client (see apps/web/vite.config.ts).
+
+name = "tarima"
+pages_build_output_dir = "apps/web/dist/client"
+compatibility_date = "2026-11-03"
+
+[vars]
+NODE_VERSION = "24"
+PNPM_VERSION = "12.16.1"
