@@ -1,0 +1,6 @@
+# Cloudflare Pages git-build configuration. When present, Pages reads the
+# output directory from this file instead of the dashboard setting, which
+# had the stale tarima2/Nitro path (apps/web/.output/public). Tarima emits
+# the prerendered landing into apps/web/dist/client (see vite.config.ts).
+name = "tarima"
+pages_build_output_dir = "apps/web/dist/client"
