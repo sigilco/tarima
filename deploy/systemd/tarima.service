@@ -9,8 +9,8 @@ StartLimitBurst=5
 Type=simple
 User=web-services
 Group=web-services
-WorkingDirectory=/opt/tarima/app
-EnvironmentFile=/opt/tarima/shared/app.env
+WorkingDirectory=/opt/tarima2/app
+EnvironmentFile=/opt/tarima2/shared/app.env
 Environment=NODE_ENV=production
 Environment=PORT=3001
 ExecStart=/usr/bin/env node dist/server/index.mjs
@@ -27,7 +27,7 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=read-only
-ReadWritePaths=/opt/tarima
+ReadWritePaths=/opt/tarima2
 
 [Install]
 WantedBy=multi-user.target
