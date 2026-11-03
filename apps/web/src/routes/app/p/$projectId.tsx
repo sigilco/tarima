@@ -6,6 +6,7 @@ import { BoardHeader } from "../../../components/BoardHeader";
 import { BoardTable } from "../../../components/BoardTable";
 import { CsvModal } from "../../../components/CsvModal";
 import { RowModal } from "../../../components/RowModal";
+import { ShareRoomModal } from "../../../components/ShareRoomModal";
 import { InboxPanel } from "../../../components/InboxPanel";
 import { StageBanner } from "../../../components/StageBanner";
 import { boardView, parseFilter } from "../../../lib/board";
@@ -91,6 +92,7 @@ function Board() {
   const [live, setLive] = useState<"connecting" | "live" | "down">("connecting");
   const [notice, setNotice] = useState<string | null>(null);
   const [stageBusy, setStageBusy] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
 
   const brief = projectBrief(payload.project);
   const stageState = stageUiState({
@@ -254,6 +256,7 @@ function Board() {
           live={live}
           onImport={openCsv}
           onAddRow={openAdd}
+          onShareRoom={() => setShareOpen(true)}
         />
 
         <StageBanner
@@ -320,6 +323,10 @@ function Board() {
 
       {search.add === "open" ? (
         <AddRowModal projectId={projectId} filter={filter} onAdd={onAddRow} />
+      ) : null}
+
+      {shareOpen ? (
+        <ShareRoomModal projectId={projectId} onClose={() => setShareOpen(false)} />
       ) : null}
     </main>
   );

@@ -402,3 +402,38 @@ export const userMessages = sqliteTable(
 );
 
 export type UserMessage = typeof userMessages.$inferSelect;
+
+/**
+ * Read-only observer share links for the negotiation room.
+ *
+ * Implements the Brioso stored-token pattern:
+ * - 24 random bytes hex token (unique index)
+ * - Project and optional room scoped
+ * - 7-day default TTL (expiresAt), nullable for indefinite
+ * - Explicit revocation (revokedAt)
+ * - View tracking (viewCount, lastViewedAt)
+ */
+export const roomShareLinks = sqliteTable(
+  "room_share_links",
+  {
+    id: text("id").primaryKey(),
+    projectId: text("project_id")
+      .notNull()
+      .references(() => projects.id, { onDelete: "cascade" }),
+    roomId: text("room_id"),
+    token: text("token").notNull(),
+    createdBy: text("created_by").references(() => users.id, { onDelete: "set null" }),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+    expiresAt: integer("expires_at"),
+    revokedAt: integer("revoked_at"),
+    viewCount: integer("view_count").notNull().default(0),
+    lastViewedAt: integer("last_viewed_at"),
+  },
+  (t) => [
+    uniqueIndex("idx_room_share_links_token").on(t.token),
+    index("idx_room_share_links_project").on(t.projectId),
+  ],
+);
+
+export type RoomShareLink = typeof roomShareLinks.$inferSelect;
+export type NewRoomShareLink = typeof roomShareLinks.$inferInsert;

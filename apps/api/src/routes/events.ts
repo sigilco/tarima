@@ -1,20 +1,15 @@
 /**
- * Server-sent events for the board (Stage 5, T5.2).
+ * Server-sent events for the board and negotiation room (Stage 5, T5.2).
  *
  * GET /api/ui/projects/:projectId/events  -> text/event-stream
  *
- * AUTH: the session cookie (`tarima_session`), same as the rest of the UI
- * surface. The route is NOT behind the Bearer middleware: the browser's
- * EventSource cannot attach an Authorization header, and the cookie is the
- * only credential a browser has. The route therefore uses the session
- * middleware directly, and the project id in the path is the only scope.
+ * AUTH: accepts EITHER the session cookie (`tarima_session`) from the owner
+ * OR a valid observer share token (`?share_token=<token>`).
+ * The browser's EventSource cannot attach an Authorization header, but
+ * EventSource URLs CAN carry query parameters.
  *
  * WHAT IT STREAMS: the durable audit trail (`events` table) plus synthetic
- * `entity.changed` signals, polled every `POLL_INTERVAL_MS`. See
- * `lib/events.ts` for why the stream is a poll of the table rather than an
- * in-process bus: the writers of those rows (the engine dispatcher, the
- * inbound webhooks) are owned by another stream, so this route reads what
- * they already persist instead of asking them to publish.
+ * `entity.changed` signals, polled every `POLL_INTERVAL_MS`.
  *
  * PROTOCOL:
  *   - one `data: {json}\n\n` frame per event (named "board")
@@ -25,7 +20,11 @@
 import { Hono } from "hono";
 import { streamSSE } from "hono/streaming";
 import { db } from "../db";
-import { requireSession, getSessionUser } from "../middleware/require-session";
+import {
+  getRoomActor,
+  requireRoomAccess,
+  type RoomAccessEnv,
+} from "../middleware/require-room-access";
 import { getProject } from "../services/projects";
 import { advanceCursor, cursorNow, pollBoardEvents } from "../lib/events";
 
@@ -35,17 +34,20 @@ const POLL_INTERVAL_MS = 2_000;
 /** How often a heartbeat comment is written, in ms. */
 const HEARTBEAT_MS = 25_000;
 
-export const eventRoutes = new Hono().get(
+export const eventRoutes = new Hono<RoomAccessEnv>().get(
   "/api/ui/projects/:projectId/events",
-  requireSession(),
+  requireRoomAccess({ mode: "read", allowObserver: true }),
   (c) => {
     const projectId = c.req.param("projectId");
-    const ownerId = getSessionUser(c)?.userId ?? null;
-    if (!getProject(db, projectId, ownerId)) return c.json({ error: "not_found" }, 404);
+    const actor = getRoomActor(c);
+    if (!actor) return c.json({ error: "unauthorized" }, 401);
+
+    const project = getProject(db, projectId);
+    if (!project) return c.json({ error: "not_found" }, 404);
 
     return streamSSE(c, async (stream) => {
       // The stream starts at "now": only changes that happen while the
-      // board is open are delivered.
+      // board/room is open are delivered.
       let cursor = cursorNow();
       let lastHeartbeat = Date.now();
       stream.onAbort(() => {

@@ -23,6 +23,7 @@ import { entityRoutes } from "./routes/entities";
 import { eventRoutes } from "./routes/events";
 import { mcpRoutes } from "./routes/mcp";
 import { projectRoutes } from "./routes/projects";
+import { roomRoutes } from "./routes/room";
 import { settingsRoutes } from "./routes/settings";
 import { uiRoutes } from "./routes/ui";
 import { webhookRoutes } from "./routes/webhooks";
@@ -85,9 +86,10 @@ app.route("/", workflowRoutes);
 app.route("/", csvRoutes);
 app.route("/", mcpRoutes);
 app.route("/", capabilityRoutes);
+app.route("/", roomRoutes);
+app.route("/", eventRoutes);
 app.route("/", uiRoutes);
 app.route("/", settingsRoutes);
-app.route("/", eventRoutes);
 
 // Static client assets (vite build output) and the SSR handler for
 // everything else. In production both live inside the artifact next to
