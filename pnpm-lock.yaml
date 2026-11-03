@@ -477,7 +477,7 @@ importers:
         version: 1.5.0(typescript@5.9.3)
     devDependencies:
       '@types/node':
-        specifier: 'catalog:'
+        specifier: ^24.19.2
         version: 24.19.2
       typescript:
         specifier: 'catalog:'
