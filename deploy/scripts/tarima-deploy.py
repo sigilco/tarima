@@ -81,7 +81,6 @@ def warn(msg: str) -> None:
 
 def result(status: str) -> None:
     print(f"::DEPLOY_RESULT:: status={status} sha={SHA} prev_sha={PREV_SHA}")
-    RESULT_PRINTED = True
 
 
 def die(msg: str) -> NoReturn:

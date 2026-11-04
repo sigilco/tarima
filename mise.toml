@@ -30,7 +30,9 @@ run = "pnpm --filter @tarima/api build"
 description = "mypy --strict the Python deploy runner + shellcheck install-host.sh"
 run = """
 set -euo pipefail
-python3 -m mypy --strict deploy/scripts/tarima-deploy.py deploy/tests/test_tarima_deploy.py
+# mypy is not a project dependency; run it through uvx so the task
+# works without a virtualenv. uv is required tooling on this machine.
+uvx mypy --strict deploy/scripts/tarima-deploy.py deploy/tests/test_tarima_deploy.py
 shellcheck deploy/scripts/install-host.sh
 """
 
