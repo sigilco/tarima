@@ -234,8 +234,11 @@ jobs:
 
           result_line="$(grep '::DEPLOY_RESULT::' /tmp/deploy.log | tail -n1 || true)"
           status="$(printf '%s' "$result_line" | sed -n 's/.*status=\([^ ]*\).*/\1/p')"
-          sha="$(printf '%s' "$result_line" | sed -n 's/.*sha=\([^ ]*\).*/\1/p')"
-          prev_sha="$(printf '%s' "$result_line" | sed -n 's/.*prev_sha=\([^ ]*\).*/\1/p')"
+          # The sha is matched on a word boundary: a greedy .*sha= also
+          # matches the sha inside prev_sha=, which reported the wrong
+          # commit in the summary and in the deployment record.
+          sha="$(printf '%s' "$result_line" | grep -oE '(^| )sha=[^ ]+' | head -n1 | cut -d= -f2)"
+          prev_sha="$(printf '%s' "$result_line" | grep -oE '(^| )prev_sha=[^ ]+' | head -n1 | cut -d= -f2)"
           {
             echo "status=${status:-unknown}"
             echo "sha=${sha}"
