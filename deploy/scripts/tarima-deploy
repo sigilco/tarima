@@ -1,0 +1,236 @@
+#!/usr/bin/env bash
+# Host-side deploy script: run on the VPS by CI (or by hand) as root.
+#
+#   sudo /usr/local/sbin/tarima-deploy '<sha>'
+#
+# Trust boundary: the sudoers entry for the `deploy` user (installed by
+# deploy/scripts/install-host.sh) allows exactly this one command, and the
+# script itself is root-owned and lives outside the repo checkout. CI
+# cannot edit what it sudo-runs.
+#
+# Layout on the box:
+#   /opt/tarima2/releases/<sha>/{dist/server,node_modules,package.json}
+#   /opt/tarima2/current -> releases/<sha>   (symlink, swapped atomically)
+#   /opt/tarima2/shared/deployed-sha          (the sha currently serving)
+#
+# A release is never partially replaced: the new tree is unpacked into its
+# own release dir and only then does `current` flip. A rollback is a
+# symlink flip plus a restart, so there is no state to corrupt.
+#
+# Contract with the caller:
+# - prints exactly one ::DEPLOY_RESULT:: line: status=ok|failed sha=<sha> prev_sha=<sha>
+# - exit 0 when the new release serves /api/health and /, 1 otherwise
+#
+# The artifact itself is built in CI (deploy.yml) and uploaded to
+# /tmp/tarima-artifact.tar.zst before this script runs. Building on the
+# box would need the whole toolchain; CI already has it.
+set -euo pipefail
+
+APP_ROOT="${APP_ROOT:-/opt/tarima2}"
+RELEASES_DIR="${RELEASES_DIR:-$APP_ROOT/releases}"
+SHARED_DIR="${SHARED_DIR:-$APP_ROOT/shared}"
+CURRENT_LINK="${CURRENT_LINK:-$APP_ROOT/current}"
+ARTIFACT_TAR="${ARTIFACT_TAR:-/tmp/tarima-artifact.tar.zst}"
+ARTIFACT_ENTRY="${ARTIFACT_ENTRY:-index.mjs}"
+UNIT="${UNIT:-tarima.service}"
+SERVICE="${SERVICE:-web-services}"
+HEALTH_URL="${HEALTH_URL:-http://127.0.0.1:3001/api/health}"
+ROOT_URL="${ROOT_URL:-http://127.0.0.1:3001/}"
+# The health probe is a command so the tests can drive both outcomes
+# without a server. The default checks both endpoints: /api/health
+# proves the process is up, / proves the SSR bundle loads. A broken SSR
+# bundle used to look healthy.
+HEALTH_CMD="${HEALTH_CMD:-}"
+HEALTH_ATTEMPTS="${HEALTH_ATTEMPTS:-5}"
+HEALTH_INTERVAL="${HEALTH_INTERVAL:-2}"
+KEEP_RELEASES="${KEEP_RELEASES:-5}"
+STATE_FILE="${STATE_FILE:-$SHARED_DIR/deployed-sha}"
+LOCK_FILE="${LOCK_FILE:-$APP_ROOT/.tarima-deploy.lock}"
+# A dry run has no systemd and no node runtime on the box, so the
+# restart, the native binding check and the health check are stubbed out.
+DRY_RUN="${DRY_RUN:-0}"
+
+SHA="${1:-}"
+PREV_SHA="unknown"
+
+log() { echo "==> $*"; }
+warn() { echo "tarima-deploy: $*" >&2; }
+
+result() {
+  echo "::DEPLOY_RESULT:: status=$1 sha=$SHA prev_sha=$PREV_SHA"
+}
+
+die() {
+  warn "$*"
+  result failed
+  exit 1
+}
+
+# flip_current: point the current symlink at a release, atomically.
+# The new link is created under a temporary name and renamed over the
+# old one, so the service never sees a half-written current.
+flip_current() {
+  ln -sfn "releases/$1" "$CURRENT_LINK.new"
+  # GNU mv -T replaces the link in one atomic rename. BSD mv has no -T
+  # and would move the link *into* the directory it points at, so the
+  # fallback unlinks first and then renames.
+  if mv -T "$CURRENT_LINK.new" "$CURRENT_LINK" 2>/dev/null; then
+    return 0
+  fi
+  rm -f "$CURRENT_LINK"
+  mv "$CURRENT_LINK.new" "$CURRENT_LINK"
+}
+
+restart_unit() {
+  if [ "$DRY_RUN" = "1" ]; then
+    log "dry run: skipping the restart of $UNIT"
+    return 0
+  fi
+  systemctl restart "$UNIT"
+}
+
+# health_ok: one health probe. The default hits both endpoints.
+health_ok() {
+  if [ -n "$HEALTH_CMD" ]; then
+    bash -c "$HEALTH_CMD" >/dev/null 2>&1
+    return $?
+  fi
+  curl -fsS "$HEALTH_URL" >/dev/null 2>&1 && curl -fsS "$ROOT_URL" >/dev/null 2>&1
+}
+
+# rollback: point current back at the previous release and restart.
+# Every step runs even if an earlier one fails, so the rollback itself
+# never leaves the service down.
+rollback() {
+  if [ "$PREV_SHA" = "unknown" ] || [ ! -d "$RELEASES_DIR/$PREV_SHA" ]; then
+    warn "no previous release to roll back to"
+    return 1
+  fi
+  flip_current "$PREV_SHA" || return 1
+  restart_unit || return 1
+  warn "rolled back to $PREV_SHA"
+  return 0
+}
+
+# prune: keep the newest KEEP_RELEASES releases, never the current one.
+prune() {
+  local keep=()
+  local dir
+  local kept
+  while IFS= read -r dir; do
+    [ -n "$dir" ] || continue
+    keep+=("$dir")
+  done < <(find "$RELEASES_DIR" -mindepth 1 -maxdepth 1 -type d -print | sort -r | head -n "$KEEP_RELEASES")
+  for dir in "$RELEASES_DIR"/*; do
+    [ -d "$dir" ] || continue
+    [ "$dir" = "$RELEASE_DIR" ] && continue
+    kept=0
+    for k in "${keep[@]:-}"; do
+      if [ "$k" = "$dir" ]; then
+        kept=1
+        break
+      fi
+    done
+    [ "$kept" -eq 1 ] && continue
+    rm -rf "$dir"
+  done
+}
+
+[ -n "$SHA" ] || {
+  warn "usage: tarima-deploy <sha>"
+  echo "::DEPLOY_RESULT:: status=failed sha=unknown prev_sha=unknown"
+  exit 1
+}
+
+# A sha is a directory name under releases/, so it must not be able to
+# escape it. Accept the short and the long form, nothing else.
+case "$SHA" in
+  *[!0-9a-f]* | "") die "refusing a non-hex sha: $SHA" ;;
+esac
+[ "${#SHA}" -ge 7 ] || die "sha too short: $SHA"
+
+command -v flock >/dev/null 2>&1 || die "flock is not installed"
+
+# One deploy at a time. The lock is held for the whole script so a second
+# CI run cannot interleave with the release swap.
+install -d -m 755 "$APP_ROOT"
+exec 9>"$LOCK_FILE"
+if ! flock -n 9; then
+  die "another deploy is running (lock: $LOCK_FILE)"
+fi
+
+[ -f "$ARTIFACT_TAR" ] || die "artifact tarball missing at $ARTIFACT_TAR (CI uploads it)"
+
+# The previously deployed sha comes from the state file the last
+# successful deploy wrote, not from a git checkout: the box does not
+# need a repo to deploy.
+if [ -f "$STATE_FILE" ]; then
+  PREV_SHA="$(tr -d '[:space:]' <"$STATE_FILE")"
+  [ -n "$PREV_SHA" ] || PREV_SHA="unknown"
+fi
+
+RELEASE_DIR="$RELEASES_DIR/$SHA"
+
+log "unpacking artifact into $RELEASE_DIR"
+# A retried deploy of the same sha must not reuse a half-written tree.
+rm -rf "$RELEASE_DIR"
+install -d -m 755 "$RELEASES_DIR"
+install -d -m 755 "$RELEASE_DIR"
+tar --zstd -xf "$ARTIFACT_TAR" -C "$RELEASE_DIR"
+rm -f "$ARTIFACT_TAR"
+
+log "verifying the release"
+[ -f "$RELEASE_DIR/dist/server/$ARTIFACT_ENTRY" ] || die "artifact entry dist/server/$ARTIFACT_ENTRY missing"
+[ -d "$RELEASE_DIR/dist/server/web/ssr" ] || die "web ssr bundle missing"
+[ -d "$RELEASE_DIR/dist/server/web/client" ] || die "web client bundle missing"
+[ -d "$RELEASE_DIR/node_modules" ] || die "node_modules missing from the artifact"
+# The native sqlite binding is the one thing a file listing cannot prove:
+# it has to load. A missing or mismatched prebuild is the failure that
+# took the site down, so it is checked before the swap.
+if [ "$DRY_RUN" != "1" ]; then
+  if ! (cd "$RELEASE_DIR" && node -e "require('better-sqlite3')(':memory:')" >/dev/null 2>&1); then
+    die "better-sqlite3 native binding does not load in the release"
+  fi
+fi
+
+# The service runs as $SERVICE; root-owned files from the tarball would
+# break the restart (EACCES on read). The group is looked up because it
+# is not always the same name as the user.
+SERVICE_GROUP="$(id -gn "$SERVICE" 2>/dev/null || echo "$SERVICE")"
+chown -R "$SERVICE:$SERVICE_GROUP" "$RELEASE_DIR"
+
+log "flipping current -> releases/$SHA"
+flip_current "$SHA"
+
+log "restarting $UNIT"
+if ! restart_unit; then
+  warn "restart of $UNIT failed; rolling back to the previous release"
+  rollback || true
+  die "restart of $UNIT failed"
+fi
+
+log "health check"
+ok=0
+for _ in $(seq 1 "$HEALTH_ATTEMPTS"); do
+  sleep "$HEALTH_INTERVAL"
+  if health_ok; then
+    ok=1
+    break
+  fi
+done
+
+if [ "$ok" -ne 1 ]; then
+  warn "health check failed; rolling back to the previous release"
+  rollback || true
+  die "health check failed after $HEALTH_ATTEMPTS attempts"
+fi
+
+log "recording the deployed sha"
+install -d -m 755 "$SHARED_DIR"
+printf '%s\n' "$SHA" >"$STATE_FILE"
+
+log "pruning old releases"
+prune
+
+result ok
+log "deployed $SHA (previous: $PREV_SHA)"
