@@ -9,7 +9,9 @@ User=web-services
 Group=web-services
 WorkingDirectory=/opt/tarima2
 EnvironmentFile=/opt/tarima2/shared/litestream.env
-ExecStart=/usr/local/bin/litestream replicate -config /opt/tarima2/app/deploy/litestream/litestream.yml
+# The config lives in shared, not in a release: releases are swapped on
+# every deploy and this unit must not depend on the running release.
+ExecStart=/usr/local/bin/litestream replicate -config /opt/tarima2/shared/litestream/litestream.yml
 Restart=on-failure
 RestartSec=5s
 MemoryMax=128M

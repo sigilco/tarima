@@ -2,9 +2,18 @@
 
 One Node process serves the API and the web app.
 
-- Artifact: `apps/api/dist/server/` (API bundle + web SSR and client builds).
-- Runtime: `tarima.service`, WorkingDirectory `/opt/tarima2/app`, env from
+- Artifact: a self-contained tree (API bundle + web SSR and client builds +
+  `node_modules`), built in CI by `pnpm deploy --prod --legacy` and packed
+  into `/tmp/tarima-artifact.tar.zst`.
+- Runtime: `tarima.service`, WorkingDirectory `/opt/tarima2/current`, env from
   `/opt/tarima2/shared/app.env`, port 3001 on loopback.
+- Layout on the box:
+  - `/opt/tarima2/releases/<sha>/{dist/server,node_modules,package.json}`
+  - `/opt/tarima2/current` -> `releases/<sha>` (the symlink the deploy flips)
+  - `/opt/tarima2/shared/deployed-sha` (the sha currently serving)
+- Host script: `/usr/local/sbin/tarima-deploy`, root-owned and outside the
+  repo checkout, so CI cannot edit the thing it sudo-runs. The sudoers
+  entry allows the `deploy` user to run exactly that one command.
 - TLS: Caddy (see `deploy/caddy/Caddyfile`) reverse proxies ports 80 and 443 to port 3001.
   - Active: `https://37.187.62.157` (public IP, internal TLS) and `https://100.105.198.36` (Tailscale IP, internal TLS).
   - Ready for Public CA: `tarima.events` and `tarima.illo.fyi` once DNS A records point to `37.187.62.157`.
@@ -28,18 +37,39 @@ The laptop infisical CLI renders the secrets (`render_secrets.py --phase base`) 
 
 ## Deploy steps
 
-On the laptop (the script builds, renders, uploads, restarts and health checks; run it manually, the repo never deploys by itself):
+Production deploys run from CI (`.github/workflows/deploy.yml`): the build
+job assembles the artifact, the deploy job ships it and runs the one
+sudoers-allowed command on the box:
 
-```bash
-mise exec -- pnpm build
-./deploy/deploy.sh
+```
+sudo /usr/local/sbin/tarima-deploy '<sha>'
 ```
 
-The script uses `VPS_HOST` (default `ovhcloud`) and prints each step. After
-it prints `deployed`, run the smoke test:
+The script prints exactly one `::DEPLOY_RESULT:: status=ok|failed sha=<sha>
+prev_sha=<sha>` line and exits non-zero when the release does not serve,
+after rolling back to the previous one.
+
+Host setup (once, from the laptop, as root on the VPS):
 
 ```bash
-scripts/smoke.sh https://37.187.62.157 tester@illo.fyi
+sudo ./deploy/scripts/install-host.sh
+```
+
+Local checks, before pushing:
+
+```bash
+mise run deploy:lint    # shellcheck the host scripts
+mise run deploy:test    # drive the script against a temp root
+mise run deploy:dry     # one dry run against a temp root
+```
+
+Secrets are rendered on the laptop (`render_secrets.py --phase base`) and
+uploaded to `/opt/tarima2/shared/` mode 0600 owned by
+`web-services:web-services`. `deploy/deploy.sh` still does the manual
+secret upload plus a smoke test:
+
+```bash
+scripts/smoke.sh https://tarima.illo.fyi tester@illo.fyi
 ```
 
 ## Real email (Brevo in, replies through Cloudflare)
@@ -121,14 +151,16 @@ lifecycle delete rule.
 
 ## One-command rollback
 
-`deploy/deploy.sh` snapshots the running artifact on the VPS before it
-uploads the new one, so the rollback is exactly one command over ssh:
+The deploy keeps the last five releases, and `current` is a symlink, so
+a rollback is a symlink flip plus a restart:
 
 ```bash
-ssh $VPS_HOST 'rm -rf /opt/tarima2/app/dist/server && cp -a /opt/tarima2/app/dist/server.previous /opt/tarima2/app/dist/server && sudo systemctl restart tarima.service'
+ssh $VPS_HOST 'sudo ln -sfn releases/<prev-sha> /opt/tarima2/current.new && sudo mv -T /opt/tarima2/current.new /opt/tarima2/current && sudo systemctl restart tarima.service'
 ```
 
-The snapshot lives at `/opt/tarima2/app/dist/server.previous`.
+The previous sha is the one in `/opt/tarima2/shared/deployed-sha`. The
+deploy script does this by itself when the health check fails, so a bad
+release never stays up.
 
 Database restores go through Litestream, not rsync: stop the services,
 then `litestream restore -o /opt/tarima2/shared/data/tarima.db s3://tarima-backups/litestream` and start them again.

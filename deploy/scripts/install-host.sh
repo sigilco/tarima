@@ -102,9 +102,30 @@ if [ -d "$APP_ROOT/app" ] && [ ! -L "$APP_ROOT/current" ]; then
   chmod 644 "$APP_ROOT/shared/deployed-sha"
 fi
 
+if [ -d "$APP_ROOT/app" ] && [ -L "$APP_ROOT/current" ]; then
+  # The migration already happened on an earlier run: the old tree is
+  # superseded by the release layout and only confuses the next
+  # migration, so it goes.
+  echo "  removing the superseded $APP_ROOT/app tree"
+  rm -rf "$APP_ROOT/app"
+fi
+
 echo "==> systemd unit"
 if [ -f "$REPO_DIR/deploy/systemd/tarima.service" ]; then
   install -m 644 "$REPO_DIR/deploy/systemd/tarima.service" /etc/systemd/system/tarima.service
+  systemctl daemon-reload
+fi
+
+echo "==> litestream config"
+# The config lives in shared, not in a release: releases are swapped on
+# every deploy and the litestream unit must not depend on the running
+# release.
+if [ -f "$REPO_DIR/deploy/litestream/litestream.yml" ]; then
+  install -d -m 755 -o "$SERVICE" -g "$SERVICE" "$APP_ROOT/shared/litestream"
+  install -m 644 -o "$SERVICE" -g "$SERVICE" \
+    "$REPO_DIR/deploy/litestream/litestream.yml" "$APP_ROOT/shared/litestream/litestream.yml"
+  install -m 644 "$REPO_DIR/deploy/litestream/tarima-litestream.service" \
+    /etc/systemd/system/tarima-litestream.service
   systemctl daemon-reload
 fi
 
