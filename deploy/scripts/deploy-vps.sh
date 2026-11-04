@@ -30,6 +30,7 @@ ARTIFACT_TAR="/tmp/tarima-artifact.tar.zst"
 
 REF="${1:?usage: deploy-vps.sh <ref>}"
 SERVICE="web-services"
+GIT_USER="${GIT_USER:-debian}"
 
 PREV_SHA="unknown"
 die() { echo "deploy-vps: $*" >&2; echo "::DEPLOY_RESULT:: status=failed sha=$REF prev_sha=$PREV_SHA"; exit 1; }
@@ -38,20 +39,21 @@ die() { echo "deploy-vps: $*" >&2; echo "::DEPLOY_RESULT:: status=failed sha=$RE
 [ -d "$REPO_DIR/.git" ] || die "checkout missing at $REPO_DIR (run install-host.sh first)"
 [ -f "$ARTIFACT_TAR" ] || die "artifact tarball missing at $ARTIFACT_TAR (CI uploads it)"
 
-PREV_SHA="$(git -C "$REPO_DIR" rev-parse --short HEAD 2>/dev/null || echo unknown)"
+PREV_SHA="$(sudo -u "$GIT_USER" git -C "$REPO_DIR" rev-parse --short HEAD 2>/dev/null || echo unknown)"
 
 echo "==> resolving $REF"
-# The checkout on the box may have no credentials (a public https clone of
-# a private repo fails on fetch). The artifact is already here, so a
-# failed fetch is not fatal: the ref must already be present locally.
-if ! git -C "$REPO_DIR" fetch origin --quiet; then
+# Git runs as GIT_USER (the human user whose credentials can fetch the
+# private repo), never as root: the checkout must stay un-elevated. The
+# artifact is already on the box, so a failed fetch is not fatal; the
+# ref must already be present locally.
+if ! sudo -u "$GIT_USER" git -C "$REPO_DIR" fetch origin --quiet; then
   echo "deploy-vps: fetch failed (no credentials on the box); using the local checkout" >&2
 fi
-SHA="$(git -C "$REPO_DIR" rev-parse --verify --quiet "$REF^{commit}")" \
+SHA="$(sudo -u "$GIT_USER" git -C "$REPO_DIR" rev-parse --verify --quiet "$REF^{commit}")" \
   || die "ref $REF not resolvable in $REPO_DIR"
 
 echo "==> checking out $SHA"
-git -C "$REPO_DIR" checkout --quiet --force "$SHA"
+sudo -u "$GIT_USER" git -C "$REPO_DIR" checkout --quiet --force "$SHA"
 
 echo "==> unpacking artifact"
 # Only dist/ comes from CI; env files, data and node_modules stay on the box.
