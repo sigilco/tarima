@@ -1,0 +1,167 @@
+# Deploy tarima to the VPS.
+#
+# Shape (mirrors brioso's deploy.yml):
+#
+#   build    builds the artifact on the runner and packs it
+#   deploy   joins the tailnet, ships the artifact over SSH, and runs
+#            exactly one sudoers-allowed script on the box:
+#            sudo /opt/tarima2/repo/deploy/scripts/deploy-vps.sh '<ref>'
+#
+# The sudoers entry is the trust boundary: CI cannot get a general shell
+# on the VPS. The script keeps the previous artifact, so a rollback is
+# one command on the box.
+#
+# Secrets (GitHub environment "production"):
+#   TS_OAUTH_CLIENT_ID   tailnet OAuth client, tagged tag:ci
+#   TS_OAUTH_SECRET      tailnet OAuth secret, tagged tag:ci
+#   VPS_TAILSCALE_HOST   MagicDNS name of the VPS (ovhcloud.tail876c20.ts.net)
+#   VPS_DEPLOY_SSH_KEY   ed25519 private key whose public half is in
+#                        /home/deploy/.ssh/authorized_keys on the box
+name: deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "ref to deploy (default: the pushed sha)"
+        required: false
+        type: string
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: build artifact
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.16.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      # The artifact is what the systemd unit execs. A build that did not
+      # produce it must stop here, not break the service on the VPS.
+      - name: verify the artifact
+        run: |
+          test -f apps/api/dist/server/index.mjs
+          test -d apps/api/dist/server/web/ssr
+          test -d apps/api/dist/server/web/client
+      - name: pack the artifact
+        run: |
+          tar --zstd -cf /tmp/tarima-artifact.tar.zst \
+            -C apps/api/dist server
+          echo "artifact: $(du -h /tmp/tarima-artifact.tar.zst | cut -f1)"
+
+  deploy:
+    name: deploy to production
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 15
+    steps:
+      - name: Start GitHub deployment record
+        id: deployment
+        uses: bobheadxi/deployments@648679e8e4915b27893bd7dbc35cb504dc915bc8 # v1.5.0
+        with:
+          step: start
+          env: production
+
+      - name: Connect to tailnet
+        uses: tailscale/github-action@d1b6cd204f8dceda5b3eaad7f1f767be390056cd # v4.2.0
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+          # New peer propagation is eventually consistent on the coord
+          # server, so ping until the VPS answers before the SSH.
+          ping: ${{ secrets.VPS_TAILSCALE_HOST }}
+
+      - name: Load deploy SSH key
+        uses: webfactory/ssh-agent@dc588b651fe13675774614f8e6a936a468676387 # v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_DEPLOY_SSH_KEY }}
+
+      - name: Ship the artifact
+        env:
+          TS_HOST: ${{ secrets.VPS_TAILSCALE_HOST }}
+          DEPLOY_REF: ${{ github.event.inputs.ref || github.sha }}
+        run: |
+          set -euo pipefail
+          ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 \
+            "deploy@${TS_HOST}" "cat > /tmp/tarima-artifact.tar.zst" \
+            < /tmp/tarima-artifact.tar.zst
+          ls -lh /tmp/tarima-artifact.tar.zst
+
+      - name: Deploy
+        id: deploy
+        env:
+          TS_HOST: ${{ secrets.VPS_TAILSCALE_HOST }}
+          DEPLOY_REF: ${{ github.event.inputs.ref || github.sha }}
+        shell: bash
+        run: |
+          # A remote non-zero exit must not fail this step: the result line
+          # is parsed below so the summary and the deployment record are
+          # always written, even on rollback or abort.
+          set +e
+          ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 \
+            "deploy@${TS_HOST}" \
+            "sudo /opt/tarima2/repo/deploy/scripts/deploy-vps.sh '${DEPLOY_REF}'" \
+            2>&1 | tee /tmp/deploy.log
+          rc=${PIPESTATUS[0]}
+          set -e
+
+          echo "exit_code=${rc}" >> "$GITHUB_OUTPUT"
+
+          result_line="$(grep '::DEPLOY_RESULT::' /tmp/deploy.log | tail -n1 || true)"
+          status="$(printf '%s' "$result_line" | sed -n 's/.*status=\([^ ]*\).*/\1/p')"
+          sha="$(printf '%s' "$result_line" | sed -n 's/.*sha=\([^ ]*\).*/\1/p')"
+          prev_sha="$(printf '%s' "$result_line" | sed -n 's/.*prev_sha=\([^ ]*\).*/\1/p')"
+          {
+            echo "status=${status:-unknown}"
+            echo "sha=${sha}"
+            echo "prev_sha=${prev_sha}"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Write step summary
+        if: always()
+        env:
+          STATUS: ${{ steps.deploy.outputs.status }}
+          SHA: ${{ steps.deploy.outputs.sha }}
+          PREV_SHA: ${{ steps.deploy.outputs.prev_sha }}
+        run: |
+          {
+            echo "### deploy"
+            echo
+            echo "- status: ${STATUS}"
+            echo "- sha: ${SHA}"
+            echo "- previous: ${PREV_SHA}"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Update deployment record
+        id: deployment_finish
+        if: always()
+        uses: bobheadxi/deployments@648679e8e4915b27893bd7dbc35cb504dc915bc8 # v1.5.0
+        with:
+          step: finish
+          status: ${{ steps.deploy.outputs.status == 'ok' && 'success' || 'failure' }}
+          environment: production
+          log_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+      - name: Fail when the deploy failed
+        if: steps.deploy.outputs.status != 'ok'
+        run: |
+          echo "deploy status: ${{ steps.deploy.outputs.status }}" >&2
+          exit 1
