@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { index, integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
+import { index, integer, real, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 
 // Timestamps are unix epoch milliseconds (integer). Ids are TEXT (uuid/nanoid)
 // except access_requests, which keeps its legacy autoincrement id.
@@ -376,3 +376,130 @@ export const roomShareLinks = sqliteTable(
 
 export type RoomShareLink = typeof roomShareLinks.$inferSelect;
 export type NewRoomShareLink = typeof roomShareLinks.$inferInsert;
+
+// ---------- Phase 2: deal tables (negotiation room) ----------
+
+/** Versioned requirements per project; current = max version. */
+export const dealSpecs = sqliteTable(
+  "deal_specs",
+  {
+    id: text("id").primaryKey(),
+    projectId: text("project_id")
+      .notNull()
+      .references(() => projects.id, { onDelete: "cascade" }),
+    version: integer("version").notNull(),
+    spec: text("spec", { mode: "json" })
+      .notNull()
+      .default(sql`'{}'`)
+      .$type<Record<string, unknown>>(),
+    changedBy: text("changed_by"),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+    updatedAt: integer("updated_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [
+    index("idx_deal_specs_project").on(t.projectId),
+    uniqueIndex("idx_deal_specs_project_version").on(t.projectId, t.version),
+  ],
+);
+
+export type DealSpec = typeof dealSpecs.$inferSelect;
+export type NewDealSpec = typeof dealSpecs.$inferInsert;
+
+/** Append-only proposal revisions per negotiation; never updated. */
+export const proposalVersions = sqliteTable(
+  "proposal_versions",
+  {
+    id: text("id").primaryKey(),
+    negotiationId: text("negotiation_id").notNull(),
+    revision: integer("revision").notNull(),
+    terms: text("terms", { mode: "json" })
+      .notNull()
+      .default(sql`'{}'`)
+      .$type<Record<string, unknown>>(),
+    audit: text("audit", { mode: "json" })
+      .notNull()
+      .default(sql`'{}'`)
+      .$type<Record<string, unknown>>(),
+    draftCounter: text("draft_counter"),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [
+    index("idx_proposal_versions_negotiation").on(t.negotiationId),
+    uniqueIndex("idx_proposal_versions_negotiation_rev").on(t.negotiationId, t.revision),
+  ],
+);
+
+export type ProposalVersion = typeof proposalVersions.$inferSelect;
+export type NewProposalVersion = typeof proposalVersions.$inferInsert;
+
+/** Human and vendor decisions on proposals. */
+export const dealDecisions = sqliteTable(
+  "deal_decisions",
+  {
+    id: text("id").primaryKey(),
+    negotiationId: text("negotiation_id").notNull(),
+    decision: text("decision")
+      .notNull()
+      .$type<"approve" | "reject" | "comment" | "vendor_accept">(),
+    by: text("by").notNull(),
+    text: text("text"),
+    at: integer("at").notNull().$defaultFn(nowMs),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [
+    index("idx_deal_decisions_negotiation").on(t.negotiationId),
+    index("idx_deal_decisions_at").on(t.at),
+  ],
+);
+
+export type DealDecision = typeof dealDecisions.$inferSelect;
+export type NewDealDecision = typeof dealDecisions.$inferInsert;
+
+/** Closed deals with winning negotiation and final terms. */
+export const deals = sqliteTable(
+  "deals",
+  {
+    id: text("id").primaryKey(),
+    projectId: text("project_id")
+      .notNull()
+      .references(() => projects.id, { onDelete: "cascade" }),
+    specVersion: integer("spec_version"),
+    winningNegotiationId: text("winning_negotiation_id").notNull(),
+    finalTerms: text("final_terms", { mode: "json" })
+      .notNull()
+      .default(sql`'{}'`)
+      .$type<Record<string, unknown>>(),
+    budgetDelta: real("budget_delta"),
+    closedAt: integer("closed_at"),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+    updatedAt: integer("updated_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [
+    index("idx_deals_project").on(t.projectId),
+    index("idx_deals_winning_negotiation").on(t.winningNegotiationId),
+  ],
+);
+
+export type Deal = typeof deals.$inferSelect;
+export type NewDeal = typeof deals.$inferInsert;
+
+/** Persisted comparison grid per project so the UI renders without recompute. */
+export const dealComparison = sqliteTable(
+  "deal_comparison",
+  {
+    id: text("id").primaryKey(),
+    projectId: text("project_id")
+      .notNull()
+      .references(() => projects.id, { onDelete: "cascade" }),
+    grid: text("grid", { mode: "json" })
+      .notNull()
+      .default(sql`'{}'`)
+      .$type<Record<string, unknown> | Array<Record<string, unknown>>>(),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+    updatedAt: integer("updated_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [index("idx_deal_comparison_project").on(t.projectId)],
+);
+
+export type DealComparison = typeof dealComparison.$inferSelect;
+export type NewDealComparison = typeof dealComparison.$inferInsert;

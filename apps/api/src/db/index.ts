@@ -48,6 +48,20 @@ const BOOTSTRAP_DDL = [
   "CREATE TABLE IF NOT EXISTS `room_share_links` ( `id` text PRIMARY KEY NOT NULL, `project_id` text NOT NULL, `room_id` text, `token` text NOT NULL, `created_by` text, `created_at` integer NOT NULL, `expires_at` integer, `revoked_at` integer, `view_count` integer DEFAULT 0 NOT NULL, `last_viewed_at` integer, FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON UPDATE no action ON DELETE cascade, FOREIGN KEY (`created_by`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE set null );",
   "CREATE UNIQUE INDEX IF NOT EXISTS `idx_room_share_links_token` ON `room_share_links` (`token`);",
   "CREATE INDEX IF NOT EXISTS `idx_room_share_links_project` ON `room_share_links` (`project_id`);",
+  "CREATE TABLE IF NOT EXISTS `deal_specs` ( `id` text PRIMARY KEY NOT NULL, `project_id` text NOT NULL, `version` integer NOT NULL, `spec` text DEFAULT '{}' NOT NULL, `changed_by` text, `created_at` integer NOT NULL, `updated_at` integer NOT NULL, FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON UPDATE no action ON DELETE cascade );",
+  "CREATE INDEX IF NOT EXISTS `idx_deal_specs_project` ON `deal_specs` (`project_id`);",
+  "CREATE UNIQUE INDEX IF NOT EXISTS `idx_deal_specs_project_version` ON `deal_specs` (`project_id`,`version`);",
+  "CREATE TABLE IF NOT EXISTS `proposal_versions` ( `id` text PRIMARY KEY NOT NULL, `negotiation_id` text NOT NULL, `revision` integer NOT NULL, `terms` text DEFAULT '{}' NOT NULL, `audit` text DEFAULT '{}' NOT NULL, `draft_counter` text, `created_at` integer NOT NULL );",
+  "CREATE INDEX IF NOT EXISTS `idx_proposal_versions_negotiation` ON `proposal_versions` (`negotiation_id`);",
+  "CREATE UNIQUE INDEX IF NOT EXISTS `idx_proposal_versions_negotiation_rev` ON `proposal_versions` (`negotiation_id`,`revision`);",
+  "CREATE TABLE IF NOT EXISTS `deal_decisions` ( `id` text PRIMARY KEY NOT NULL, `negotiation_id` text NOT NULL, `decision` text NOT NULL, `by` text NOT NULL, `text` text, `at` integer NOT NULL, `created_at` integer NOT NULL );",
+  "CREATE INDEX IF NOT EXISTS `idx_deal_decisions_negotiation` ON `deal_decisions` (`negotiation_id`);",
+  "CREATE INDEX IF NOT EXISTS `idx_deal_decisions_at` ON `deal_decisions` (`at`);",
+  "CREATE TABLE IF NOT EXISTS `deals` ( `id` text PRIMARY KEY NOT NULL, `project_id` text NOT NULL, `spec_version` integer, `winning_negotiation_id` text NOT NULL, `final_terms` text DEFAULT '{}' NOT NULL, `budget_delta` real, `closed_at` integer, `created_at` integer NOT NULL, `updated_at` integer NOT NULL, FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON UPDATE no action ON DELETE cascade );",
+  "CREATE INDEX IF NOT EXISTS `idx_deals_project` ON `deals` (`project_id`);",
+  "CREATE INDEX IF NOT EXISTS `idx_deals_winning_negotiation` ON `deals` (`winning_negotiation_id`);",
+  "CREATE TABLE IF NOT EXISTS `deal_comparison` ( `id` text PRIMARY KEY NOT NULL, `project_id` text NOT NULL, `grid` text DEFAULT '{}' NOT NULL, `created_at` integer NOT NULL, `updated_at` integer NOT NULL, FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON UPDATE no action ON DELETE cascade );",
+  "CREATE INDEX IF NOT EXISTS `idx_deal_comparison_project` ON `deal_comparison` (`project_id`);",
 ];
 
 for (const statement of BOOTSTRAP_DDL) {
