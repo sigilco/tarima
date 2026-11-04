@@ -23,12 +23,19 @@ on:
   push:
     branches:
       - main
+    # Set the repo variable DEPLOY_ENABLED=true (repo Settings, Actions,
+    # Variables) once the production secrets exist. Until then the
+    # workflow skips instead of going red on every push.
   workflow_dispatch:
     inputs:
       ref:
         description: "ref to deploy (default: the pushed sha)"
         required: false
         type: string
+
+permissions:
+  contents: read
+  deployments: write
 
 concurrency:
   group: deploy-production
@@ -39,6 +46,7 @@ jobs:
     name: build artifact
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    if: vars.DEPLOY_ENABLED == 'true' || github.event_name == 'workflow_dispatch'
     steps:
       - uses: actions/checkout@v4
 
