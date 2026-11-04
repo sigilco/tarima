@@ -5,7 +5,7 @@ import { RatingBar } from "./RatingBar";
 import { PhoneMockup } from "./PhoneMockup";
 import { PhoneChatDemo, type PhoneChatCopy } from "./PhoneChatDemo";
 import { ArrowRightIcon, ChevronRightIcon } from "./icons";
-import type { RefObject } from "react";
+import type { ReactNode, RefObject } from "react";
 
 export type PlayfulHeroRefs = {
   leftRef: RefObject<HTMLDivElement | null>;
@@ -36,11 +36,19 @@ type PlayfulHeroProps = {
   /** Primary CTA destination (platform entry). */
   ctaHref: string;
   /** Ghost CTA destination (reach out). */
-  ghostHref: string;
+  ghostHref?: string;
   onIslandClick?: () => void;
+  waitlistSlot?: ReactNode;
 };
 
-export function PlayfulHero({ refs, copy, ctaHref, ghostHref, onIslandClick }: PlayfulHeroProps) {
+export function PlayfulHero({
+  refs,
+  copy,
+  ctaHref,
+  ghostHref,
+  onIslandClick,
+  waitlistSlot,
+}: PlayfulHeroProps) {
   return (
     <div className="grid w-full max-w-7xl grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-8">
       {/* Left Column: Copy & Actions */}
@@ -73,23 +81,29 @@ export function PlayfulHero({ refs, copy, ctaHref, ghostHref, onIslandClick }: P
           {copy.subtitleAfter}
         </p>
 
-        {/* CTA Buttons */}
-        <div className="mt-8 flex flex-wrap items-center gap-5 sm:gap-6">
-          <a
-            href={ctaHref}
-            className="flex items-center gap-2 rounded-xl bg-[#FACC15] px-6 py-3.5 text-sm font-bold text-neutral-950 shadow-sm transition-all hover:bg-[#EAB308] hover:shadow-md active:scale-[0.98]"
-          >
-            <span>{copy.ctaLabel}</span>
-            <ArrowRightIcon className="h-4 w-4" />
-          </a>
+        {/* CTA Buttons & Waitlist */}
+        <div className="mt-8 flex w-full flex-col items-start gap-5">
+          <div className="flex flex-wrap items-center gap-5 sm:gap-6">
+            <a
+              href={ctaHref}
+              className="flex items-center gap-2 rounded-xl bg-[#FACC15] px-6 py-3.5 text-sm font-bold text-neutral-950 shadow-sm transition-all hover:bg-[#EAB308] hover:shadow-md active:scale-[0.98]"
+            >
+              <span>{copy.ctaLabel}</span>
+              <ArrowRightIcon className="h-4 w-4" />
+            </a>
 
-          <a
-            href={ghostHref}
-            className="group flex items-center gap-1.5 px-2 py-2 text-sm font-semibold text-neutral-800 transition-colors hover:text-black"
-          >
-            <span>{copy.ghostLabel}</span>
-            <ChevronRightIcon className="h-4 w-4 text-neutral-400 transition-transform group-hover:translate-x-0.5" />
-          </a>
+            {ghostHref && (
+              <a
+                href={ghostHref}
+                className="group flex items-center gap-1.5 px-2 py-2 text-sm font-semibold text-neutral-800 transition-colors hover:text-black"
+              >
+                <span>{copy.ghostLabel}</span>
+                <ChevronRightIcon className="h-4 w-4 text-neutral-400 transition-transform group-hover:translate-x-0.5" />
+              </a>
+            )}
+          </div>
+
+          {waitlistSlot}
         </div>
 
         {/* Trust Bar */}

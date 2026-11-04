@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import * as m from "../paraglide/messages.js";
 import { PlayfulHero, type PlayfulHeroCopy } from "../components/landing/playful/PlayfulHero";
+import { WaitlistForm } from "../components/landing/playful/WaitlistForm";
 import { MinimalFooter } from "../components/landing/playful/MinimalFooter";
 import { Toast } from "../components/landing/playful/Toast";
 import { useFitToViewport } from "../components/landing/playful/useFitToViewport";
@@ -101,6 +102,7 @@ function PlayfulLanding() {
           copy={HERO_COPY}
           ctaHref="/login"
           ghostHref={REACH_OUT_HREF}
+          waitlistSlot={<WaitlistForm />}
           onIslandClick={() => showToast(m["playful.toast.island"]())}
         />
       </main>
