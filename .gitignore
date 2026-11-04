@@ -15,3 +15,7 @@ apps/web/test-results
 apps/web/playwright-report
 coverage
 .wrangler
+
+# og-preview build inputs: the fonts are copied in from the installed
+# @fontsource package by scripts/og-preview/build-og-preview.sh.
+scripts/og-preview/*.woff2
