@@ -30,7 +30,7 @@ APP_ROOT="${APP_ROOT:-/opt/tarima2}"
 RELEASES_DIR="${RELEASES_DIR:-$APP_ROOT/releases}"
 SHARED_DIR="${SHARED_DIR:-$APP_ROOT/shared}"
 CURRENT_LINK="${CURRENT_LINK:-$APP_ROOT/current}"
-ARTIFACT_TAR="${ARTIFACT_TAR:-/tmp/tarima-artifact.tar.zst}"
+ARTIFACT_TAR="${ARTIFACT_TAR:-}"
 ARTIFACT_ENTRY="${ARTIFACT_ENTRY:-index.mjs}"
 UNIT="${UNIT:-tarima.service}"
 SERVICE="${SERVICE:-web-services}"
@@ -148,6 +148,11 @@ case "$SHA" in
   *[!0-9a-f]* | "") die "refusing a non-hex sha: $SHA" ;;
 esac
 [ "${#SHA}" -ge 7 ] || die "sha too short: $SHA"
+
+# The artifact is named after the sha it carries. A leftover file from
+# an earlier deploy therefore never collides with this one, and a
+# truncated upload cannot be mistaken for the current release.
+ARTIFACT_TAR="${ARTIFACT_TAR:-/tmp/tarima-artifact-$SHA.tar.zst}"
 
 command -v flock >/dev/null 2>&1 || die "flock is not installed"
 

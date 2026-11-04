@@ -205,10 +205,14 @@ jobs:
       - name: Ship the artifact
         env:
           SSH_HOST: ${{ steps.host.outputs.host }}
+          DEPLOY_SHA: ${{ steps.ref.outputs.sha }}
         run: |
           set -euo pipefail
+          # The remote path is named after the sha, so a leftover file
+          # from an earlier deploy can never collide with this upload.
+          remote="/tmp/tarima-artifact-${DEPLOY_SHA}.tar.zst"
           ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 \
-            "deploy@${SSH_HOST}" "cat > /tmp/tarima-artifact.tar.zst" \
+            "deploy@${SSH_HOST}" "rm -f '${remote}' && cat > '${remote}'" \
             < /tmp/tarima-artifact.tar.zst
           ls -lh /tmp/tarima-artifact.tar.zst
 
