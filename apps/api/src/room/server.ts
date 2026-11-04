@@ -61,7 +61,7 @@ export function resetRoomsForTest(): void {
 }
 
 /** Send a typed outgoing frame to a socket client. */
-export function sendFrame(client: ConnectedSocket, frame: RoomOutgoing): void {
+function sendFrame(client: ConnectedSocket, frame: RoomOutgoing): void {
   try {
     client.send(JSON.stringify(frame));
   } catch {
@@ -70,7 +70,7 @@ export function sendFrame(client: ConnectedSocket, frame: RoomOutgoing): void {
 }
 
 /** Broadcast a typed frame to all connected clients in a project room. */
-export function broadcastRoom(projectId: string, frame: RoomOutgoing): void {
+function broadcastRoom(projectId: string, frame: RoomOutgoing): void {
   const room = activeRooms.get(projectId);
   if (!room) return;
   const serialized = JSON.stringify(frame);
@@ -84,7 +84,7 @@ export function broadcastRoom(projectId: string, frame: RoomOutgoing): void {
 }
 
 /** Broadcast current room snapshot to all connected clients. */
-export function broadcastSnapshot(projectId: string): void {
+function broadcastSnapshot(projectId: string): void {
   const room = activeRooms.get(projectId);
   if (!room) return;
   const snapshotFrame = createSnapshotMessage(room.state);
