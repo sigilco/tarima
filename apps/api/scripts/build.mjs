@@ -44,6 +44,11 @@ await build({
     "@tarima/chase/handlers": join(apiRoot, "../../packages/chase/src/handlers.ts"),
     "@tarima/chase/llm": join(apiRoot, "../../packages/chase/src/llm.ts"),
     "@tarima/chase/register": join(apiRoot, "../../packages/chase/src/register.ts"),
+    // The room package (the negotiation state machine) is bundled the
+    // same way: without these aliases the artifact imports
+    // "@tarima/room/sfm" at runtime and the service crash-loops on boot.
+    "@tarima/room/sfm": join(apiRoot, "../../packages/room/src/sfm.ts"),
+    "@tarima/room/template": join(apiRoot, "../../packages/room/src/template.ts"),
     "@tarima/venuesearch/types": join(apiRoot, "../../packages/venuesearch/src/types.ts"),
     "@tarima/venuesearch/photon": join(apiRoot, "../../packages/venuesearch/src/photon.ts"),
     "@tarima/venuesearch/overpass": join(apiRoot, "../../packages/venuesearch/src/overpass.ts"),
