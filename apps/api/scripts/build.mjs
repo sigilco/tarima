@@ -1,7 +1,7 @@
 // Assemble the deployable artifact: the API server (bundled) plus the web
 // SSR + client builds, under apps/api/dist/server.
 import { build } from "esbuild";
-import { cpSync, mkdirSync } from "node:fs";
+import { cpSync, mkdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -34,6 +34,11 @@ await build({
     "@tarima/engine/runner": join(apiRoot, "../../packages/engine/src/runner.ts"),
     "@tarima/engine/store": join(apiRoot, "../../packages/engine/src/store.ts"),
     "@tarima/engine/db": join(apiRoot, "../../packages/engine/src/db.ts"),
+    // The journal tables moved into the engine (pnpm 12 dropped the
+    // apps/api -> packages/engine cycle). Without this alias the artifact
+    // imports "@tarima/engine/schema" at runtime, and the package is not
+    // installed on the VPS: the service crash-loops on boot.
+    "@tarima/engine/schema": join(apiRoot, "../../packages/engine/src/schema.ts"),
     "@tarima/chase/sfm": join(apiRoot, "../../packages/chase/src/sfm.ts"),
     "@tarima/chase/template": join(apiRoot, "../../packages/chase/src/template.ts"),
     "@tarima/chase/handlers": join(apiRoot, "../../packages/chase/src/handlers.ts"),
@@ -58,5 +63,20 @@ await build({
 mkdirSync(outDir, { recursive: true });
 cpSync(join(apiRoot, "../web/dist/ssr"), join(outDir, "web/ssr"), { recursive: true });
 cpSync(join(apiRoot, "../web/dist/client"), join(outDir, "web/client"), { recursive: true });
+
+// The artifact ships without node_modules: every "@tarima/*" import left in
+// the bundle is a runtime crash on the VPS (ERR_MODULE_NOT_FOUND on boot).
+// A workspace export added in source but missing from the alias map above
+// fails the build here instead of failing the service.
+const bundled = readFileSync(join(outDir, "index.mjs"), "utf8");
+const leaked = [...new Set(bundled.match(/from\s*"[^"]*@tarima\/[^"]*"/g) ?? [])];
+if (leaked.length > 0) {
+  console.error(
+    `build: the artifact still imports workspace packages at runtime:\n` +
+      leaked.map((x) => `  ${x}`).join("\n") +
+      `\nadd the missing alias to apps/api/scripts/build.mjs`,
+  );
+  process.exit(1);
+}
 
 console.log("artifact at apps/api/dist/server");

@@ -73,6 +73,9 @@ const WEB_CLIENT = join(here, "./web/client");
 app.use("/assets/*", serveStatic({ root: join(WEB_CLIENT) }));
 app.get("/mark.png", serveStatic({ path: join(WEB_CLIENT, "mark.png") }));
 app.get("/favicon.ico", serveStatic({ path: join(WEB_CLIENT, "favicon.ico") }));
+// The social preview card: crawlers fetch it from the page origin, so the
+// api (which serves the SSR site) has to serve it like mark.png.
+app.get("/og-preview.png", serveStatic({ path: join(WEB_CLIENT, "og-preview.png") }));
 
 // TanStack Start SSR for everything that is not /api/*.
 app.all("*", async (c) => {
