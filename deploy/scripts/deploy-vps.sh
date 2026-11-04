@@ -43,11 +43,20 @@ PREV_SHA="$(sudo -u "$GIT_USER" git -C "$REPO_DIR" rev-parse --short HEAD 2>/dev
 
 echo "==> resolving $REF"
 # Git runs as GIT_USER (the human user whose credentials can fetch the
-# private repo), never as root: the checkout must stay un-elevated. The
-# artifact is already on the box, so a failed fetch is not fatal; the
-# ref must already be present locally.
-if ! sudo -u "$GIT_USER" git -C "$REPO_DIR" fetch origin --quiet; then
-  echo "deploy-vps: fetch failed (no credentials on the box); using the local checkout" >&2
+# private repo), never as root: the checkout must stay un-elevated.
+# CI may push a sha the box has never seen, so the fetch is required
+# for a fresh ref, not optional. Retry once: the first attempt can race
+# with a concurrent deploy still updating the checkout.
+fetch_ok=0
+for _ in 1 2; do
+  if sudo -u "$GIT_USER" git -C "$REPO_DIR" fetch origin --quiet; then
+    fetch_ok=1
+    break
+  fi
+  sleep 2
+done
+if [ "$fetch_ok" -ne 1 ]; then
+  echo "deploy-vps: fetch failed; falling back to the local checkout" >&2
 fi
 SHA="$(sudo -u "$GIT_USER" git -C "$REPO_DIR" rev-parse --verify --quiet "$REF^{commit}")" \
   || die "ref $REF not resolvable in $REPO_DIR"
