@@ -36,14 +36,30 @@ TAR_FLAGS: list[str] = ["--zstd"]
 
 
 def _detect_tar() -> None:
-    """Prefer `tar --zstd`; fall back to plain tar when unsupported."""
-    probe = subprocess.run(
-        ["tar", "--zstd", "-cf", "-", "-C", tempfile.gettempdir(), "."],
+    """Prefer `tar --zstd`; fall back to plain tar when unsupported.
+
+    The probe must round-trip real bytes. Some CI images ship a GNU tar
+    that accepts the --zstd flag but has no zstd decompressor on PATH:
+    the create succeeds only in appearance or the unpack rejects the
+    stream, so a flag-only probe (tar --zstd -tf) passes where unpacking
+    fails. Round-tripping is the only honest check.
+    """
+    probe_dir = tempfile.mkdtemp(prefix="tarima-tar-probe-")
+    (Path(probe_dir) / "probe.txt").write_text("probe\n")
+    create = subprocess.run(
+        ["tar", "--zstd", "-cf", "-", "-C", probe_dir, "probe.txt"],
         capture_output=True,
         timeout=30,
     )
-    if probe.returncode != 0:
+    unpack = subprocess.run(
+        ["tar", "--zstd", "-xf", "-", "-C", probe_dir],
+        input=create.stdout,
+        capture_output=True,
+        timeout=30,
+    )
+    if create.returncode != 0 or unpack.returncode != 0:
         TAR_FLAGS.clear()
+    shutil.rmtree(probe_dir, ignore_errors=True)
 
 
 _detect_tar()
