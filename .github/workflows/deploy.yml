@@ -151,14 +151,13 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Update deployment record
-        id: deployment_finish
         if: always()
         uses: bobheadxi/deployments@648679e8e4915b27893bd7dbc35cb504dc915bc8 # v1.5.0
         with:
           step: finish
+          env: production
           status: ${{ steps.deploy.outputs.status == 'ok' && 'success' || 'failure' }}
-          environment: production
-          log_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
 
       - name: Fail when the deploy failed
         if: steps.deploy.outputs.status != 'ok'
