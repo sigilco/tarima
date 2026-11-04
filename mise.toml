@@ -25,3 +25,39 @@ run = "pnpm --filter web build"
 [tasks."build:api"]
 description = "Build only the api artifact; output lands in apps/api/dist/server"
 run = "pnpm --filter @tarima/api build"
+
+[tasks."deploy:lint"]
+description = "Shellcheck the host-side deploy scripts"
+run = "shellcheck deploy/scripts/tarima-deploy deploy/scripts/install-host.sh deploy/tests/tarima-deploy.test.sh"
+
+[tasks."deploy:test"]
+description = "Run the host-side deploy script tests against a temp root"
+run = "bash deploy/tests/tarima-deploy.test.sh"
+
+[tasks."deploy:dry"]
+description = "Dry-run the host-side deploy script against a temp root with a synthetic artifact"
+run = """
+set -euo pipefail
+root="$(mktemp -d)"
+trap 'rm -rf "$root"' EXIT
+mkdir -p "$root/pkg/dist/server/web/ssr" "$root/pkg/dist/server/web/client" "$root/pkg/node_modules"
+echo "export const ok = 1;" > "$root/pkg/dist/server/index.mjs"
+echo "ssr" > "$root/pkg/dist/server/web/ssr/server.js"
+echo "client" > "$root/pkg/dist/server/web/client/index.html"
+echo '{"name":"@tarima/api"}' > "$root/pkg/package.json"
+tar --zstd -cf "$root/artifact.tar.zst" -C "$root/pkg" .
+APP_ROOT="$root/app_root" \
+SHARED_DIR="$root/shared" \
+RELEASES_DIR="$root/releases" \
+CURRENT_LINK="$root/app_root/current" \
+STATE_FILE="$root/shared/deployed-sha" \
+LOCK_FILE="$root/app_root/.tarima-deploy.lock" \
+ARTIFACT_TAR="$root/artifact.tar.zst" \
+UNIT=tarima.service \
+SERVICE="$(id -un)" \
+HEALTH_CMD=true \
+HEALTH_ATTEMPTS=1 \
+HEALTH_INTERVAL=0 \
+DRY_RUN=1 \
+  bash deploy/scripts/tarima-deploy "$(git rev-parse --short HEAD)"
+"""

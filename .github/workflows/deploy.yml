@@ -5,11 +5,12 @@
 #   build    builds the artifact on the runner and packs it
 #   deploy   joins the tailnet, ships the artifact over SSH, and runs
 #            exactly one sudoers-allowed script on the box:
-#            sudo /opt/tarima2/repo/deploy/scripts/deploy-vps.sh '<ref>'
+#            sudo /usr/local/sbin/tarima-deploy '<sha>'
 #
 # The sudoers entry is the trust boundary: CI cannot get a general shell
-# on the VPS. The script keeps the previous artifact, so a rollback is
-# one command on the box.
+# on the VPS. The script is root-owned and lives outside the repo
+# checkout, so CI cannot edit the thing it sudo-runs. It keeps the
+# previous release, so a rollback is one symlink flip on the box.
 #
 # Secrets (GitHub environment "production"):
 #   TS_OAUTH_CLIENT_ID   tailnet OAuth client, tagged tag:ci
@@ -67,12 +68,52 @@ jobs:
           test -f apps/api/dist/server/index.mjs
           test -d apps/api/dist/server/web/ssr
           test -d apps/api/dist/server/web/client
+      # The bundle keeps third-party packages external (the native sqlite
+      # binding is real), so the runtime node_modules ship WITH the
+      # artifact: pnpm deploy produces a self-contained, catalog-resolved
+      # tree that installs on the box with no network and no workspace.
+      # A runtime dependency added in source is therefore present by
+      # construction; a missing dep can never crash-loop the service.
+      - name: assemble the deployable package
+        run: |
+          pnpm deploy /tmp/tarima-pkg --filter @tarima/api --prod --legacy
+          test -f /tmp/tarima-pkg/package.json
+          test -d /tmp/tarima-pkg/node_modules
+          node -e "require('/tmp/tarima-pkg/node_modules/better-sqlite3')(':memory:')" \
+            && echo "native binding ok"
+      # Boot smoke: import the real bundle against the shipped
+      # node_modules. A dependency the bundle needs but the prod install
+      # does not carry (bcryptjs was a devDependency used at runtime)
+      # fails here, on the runner, instead of crash-looping the service.
+      - name: boot smoke the artifact
+        run: |
+          node --input-type=module -e "
+            process.env.DATABASE_URL = ':memory:';
+            process.env.SESSION_SECRET = 'smoke';
+            try {
+              await import('file:///tmp/tarima-pkg/dist/server/index.mjs');
+              console.log('boot smoke: module graph ok');
+            } catch (e) {
+              if (String(e.cause ?? e).includes('ERR_MODULE_NOT_FOUND') || String(e).includes('Cannot find package')) {
+                console.error('boot smoke FAILED: missing runtime dependency');
+                console.error(String(e).split('\n').slice(0, 4).join('\n'));
+                process.exit(1);
+              }
+              console.log('boot smoke: module graph ok (runtime refused to start on env, as expected)');
+            }
+          "
       # Jobs run on different runners: the tarball crosses via an
       # upload-artifact / download-artifact pair, not /tmp.
       - name: pack and upload the artifact
         run: |
-          tar --zstd -cf /tmp/tarima-artifact.tar.zst \
-            -C apps/api/dist server
+          # Layout on the box after unpack (paths relative to the release dir):
+          #   package.json  node_modules/  dist/server/{index.mjs,web}
+          cp apps/api/package.json /tmp/tarima-pkg/package.json
+          cp -a apps/api/dist/server /tmp/tarima-pkg/dist/server
+          # The checkout is needed on the box only for drizzle configs;
+          # keep it out of the tarball.
+          rm -rf /tmp/tarima-pkg/drizzle /tmp/tarima-pkg/src /tmp/tarima-pkg/scripts /tmp/tarima-pkg/tarima.db*
+          tar --zstd -cf /tmp/tarima-artifact.tar.zst -C /tmp/tarima-pkg .
           echo "artifact: $(du -h /tmp/tarima-artifact.tar.zst | cut -f1)"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
@@ -88,6 +129,13 @@ jobs:
     environment: production
     timeout-minutes: 15
     steps:
+      # The checkout is needed only to resolve the ref into a full sha
+      # (the box no longer runs git). The full history is fetched so a
+      # workflow_dispatch ref that is not the pushed sha resolves too.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Start GitHub deployment record
         id: deployment
         uses: bobheadxi/deployments@648679e8e4915b27893bd7dbc35cb504dc915bc8 # v1.5.0
@@ -138,10 +186,22 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.VPS_DEPLOY_SSH_KEY }}
 
+      - name: Resolve the deployed sha
+        id: ref
+        env:
+          DEPLOY_REF: ${{ github.event.inputs.ref || github.sha }}
+        run: |
+          set -euo pipefail
+          # The box does not resolve refs: CI sends the full commit sha it
+          # built, so the release directory is named after the exact tree
+          # that is running.
+          sha="$(git rev-parse --verify "${DEPLOY_REF}^{commit}")"
+          echo "sha=${sha}" >> "$GITHUB_OUTPUT"
+          echo "deploying ${sha}"
+
       - name: Ship the artifact
         env:
           SSH_HOST: ${{ steps.host.outputs.host }}
-          DEPLOY_REF: ${{ github.event.inputs.ref || github.sha }}
         run: |
           set -euo pipefail
           ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 \
@@ -153,7 +213,7 @@ jobs:
         id: deploy
         env:
           SSH_HOST: ${{ steps.host.outputs.host }}
-          DEPLOY_REF: ${{ github.event.inputs.ref || github.sha }}
+          DEPLOY_SHA: ${{ steps.ref.outputs.sha }}
         shell: bash
         run: |
           # A remote non-zero exit must not fail this step: the result line
@@ -162,7 +222,7 @@ jobs:
           set +e
           ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 \
             "deploy@${SSH_HOST}" \
-            "sudo /opt/tarima2/repo/deploy/scripts/deploy-vps.sh '${DEPLOY_REF}'" \
+            "sudo /usr/local/sbin/tarima-deploy '${DEPLOY_SHA}'" \
             2>&1 | tee /tmp/deploy.log
           rc=${PIPESTATUS[0]}
           set -e
