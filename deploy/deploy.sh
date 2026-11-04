@@ -1,85 +1,61 @@
 #!/usr/bin/env bash
-# Deploy tarima to the VPS: build, rsync the artifact, render secrets from
-# Infisical, push the schema and restart the service.
+# Render the secrets and run the smoke test against production.
 #
-# First-time requirements (run once as root on the VPS, before the first
-# deploy):
-#   useradd -r -m -d /opt/tarima2 web-services   (or your chosen service user)
-#   mkdir -p /opt/tarima2/shared/{data,folders} && chown -R web-services: /opt/tarima2/shared
-#   install -m 644 deploy/systemd/tarima.service /etc/systemd/system/
-#   install -m 644 deploy/litestream/tarima-litestream.service /etc/systemd/system/
-#   install -m 644 deploy/caddy/Caddyfile /etc/caddy/Caddyfile
-#   install -m 644 deploy/litestream/litestream.yml /opt/tarima2/app/deploy/litestream/
-#   systemctl daemon-reload && systemctl enable --now tarima
-# Secrets render on laptop (or via Infisical machine-identity on VPS).
+# The code deploy itself runs from CI (see .github/workflows/deploy.yml):
+# the build job assembles the artifact and the deploy job runs the one
+# sudoers-allowed command on the box. This script covers what CI does
+# not: the secret render and the post-deploy check.
+#
+# First-time requirements (run once as root on the VPS):
+#   sudo ./deploy/scripts/install-host.sh
+# That installs the deploy user, the sudoers boundary, the release
+# layout, the units and the Caddy config.
 #
 # Environment:
 #   VPS_HOST      the ssh alias of the VPS (default ovhcloud)
 #   SMOKE_EMAIL   an allowlisted tester address; when set, the smoke test
-#                 runs against the public origin after the switch
+#                 runs against the public origin
 #   SMOKE_API_KEY an optional bearer key with the projects:write scope
 #   SMOKE_SKIP    set to 1 to not run the smoke test
 set -euo pipefail
 
 VPS_HOST="${VPS_HOST:-ovhcloud}"
-VPS_APP_DIR="${VPS_APP_DIR:-/opt/tarima2/app}"
 VPS_SHARED_DIR="${VPS_SHARED_DIR:-/opt/tarima2/shared}"
-ARTIFACT="apps/api/dist/server"
-ARTIFACT_ENTRY="index.mjs"
 UNIT="tarima.service"
 PUBLIC_BASE_URL="${PUBLIC_BASE_URL:-https://tarima.illo.fyi}"
 INFISICAL_PROJECT_ID="${INFISICAL_PROJECT_ID:-76492067-b7c2-4a47-9b2d-f87ef68b1a8e}"
 
 cd "$(dirname "$0")/.."
 
-echo "==> building"
-pnpm build
-
-echo "==> verifying the build output"
-# The artifact is what the systemd unit execs (node dist/server/index.mjs
-# from /opt/tarima2/app), so a build that did not produce it must stop the
-# deploy here, not break the service on the VPS.
-if [ ! -f "$ARTIFACT/$ARTIFACT_ENTRY" ]; then
-  echo "deploy: the artifact entry $ARTIFACT/$ARTIFACT_ENTRY is missing after pnpm build" >&2
-  exit 1
-fi
-if [ -z "$(ls "$ARTIFACT/web/ssr" 2>/dev/null)" ] || [ -z "$(ls "$ARTIFACT/web/client" 2>/dev/null)" ]; then
-  echo "deploy: the web bundle under $ARTIFACT/web is missing" >&2
-  exit 1
-fi
-echo "ok   $ARTIFACT/$ARTIFACT_ENTRY and the web bundle are present"
-
 echo "==> rendering secrets from Infisical"
 tmpdir="$(mktemp -d)"
 trap 'rm -rf "$tmpdir"' EXIT
 INFISICAL_PROJECT_ID="$INFISICAL_PROJECT_ID" python3 deploy/scripts/render_secrets.py --out "$tmpdir" --phase base
 
-echo "==> uploading artifact"
-# Keep the previous artifact on the VPS: the one-command rollback in
-# deploy/README.md rsyncs dist/server.previous back into place.
-ssh "$VPS_HOST" "rm -rf $VPS_APP_DIR/dist/server.previous && [ -d $VPS_APP_DIR/dist/server ] && cp -a $VPS_APP_DIR/dist/server $VPS_APP_DIR/dist/server.previous || true"
-rsync -az --delete "$ARTIFACT/" "$VPS_HOST:$VPS_APP_DIR/dist/server/"
+echo "==> uploading the secrets"
 rsync -az "$tmpdir/app.env" "$VPS_HOST:/tmp/app.env.new"
 rsync -az "$tmpdir/litestream.env" "$VPS_HOST:/tmp/litestream.env.new"
 
-echo "==> activating on the VPS"
-ssh "$VPS_HOST" "set -eu
-  sudo install -m 600 -o web-services -g web-services \\
-    /tmp/app.env.new $VPS_SHARED_DIR/app.env
-  sudo install -m 600 -o web-services -g web-services \\
-    /tmp/litestream.env.new $VPS_SHARED_DIR/litestream.env
-  rm -f /tmp/app.env.new /tmp/litestream.env.new
-  cd $VPS_APP_DIR
-  # drizzle push is idempotent; add generated migrations here once Stage 2 lands.
-  sudo -u web-services env DATABASE_URL=$VPS_SHARED_DIR/data/tarima.db \\
-    node_modules/.bin/drizzle-kit push || echo 'drizzle push skipped (no migrations yet)'
-  sudo systemctl restart $UNIT
-  if [ -f $VPS_SHARED_DIR/litestream.env ] && ! sudo grep -q 'unconfigured' $VPS_SHARED_DIR/litestream.env; then
-    sudo systemctl restart tarima-litestream.service || true
-  fi
-  sleep 2
-  curl -fsS http://127.0.0.1:3001/api/health
-"
+# The remote script takes the paths as arguments, so nothing is expanded
+# on the client side inside the command string.
+ssh "$VPS_HOST" bash -s -- "$VPS_SHARED_DIR" "$UNIT" <<'REMOTE'
+set -eu
+shared_dir="$1"
+unit="$2"
+sudo install -m 600 -o web-services -g web-services \
+  /tmp/app.env.new "$shared_dir/app.env"
+sudo install -m 600 -o web-services -g web-services \
+  /tmp/litestream.env.new "$shared_dir/litestream.env"
+rm -f /tmp/app.env.new /tmp/litestream.env.new
+# The service reads app.env at start, so a secret change needs a
+# restart. The code itself is not touched.
+sudo systemctl restart "$unit"
+if [ -f "$shared_dir/litestream.env" ] && ! sudo grep -q 'unconfigured' "$shared_dir/litestream.env"; then
+  sudo systemctl restart tarima-litestream.service || true
+fi
+sleep 2
+curl -fsS http://127.0.0.1:3001/api/health
+REMOTE
 
 echo "==> deployed"
 

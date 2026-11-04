@@ -25,7 +25,7 @@ Secrets: `secrets-manifest.toml` + `scripts/render_secrets.py` render
 fail-hard on missing keys. Validate with
 `python3 deploy/scripts/validate_secrets_manifest.py`.
 
-The laptop infisical CLI renders the secrets (`render_secrets.py --phase base`) and `deploy.sh` uploads them to `/opt/tarima2/shared/` mode 0600 owned by `web-services:web-services`.
+The laptop infisical CLI renders the secrets (`render_secrets.py --phase base`) and `deploy.sh` uploads them to `/opt/tarima2/shared/` mode 0600 owned by `web-services:web-services`. The code itself is deployed by CI, not by this script.
 
 ## Active Endpoints and Ports
 
@@ -165,7 +165,7 @@ release never stays up.
 Database restores go through Litestream, not rsync: stop the services,
 then `litestream restore -o /opt/tarima2/shared/data/tarima.db s3://tarima-backups/litestream` and start them again.
 
-## Operator checklist (human, after deploy.sh is green)
+## Operator checklist (human, after a deploy is green)
 
 - [x] Infisical folders exist: `/email`, `/ai`, `/infra/litestream`, `/beta`, `/webhooks`, `/channels`.
 - [x] `BETA_ALLOWLIST` and `SESSION_SECRET` generated and configured.
