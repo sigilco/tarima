@@ -91,7 +91,9 @@ http_status() {
   if [ -n "$extra_header" ]; then
     args+=(-H "$extra_header")
   fi
-  curl --max-time 20 --silent "${args[@]}"
+  # -k: the deploy may be exercised against an IP whose certificate is
+  # self-signed (the Caddy internal CA before the DNS cutover).
+  curl --max-time 20 --silent -k "${args[@]}"
 }
 
 # The body of a request.
@@ -104,7 +106,7 @@ http_body() {
   if [ -n "$extra_header" ]; then
     args+=(-H "$extra_header")
   fi
-  curl --max-time 20 --silent "${args[@]}"
+  curl --max-time 20 --silent -k "${args[@]}"
 }
 
 # True when the address is on a loopback domain, where the api captures
@@ -200,7 +202,9 @@ else
   # One request does both jobs: the code is single use, so the status and
   # the session cookie have to come from the same call.
   headers_file="$workdir/verify.headers"
-  curl --max-time 20 --silent -D "$headers_file" -o "$workdir/verify.out" \
+  # -k: the deploy may be exercised against an IP whose certificate is
+  # self-signed (the Caddy internal CA before the DNS cutover).
+  curl --max-time 20 --silent -k -D "$headers_file" -o "$workdir/verify.out" \
     -X POST -H 'content-type: application/json' \
     -d "{\"email\":\"${EMAIL}\",\"code\":\"${OTP}\"}" \
     "${BASE_URL}/auth/verify-otp"
