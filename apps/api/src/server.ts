@@ -4,6 +4,7 @@
  * this handler only renders the app shell).
  */
 import { serve } from "@hono/node-server";
+import { WebSocketServer } from "ws";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Hono } from "hono";
@@ -95,7 +96,9 @@ startEngine();
 // the public, keyless ones (Photon discovery, Overpass enrichment).
 setVenueSearchDeps(defaultProviders());
 
-serve({ fetch: app.fetch, port, hostname: "127.0.0.1" }, (info) => {
+const wss = new WebSocketServer({ noServer: true });
+
+serve({ fetch: app.fetch, port, hostname: "127.0.0.1", websocket: { server: wss } }, (info) => {
   console.log(`tarima listening on :${info.port}`);
 });
 

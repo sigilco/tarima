@@ -28,6 +28,7 @@
     "@tarima/engine": "workspace:*",
     "@tarima/llm": "workspace:*",
     "@tarima/obs": "workspace:*",
+    "@tarima/room": "workspace:*",
     "@tarima/telegram": "workspace:*",
     "@tarima/venuesearch": "workspace:*",
     "better-sqlite3": "^13.0.3",
@@ -39,12 +40,14 @@
     "postal-mime": "catalog:",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "valibot": "catalog:"
+    "valibot": "catalog:",
+    "ws": "^8.22.1"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^9.6.0",
     "@types/node": "catalog:",
     "@types/papaparse": "^5.5.2",
+    "@types/ws": "^8.18.2",
     "bcryptjs": "^3.0.2",
     "drizzle-kit": "^0.31.11",
     "esbuild": "^0.28.2",
