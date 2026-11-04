@@ -4,9 +4,10 @@
 #   sudo ./deploy/scripts/install-host.sh
 #
 # Installs: the `deploy` user with a locked password (SSH-key only), the
-# root-owned host deploy script at /usr/local/sbin/tarima-deploy, a
-# sudoers entry allowing exactly that one command, and the release
-# directory layout the script expects.
+# root-owned host deploy script at /usr/local/sbin/tarima-deploy (the
+# Python runner, installed without the .py suffix), a sudoers entry
+# allowing exactly that one command, and the release directory layout
+# the script expects.
 #
 # The trust boundary is the sudoers entry plus the ownership of the
 # script: CI runs a file it cannot edit. The script used to live inside
@@ -21,7 +22,7 @@ REPO_URL="${REPO_URL:-git@github.com:sigilco/tarima.git}"
 DEPLOY_KEY="${DEPLOY_KEY:-}"   # optional: an ed25519 public key one-liner
 APP_ROOT="${APP_ROOT:-/opt/tarima2}"
 DEPLOY_SCRIPT="${DEPLOY_SCRIPT:-/usr/local/sbin/tarima-deploy}"
-SCRIPT_SOURCE="${SCRIPT_SOURCE:-$(cd "$(dirname "$0")" && pwd)/tarima-deploy}"
+SCRIPT_SOURCE="${SCRIPT_SOURCE:-$(cd "$(dirname "$0")" && pwd)/tarima-deploy.py}"
 SERVICE="${SERVICE:-web-services}"
 
 die() { echo "install-host: $*" >&2; exit 1; }
@@ -45,7 +46,8 @@ fi
 echo "==> installing the host deploy script"
 [ -f "$SCRIPT_SOURCE" ] || die "the deploy script is missing at $SCRIPT_SOURCE"
 # Root-owned, mode 755: the deploy user runs it through sudo, so it
-# must be executable but not writable by anyone but root.
+# must be executable but not writable by anyone but root. The .py suffix
+# is dropped on the host; the shebang picks the interpreter.
 install -m 755 -o root -g root "$SCRIPT_SOURCE" "$DEPLOY_SCRIPT"
 
 echo "==> sudoers boundary"

@@ -19,6 +19,10 @@ One Node process serves the API and the web app.
   - Ready for Public CA: `tarima.events` and `tarima.illo.fyi` once DNS A records point to `37.187.62.157`.
 - Backups: `tarima-litestream.service` replicates the SQLite WAL to R2 (pending R2 credentials).
 
+## Deploy runner
+
+`/usr/local/sbin/tarima-deploy` is a plain Python 3 runner (`deploy/scripts/tarima-deploy.py` in the repo, stdlib only, no pip deps). Host requirements are deliberately minimal: `python3 >= 3.11`, `tar` (with zstd for unpacking), and `systemctl`. Nothing else. The box has no node runtime: CI already checks that the `better-sqlite3` native binding loads before the artifact ships, so the runner only verifies the layout it can prove from the file listing. The health check uses `urllib` against `/api/health` and `/` unless `HEALTH_CMD` overrides it. The `current` symlink flip is a single atomic `os.rename` over the old link, and the lock is an `fcntl.flock` on `APP_ROOT/.tarima-deploy.lock`, so one deploy at a time without any extra binaries.
+
 Secrets: `secrets-manifest.toml` + `scripts/render_secrets.py` render
 `app.env` (Infisical folders `email/`, `ai/`, `beta/`, `webhooks/` and
 `channels/`) and `litestream.env` (`infra/litestream/`), mode 0600,
@@ -49,6 +53,12 @@ The script prints exactly one `::DEPLOY_RESULT:: status=ok|failed sha=<sha>
 prev_sha=<sha>` line and exits non-zero when the release does not serve,
 after rolling back to the previous one.
 
+Tests run with stdlib unittest only:
+
+```bash
+python3 -m unittest discover deploy/tests
+```
+
 Host setup (once, from the laptop, as root on the VPS):
 
 ```bash
@@ -58,8 +68,8 @@ sudo ./deploy/scripts/install-host.sh
 Local checks, before pushing:
 
 ```bash
-mise run deploy:lint    # shellcheck the host scripts
-mise run deploy:test    # drive the script against a temp root
+mise run deploy:lint    # mypy --strict the Python deploy runner
+mise run deploy:test    # unittest the runner against a temp root
 mise run deploy:dry     # one dry run against a temp root
 ```
 

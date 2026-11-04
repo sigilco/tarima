@@ -27,12 +27,16 @@ description = "Build only the api artifact; output lands in apps/api/dist/server
 run = "pnpm --filter @tarima/api build"
 
 [tasks."deploy:lint"]
-description = "Shellcheck the host-side deploy scripts"
-run = "shellcheck deploy/scripts/tarima-deploy deploy/scripts/install-host.sh deploy/tests/tarima-deploy.test.sh"
+description = "mypy --strict the Python deploy runner + shellcheck install-host.sh"
+run = """
+set -euo pipefail
+python3 -m mypy --strict deploy/scripts/tarima-deploy.py deploy/tests/test_tarima_deploy.py
+shellcheck deploy/scripts/install-host.sh
+"""
 
 [tasks."deploy:test"]
 description = "Run the host-side deploy script tests against a temp root"
-run = "bash deploy/tests/tarima-deploy.test.sh"
+run = "python3 -m unittest discover deploy/tests"
 
 [tasks."deploy:dry"]
 description = "Dry-run the host-side deploy script against a temp root with a synthetic artifact"
@@ -59,5 +63,5 @@ HEALTH_CMD=true \
 HEALTH_ATTEMPTS=1 \
 HEALTH_INTERVAL=0 \
 DRY_RUN=1 \
-  bash deploy/scripts/tarima-deploy "$(git rev-parse --short HEAD)"
+  python3 deploy/scripts/tarima-deploy.py "$(git rev-parse --short HEAD)"
 """
