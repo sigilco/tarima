@@ -41,7 +41,12 @@ die() { echo "deploy-vps: $*" >&2; echo "::DEPLOY_RESULT:: status=failed sha=$RE
 PREV_SHA="$(git -C "$REPO_DIR" rev-parse --short HEAD 2>/dev/null || echo unknown)"
 
 echo "==> resolving $REF"
-git -C "$REPO_DIR" fetch origin --quiet
+# The checkout on the box may have no credentials (a public https clone of
+# a private repo fails on fetch). The artifact is already here, so a
+# failed fetch is not fatal: the ref must already be present locally.
+if ! git -C "$REPO_DIR" fetch origin --quiet; then
+  echo "deploy-vps: fetch failed (no credentials on the box); using the local checkout" >&2
+fi
 SHA="$(git -C "$REPO_DIR" rev-parse --verify --quiet "$REF^{commit}")" \
   || die "ref $REF not resolvable in $REPO_DIR"
 
@@ -57,16 +62,17 @@ fi
 mkdir -p "$VPS_APP_DIR/dist"
 tar --zstd -xf "$ARTIFACT_TAR" -C "$VPS_APP_DIR/dist"
 rm -f "$ARTIFACT_TAR"
+# The service runs as $SERVICE; root-owned files from the tarball would
+# break the restart (EACCES on read). Preserve the previous owner.
+chown -R "$SERVICE:$SERVICE" "$VPS_APP_DIR/dist"
 [ -f "$VPS_APP_DIR/dist/server/$ARTIFACT_ENTRY" ] || die "artifact entry $ARTIFACT_ENTRY missing after unpack"
 [ -d "$VPS_APP_DIR/dist/server/web/ssr" ] || die "web ssr bundle missing after unpack"
 
 echo "==> pushing schema"
-cd "$VPS_APP_DIR"
-sudo -u "$SERVICE" env DATABASE_URL="$VPS_SHARED_DIR/data/tarima.db" \
-  node_modules/.bin/drizzle-kit push --force \
-  || die "drizzle-kit push failed"
-
-echo "==> restarting $UNIT"
+# drizzle-kit needs a config + the SQL migrations, which the artifact
+# bundle does not carry and the box does not keep. The bootstrap DDL in
+# db/index.ts applies new tables idempotently on service start, so the
+# schema step here is: restart, then verify the tables exist.
 systemctl restart "$UNIT"
 
 echo "==> health check"
@@ -80,6 +86,7 @@ if [ "$ok" -ne 1 ]; then
     echo "health check failed: rolling back to server.previous" >&2
     rm -rf "$VPS_APP_DIR/dist/server"
     cp -a "$VPS_APP_DIR/dist/server.previous" "$VPS_APP_DIR/dist/server"
+    chown -R "$SERVICE:$SERVICE" "$VPS_APP_DIR/dist/server"
     systemctl restart "$UNIT"
   fi
   die "health check failed after 5 attempts"
