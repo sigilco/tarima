@@ -85,6 +85,8 @@ jobs:
       # node_modules. A dependency the bundle needs but the prod install
       # does not carry (bcryptjs was a devDependency used at runtime)
       # fails here, on the runner, instead of crash-looping the service.
+      # The import starts a listener, so the process is exited explicitly
+      # once the module graph has resolved.
       - name: boot smoke the artifact
         run: |
           node --input-type=module -e "
@@ -101,6 +103,7 @@ jobs:
               }
               console.log('boot smoke: module graph ok (runtime refused to start on env, as expected)');
             }
+            process.exit(0);
           "
       # Jobs run on different runners: the tarball crosses via an
       # upload-artifact / download-artifact pair, not /tmp.
