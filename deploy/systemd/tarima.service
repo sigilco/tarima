@@ -9,7 +9,9 @@ StartLimitBurst=5
 Type=simple
 User=web-services
 Group=web-services
-WorkingDirectory=/opt/tarima2/app
+# current is a symlink to releases/<sha>; the deploy script flips it
+# atomically, so a restart always runs one whole release.
+WorkingDirectory=/opt/tarima2/current
 EnvironmentFile=/opt/tarima2/shared/app.env
 Environment=NODE_ENV=production
 Environment=PORT=3001
