@@ -269,6 +269,29 @@ export function fetchRoom(projectId: string, shareToken?: string): Promise<RoomP
   return call<RoomPayload>(`/api/ui/projects/${encodeURIComponent(projectId)}/room${query}`);
 }
 
+/** The WebSocket url for the negotiation room. */
+export function roomWsUrl(projectId: string, shareToken?: string): string {
+  if (typeof window === "undefined") return "";
+  const loc = window.location;
+  const proto = loc.protocol === "https:" ? "wss:" : "ws:";
+  const origin = `${proto}//${loc.host}`;
+  const base = `${origin}/api/ui/projects/${encodeURIComponent(projectId)}/room/ws`;
+  return shareToken ? `${base}?share_token=${encodeURIComponent(shareToken)}` : base;
+}
+
+/** Dispatch the staged counter proposal to vendor (owner-only HITL send). */
+export function sendNegotiationCounter(
+  projectId: string,
+  negotiationId: string,
+): Promise<{ ok: boolean; negotiation: unknown }> {
+  return call<{ ok: boolean; negotiation: unknown }>(
+    `/api/ui/projects/${encodeURIComponent(projectId)}/negotiations/${encodeURIComponent(negotiationId)}/send`,
+    {
+      method: "POST",
+    },
+  );
+}
+
 /** The channels a user can bind (contract `BINDING_CHANNELS`). */
 export type BindingChannel = "telegram" | "whatsapp";
 
