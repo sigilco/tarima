@@ -64,6 +64,21 @@ SHA="$(sudo -u "$GIT_USER" git -C "$REPO_DIR" rev-parse --verify --quiet "$REF^{
 echo "==> checking out $SHA"
 sudo -u "$GIT_USER" git -C "$REPO_DIR" checkout --quiet --force "$SHA"
 
+echo "==> syncing runtime dependencies"
+# The artifact ships without node_modules (packages: "external" keeps
+# the native bindings real), so the box installs from the app
+# manifest. The checkout at $REPO_DIR carries the same manifest at the
+# deployed sha; --prod keeps devDependencies (drizzle-kit) untouched.
+# A no-op when nothing changed.
+if ! cmp -s "$REPO_DIR/apps/api/package.json" "$VPS_APP_DIR/package.json"; then
+  install -m 644 "$REPO_DIR/apps/api/package.json" "$VPS_APP_DIR/package.json"
+  chown "$SERVICE:$SERVICE" "$VPS_APP_DIR/package.json"
+fi
+if ! pnpm --dir "$VPS_APP_DIR" install --prod --frozen-lockfile=false --prefer-offline; then
+  die "pnpm install failed on the box"
+fi
+chown -R "$SERVICE:$SERVICE" "$VPS_APP_DIR/node_modules"
+
 echo "==> unpacking artifact"
 # Only dist/ comes from CI; env files, data and node_modules stay on the box.
 if [ -d "$VPS_APP_DIR/dist/server" ]; then
