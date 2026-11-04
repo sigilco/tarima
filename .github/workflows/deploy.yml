@@ -88,7 +88,14 @@ jobs:
           env: production
 
       - name: Connect to tailnet
+        # Preferred transport: the GitHub-hosted runner joins the tailnet
+        # (tag:ci) and SSHes to the VPS's MagicDNS name. Needs
+        # TS_OAUTH_CLIENT_ID / TS_OAUTH_SECRET. Skipped when the secrets
+        # are absent, falling back to the public-IP SSH transport.
+        if: env.TS_OAUTH_CLIENT_ID != ''
         uses: tailscale/github-action@d1b6cd204f8dceda5b3eaad7f1f767be390056cd # v4.2.0
+        env:
+          TS_OAUTH_CLIENT_ID: ${{ secrets.TS_OAUTH_CLIENT_ID }}
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
@@ -97,6 +104,21 @@ jobs:
           # server, so ping until the VPS answers before the SSH.
           ping: ${{ secrets.VPS_TAILSCALE_HOST }}
 
+      - name: Resolve the SSH host
+        id: host
+        env:
+          TS_HOST: ${{ secrets.VPS_TAILSCALE_HOST }}
+          VPS_PUBLIC_IP: ${{ vars.VPS_PUBLIC_IP }}
+        run: |
+          # Tailnet MagicDNS name when the OAuth secrets exist (the runner
+          # joined above), otherwise the public IP from the repo variable.
+          if [ -n "${TS_HOST}" ] && [ -n "${{ secrets.TS_OAUTH_CLIENT_ID }}" ]; then
+            echo "host=${TS_HOST}" >> "$GITHUB_OUTPUT"
+          else
+            echo "host=${VPS_PUBLIC_IP:-37.187.62.157}" >> "$GITHUB_OUTPUT"
+            echo "WARN: no TS_OAUTH_CLIENT_ID secret; SSHing over the public IP" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       - name: Load deploy SSH key
         uses: webfactory/ssh-agent@dc588b651fe13675774614f8e6a936a468676387 # v0.9.0
         with:
@@ -104,19 +126,19 @@ jobs:
 
       - name: Ship the artifact
         env:
-          TS_HOST: ${{ secrets.VPS_TAILSCALE_HOST }}
+          SSH_HOST: ${{ steps.host.outputs.host }}
           DEPLOY_REF: ${{ github.event.inputs.ref || github.sha }}
         run: |
           set -euo pipefail
           ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 \
-            "deploy@${TS_HOST}" "cat > /tmp/tarima-artifact.tar.zst" \
+            "deploy@${SSH_HOST}" "cat > /tmp/tarima-artifact.tar.zst" \
             < /tmp/tarima-artifact.tar.zst
           ls -lh /tmp/tarima-artifact.tar.zst
 
       - name: Deploy
         id: deploy
         env:
-          TS_HOST: ${{ secrets.VPS_TAILSCALE_HOST }}
+          SSH_HOST: ${{ steps.host.outputs.host }}
           DEPLOY_REF: ${{ github.event.inputs.ref || github.sha }}
         shell: bash
         run: |
@@ -125,7 +147,7 @@ jobs:
           # always written, even on rollback or abort.
           set +e
           ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 \
-            "deploy@${TS_HOST}" \
+            "deploy@${SSH_HOST}" \
             "sudo /opt/tarima2/repo/deploy/scripts/deploy-vps.sh '${DEPLOY_REF}'" \
             2>&1 | tee /tmp/deploy.log
           rc=${PIPESTATUS[0]}
