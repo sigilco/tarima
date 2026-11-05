@@ -332,5 +332,21 @@
   "playful.phone.reply.sponsors": "Chased all 12 sponsors. 4 replied, 8 still pending.",
   "playful.phone.reply.venues": "Called 3 venues. 2 quoted, 1 will confirm tomorrow.",
   "login.rateLimited": "Too many attempts. Wait a minute and try again.",
-  "login.expiresIn": "Code expires in {time}"
+  "login.expiresIn": "Code expires in {time}",
+  "workspace.tabProjects": "Projects",
+  "workspace.tabDocuments": "Documents",
+  "workspace.tabAudit": "Audit",
+  "workspace.soon": "Soon",
+  "workspace.signOut": "Sign out",
+  "workspace.collapse": "Collapse sidebar",
+  "workspace.expand": "Expand sidebar",
+  "workspace.chatSlotTitle": "Chat arrives here soon.",
+  "workspace.chatSlotHint": "The event agent will work from this panel.",
+  "workspace.creating": "Creating…",
+  "workspace.retry": "Retry",
+  "workspace.noStage": "—",
+  "workspace.open": "Open",
+  "workspace.oldBoard": "Open old board",
+  "workspace.projectEmpty": "No rows yet. Open the old board to add or import the first row.",
+  "workspace.userFallback": "Signed in"
 }

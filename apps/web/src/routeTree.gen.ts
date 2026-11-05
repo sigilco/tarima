@@ -14,6 +14,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AppSettingsRouteImport } from './routes/app/settings'
 import { Route as AppPProjectIdRouteImport } from './routes/app/p/$projectId'
+import { Route as AppWProjectIdRouteImport } from './routes/app/w/$projectId'
 import { Route as ProjectsProjectIdRoomRouteImport } from './routes/projects/$projectId_.room'
 import { Route as AppPProjectIdRoomRouteImport } from './routes/app/p/$projectId_.room'
 
@@ -42,6 +43,11 @@ const AppPProjectIdRoute = AppPProjectIdRouteImport.update({
   path: '/app/p/$projectId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppWProjectIdRoute = AppWProjectIdRouteImport.update({
+  id: '/app/w/$projectId',
+  path: '/app/w/$projectId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProjectsProjectIdRoomRoute = ProjectsProjectIdRoomRouteImport.update({
   id: '/projects/$projectId_/room',
   path: '/projects/$projectId/room',
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
   '/app/p/$projectId': typeof AppPProjectIdRoute
+  '/app/w/$projectId': typeof AppWProjectIdRoute
   '/projects/$projectId/room': typeof ProjectsProjectIdRoomRoute
   '/app/p/$projectId/room': typeof AppPProjectIdRoomRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/app/settings': typeof AppSettingsRoute
   '/app': typeof AppIndexRoute
   '/app/p/$projectId': typeof AppPProjectIdRoute
+  '/app/w/$projectId': typeof AppWProjectIdRoute
   '/projects/$projectId/room': typeof ProjectsProjectIdRoomRoute
   '/app/p/$projectId/room': typeof AppPProjectIdRoomRoute
 }
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
   '/app/p/$projectId': typeof AppPProjectIdRoute
+  '/app/w/$projectId': typeof AppWProjectIdRoute
   '/projects/$projectId_/room': typeof ProjectsProjectIdRoomRoute
   '/app/p/$projectId_/room': typeof AppPProjectIdRoomRoute
 }
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/app/'
     | '/app/p/$projectId'
+    | '/app/w/$projectId'
     | '/projects/$projectId/room'
     | '/app/p/$projectId/room'
   fileRoutesByTo: FileRoutesByTo
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/app'
     | '/app/p/$projectId'
+    | '/app/w/$projectId'
     | '/projects/$projectId/room'
     | '/app/p/$projectId/room'
   id:
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/app/'
     | '/app/p/$projectId'
+    | '/app/w/$projectId'
     | '/projects/$projectId_/room'
     | '/app/p/$projectId_/room'
   fileRoutesById: FileRoutesById
@@ -117,6 +129,7 @@ export interface RootRouteChildren {
   AppSettingsRoute: typeof AppSettingsRoute
   AppIndexRoute: typeof AppIndexRoute
   AppPProjectIdRoute: typeof AppPProjectIdRoute
+  AppWProjectIdRoute: typeof AppWProjectIdRoute
   ProjectsProjectIdRoomRoute: typeof ProjectsProjectIdRoomRoute
   AppPProjectIdRoomRoute: typeof AppPProjectIdRoomRoute
 }
@@ -158,6 +171,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPProjectIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/w/$projectId': {
+      id: '/app/w/$projectId'
+      path: '/app/w/$projectId'
+      fullPath: '/app/w/$projectId'
+      preLoaderRoute: typeof AppWProjectIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projects/$projectId_/room': {
       id: '/projects/$projectId_/room'
       path: '/projects/$projectId/room'
@@ -181,6 +201,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppSettingsRoute: AppSettingsRoute,
   AppIndexRoute: AppIndexRoute,
   AppPProjectIdRoute: AppPProjectIdRoute,
+  AppWProjectIdRoute: AppWProjectIdRoute,
   ProjectsProjectIdRoomRoute: ProjectsProjectIdRoomRoute,
   AppPProjectIdRoomRoute: AppPProjectIdRoomRoute,
 }

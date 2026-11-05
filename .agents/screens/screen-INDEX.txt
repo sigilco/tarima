@@ -9,3 +9,6 @@ shell-1         Workspace shell         /p/$id      apps/web/src/routes/p/$proje
 
 Existing prose specs pending migration: .agents/docs/screens/{board,login,row-modal,settings}.md
 Landing (/) is out of scope until SP7.
+workspace-1     Workspace shell         /app        apps/web/src/components/workspace/WorkspaceShell.tsx   done (SP5-A)
+workspace-2     Projects list           /app        apps/web/src/components/workspace/ProjectList.tsx      done (SP5-A)
+workspace-3     Project view            /app/w/$id  apps/web/src/components/workspace/ProjectView.tsx      done (SP5-A)

@@ -1,0 +1,78 @@
+screen: workspace-1
+name: Workspace shell — sidebar + content
+route: /app (index), content swaps to /app/w/$projectId
+file: apps/web/src/components/workspace/WorkspaceShell.tsx (Sidebar: Sidebar.tsx)
+theme: light
+components: sidebar primitives hand-rolled on shadcn tokens (button, badge, skeleton, separator) under apps/web/src/components/workspace/
+
+The persistent chrome of the new workspace. A Notion-like collapsible
+sidebar on the off-white #FAFAFA surface sits left of a content area that
+renders the active view (projects list or project view). The chip tabs
+switch the sidebar's own listing mode; Documents and Audit are stubs until
+later boxes land them. The bottom user block shows the signed-in email
+(from /api/ui/settings session resolution; the api does not expose a name
+yet, so the email stands in) and a sign-out button that clears the session
+cookie client-side and lands on /login. An empty bottom-right container is
+reserved for the eve chat panel (SP4) via <ChatPanelSlot/>; the shell does
+not implement chat.
+
+State: sidebar-expanded — default on first load
+
+┌────────────┬──────────────────────────────────────────────────────────┐
+│ [■] tarima │                                              (collapse «)│
+│            │                                                          │
+│ (Projects) │                                                          │
+│ (Documents)│              content area (projects list /               │
+│ (Audit)   │               project view — see workspace-2/3)          │
+│            │                                                          │
+│  …chips…   │                                                          │
+│            │                                                          │
+│────────────│                                                          │
+│ qa@ta…     │                                                          │
+│ (Sign out) │                                                          │
+└────────────┴──────────────────────────────────────────────────────────┘
+
+State: sidebar-collapsed — user clicked «, chips reduce to icons; the
+content area is untouched and the state is local (useState), not in the URL
+
+┌──┬─────────────────────────────────────────────────────────────────────┐
+│■ │                                                       (collapse ») │
+│📋│                                                                     │
+│📄│                    content area unchanged                           │
+│🛡 │                                                                     │
+│  │                                                                     │
+│👤│                                                                     │
+└──┴─────────────────────────────────────────────────────────────────────┘
+
+State: chat-slot-empty — the reserved container at the bottom of the
+content column before SP4 wires the eve agent in
+
+┌────────────┬──────────────────────────────────────────────────────────┐
+│ (sidebar)  │  …project view above…                                    │
+│            │  ┌────────────────────────────────────────────────────┐  │
+│            │  │ Chat arrives here soon.                            │  │
+│            │  │ TODO(SP4): mount <ChatPanel/> in this slot.        │  │
+│            │  └────────────────────────────────────────────────────┘  │
+└────────────┴──────────────────────────────────────────────────────────┘
+
+States: expanded | collapsed (local toggle) | chat-slot-empty (always, SP4)
+Transitions: Projects chip → /app (projects list); Documents/Audit chips
+render disabled with a "soon" marker, no navigation; Sign out → clears the
+session cookie and navigates to /login; a project row click →
+/app/w/$projectId (workspace-3). Collapse toggle animates width via the
+sidebar's own transition only.
+Copy:
+  copy.brand: app.title — Tarima
+  copy.tabProjects: workspace.tabProjects — Projects
+  copy.tabDocuments: workspace.tabDocuments — Documents
+  copy.tabAudit: workspace.tabAudit — Audit
+  copy.soon: workspace.soon — Soon
+  copy.signOut: workspace.signOut — Sign out
+  copy.collapse: workspace.collapse — Collapse sidebar
+  copy.expand: workspace.expand — Expand sidebar
+  copy.chatSlotTitle: workspace.chatSlotTitle — Chat arrives here soon.
+  copy.chatSlotHint: workspace.chatSlotHint — The event agent will work from this panel.
+Tokens: background #FAFAFA, sidebar surface #FAFAFA with a #e4e4e7 right
+rule, chips in muted #f4f4f5 with ink text, active chip white card with
+border, clay #b8491f only on the collapse hover ring. No paper/clay
+surfaces.

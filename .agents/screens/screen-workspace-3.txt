@@ -1,0 +1,92 @@
+screen: workspace-3
+name: Project view — entities + chat slot
+route: /app/w/$projectId
+file: apps/web/src/components/workspace/ProjectView.tsx (route: apps/web/src/routes/app/w/$projectId.tsx)
+theme: light
+components: badge, table primitives, button, skeleton, separator (ProjectView, ChatPanelSlot under apps/web/src/components/workspace/)
+
+One project inside the workspace shell (workspace-1 chrome stays mounted).
+The header shows the project name and its stage badge; the loader pulls the
+project from GET /api/ui/projects/:projectId and the entities from
+GET /api/ui/projects/:projectId/entities. Entities render as a read-only
+table (name, contact or "—", status, missing deliverables, last activity) —
+editing stays on the old board at /app/p/$projectId until SP7; a link in
+the header offers it. Below the table sits the <ChatPanelSlot/> reserved
+container for the eve agent (SP4). No tasks/up-next section exists in the
+api yet; the missing-deliverables column serves that role.
+
+State: populated — the happy path
+
+┌──────────────────────────────────────────────────────────────┐
+│  ← Projects                                                  │
+│  Spring hackathon sponsors          [spec review]            │
+│                                          ( Open old board )  │
+│  ──────────────────────────────────────────────────────────  │
+│  Name          Contact        Status    Missing   Updated    │
+│  ──────────────────────────────────────────────────────────  │
+│  Acme Corp     ops@acme.test  replied   logo      3 Nov      │
+│  Lumen Studio  —              intake    deck; Sl… 2 Nov      │
+│  ──────────────────────────────────────────────────────────  │
+│                                                              │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │ Chat arrives here soon. (ChatPanelSlot — SP4)          │  │
+│  └────────────────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────────┘
+
+State: loading — skeletons for header and table rows
+
+┌──────────────────────────────────────────────────────────────┐
+│  ← Projects                                                  │
+│  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒  [▒▒▒▒▒▒]         │
+│  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒  │
+│  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒  │
+└──────────────────────────────────────────────────────────────┘
+
+State: empty — project with zero entities
+
+┌──────────────────────────────────────────────────────────────┐
+│  ← Projects                                                  │
+│  Founder dinner Paris               [brief]                  │
+│  ──────────────────────────────────────────────────────────  │
+│      No rows yet. Open the old board to add or               │
+│      import the first row.                                   │
+│                                                              │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │ Chat arrives here soon. (ChatPanelSlot — SP4)          │  │
+│  └────────────────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────────┘
+
+State: error — api failure or 404 (unknown project); retry re-runs the loader
+
+┌──────────────────────────────────────────────────────────────┐
+│  ← Projects                                                  │
+│                                                              │
+│      The board could not be reached. Retry in a moment.      │
+│      ( Retry )                                               │
+│                                                              │
+└──────────────────────────────────────────────────────────────┘
+
+States: loading | populated | empty | error (offline, not_found)
+Transitions: "← Projects" → /app; "Open old board" → /app/p/$projectId
+(untouched until SP7); retry → router invalidate(). Status text uses the
+chase row state verbatim (candidate, intake, outreach, awaiting_reply,
+parsing, validating, updating, notifying, chasing, replied, blocked, done).
+Animations: none beyond shadcn defaults.
+Copy:
+  copy.back: app.backToProjects — All projects
+  copy.stageLabel: stage.label — Stage
+  copy.oldBoard: workspace.oldBoard — Open old board
+  copy.colName: board.colName — Name
+  copy.colContact: board.colContact — Contact
+  copy.colStatus: board.colStatus — Status
+  copy.colMissing: board.colMissing — Missing
+  copy.colUpdated: board.colUpdated — Last activity
+  copy.noContact: board.noContact — —
+  copy.noMissing: row.noMissing — Nothing outstanding
+  copy.empty: workspace.projectEmpty — No rows yet. Open the old board to add or import the first row.
+  copy.offline: errors.offline — The board could not be reached. Retry in a moment.
+  copy.retry: workspace.retry — Retry
+  copy.chatSlotTitle: workspace.chatSlotTitle — Chat arrives here soon.
+Tokens: background #FAFAFA, table rows white #ffffff cards, border
+#e4e4e7, stage badge secondary #f4f4f5, status text muted #71717a, clay
+#b8491f only on the "Open old board" link hover. No paper/clay surfaces.

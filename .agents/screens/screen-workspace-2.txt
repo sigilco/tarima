@@ -1,0 +1,90 @@
+screen: workspace-2
+name: Projects list
+route: /app
+file: apps/web/src/components/workspace/ProjectList.tsx (route: apps/web/src/routes/app/index.tsx)
+theme: light
+components: card, button, input, skeleton, badge (ProjectList under apps/web/src/components/workspace/)
+
+The content area of the workspace shell at /app: a compact table of the
+signed-in organizer's projects from GET /api/ui/projects (via the
+fetchProjectsFn server function, session cookie forwarded). Each row shows
+the project name, its approval-flow stage (contract projectStageSchema,
+absent on old rows → "—") and the creation date. "New project" opens an
+inline create row (name + optional brief is NOT part of this screen — the
+minimal POST /api/ui/projects { name } path only; SP7 replaces the old
+brief-first form). Clicking a row navigates to /app/w/$projectId. The old
+board remains reachable at /app/p/$projectId until SP7.
+
+State: loading — SSR loader resolves; skeleton rows
+
+┌──────────────────────────────────────────────────────────────┐
+│  Projects                                    ( New project ) │
+│                                                              │
+│  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒  │
+│  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒  │
+│  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒  │
+└──────────────────────────────────────────────────────────────┘
+
+State: populated — the happy path
+
+┌──────────────────────────────────────────────────────────────┐
+│  Projects                                    ( New project ) │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │ Spring hackathon sponsors   spec_review   3 Nov 2026 → │  │
+│  │ Founder dinner Paris        brief       2 Nov 2026 →   │  │
+│  └────────────────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────────┘
+
+State: empty — zero projects
+
+┌──────────────────────────────────────────────────────────────┐
+│  Projects                                    ( New project ) │
+│                                                              │
+│              No projects yet. Create one to                  │
+│              start chasing.                                  │
+│                                                              │
+└──────────────────────────────────────────────────────────────┘
+
+State: error — fetch failed (loader threw or api 5xx); a retry re-runs the
+loader through the router's invalidate
+
+┌──────────────────────────────────────────────────────────────┐
+│  Projects                                                    │
+│                                                              │
+│      The board could not be reached. Retry in a moment.      │
+│      ( Retry )                                               │
+│                                                              │
+└──────────────────────────────────────────────────────────────┘
+
+State: creating — "New project" revealed, POST in flight, button disabled
+
+┌──────────────────────────────────────────────────────────────┐
+│  Projects                                    ( New project ) │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │ [Project name…]                              (Creating…)│  │
+│  └────────────────────────────────────────────────────────┘  │
+│  …existing rows below…                                       │
+└──────────────────────────────────────────────────────────────┘
+
+States: loading | populated | empty | error (offline) | creating |
+create-error (inline danger copy, row stays open)
+Transitions: row click → /app/w/$projectId (workspace-3); create success →
+navigate to /app/w/$projectId for the new project; retry → router
+invalidate() re-runs the loader. Focus rings per shadcn defaults.
+Animations: row hover raises bg to muted; transitions from the shadcn
+button/card defaults only.
+Copy:
+  copy.title: app.projects — Projects
+  copy.newProject: app.newProject — New project
+  copy.namePlaceholder: app.newProjectName — Project name, e.g. Spring hackathon sponsors
+  copy.create: app.newProjectSubmit — Create
+  copy.creating: workspace.creating — Creating…
+  copy.empty: app.empty — No projects yet. Create one to start chasing.
+  copy.offline: errors.offline — The board could not be reached. Retry in a moment.
+  copy.retry: workspace.retry — Retry
+  copy.stageLabel: stage.label — Stage
+  copy.noStage: workspace.noStage — —
+  copy.open: workspace.open — Open
+Tokens: card #ffffff rows on background #FAFAFA, border #e4e4e7, primary
+clay #b8491f button, skeletons in muted #f4f4f5. Stage badge in secondary
+#f4f4f5.
