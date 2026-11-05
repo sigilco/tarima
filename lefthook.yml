@@ -5,7 +5,8 @@
 # mistakes (type errors, lint, formatting, broken workspace imports) without
 # running the test suite.
 # pre-push: full gate. Same as CI's `pnpm validate`.
-# Bypass with `git push --no-verify` when you really need to.
+# Bypass with `git push --no-verify` when you really need to (never as an
+# agent: see AGENTS.md "Definition of done").
 
 pre-commit:
   commands:
