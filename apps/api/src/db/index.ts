@@ -80,6 +80,8 @@ const BOOTSTRAP_DDL = [
   "CREATE UNIQUE INDEX IF NOT EXISTS `idx_approvals_interaction` ON `approvals` (`interaction_id`);",
   "CREATE INDEX IF NOT EXISTS `idx_approvals_session` ON `approvals` (`session_id`,`created_at`);",
   "CREATE INDEX IF NOT EXISTS `idx_approvals_status` ON `approvals` (`status`,`created_at`);",
+  "CREATE TABLE IF NOT EXISTS `memory_documents` ( `key` text PRIMARY KEY NOT NULL, `namespace` text NOT NULL, `content` text NOT NULL, `version` text NOT NULL, `created_at` integer NOT NULL, `updated_at` integer NOT NULL );",
+  "CREATE INDEX IF NOT EXISTS `idx_memory_documents_namespace` ON `memory_documents` (`namespace`,`updated_at`);",
 ];
 
 for (const statement of BOOTSTRAP_DDL) {

@@ -641,3 +641,27 @@ export const approvals = sqliteTable(
 
 export type Approval = typeof approvals.$inferSelect;
 export type NewApproval = typeof approvals.$inferInsert;
+
+/**
+ * Eve agent memory (plan W4): one versioned text document per principal
+ * scope key. eve's `fileMemory` provider reads/writes through the
+ * MemoryDocumentBackend seam in `apps/web/agent/lib/memory-sqlite.ts`;
+ * writes are optimistic on `version` (the read version must match or the
+ * write rejects). One row per scope key, so each principal's memory is
+ * isolated and survives restarts (same sqlite file).
+ */
+export const memoryDocuments = sqliteTable(
+  "memory_documents",
+  {
+    key: text("key").primaryKey(),
+    namespace: text("namespace").notNull(),
+    content: text("content").notNull(),
+    version: text("version").notNull(),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+    updatedAt: integer("updated_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [index("idx_memory_documents_namespace").on(t.namespace, t.updatedAt)],
+);
+
+export type MemoryDocument = typeof memoryDocuments.$inferSelect;
+export type NewMemoryDocument = typeof memoryDocuments.$inferInsert;
