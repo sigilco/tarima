@@ -64,6 +64,10 @@ export async function mountEveRuntime(): Promise<string | undefined> {
   const port = process.env.TARIMA_EVE_PORT ?? "4310";
   process.env.NITRO_HOST = "127.0.0.1";
   process.env.NITRO_PORT = port;
+  // The workflow local world delivers queued turns over HTTP to this
+  // origin; without it the world derives one from PORT (the web app),
+  // which has no /.well-known/workflow route, and every turn stalls.
+  process.env.WORKFLOW_LOCAL_BASE_URL = `http://127.0.0.1:${port}`;
   await import(EVE_SERVER_ENTRY).catch((err) => {
     console.error("[eve-runtime] eve server import failed", err);
     return undefined;
