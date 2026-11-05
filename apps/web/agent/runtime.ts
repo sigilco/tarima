@@ -18,6 +18,13 @@ import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 
+declare global {
+  // Nitro's entry chunk sets this global; it is the base the runtime
+  // resolves public assets against. Not typed by nitro itself.
+  // eslint-disable-next-line no-var
+  var __nitro_main__: string | undefined;
+}
+
 const APP_ROOT = process.cwd();
 const EVE_SERVER_ENTRY = join(APP_ROOT, ".output", "server", "index.mjs");
 const EVE_ORIGIN_ENV = "TARIMA_EVE_ORIGIN";
@@ -94,9 +101,25 @@ export async function mountEveRuntime(): Promise<string | undefined> {
   // origin; without it the world derives one from PORT (the web app),
   // which has no /.well-known/workflow route, and every turn stalls.
   process.env.WORKFLOW_LOCAL_BASE_URL = `http://127.0.0.1:${port}`;
+  // Both nitro bundles (this app and the eve runtime) resolve their
+  // public assets through the `globalThis.__nitro_main__` global, and each
+  // bundle's entry OVERWRITES it on import. The eve entry is imported
+  // here, after the web bundle already claimed the global, so eve's
+  // `.output/server/index.mjs` would win and the web bundle's asset
+  // paths (`../../client/...`) would resolve against the wrong root:
+  // every /assets/* request then 500s with ENOENT.
+  //
+  // Restore the web bundle's value after the import. The web app is the
+  // only one serving static files to browsers (eve's own public dir
+  // holds just the worker shim and the og image), so the web bundle
+  // must own the global.
+  const webNitroMain = globalThis.__nitro_main__;
   await import(EVE_SERVER_ENTRY).catch((err) => {
     console.error("[eve-runtime] eve server import failed", err);
     return undefined;
   });
+  if (webNitroMain) {
+    globalThis.__nitro_main__ = webNitroMain;
+  }
   return `http://127.0.0.1:${port}`;
 }

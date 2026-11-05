@@ -32,9 +32,15 @@ export async function handleEveProxy(request: Request): Promise<Response> {
   }
 
   const url = new URL(request.url);
+  // Normalize the client-side double prefix: eve's client joins its
+  // routes (`/eve/v1/...`) onto the baseUrl verbatim, so a panel using
+  // `baseUrl: "/api/eve"` requests `/api/eve/eve/v1/...`. Strip one
+  // duplicate `/eve` so both shapes reach `<origin>/eve/v1/...`.
+  let path = url.pathname.slice(EVE_PREFIX.length);
+  if (path.startsWith("/eve/")) path = path.slice(4);
   // /api/eve/v1/... -> <origin>/eve/v1/... (eve's routes all live under
   // its own /eve prefix; the proxy prefix replaces it).
-  const upstream = `${origin}/eve${url.pathname.slice(EVE_PREFIX.length)}${url.search}`;
+  const upstream = `${origin}/eve${path}${url.search}`;
 
   // Only what eve's channel needs: the session cookie for auth, and the
   // body/accept headers to read the request and negotiate the response.
