@@ -1,0 +1,14 @@
+{
+  "title": "Guides",
+  "pages": [
+    "deployment",
+    "auth-and-route-protection",
+    "instrumentation",
+    "hooks",
+    "session-context",
+    "remote-agents",
+    "dev-tui",
+    "frontend",
+    "client"
+  ]
+}

@@ -1,0 +1,218 @@
+---
+title: "Cases"
+description: "Author single-turn and multi-turn evals with test(t), and fan one file out over a dataset."
+---
+
+A case is one `async test(t)` function that sends messages to the agent and records [assertions](./assertions) as it goes. A case can send one message or several, answer approvals, or run once per row of a [dataset](#datasets-exporting-an-array). Each eval file exports one case, or an array of cases.
+
+Every `evals/` directory needs an `evals.config.ts` at its root. An empty config works when you don't need shared settings:
+
+```ts title="evals/evals.config.ts"
+import { defineEvalConfig } from "eve/evals";
+
+export default defineEvalConfig({});
+```
+
+## Single-turn evals
+
+A single-turn eval sends one message and asserts on the reply. `t.send(input)` resolves when the agent finishes its turn, and the returned turn's `.reply` holds the reply:
+
+```ts title="evals/weather/brooklyn-forecast.eval.ts"
+import { defineEval } from "eve/evals";
+import { includes } from "eve/evals/expect";
+
+export default defineEval({
+  async test(t) {
+    const turn = await t.send("What is the weather in Brooklyn?");
+    t.succeeded();
+    t.check(turn.reply, includes("Sunny"));
+  },
+});
+```
+
+To test behavior rather than text, assert on the run and skip the content check:
+
+```ts title="evals/weather/no-tools-for-greetings.eval.ts"
+import { defineEval } from "eve/evals";
+
+export default defineEval({
+  async test(t) {
+    await t.send("Hello!");
+    t.succeeded();
+    t.notCalledTool("get_weather");
+  },
+});
+```
+
+## Organizing with directories
+
+The file path is the eval's id, so directories group evals. `evals/weather/brooklyn-forecast.eval.ts` gets the id `weather/brooklyn-forecast`, and `eve eval weather` runs everything under `evals/weather/`. Put shared constants and helpers in sibling files whose names don't end in `.eval.ts`:
+
+```text
+evals/
+├── evals.config.ts
+├── weather/
+│   ├── shared.ts                    # helpers, not an eval
+│   ├── brooklyn-forecast.eval.ts
+│   └── no-tools-for-greetings.eval.ts
+└── smoke.eval.ts
+```
+
+## Multi-turn evals
+
+Send several messages in order to test branching, approvals, structured output, attachments, or more than one conversation. Keep each turn in a variable and send the next message through its `.session`:
+
+```ts title="evals/draft-then-send.eval.ts"
+import { defineEval } from "eve/evals";
+import { includes } from "eve/evals/expect";
+
+export default defineEval({
+  async test(t) {
+    const draft = await t.send("Draft the follow-up email.");
+    t.check(draft.reply, includes("Best regards"));
+    t.judge("professional tone", { on: draft.reply }).atLeast(0.6);
+
+    await draft.session.send("Now send it.");
+    t.calledTool("send_email");
+  },
+});
+```
+
+Use scoped assertions on turns in the middle of the conversation. When later code depends on a value check, `t.require` records a gate and stops the eval if it fails:
+
+```ts title="evals/session-continuity.eval.ts"
+import { defineEval } from "eve/evals";
+import { equals } from "eve/evals/expect";
+
+export default defineEval({
+  async test(t) {
+    const first = await t.send("My favorite word is marigold.");
+
+    const second = await first.session.send("What is my favorite word?");
+    await t.require(second.sessionId, equals(first.sessionId));
+
+    t.succeeded();
+    second.messageIncludes("marigold");
+
+    t.judge("The assistant remembers the user's favorite word across turns", {
+      on: first.session.transcript,
+    }).atLeast(0.8);
+  },
+});
+```
+
+## The drive API
+
+Every `t.session()` or `t.send()` call starts a new, separate conversation (a session). Send more messages through its session handle. The run-level assertions on `t` see the events from every session.
+
+| Method                                     | Does                                                                                                    |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| `t.session(options?)`                      | Creates an empty session and resolves on `202 Accepted`, with `.id` and `.state` set                    |
+| `t.send(message, options?)`                | Creates a session with its first message and waits for the turn to finish                               |
+| `session.send(message, options?)`          | Sends a follow-up and waits for the turn to finish                                                      |
+| `session.start(message, options?)`         | Starts a turn and returns once the server accepts it; see [In-flight turns](#in-flight-turns)           |
+| `session.cancel()`                         | Asks the agent to stop and returns a `Delivery`; a no-op when idle                                      |
+| `session.compact()`                        | Compacts the conversation history between turns and resolves to a turn with the compaction's events     |
+| `session.sendFile(text, path, mediaType?)` | Sends a message with a local file attached as a data URL                                                |
+| `session.agent(opened).stream(options?)`   | Follows a subagent's event stream, given a `child.opened` event from that session                       |
+| `session.requireInteraction(filter?)`      | Records a gate that exactly one approval or question is pending, and returns it                         |
+| `session.respond(responses, options?)`     | Answers specific pending requests as the next turn; `session.startRespond(...)` returns without waiting |
+| `session.respondAll(optionId)`             | Answers every pending request with the same option as the next turn                                     |
+| `session.events`, `session.transcript`     | The session's recorded events, and its user and assistant messages as text                              |
+
+`t.session()` and `t.send()` options accept per-request `headers` and `signal`. Omit `signal` to use the eval's timeout signal.
+
+`session.cancel()` throws `SessionNotActiveError` when the session is no longer active, and `session.compact()` also throws. Assert on a compaction with `.event("context.settled", { data: { kind: "compaction", outcome: "completed" } })`.
+
+`session.agent(...)` uses the eval's credentials, so unlike `t.target.attach(...).watch()`, it also reaches subagents on another deployment. `requireInteraction` filters match tool name, tool input, prompt, display, and option ids.
+
+The transcript uses `User:` and `Assistant:` labels separated by blank lines. It leaves out reasoning, tool calls, tool results, and other sessions' messages. It updates when a turn finishes, so read it after `await session.send(...)`, `await session.respond(...)`, or `await live.result()`.
+
+Each `send`, `respond`, and `respondAll` resolves to a turn, which doesn't change after it returns. The turn has `.reply`, `.data`, `.events`, `.interactions`, `.toolCalls`, `.session`, `.sessionId`, `.status`, and `.expectOk()`. `.session` is the conversation handle for sending more messages. `expectOk()` throws only when the turn failed.
+
+## Prewarming a session
+
+Use `t.session()` to create a session before its first message:
+
+```ts title="evals/prewarm.eval.ts"
+import { defineEval } from "eve/evals";
+import { equals } from "eve/evals/expect";
+
+export default defineEval({
+  async test(t) {
+    const session = await t.session();
+    const turn = await session.send("Greet Alice briefly.");
+    await t.require(turn.sessionId, equals(session.id));
+    turn.event("session.started", { count: 1 });
+    turn.event("turn.started", { count: 1, data: { turnId: "turn_0" } });
+    t.succeeded();
+  },
+});
+```
+
+The agent sets up the session when the first message arrives. If eve can't create the session, `t.session()` rejects. A created session appears in eval results and is cleaned up on timeout, even when no message was sent.
+
+## In-flight turns
+
+Use `start()` when the eval must watch or change a turn before it finishes. The returned live turn has `.session`, `.sessionId`, `.waitForEvent(...)`, `.cancel()`, and `.result()`. `waitForEvent()` resolves with the first matching event, including one that arrived before the call. `result()` waits for the turn to end and returns it. Event data matchers use the same partial matching as `t.event(...)`.
+
+```ts title="evals/cancel-running-tool.eval.ts"
+import { defineEval } from "eve/evals";
+
+export default defineEval({
+  async test(t) {
+    const session = await t.session();
+    const live = await session.start("Run the long operation.");
+
+    await live.waitForEvent("call.requested", {
+      data: { capability: { kind: "tool", name: "long_operation" } },
+    });
+
+    await live.cancel();
+    const turn = await live.result();
+    turn.event("turn.settled", { count: 1, data: { outcome: "cancelled" } });
+  },
+});
+```
+
+`waitForEvent()` rejects if the stream fails or the turn ends before the event arrives. Call `result()` afterward so the run-level assertions see the turn's events.
+
+Use `expectOk()` only when the next step depends on an earlier turn succeeding; a final `t.succeeded()` already gates the whole run.
+
+To omit an eval for the current target, call `t.skip(reason)` before creating sessions, sending messages, or recording assertions. Skipped evals are reported separately and don't affect the exit code.
+
+`t.log(message)` writes debug lines to the eval artifact, and `--verbose` also streams them to stdout. `t.abortSignal` fires on timeout.
+
+For driving sessions created outside the eval, by a channel webhook or a schedule, see [Targets](./targets).
+
+## Datasets: exporting an array
+
+To run one file once per dataset row, default-export an array of `defineEval(...)` values. Eval modules are ESM, so top-level `await` works. Each id is the file name plus a zero-padded index: `sql/0000`, `sql/0001`, and so on. `loadJson` and `loadYaml` from `eve/evals/loaders` parse data files relative to the app root:
+
+```ts title="evals/sql.eval.ts"
+import { defineEval } from "eve/evals";
+import { loadYaml } from "eve/evals/loaders";
+import { equals } from "eve/evals/expect";
+
+const doc = await loadYaml("evals/data/cases.yaml");
+const rows = doc.evals as readonly { task: string; prompt: string; sql: string }[];
+
+export default rows.map((row) =>
+  defineEval({
+    description: row.task,
+    async test(t) {
+      const turn = await t.send(row.prompt);
+      t.succeeded();
+      t.check(turn.reply, equals(row.sql));
+    },
+  }),
+);
+```
+
+Use the loaders in evals, not in runtime agent code.
+
+## What to read next
+
+- [Assertions](./assertions): assert on what the eval did
+- [Judge](./judge): grade quality with an LLM judge
+- [TypeScript client](../guides/client/messages): the send/turn protocol eval sessions build on

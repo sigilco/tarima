@@ -1,0 +1,195 @@
+---
+title: "OpenAPI Connections"
+description: "Turn an OpenAPI 3.x or Swagger 2.0 document into eve connection tools, authorize calls, and control which operations the model can discover."
+---
+
+An OpenAPI connection turns an OpenAPI 3.x or Swagger 2.0 document into tools for your agent, one per operation. It lives in one file under `agent/connections/`. Use it when a service publishes an HTTP API contract.
+
+## Define an OpenAPI connection
+
+The filename is the connection name, so `agent/connections/petstore.ts` registers as `petstore`.
+
+```ts title="agent/connections/petstore.ts"
+import { defineOpenAPIConnection } from "eve/connections";
+
+export default defineOpenAPIConnection({
+  spec: "https://petstore3.swagger.io/api/v3/openapi.json", // required: URL or inline object
+  description: "Pet store inventory and orders.", // required
+  // optional: omit for a public API
+  auth: {
+    principalType: "app",
+    getToken: async () => ({ token: process.env.PETSTORE_TOKEN! }),
+  },
+});
+```
+
+The [shared connection options](../connections#options) apply, with `operations` as the filter. OpenAPI adds `baseUrl`; see [Base URL and servers](#base-url-and-servers).
+
+Each operation becomes a tool named `<connection>__<operationId>`, such as `petstore__getInventory`. An operation without an `operationId` gets a deterministic `<method>_<sanitized-path>` name. The model calls it with `eve__tool({ name: "petstore__getInventory", input })` and receives `{ status, statusText, body }`.
+
+`spec` is a URL that eve fetches at runtime, or an inline OpenAPI object. A spec URL must use `https`, also after redirects. Plain `http` works only for loopback hosts such as `localhost`. Use a URL when the provider maintains the contract. Use an inline object for private APIs, specs you pin in source control, or small hand-written contracts.
+
+## Base URL and servers
+
+eve builds each operation's URL from `baseUrl` and the operation path. Omit `baseUrl` to take it from the spec: the first usable `servers` entry in OpenAPI 3.x, or `schemes`, `host`, and `basePath` in Swagger 2.0. Set `baseUrl` when the spec lacks server data, points at the wrong environment, or uses a relative server URL.
+
+The base URL must use `https`, or `http` for loopback hosts, because operation calls carry the connection's credentials.
+
+For the same reason, operation calls follow redirects only within the base URL's origin, up to 10 hops. A longer chain fails as a redirect loop.
+
+eve doesn't follow a redirect to another origin. The tool returns it with its full target URL, such as `{ status: 302, statusText, body, location: "https://storage.example.com/..." }`. The agent can fetch that `location` without the connection's credentials. If an API moves to a new domain, point `baseUrl` there.
+
+```ts title="agent/connections/crm.ts"
+import { defineOpenAPIConnection } from "eve/connections";
+
+export default defineOpenAPIConnection({
+  spec: "https://api.example.com/openapi.json",
+  baseUrl: "https://api.example.com",
+  description: "CRM accounts, contacts, and opportunities.",
+});
+```
+
+## Use Vercel Connect for OAuth
+
+For an API that uses OAuth, follow the shared [Vercel Connect setup](../connections#interactive-oauth-via-vercel-connect) and pass the connector UID to `connect()`:
+
+```ts title="agent/connections/github.ts"
+import { connect } from "@vercel/connect/eve";
+import { defineOpenAPIConnection } from "eve/connections";
+
+export default defineOpenAPIConnection({
+  spec: "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+  baseUrl: "https://api.github.com",
+  description: "GitHub repositories, issues, pull requests, and users.",
+  auth: connect("github/github"),
+});
+```
+
+By default, `connect("...")` uses each user's own sign-in, so the session needs a signed-in user. Use `connect({ connector, principalType: "app" })` to have the API act as the agent. Pass provider-specific scopes, audiences, or authorization details through `tokenParams` on `connect(...)`.
+
+## Static tokens and headers
+
+OpenAPI connections accept the shared `auth` and `headers` options. Use `auth.getToken` for a bearer token, `headers` for another scheme or an API version, and resolver functions when credentials or routing depend on the caller. See [Static-token auth](../connections#static-token-auth), [Headers](../connections#headers), and [Per-caller auth and headers](../connections#per-caller-auth-and-headers).
+
+## Operation filters
+
+Narrow the generated tools with exactly one of `operations.allow` or `operations.block`:
+
+```ts title="agent/connections/petstore.ts"
+import { defineOpenAPIConnection } from "eve/connections";
+
+export default defineOpenAPIConnection({
+  spec: "https://petstore3.swagger.io/api/v3/openapi.json",
+  description: "Pet store inventory and orders.",
+  auth: {
+    principalType: "app",
+    getToken: async () => ({ token: process.env.PETSTORE_TOKEN! }),
+  },
+  operations: { allow: ["getInventory", "placeOrder"] },
+});
+```
+
+Filters match an operation's `operationId` and its generated tool name, so `block: ["repos.delete"]` also hides the `repos_delete` tool. For an operation without an `operationId`, use the name eve derives from the method and path.
+
+## Approval gates
+
+Operations can change data, like authored tools. Use the shared `approval` option to ask a person first, and `operations.allow` to expose only the operations you need. See [Per-connection approval](../connections#per-connection-approval) for the helpers and [Human-in-the-loop](../human-in-the-loop#approvals) for policy behavior.
+
+A custom policy sees the full tool name, `<connection>__<operationId>`, while `providedArguments` callbacks get the bare `operationId`. Its `toolInput` holds the parameters as top-level properties and the request body under `body`. To ask a person only for large orders:
+
+```ts title="agent/connections/petstore.ts"
+import { defineOpenAPIConnection } from "eve/connections";
+
+export default defineOpenAPIConnection({
+  spec: "https://petstore3.swagger.io/api/v3/openapi.json",
+  description: "Pet store inventory and orders.",
+  auth: {
+    principalType: "app",
+    getToken: async () => ({ token: process.env.PETSTORE_TOKEN! }),
+  },
+  operations: { allow: ["getInventory", "placeOrder"] },
+  approval: ({ toolName, toolInput }) => {
+    if (toolName !== "petstore__placeOrder") return "not-applicable";
+    const order = toolInput?.body as { quantity?: number } | undefined;
+    return (order?.quantity ?? 0) >= 10 ? "user-approval" : "not-applicable";
+  },
+});
+```
+
+## Path parameters
+
+Each dynamic segment in an operation path needs a matching `in: "path"` parameter in the spec. Path, query, header, and cookie parameters are top-level tool inputs, and eve puts each path value into its matching `{name}` placeholder.
+
+eve rejects a path value of exactly `.` or `..`, including one from `toolCall.providedArguments`, because URL parsing would change the route. Other values are URL-encoded, including embedded slashes.
+
+```ts title="agent/connections/cart.ts"
+import { defineOpenAPIConnection } from "eve/connections";
+
+export default defineOpenAPIConnection({
+  baseUrl: "https://api.example.com",
+  description: "Cart and checkout API.",
+  spec: {
+    openapi: "3.0.3",
+    info: { title: "Cart API", version: "1.0.0" },
+    paths: {
+      "/api/{cartId}/items/{itemId}": {
+        get: {
+          operationId: "getCartItem",
+          parameters: [
+            {
+              name: "cartId",
+              in: "path",
+              required: true,
+              schema: { type: "string" },
+            },
+            {
+              name: "itemId",
+              in: "path",
+              required: true,
+              schema: { type: "string" },
+            },
+          ],
+          responses: { "200": { description: "OK" } },
+        },
+      },
+    },
+  },
+});
+```
+
+The parameter `name` must exactly match the placeholder. If the spec omits an `in: "path"` parameter, the tool has no input for that segment, and eve can't fill it from query parameters.
+
+## Application-provided operation arguments
+
+Some operation parameters should come from the application, not the model, such as a tenant or organization ID. Set those values with `toolCall.providedArguments`:
+
+```ts title="agent/connections/crm.ts"
+import { defineOpenAPIConnection } from "eve/connections";
+
+export default defineOpenAPIConnection({
+  spec: "https://api.example.com/openapi.json",
+  description: "CRM accounts, contacts, and opportunities.",
+  toolCall: {
+    providedArguments: {
+      tenantId: ({ session }) => String(session.auth.current?.attributes.tenant ?? ""),
+    },
+  },
+});
+```
+
+Values may be JSON values, promises, or callbacks. Callbacks receive the session context, the bare operation `toolName`, and a `callId`. The `callId` is unique to the tool call and stays the same if eve runs the call again, so it works as an idempotency key.
+
+Keys name top-level operation inputs: path, query, header, and cookie parameters, plus `body` for a request body. The model doesn't see these keys in any operation's input schema. eve adds their values just before it builds each request and overwrites any value the model sent. Approval policies see only the model's input.
+
+Use `headers` instead for transport-wide headers that the spec doesn't declare as operation parameters.
+
+## Schema annotations
+
+eve removes `default` and `example` annotations whose values don't match the declared schema type, so invalid examples don't mislead the model. A boolean property with `default: "false"` loses the annotation; `default: false` keeps it. eve doesn't coerce annotation values.
+
+## What to read next
+
+- [Connections](../connections): shared auth, headers, approval, and per-caller patterns.
+- [MCP connections](./mcp): use one when the service's MCP server should define the tools, or offers more than the raw HTTP API.
+- [Authentication](../guides/auth-and-route-protection): establish the caller identity required by user-scoped auth.
+- [Security model](../concepts/security-model): how connection credentials stay out of the model's reach.

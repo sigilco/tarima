@@ -1,0 +1,152 @@
+---
+title: "Schedules"
+description: "Run an agent on a cron cadence, either a fire-and-forget prompt or a handler that hands work off to a channel."
+---
+
+A schedule starts the agent on a cron cadence instead of waiting for a message. Each schedule is one file under `agent/schedules/`. Use schedules for work such as daily digests, data syncs, cleanup sweeps, and heartbeats.
+
+## Markdown form (fire-and-forget)
+
+The smallest schedule is a markdown file. Its frontmatter takes `cron`, and the body is the prompt:
+
+```text
+agent/schedules/
+├── cleanup.md            # markdown form
+├── heartbeat.ts          # markdown form, in TypeScript
+└── billing/
+    └── sweep.ts          # named "billing/sweep"
+```
+
+```md title="agent/schedules/cleanup.md"
+---
+cron: "0 0 * * 0"
+---
+
+Sweep stale workflow state.
+```
+
+The same schedule in TypeScript uses `content` for the prompt:
+
+```ts title="agent/schedules/heartbeat.ts"
+import { defineSchedule } from "eve/schedules";
+
+export default defineSchedule({
+  cron: "*/5 * * * *",
+  content: "Pull open Linear issues and POST a summary to the metrics endpoint.",
+});
+```
+
+A markdown-form schedule runs the agent on the prompt and discards the reply. The agent can still call tools, write to backends, and log. The session has no channel, so it can't ask a person for input or receive a follow-up message. A tool that needs approval fails the session instead of waiting. After the turn ends, the session stays open until its [session timeout](./agent-config#runtime-limits) ends it.
+
+## `defineSchedule`
+
+Every schedule provides a `cron` and exactly one of `content` or `run`. The build fails otherwise.
+
+```ts
+interface ScheduleDefinition {
+  cron: string;
+  content?: string; // fire-and-forget prompt
+  run?: (args: ScheduleHandlerArgs) => Promise<void> | void; // handler
+}
+
+interface ScheduleHandlerArgs {
+  to: ScheduleToFn; // select a channel target, then send
+  waitUntil: (task: Promise<unknown>) => void; // keep the cron task alive past return
+  appAuth: SessionAuthContext; // the app's own identity
+}
+```
+
+A schedule with `content` needs no code at runtime. A schedule with `run` stays loaded at runtime so the handler can execute. See [Authored module lifecycle](./reference/typescript-api#authored-module-lifecycle).
+
+`cron` is a standard 5-field string (`minute hour day-of-month month day-of-week`) with minute granularity. On Vercel, schedules run in UTC, so `"0 9 * * 1-5"` fires at 09:00 UTC on weekdays. `eve dev` never fires schedules on their cadence, but a built app served with `eve start` does. In development, use the [dispatch route](#trigger-a-schedule-while-iterating).
+
+The name comes from the path under `schedules/`, so `agent/schedules/billing/sweep.ts` is `"billing/sweep"`. Mounted extensions can add schedules from `extension/schedules/`. The mount name becomes a prefix: `extension/schedules/sweep.ts` mounted as `crm` is `"crm__sweep"`, with the same cron expression. Declared subagents can't have a `schedules/` directory.
+
+## Handler form (`run`)
+
+Use a handler when the schedule sends to a channel, branches on conditions, or computes its message when it fires. A handler has no channel of its own. It selects a channel target with `to(...)` and sends through the returned handle:
+
+```ts title="agent/schedules/critical-alerts.ts"
+import { defineSchedule } from "eve/schedules";
+
+import slack from "../channels/slack";
+
+export default defineSchedule({
+  cron: "* * * * *",
+  async run({ to, waitUntil, appAuth }) {
+    // waitUntil keeps the cron task alive until the session and any open fetches finish.
+    waitUntil(
+      to(slack, { channelId: "C0123ABC" }).send("Summarize the new critical alerts.", {
+        auth: appAuth, // run as the app, not as a user
+      }),
+    );
+  },
+});
+```
+
+`to(channel, target).send(message, { auth, ...options })` starts a session on that channel. It takes the same [options](./channels/custom#cross-channel-hand-off) as a route handler's `ctx.to(...)` handle.
+
+The `auth` option sets which identity the session runs as. `appAuth` is the app's own identity (`{ authenticator: "app", principalId: "eve:app", principalType: "runtime" }`), for work the agent does for itself. When scheduled work needs a user's grants, pass that user's auth instead. The session still records that a schedule started it.
+
+Every run sends the agent's reply to the channel. To skip a run with nothing to report, check in the handler before you call `send`. When only the agent can tell, add the opt-in [`no_reply`](/docs/concepts/built-in-tools#no_reply) tool and ask the agent to call it, so the run posts nothing.
+
+A handler-form session can pause and wait like any other session, for example while a Slack thread waits for a reply.
+
+### Detect the app principal
+
+`isScheduleAuth(auth)` returns `true` when `auth` is the app identity that schedules pass as `appAuth`. Markdown-form sessions also run as that identity. Use it in tools, hooks, or channel handlers to treat the agent's own work differently from a user's:
+
+```ts
+import { isScheduleAuth } from "eve/schedules";
+
+if (isScheduleAuth(ctx.session.auth.current)) {
+  // The turn runs as the app, not as a user.
+}
+```
+
+`isScheduleAuth` checks the identity, not how the turn started. It returns `false` when a schedule handler sends with a user's auth, and `true` for any code that passes `appAuth` along.
+
+## Session continuity
+
+Markdown-form schedules start a new session each time they fire. Handler schedules do too, unless they send to an existing conversation, such as a Slack thread. Store data that must carry over between runs outside session state.
+
+## Trigger a schedule while iterating
+
+`eve dev` never runs schedules on their cadence, so the dev server adds a route that fires a schedule by name once:
+
+```sh
+curl -X POST http://localhost:2000/eve/v1/dev/schedules/heartbeat
+# -> { "scheduleId": "heartbeat", "sessionIds": ["..."] }
+```
+
+`:scheduleId` is the schedule name from its path (`agent/schedules/heartbeat.ts` → `heartbeat`). URL-encode the `/` in nested names. The route fires the schedule as production cron does and returns the started session IDs. Subscribe to each session's [stream](./concepts/sessions-runs-and-streaming) at `GET /eve/v1/session/:sessionId/stream`.
+
+An unknown name returns `404` with `availableScheduleIds`, which lists the app's schedules.
+
+The route exists only in development. Production builds never include it. It needs no auth because the dev server is local-only.
+
+## On Vercel
+
+Hosted Vercel builds turn every schedule into a Vercel Cron Job entry in `.vercel/output/config.json`. When [`withEve`](./guides/frontend/nextjs) adds agents to a Next.js deployment, Vercel adds each agent's schedules to the project's cron entries. Named agents use their `/eve/<name>` route prefix.
+
+When you run `vercel build` locally, use Vercel CLI 56.4.0 or later so the project output includes these cron entries.
+
+Confirm that Vercel found the schedules under **Settings → Cron Jobs**. Find run history under **Observability → Cron Jobs**, and per-run logs under **Observability → Logs**.
+
+## Self-deployed hosts
+
+Production builds register schedules as Nitro scheduled tasks. Outside Vercel, `eve build && eve start` starts Nitro's schedule runner, so schedules fire while that process runs.
+
+A process manager, container platform, or Nitro preset that only serves HTTP doesn't start the schedule runner. Schedules build but never fire. In that case, choose one:
+
+- Run eve through `eve start`.
+- Use a host that supports Nitro scheduled tasks.
+- Trigger the work from your own scheduler through an authenticated route, channel handoff, or job runner.
+
+## What to read next
+
+`defineSchedule` covers fixed schedules in code. For schedules that users or the agent create at runtime, see [Experimental dynamic schedules](./experimental/dynamic-schedules).
+
+- [Channels](/docs/channels): deliver schedule output to users.
+- [Sessions, runs & streaming](./concepts/sessions-runs-and-streaming): inspect a schedule run.
+- [Dynamic scheduling](./patterns/dynamic-scheduling): manage schedule rows in your own store behind one dispatcher schedule.

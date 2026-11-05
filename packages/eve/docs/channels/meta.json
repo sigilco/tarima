@@ -1,0 +1,19 @@
+{
+  "title": "Channels",
+  "defaultOpen": false,
+  "pages": [
+    "eve",
+    "slack",
+    "photon",
+    "linq",
+    "github",
+    "discord",
+    "telegram",
+    "linear",
+    "teams",
+    "twilio",
+    "chat-sdk",
+    "mcp",
+    "custom"
+  ]
+}

@@ -8,9 +8,11 @@
  * from apps/api/src/routes/* unchanged in logic.
  */
 import { handleAccessRequest } from "./access-requests";
+import { handleAgentTurn } from "./agent-turn";
 import { handleCreateApiKey, handleListApiKeys, handleRevokeApiKey } from "./api-keys";
 import { handleAdminInbox, handleRequestOtp, handleVerifyOtp } from "./auth";
 import { handleCapabilities } from "./capabilities";
+import { handleDevLogin } from "./dev-login";
 import { segments } from "./helpers";
 import {
   handleBulkIntakeCsv,
@@ -87,6 +89,7 @@ const routes: Route[] = [
   route("POST", "/api/api-keys", handleCreateApiKey),
   route("DELETE", "/api/api-keys/:id", handleRevokeApiKey),
   route("POST", "/api/access-requests", handleAccessRequest),
+  route("POST", "/api/agent/turn", handleAgentTurn),
 
   // Session surface (/api/ui/*): same paths the browser uses.
   route("GET", "/api/ui/projects", handleUiListProjects),
@@ -115,6 +118,7 @@ const routes: Route[] = [
   // Auth (OTP) and the loopback admin inbox.
   route("POST", "/auth/request-otp", handleRequestOtp),
   route("POST", "/auth/verify-otp", handleVerifyOtp),
+  route("GET", "/api/dev/login", handleDevLogin),
   route("GET", "/internal/admin/inbox", handleAdminInbox),
 
   route("GET", "/capabilities", handleCapabilities),

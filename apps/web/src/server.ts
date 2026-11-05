@@ -15,6 +15,8 @@ import { startEngine } from "@tarima/api/engine";
 import { setVenueSearchDeps } from "@tarima/api/services/venue-search";
 import { defaultProviders } from "@tarima/venuesearch/providers";
 import { startTelegram } from "@tarima/api/telegram";
+import { mountEveRuntime } from "../agent/runtime";
+import { setEveOrigin } from "./lib/api-handlers/agent-runtime-state";
 
 const apiFetch = buildApiHandlers();
 
@@ -40,6 +42,11 @@ setVenueSearchDeps(defaultProviders());
 // The Telegram bot is optional: without TELEGRAM_BOT_TOKEN this is a
 // no-op, so dev and CI boot the api without a bot.
 startTelegram().catch((err) => console.error("[telegram] boot failed", err));
+
+// The eve agent runtime (agent/, channels, tools, workflow world) runs
+// in this process behind a loopback socket; /api/agent/turn reaches it
+// through eve's own HTTP channel with the caller's session cookie.
+void mountEveRuntime().then((origin) => setEveOrigin(origin));
 
 /** True for the API-only prefixes (json in, json out; no html shell). */
 function isApiRoute(pathname: string): boolean {
