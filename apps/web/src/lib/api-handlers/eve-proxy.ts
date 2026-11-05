@@ -4,8 +4,9 @@
  * The browser cannot reach the loopback socket the eve runtime serves
  * (127.0.0.1:4310, see agent/runtime.ts), and the server.ts route gate
  * only forwards the /api/* space to this dispatcher — so the eve HTTP
- * channel is proxied under `/api/eve/*` (the prefix is stripped before
- * forwarding: `/api/eve/v1/sessions` -> `<eve origin>/eve/v1/sessions`).
+ * channel is proxied under `/api/eve/*` (the prefix is rewritten to
+ * eve's own route prefix before forwarding:
+ * `/api/eve/v1/session` -> `<eve origin>/eve/v1/session`).
  * `useEveAgent({ baseUrl: "/api/eve" })` targets exactly this.
  *
  * The caller's `tarima_session` cookie is forwarded untouched: eve's
@@ -22,13 +23,18 @@ import { getEveOrigin } from "./agent-runtime-state";
 const EVE_PREFIX = "/api/eve";
 
 export async function handleEveProxy(request: Request): Promise<Response> {
-  const origin = getEveOrigin();
+  // Await the mount: a request that arrives while the runtime is still
+  // booting must wait for it rather than answer 503 (getEveOrigin has
+  // been async since the mount became tracked as a promise).
+  const origin = await getEveOrigin();
   if (!origin) {
     return Response.json({ error: "agent_unavailable" }, { status: 503 });
   }
 
   const url = new URL(request.url);
-  const upstream = `${origin}${url.pathname.slice(EVE_PREFIX.length)}${url.search}`;
+  // /api/eve/v1/... -> <origin>/eve/v1/... (eve's routes all live under
+  // its own /eve prefix; the proxy prefix replaces it).
+  const upstream = `${origin}/eve${url.pathname.slice(EVE_PREFIX.length)}${url.search}`;
 
   // Only what eve's channel needs: the session cookie for auth, and the
   // body/accept headers to read the request and negotiate the response.
