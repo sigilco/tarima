@@ -28,7 +28,7 @@
 import { telegramChannel } from "eve/channels/telegram";
 import type { TelegramContext } from "eve/channels/telegram";
 import type { TelegramMessage } from "eve/channels/telegram";
-import { handleMessageText } from "./telegram-bind";
+import { handleMessageText } from "../lib/telegram-bind";
 
 /**
  * Inbound message hook: bind-or-authenticate, refusing unbound chats.
