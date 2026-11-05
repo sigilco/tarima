@@ -19,3 +19,7 @@ coverage
 # og-preview build inputs: the fonts are copied in from the installed
 # @fontsource package by scripts/og-preview/build-og-preview.sh.
 scripts/og-preview/*.woff2
+
+# react-cosmos vite plugin auto-generates this renderer entry on first run;
+# committing it would shadow TanStack Start's prerendered landing.
+apps/web/index.html
