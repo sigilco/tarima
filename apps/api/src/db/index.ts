@@ -72,33 +72,64 @@ const BOOTSTRAP_DDL = [
 ];
 
 for (const statement of BOOTSTRAP_DDL) {
-  sqlite.exec(statement);
+  try {
+    sqlite.exec(statement);
+  } catch (err) {
+    // Two importers can race the bootstrap (parallel vitest workers on
+    // one shared DATABASE_URL). Every statement is IF NOT EXISTS or an
+    // idempotent index, so losing the race is fine; rethrow anything
+    // that is not a duplicate-table/index/column error.
+    const message = err instanceof Error ? err.message : String(err);
+    if (!/already exists/i.test(message)) throw err;
+  }
 }
 
 // Databases created before migration 0003 lack projects.stage; CREATE TABLE IF
 // NOT EXISTS leaves them untouched, so add the column in place.
-const projectColumns = sqlite.prepare("PRAGMA table_info(`projects`)").all() as { name: string }[];
-if (!projectColumns.some((c) => c.name === "stage")) {
-  sqlite.exec("ALTER TABLE `projects` ADD `stage` text DEFAULT 'brief' NOT NULL;");
+function addColumnIfMissing(table: string, column: string, ddl: string): void {
+  const columns = sqlite.prepare(`PRAGMA table_info(\`${table}\`)`).all() as { name: string }[];
+  if (columns.some((c) => c.name === column)) return;
+  try {
+    sqlite.exec(ddl);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    if (!/duplicate column/i.test(message)) throw err;
+  }
 }
-if (!projectColumns.some((c) => c.name === "send_approved_at")) {
-  sqlite.exec("ALTER TABLE `projects` ADD `send_approved_at` integer;");
-}
+addColumnIfMissing(
+  "projects",
+  "stage",
+  "ALTER TABLE `projects` ADD `stage` text DEFAULT 'brief' NOT NULL;",
+);
+addColumnIfMissing(
+  "projects",
+  "send_approved_at",
+  "ALTER TABLE `projects` ADD `send_approved_at` integer;",
+);
 
 // Databases created before migration 0006 lack the venue-search columns;
 // CREATE TABLE IF NOT EXISTS leaves them untouched, so add them in place.
-const catalogColumns = sqlite.prepare("PRAGMA table_info(`venue_catalog`)").all() as {
-  name: string;
-}[];
-for (const [column, ddl] of [
-  ["external_id", "ALTER TABLE `venue_catalog` ADD `external_id` text;"],
-  ["contact_email", "ALTER TABLE `venue_catalog` ADD `contact_email` text;"],
-  ["contact_phone", "ALTER TABLE `venue_catalog` ADD `contact_phone` text;"],
-  ["website", "ALTER TABLE `venue_catalog` ADD `website` text;"],
-  ["enriched_at", "ALTER TABLE `venue_catalog` ADD `enriched_at` integer;"],
-] as const) {
-  if (!catalogColumns.some((c) => c.name === column)) sqlite.exec(ddl);
-}
+addColumnIfMissing(
+  "venue_catalog",
+  "external_id",
+  "ALTER TABLE `venue_catalog` ADD `external_id` text;",
+);
+addColumnIfMissing(
+  "venue_catalog",
+  "contact_email",
+  "ALTER TABLE `venue_catalog` ADD `contact_email` text;",
+);
+addColumnIfMissing(
+  "venue_catalog",
+  "contact_phone",
+  "ALTER TABLE `venue_catalog` ADD `contact_phone` text;",
+);
+addColumnIfMissing("venue_catalog", "website", "ALTER TABLE `venue_catalog` ADD `website` text;");
+addColumnIfMissing(
+  "venue_catalog",
+  "enriched_at",
+  "ALTER TABLE `venue_catalog` ADD `enriched_at` integer;",
+);
 // The provider index lands once the column exists (also when the column
 // was just added above).
 sqlite.exec(
