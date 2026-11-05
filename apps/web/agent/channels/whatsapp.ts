@@ -24,9 +24,10 @@
  * false` — WhatsApp cannot edit messages, so streaming would post
  * repeatedly) and the adapter auto-chunks long replies at 4096 chars.
  *
- * Mock/dev seam: `WHATSAPP_API_URL` overrides the Graph API origin the
- * adapter fetches (the adapter's own `apiUrl` option; also accepted as
- * an env var by the adapter itself). The mock Graph server
+ * Mock/dev seam: `WHATSAPP_API_BASE_URL` overrides the Graph API origin
+ * the adapter fetches (mapped to the adapter's `apiUrl` option; the
+ * adapter's own WHATSAPP_API_URL env var still works when set). The
+ * mock Graph server
  * (`tests/mocks/whatsapp-mock.mjs`) answers the exact
  * `POST /<version>/<phoneNumberId>/messages` shape.
  *
@@ -86,7 +87,9 @@ async function replyInThread(message: Message, text: string): Promise<unknown> {
   return postToAuthor(bot, message, text);
 }
 
-const apiUrl = process.env.WHATSAPP_API_URL;
+// The repo-wide seam name (scripts/dev.ts, .env.example) maps onto the
+// adapter's `apiUrl`; the adapter's own WHATSAPP_API_URL still wins if set.
+const apiUrl = process.env.WHATSAPP_API_URL ?? process.env.WHATSAPP_API_BASE_URL;
 
 const adapter = createWhatsAppAdapter({
   apiUrl,

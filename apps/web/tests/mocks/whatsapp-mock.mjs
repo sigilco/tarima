@@ -24,6 +24,10 @@ export function startMockWhatsapp({ port = 0, appSecret = "mock-wa-app-secret" }
       res.setHeader("content-type", "application/json");
       res.end(JSON.stringify(payload));
     };
+    if (req.method === "GET" && (req.url === "/health" || req.url === "/sent")) {
+      reply(200, req.url === "/health" ? { ok: true } : sent);
+      return;
+    }
     // POST /<version>/<phoneNumberId>/messages
     const match = /^\/(v[\d.]+)\/(\d+)\/messages$/.exec(req.url ?? "");
     if (req.method !== "POST" || !match) {
@@ -116,4 +120,29 @@ export function startMockWhatsapp({ port = 0, appSecret = "mock-wa-app-secret" }
       };
     },
   };
+}
+
+// Standalone boot for the round-trip harness: `node whatsapp-mock.mjs
+// <port> <appSecret>` — also answers GET /health and GET
+// /<version>/<phoneNumberId>/messages-style probes are not needed.
+import { realpathSync } from "node:fs";
+if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(import.meta.filename)) {
+  const port = Number(process.argv[2] ?? 0);
+  const handle = startMockWhatsapp({
+    port,
+    appSecret: process.argv[3] ?? "mock-wa-app-secret",
+  });
+  // /health for the harness wait loop.
+  handle.server.on("request", () => {});
+  await handle.start();
+  console.log(`[mock-wa] listening on :${handle.port ?? port}`);
+  let printed = 0;
+  setInterval(() => {
+    // Log every send so the harness output shows the wire traffic.
+    for (const record of handle.sent.slice(printed)) {
+      console.log(`[mock-wa] send ${JSON.stringify(record).slice(0, 300)}`);
+    }
+    printed = handle.sent.length;
+  }, 250).unref();
+  setInterval(() => {}, 10_000);
 }
