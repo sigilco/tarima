@@ -1,0 +1,1 @@
+const DISABLED_PRINCIPAL_TYPES=new Set([`anonymous`,`runtime`]);function principalScope(e){let t=e.current;return t===null||DISABLED_PRINCIPAL_TYPES.has(t.principalType)?null:t.principalType===`local-dev`?`local-dev`:JSON.stringify([t.principalType,t.authenticator,t.issuer??null,t.principalId])}export{principalScope};

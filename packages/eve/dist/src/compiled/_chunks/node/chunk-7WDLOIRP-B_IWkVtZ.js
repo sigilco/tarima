@@ -1,0 +1,1 @@
+var e=new Set([`https://files.slack.com`,`https://files.slack-gov.com`,`https://slack-files.com`,`https://slack-files-gov.com`,`https://slack.com`,`https://slack-gov.com`]);function t(t,n){try{let r=new URL(t).origin;return e.has(r)||n!==void 0&&r===new URL(n).origin}catch{return!1}}export{t};

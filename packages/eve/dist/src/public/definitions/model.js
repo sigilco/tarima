@@ -1,0 +1,1 @@
+import{defineDynamic as defineDynamic$1}from"#dynamic/definition.js";const defineDynamic=defineDynamic$1;export{defineDynamic};

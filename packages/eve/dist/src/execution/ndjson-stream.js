@@ -1,0 +1,3 @@
+function parseNdjsonStream(e,t=e=>e){let n=new TextDecoder,r=``,i,a=!1;return new ReadableStream({start(){i=e().getReader()},async pull(e){try{for(;;){let{value:o,done:s}=await i.read();if(a)return;if(s){r+=n.decode();let i=r.trim();i.length>0&&e.enqueue(t(JSON.parse(i))),e.close();return}r+=n.decode(o,{stream:!0});let c=!1;for(let n=r.indexOf(`
+`);n!==-1;n=r.indexOf(`
+`)){let i=r.slice(0,n).trim();r=r.slice(n+1),i.length>0&&(e.enqueue(t(JSON.parse(i))),c=!0)}if(c)return}}catch(t){if(a)return;e.error(t),await i.cancel(t).catch(()=>{})}},async cancel(e){a=!0,await i?.cancel(e)}})}export{parseNdjsonStream};

@@ -1,0 +1,1 @@
+async function mapWithConcurrency(e,t,n){let r=Array.from({length:e.length}),i=0;return await Promise.all(Array.from({length:Math.min(t,e.length)},async()=>{for(;i<e.length;){let t=i;i+=1,r[t]=await n(e[t])}})),r}export{mapWithConcurrency};

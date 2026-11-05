@@ -1,0 +1,1 @@
+const WORKFLOW_REGISTRY_GLOBAL=`__private_workflows`;function readRegisteredWorkflow(e){return globalThis[WORKFLOW_REGISTRY_GLOBAL]?.get(e)}export{WORKFLOW_REGISTRY_GLOBAL,readRegisteredWorkflow};

@@ -1,0 +1,1 @@
+async function ripgrepIsAvailable(e){try{let t=await e.run({command:`command -v rg >/dev/null 2>&1 || exit 127; rg --line-number --color=never --hidden --glob '!.git/*' --max-count 1 -- '__eve_ripgrep_probe_never_matches__' /dev/null`});return(t.exitCode===0||t.exitCode===1)&&t.stderr.trim().length===0}catch{return!1}}export{ripgrepIsAvailable};

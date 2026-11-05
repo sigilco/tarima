@@ -1,0 +1,610 @@
+import type { SessionStreamEvent } from "#protocol/session-event.js";
+import type { MessageContent } from "#shared/message-content.js";
+import type { ChannelDelivery } from "#shared/channel-delivery.js";
+import type { RemoteChildBinding } from "#execution/child-binding.js";
+import type { SessionInboxAddress } from "#execution/session-inbox/address.js";
+import type { CancelTurnResult as ProtocolCancelTurnResult } from "#protocol/cancel-turn.js";
+import type { RuntimeSubagentChildResult, RuntimeSubagentDispatchFailure, RuntimeToolResultActionResult } from "#shared/action-types.js";
+import type { InteractionOpenedData, InteractionSettledData } from "#protocol/session-events/families/interaction.js";
+import type { ResponseOutcome } from "#protocol/session-events/families/response.js";
+import type { ChannelAdapter } from "#channel/adapter.js";
+import type { JsonObject } from "#shared/json.js";
+import type { SessionHistoryMessage } from "#shared/session-history.js";
+import type { InstrumentationDecision } from "#shared/instrumentation-decision.js";
+import type { ForwardedTraceAssertion } from "#shared/forwarded-trace-policy.js";
+import type { ConversationContext } from "#shared/conversation-context.js";
+export type { ContextAccessor } from "#context/key.js";
+export type { ChannelInstrumentationProjection } from "#channel/instrumentation.js";
+import type { ChannelInstrumentationProjection } from "#channel/instrumentation.js";
+/** Identifies the session turn to cancel. */
+export interface CancelTurnInput {
+    readonly sessionId: string;
+    /** Limits cancellation to the observed turn; null records a no-op without targeting later work. */
+    readonly turnId?: string | null;
+}
+/** Result of requesting turn cancellation. Both statuses are successful. */
+export type CancelTurnResult = ProtocolCancelTurnResult;
+/** Result of queueing manual context compaction for a session. */
+export type CompactSessionResult = {
+    readonly status: "accepted";
+    readonly sessionId: string;
+} | {
+    readonly status: "no_active_session";
+};
+/**
+ * Result of queueing a manual context clear for a session. A stranded session
+ * cannot run the clear, so it throws `SessionStrandedError` instead.
+ */
+export type ClearSessionResult = {
+    readonly status: "accepted";
+    readonly sessionId: string;
+} | {
+    readonly status: "no_active_session";
+};
+/**
+ * Identifies one turn within a session.
+ *
+ * `id` is the stable, unique turn identifier. `sequence` is the turn's
+ * zero-based position in the session's turn order (the first turn is `0`).
+ */
+export interface SessionTurn {
+    readonly id: string;
+    readonly sequence: number;
+}
+/**
+ * Lineage metadata for the eve parent execution that delegated this session.
+ *
+ * `sessionId` and `turn` describe the **immediate** parent that dispatched
+ * this child. `rootSessionId` denormalizes the top of the dispatch chain so
+ * descendants identify the user-facing session without walking up
+ * parent-by-parent. Always populated at dispatch: a first-level child sets it
+ * to the top session's id (its immediate parent), and deeper descendants
+ * inherit the same root.
+ */
+export interface SessionParent {
+    /**
+     * Parent runtime-action tool call id that created this child session.
+     */
+    readonly callId: string;
+    readonly rootSessionId: string;
+    readonly sessionId: string;
+    readonly turn: SessionTurn;
+}
+/**
+ * Session whose id a run's spans carry as their trace session.
+ *
+ * Lineage and tracing usually share a root: every span in a conversation
+ * carries `parent.rootSessionId`. A remote agent runs in another deployment,
+ * so its spans start their own trace session (`own`) while its lineage still
+ * names the caller's root. Its local subagents then carry that session
+ * (`inherited`). Conversation correlation across deployments stays on
+ * `gen_ai.conversation.id`.
+ */
+export type SessionTraceRoot = {
+    readonly kind: "own";
+} | {
+    readonly kind: "inherited";
+    readonly sessionId: string;
+};
+/**
+ * Trace coordinates and the inherited policy decision used to seed a session's trace.
+ * Separate from `TraceContext`, which carries only portable W3C coordinates.
+ */
+export interface SessionTraceSeed {
+    readonly decision?: InstrumentationDecision;
+    readonly forwardedTracePolicy?: ForwardedTraceAssertion;
+    readonly spanId: string;
+    readonly traceFlags: number;
+    readonly traceId: string;
+}
+/** Framework-owned identity for one inbound channel operation. */
+export interface ChannelDeliveryMetadata {
+    readonly acceptedDeploymentId?: string;
+    readonly channelKind: string;
+    readonly channelName: string;
+    readonly deliveryId: string;
+    /** The hook whose `ctx.continue()` made the delivery, recorded on its `delivery.admitted`. */
+    readonly hook?: string;
+    readonly requestId?: string;
+    readonly requestTraceContext?: SessionTraceSeed;
+}
+/** Associates delivery metadata with one payload in a durable envelope. */
+export interface ChannelDeliveryMetadataEntry extends ChannelDeliveryMetadata {
+    readonly payloadIndex: number;
+}
+/**
+ * Authenticated caller principal attached to a request.
+ *
+ * Route-level auth strategies (JWT, OIDC, HTTP Basic, etc.) produce this
+ * and pass it to the runtime on {@link RunInput.auth} and
+ * {@link DeliverInput.auth}.
+ */
+export interface SessionAuthContext {
+    readonly attributes: Readonly<Record<string, string | readonly string[]>>;
+    readonly authenticator: string;
+    readonly issuer?: string;
+    readonly principalId: string;
+    readonly principalType: string;
+    readonly subject?: string;
+}
+/** Framework-internal caller waiting for one delegated conversation turn. */
+export interface TurnCaller {
+    /** The call that opened the session, whose lineage its messages keep. */
+    readonly callId: string;
+    readonly subagentName: string;
+    readonly replyTo: {
+        readonly kind: "hook";
+        readonly token: string;
+    } | {
+        readonly kind: "callback";
+        readonly token: string;
+        readonly url: string;
+    };
+}
+/** Internal transport payload, including framework-owned compatibility and context fields. */
+export interface DeliverPayload extends Omit<ChannelDelivery, "state"> {
+    /** Framework-owned history; delivery hooks cannot replace it. */
+    readonly history?: readonly SessionHistoryMessage[];
+    readonly state?: unknown;
+    readonly [key: string]: unknown;
+}
+/** Controls how a channel message interacts with an active turn. */
+export type TurnPolicy = "steer" | "queue";
+/** Default policy for message sends produced by current channel surfaces. */
+export declare const DEFAULT_TURN_POLICY: TurnPolicy;
+/** One command accepted by a durable session inbox. */
+export type SessionCommand = {
+    readonly idempotencyKey?: string;
+    readonly auth?: SessionAuthContext | null;
+    readonly caller?: TurnCaller;
+    /** Initial workflow title when delivering to a prewarmed session. */
+    readonly title?: string;
+    readonly kind: "send";
+    readonly schedule?: import("#context/session-schedule.js").SessionSchedule;
+    readonly payload: DeliverPayload;
+    readonly delivery?: ChannelDeliveryMetadata;
+    readonly requestId?: string;
+    readonly turnPolicy?: TurnPolicy;
+} | ({
+    readonly kind: "cancel";
+    readonly turnId?: string | null;
+} & SessionControlIdentity) | {
+    readonly kind: "prewarm";
+    readonly targetDeploymentId?: string;
+} | ({
+    readonly kind: "compact";
+} & SessionControlIdentity) | ({
+    readonly kind: "clear";
+} & SessionControlIdentity) | ({
+    readonly kind: "reset";
+    readonly reason?: string;
+} & SessionControlIdentity);
+/**
+ * A control is a delivery: its id, and who sent it, so the facts it causes name it.
+ */
+export interface SessionControlIdentity {
+    readonly deliveryId: string;
+    readonly auth?: SessionAuthContext | null;
+}
+/** Who sends a control, so the delivery it arrives as names them. */
+export interface SessionControlOptions {
+    readonly auth?: SessionAuthContext | null;
+}
+/** A control command as one delivery: a fresh id, and the sender when known. */
+export declare function controlCommand<TCommand extends {
+    readonly kind: "cancel" | "clear" | "compact" | "reset";
+}>(command: TCommand, options?: SessionControlOptions): TCommand & SessionControlIdentity & {
+    readonly deliveryId: string;
+};
+export type SessionSendCommandResult = {
+    readonly status: "accepted";
+    readonly sessionId: string;
+    readonly deliveryId?: string;
+    readonly inbox?: string;
+} | {
+    readonly status: "session_not_active";
+    /** The workflow exists but its inbox is not yet available; no delivery was accepted. */
+    readonly retryable?: boolean;
+};
+/** Result of ending a session. The `"reset"` status is kept for wire compatibility. */
+export type EndSessionResult = {
+    readonly status: "reset";
+    readonly previousSessionId: string;
+} | {
+    readonly status: "no_active_session";
+};
+export type SessionCommandResult<TCommand extends SessionCommand = SessionCommand> = TCommand extends {
+    readonly kind: "prewarm";
+} ? import("#protocol/prewarm-session.js").PrewarmSessionResult : TCommand extends {
+    readonly kind: "send";
+} ? SessionSendCommandResult : TCommand extends {
+    readonly kind: "cancel";
+} ? CancelTurnResult : TCommand extends {
+    readonly kind: "compact";
+} ? CompactSessionResult : TCommand extends {
+    readonly kind: "clear";
+} ? ClearSessionResult : EndSessionResult;
+export interface DispatchContinuationInput<TCommand extends SessionCommand = SessionCommand> {
+    readonly command: TCommand;
+    readonly continuationToken: string;
+    /**
+     * Fresh creation inputs for a send. Used only when the address's owner is
+     * stranded: the runtime ends it and starts this successor in its place.
+     */
+    readonly successor?: RunInput;
+}
+export interface DispatchSessionInput<TCommand extends SessionCommand = SessionCommand> {
+    readonly inbox?: string;
+    readonly command: TCommand;
+    readonly sessionId: string;
+}
+/**
+ * Deliver payload sent through the workflow `resumeHook`.
+ *
+ * Wraps the raw {@link DeliverPayload} with optional auth and turn-caller
+ * metadata so both cross the durable hook boundary outside adapter-owned data.
+ */
+export interface DeliverHookPayload {
+    readonly idempotencyKey?: string;
+    readonly schedule?: import("#context/session-schedule.js").SessionSchedule;
+    /** Initial workflow title; ignored once session initialization has run. */
+    readonly title?: string;
+    readonly auth?: SessionAuthContext | null;
+    /** Delegated caller waiting for this turn's settled result. */
+    readonly caller?: TurnCaller;
+    /** Additive durable metadata. Absent on envelopes written by older deployments. */
+    readonly deliveryMetadata?: readonly ChannelDeliveryMetadataEntry[];
+    /** Inbound channel request id used only for workflow attributes. */
+    readonly requestId?: string;
+    readonly kind: "deliver";
+    readonly payloads: readonly DeliverPayload[];
+    readonly turnPolicy?: TurnPolicy;
+}
+/** Internal deadline signal sent through the stable session command inbox. */
+export interface SessionTimeoutHookPayload {
+    readonly kind: "session-timeout";
+    /** The owner run that armed this timer; a later owner ignores a predecessor's deadline. */
+    readonly ownerRunId: string;
+}
+/** Requests a context compaction without delivering model input. */
+export interface CompactSessionHookPayload {
+    readonly kind: "compact";
+}
+/** Requests a context clear without delivering model input. */
+export interface ClearSessionHookPayload {
+    readonly kind: "clear";
+}
+/**
+ * Results resumed back into a parked parent workflow by the work it
+ * dispatched: child-produced subagent results and authored workflow tool
+ * results. Workflow-owner dispatch failures use the same private reply hook so
+ * `agent()` can settle instead of waiting forever.
+ */
+export interface RuntimeActionResultHookPayload {
+    readonly kind: "runtime-action-result";
+    readonly results: readonly (RuntimeSubagentChildResult | RuntimeSubagentDispatchFailure | RuntimeToolResultActionResult)[];
+}
+/**
+ * A change to an interaction a delegated child session or workflow run owns, relayed to the
+ * session that serves it and keyed by the asker's ids: a request it opened, how it settled one,
+ * or how it settled an answer this session forwarded. The serving session mirrors each in its own
+ * stream; the asker's stream stays its own. An opened request names its origin from the asker's
+ * side: the asker, its interaction, and the call it asks about.
+ */
+export type RelayedInteractionEvent = {
+    readonly type: "interaction.opened";
+    readonly data: InteractionOpenedData;
+} | {
+    readonly type: "interaction.settled";
+    readonly data: InteractionSettledData;
+} | {
+    readonly type: "response.admitted";
+    readonly data: RelayedResponseAdmission;
+} | {
+    readonly type: "response.settled";
+    readonly data: RelayedResponseSettlement;
+};
+/**
+ * An asker admitted an answer it was forwarded: it stands, revisable, while the rest of its batch
+ * waits. Which interaction, and the delivery the asker received it in.
+ */
+export interface RelayedResponseAdmission {
+    readonly interactionId: string;
+    /** The delivery the asker received the answer in, when it kept the forwarder's id. */
+    readonly deliveryId?: string;
+}
+/** How an asker settled an answer: which interaction, from which delivery, and how. */
+export interface RelayedResponseSettlement {
+    readonly interactionId: string;
+    /** The delivery the asker received the answer in, when it kept the forwarder's id. */
+    readonly deliveryId?: string;
+    readonly outcome: ResponseOutcome;
+    readonly reason?: string;
+}
+/** Where answers to a relayed request go: the asker's hook, inbox, and the source it reads. */
+export interface RelayRoute {
+    readonly childContinuationToken: string;
+    readonly childSessionInbox?: SessionInboxAddress;
+    /** Independent source when several requests share an answer destination. */
+    readonly inputSource?: string;
+    readonly remote?: import("#eve-channel/support.js").RemoteAgentBinding & {
+        readonly sessionId: string;
+    };
+}
+/**
+ * Interaction facts one commit of a child session (or a workflow run) changed, relayed up to the
+ * session that serves it: the requests it opened together, or one other fact. Runtime-internal:
+ * channel adapters and authored code never observe this kind. `route` comes with requests a
+ * person answers.
+ */
+export interface SubagentInteractionHookPayload {
+    readonly kind: "subagent-interaction";
+    /** The serving session's call that delegated to the asker. */
+    readonly callId: string;
+    readonly childSessionId: string;
+    readonly subagentName: string;
+    readonly events: readonly RelayedInteractionEvent[];
+    readonly route?: RelayRoute;
+}
+/**
+ * Serializable payload sent through the workflow `resumeHook`.
+ */
+export type HookPayload = ClearSessionHookPayload | CompactSessionHookPayload | DeliverHookPayload | RuntimeActionResultHookPayload | SessionTimeoutHookPayload | SubagentInteractionHookPayload;
+/**
+ * Initial caller callback attached to a delegated session at creation.
+ *
+ * `url` is the absolute callback endpoint. `token` is the capability token
+ * embedded in the framework-owned callback route. `callId` and `subagentName`
+ * correlate the callee's result to the pending tool call. The session uses
+ * this as its first turn's caller; each continuation supplies the caller for
+ * that turn.
+ */
+export interface SessionCallback {
+    readonly callId: string;
+    readonly subagentName: string;
+    readonly token: string;
+    readonly url: string;
+}
+/**
+ * Runtime capabilities granted to one eve session.
+ *
+ * Capabilities describe what the session may do mid-turn.
+ *
+ * Channel routes that can reach a human (HTTP, Slack, etc.) set
+ * `requestInput: true` when starting a run. Subagent dispatch inherits the
+ * parent's capabilities pointwise, so HITL bubbles up transparently through a
+ * conversation chain and stays disabled in a scheduled chain.
+ */
+export interface SessionCapabilities {
+    /**
+     * True when the session may request input from a human (tool approvals,
+     * `ctx.ask()`). The runtime reads this in every HITL gate:
+     *
+     * 1. `ctx.ask()` resolves as `unavailable` instead of waiting when the
+     *    session cannot request input.
+     * 2. The pending-input park guard: sessions without this flag and without a
+     *    delegating parent fail fast rather than waiting for a tool approval.
+     */
+    readonly requestInput?: boolean;
+}
+/**
+ * Single input shape consumed by {@link Runtime.createSession} for both root runs
+ * (started by routes) and delegated child runs (started by the
+ * subagent tool wrapper).
+ */
+export interface RunInput {
+    /** Optional stable identity of the initial delivery, scoped to this logical session. */
+    readonly idempotencyKey?: string;
+    /** Server-supplied provenance inherited by locally delegated scheduled work. */
+    readonly schedule?: import("#context/session-schedule.js").SessionSchedule;
+    readonly adapter: ChannelAdapter<any>;
+    /**
+     * Registered channel name for root sessions started from an authored
+     * channel route. Framework runs omit this and use their framework
+     * adapter kind (`http`, `schedule`, `subagent`) directly.
+     */
+    readonly channelName?: string;
+    readonly channelMetadata?: ChannelInstrumentationProjection;
+    /** Parent conversation classification inherited by a local subagent. */
+    readonly inheritedConversation?: ConversationContext;
+    /** Inbound channel operation that created this session. */
+    readonly delivery?: ChannelDeliveryMetadata;
+    /**
+     * Authenticated caller principal for this session. `null` means the
+     * request was accepted with no credentials.
+     */
+    readonly auth: SessionAuthContext | null;
+    /**
+     * Route-authenticated principal used to classify the conversation. This
+     * stays separate from `auth` because a channel may project a different
+     * principal into session auth after route authentication.
+     */
+    readonly audienceAuth?: SessionAuthContext | null;
+    /**
+     * Session-level capabilities. When omitted, every flag is
+     * interpreted as `false`. Channel routes that can reach a human
+     * set `capabilities: { requestInput: true }`; scheduled task routes
+     * leave this undefined.
+     */
+    readonly capabilities?: SessionCapabilities;
+    /** Inbound channel request id used to correlate workflow attributes. */
+    readonly requestId?: string;
+    /**
+     * Human-readable workflow title for top-level sessions. When omitted, the
+     * runtime derives `$eve.title` from {@link input.message}.
+     */
+    readonly title?: string;
+    /**
+     * Optional caller callback for the first turn; continuations carry the
+     * caller for their own turn.
+     */
+    readonly callback?: SessionCallback;
+    /**
+     * Set when {@link callback} belongs to a caller on an earlier remote agent protocol. The session
+     * reports its result to that caller, but relays none of its requests.
+     */
+    readonly earlierCallerProtocol?: number;
+    /**
+     * Session continuation token for delivery and hook creation. Channels can
+     * add a continuation address during the first turn via
+     * `ctx.channel.continuation.alias(...)` (e.g. Slack adopts its first
+     * post's `ts` as the thread root), so an initial placeholder token is
+     * acceptable when full identity isn't known until the first message. Earlier
+     * addresses remain valid after an alias. ID-only
+     * transports omit this field.
+     */
+    readonly continuationToken?: string;
+    /**
+     * Framework-owned delivery to forward when another run wins the initial
+     * continuation-token claim. Channel addresses set this so concurrent cold
+     * starts preserve every distinct inbound message inside durable execution.
+     * Create-once and replay-idempotent starts omit it so losing inputs are
+     * discarded.
+     */
+    readonly continuationConflictCommand?: Extract<SessionCommand, {
+        readonly kind: "send";
+    }>;
+    /**
+     * The original (top-level) caller's auth, forwarded down the delegation
+     * chain so the child's `session.auth.initiator` always resolves back to
+     * whoever started the root session. Defaults to {@link auth} when omitted
+     * (root session behavior).
+     */
+    readonly initiatorAuth?: SessionAuthContext | null;
+    readonly input: {
+        /** Omitted only when creating a conversation session before its first turn. */
+        readonly message?: MessageContent;
+        readonly context?: readonly string[];
+        /** Prior conversation; with no message, it waits for the first message's turn. */
+        readonly history?: readonly SessionHistoryMessage[];
+        readonly outputSchema?: JsonObject;
+        /** Channel payload state for the first delivery, as later deliveries carry it. */
+        readonly state?: unknown;
+    };
+    /** Observability correlation only; never grants delegated-session privileges. */
+    readonly conversationId?: string;
+    readonly parent?: SessionParent;
+    /** Trace session for this run when it differs from `parent.rootSessionId`. */
+    readonly traceRoot?: SessionTraceRoot;
+    /**
+     * Dispatching parent's open trace window. Handed down rather than looked up
+     * because trace state is scoped to one session's context.
+     */
+    readonly parentTraceContext?: SessionTraceSeed;
+    /** Framework-owned metadata for a protocol-neutral external invocation. */
+    readonly externalInvocation?: {
+        readonly continuationToken: string;
+        readonly ownerKey: string;
+    };
+}
+export interface DeliverInput {
+    /**
+     * Authenticated principal for this follow-up message.
+     * May differ from the session initiator when different users send
+     * messages to the same session. The runtime updates `AuthKey` from
+     * this field before calling the adapter's hooks.
+     */
+    readonly auth?: SessionAuthContext | null;
+    /** Delegated caller waiting for this turn's settled result. */
+    readonly caller?: TurnCaller;
+    /** Inbound channel request id used to correlate workflow attributes. */
+    readonly requestId?: string;
+    readonly continuationToken: string;
+    readonly payload: DeliverPayload;
+}
+/**
+ * Handle returned by `runtime.createSession()` once the durable run is accepted,
+ * before its command inbox or step loop necessarily starts.
+ *
+ * Carries the identifiers needed for stream endpoints.
+ */
+export interface RunHandle {
+    /** Initial message delivery; absent for an idle prewarm. */
+    readonly deliveryId?: string;
+    readonly events: ReadableStream<SessionStreamEvent>;
+    /**
+     * Runtime-owned identifier for this session. Stream and inspection APIs
+     * key on it: workflow-backed runs expose the workflow run id.
+     */
+    readonly sessionId: string;
+}
+/**
+ * Runtime interface consumed by routes and the subagent tool wrapper.
+ */
+export interface Runtime {
+    /**
+     * Starts a new run from a flat platform-shape input.
+     *
+     * Loads the compiled bundle (using the node id baked in at construction
+     * time), builds the seeded {@link AlsContext}, and drives the step loop to
+     * completion.
+     */
+    createSession(input: RunInput): Promise<RunHandle>;
+    /**
+     * Sends a command to whichever session owns a continuation address. When
+     * that owner is stranded, a send with a `successor` ends it and is accepted
+     * by the successor; a send without one, or a `clear`, throws
+     * `SessionStrandedError`, and an `end()` call retires it.
+     */
+    dispatchContinuation<TCommand extends SessionCommand>(input: DispatchContinuationInput<TCommand>): Promise<SessionCommandResult<TCommand>>;
+    /**
+     * Sends a command to one exact session. A send or `clear` to a stranded
+     * session throws `SessionStrandedError`; an `end()` call retires it.
+     */
+    dispatchSession<TCommand extends SessionCommand>(input: DispatchSessionInput<TCommand>): Promise<SessionCommandResult<TCommand>>;
+    /**
+     * Resolves the session that currently owns a continuation token without
+     * delivering input or starting a run. Returns `undefined` when no session
+     * owns the token. With `runnable`, throws `SessionStrandedError` when the
+     * owner is stranded and can run nothing.
+     */
+    resolveContinuation(continuationToken: string, options?: {
+        readonly runnable?: boolean;
+    }): Promise<{
+        sessionId: string;
+    } | undefined>;
+    /**
+     * Returns a readable stream of lifecycle events for an existing session.
+     *
+     * Called by the framework's HTTP session-stream route and any user-authored
+     * event-streaming route. Backed by the workflow API's per-session durable
+     * stream.
+     *
+     * Nonnegative `options.startIndex` values are the zero-based position of the
+     * first event to yield. Negative values read relative to the current tail.
+     * The framework HTTP session-stream route forwards the `startIndex` query
+     * parameter unchanged.
+     *
+     * A following read throws `SessionStrandedError` when the session's owner
+     * cannot execute here, and rejects before returning when the session does
+     * not exist or its history has expired. A historical read (`follow: false`)
+     * never inspects or changes the session's lifecycle.
+     */
+    getEventStream(sessionId: string, options?: SessionStreamOptions): Promise<ReadableStream<SessionStreamEvent>>;
+    /**
+     * Returns a session's stored lines from `options.startIndex`, one parsed record per line: a
+     * commit (`{at, facts}`) or a progress record (`{progress}`). A line's position is its index,
+     * counting every line, including ones this version can't read. Backs the HTTP stream route.
+     */
+    getLineStream(sessionId: string, options?: SessionStreamOptions): Promise<ReadableStream<unknown>>;
+    /**
+     * Resolves the durable tail of a session's event stream: the zero-based
+     * index of the last recorded event, or `-1` before the first. Callers use
+     * it to bound a read at the tail they observed instead of following the
+     * live stream.
+     */
+    getStreamTailIndex(sessionId: string): Promise<number>;
+    /**
+     * Reads where a remote child of `sessionId` runs, from the private record the parent wrote
+     * before linking it. Only the parent's stream proxy reads it.
+     */
+    readChildBinding?(sessionId: string, childSessionId: string): Promise<RemoteChildBinding | undefined>;
+    /**
+     * Whether a run that can still execute owns the session: one holds its inbox, on a deployment
+     * that runs. `false` when the session's owner ended or is stranded; its stream gets no more
+     * lines.
+     */
+    hasRunnableOwner?(sessionId: string): Promise<boolean>;
+}
+export type { SessionStreamOptions } from "#shared/session.js";
+import type { SessionStreamOptions } from "#shared/session.js";

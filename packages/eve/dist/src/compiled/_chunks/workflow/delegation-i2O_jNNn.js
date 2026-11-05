@@ -1,0 +1,1 @@
+import{D as e,s as t}from"./esm-B9PP2E1t.js";const n=e(`agent.tracing.handoff`),r=()=>t.active().getValue(n);function i(e,r){return t.with(t.active().setValue(n,e),r)}export{i as n,r as t};

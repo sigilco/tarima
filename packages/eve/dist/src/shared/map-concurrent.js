@@ -1,0 +1,1 @@
+async function mapConcurrent(e,t,n=8){if(!Number.isInteger(n)||n<1)throw Error(`Concurrency must be a positive integer.`);let r=[],i=0,a=!1,o;if(await Promise.all(Array.from({length:Math.min(n,e.length)},async()=>{for(;!a&&i<e.length;){let n=i++;try{r[n]=await t(e[n],n)}catch(e){a||(o=e),a=!0}}})),a)throw o;return r}export{mapConcurrent};

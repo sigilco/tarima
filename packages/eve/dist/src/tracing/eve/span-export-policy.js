@@ -1,0 +1,1 @@
+function normalizeSpanExportPolicies(e){return e===void 0?[]:Array.isArray(e)?e:[e]}export{normalizeSpanExportPolicies};

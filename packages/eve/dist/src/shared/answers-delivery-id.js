@@ -1,0 +1,1 @@
+function answersDeliveryId(e){return`answers_${e}`}export{answersDeliveryId};

@@ -1,0 +1,3 @@
+function agentInstructionsOf(e){let t=(e??[]).filter(e=>e.role===`system`&&e.content.trim().length>0);if(t.length===0)return;let n=t.length===1?t[0]:void 0,r=n!==void 0&&n.owner.kind!==`extension`?n.name:`instructions`;return{content:t.map(e=>e.content).join(`
+
+`).trim(),name:r}}function renderInstructionsBlock(e){return`Instructions (${e.name})\n${e.content}`}export{agentInstructionsOf,renderInstructionsBlock};

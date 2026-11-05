@@ -1,0 +1,3 @@
+import{contentPhase}from"#protocol/session-events/catalog.js";import{formatErrorHint}from"#internal/logging.js";function replyTextOf(e){if(e.kind===`text`&&contentPhase(e.phase)===`reply`)return typeof e.value==`string`&&e.value.length>0?e.value:void 0}function errorHintOf(e){return e===void 0?{}:{details:{name:e.code},message:e.message}}function failureNotice(e,t){if(e.outcome!==`failed`)return;let n=formatErrorHint(errorHintOf(e.error)),r=e.error?.id,[i,a]=t===`turn`?[`I hit an error while handling your request`,`Please try again, rephrase, or reach out if it keeps failing.`]:[`This session could not recover from an error`,`Start a new ${t.restart} to continue.`];return[`${i}${n}.`,a,...r?[`Error id: ${r}`]:[]].join(`
+
+`)}export{errorHintOf,failureNotice,replyTextOf};

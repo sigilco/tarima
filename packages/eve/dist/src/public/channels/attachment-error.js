@@ -1,0 +1,1 @@
+import{EveAttachmentError}from"#internal/attachments/errors.js";function attachmentError(e,t){return new EveAttachmentError({cause:t?.cause,kind:`resolver-threw`,message:e})}export{attachmentError};

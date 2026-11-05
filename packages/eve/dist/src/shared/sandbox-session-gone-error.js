@@ -1,0 +1,1 @@
+var SandboxSessionGoneError=class SandboxSessionGoneError extends Error{constructor(e){super(e),this.name=`SandboxSessionGoneError`}static is(e){return e instanceof SandboxSessionGoneError||e instanceof Error&&e.name===`SandboxSessionGoneError`}};export{SandboxSessionGoneError};

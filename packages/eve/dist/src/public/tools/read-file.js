@@ -1,0 +1,1 @@
+import readFileDefinition,{readFile}from"#tools/provided/read-file.js";var read_file_default=readFileDefinition;export{read_file_default as default,readFile};

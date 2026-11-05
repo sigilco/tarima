@@ -1,0 +1,1 @@
+import{conforming,envelopeOf,id,usage}from"../common.js";import{z}from"#compiled/zod/index.js";const usageSchemas={"usage.recorded":envelopeOf(`usage.recorded`,conforming()(z.object({kind:z.string(),owner:z.union([z.object({runId:id}),z.object({callId:id}),z.object({changeId:id})]).optional(),usage})))};export{usageSchemas};

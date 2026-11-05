@@ -1,0 +1,1 @@
+function isSandboxPreparedArtifact(e){return e===null||typeof e==`boolean`||typeof e==`number`||typeof e==`string`?!0:Array.isArray(e)?e.every(isSandboxPreparedArtifact):typeof e==`object`&&!!e&&Object.values(e).every(isSandboxPreparedArtifact)}export{isSandboxPreparedArtifact};

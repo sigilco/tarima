@@ -1,0 +1,1 @@
+const tag=process.env.EVE_SANDBOX_IMAGE_TAG?.trim()||`dockerfile-fc0279bf1664`,DEFAULT_EVE_SANDBOX_IMAGE=`ghcr.io/vercel/eve:${tag}`,VERCEL_EVE_SANDBOX_IMAGE=`vcr.vercel.com/vercel/eve/base:${tag}`;export{DEFAULT_EVE_SANDBOX_IMAGE,VERCEL_EVE_SANDBOX_IMAGE};

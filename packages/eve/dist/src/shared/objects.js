@@ -1,0 +1,1 @@
+import{isPlainRecord}from"#shared/guards.js";function mergeObjects(e,t){let n={...e,...t};for(let[r,i]of Object.entries(t??{})){let t=e[r];isPlainRecord(t)&&isPlainRecord(i)&&(n[r]=mergeObjects(t,i))}return n}export{mergeObjects};

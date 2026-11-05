@@ -1,0 +1,1 @@
+const CONNECTION_EVENT_SUBSCRIPTION_NAMESPACE=`eve.connection-event.subscription`;function sameEventOwner(e,t){return e.connectionName===t.connectionName&&e.instanceId===t.instanceId&&e.connector===t.connector&&e.principalKey===t.principalKey&&e.executionPrincipal===t.executionPrincipal}export{CONNECTION_EVENT_SUBSCRIPTION_NAMESPACE,sameEventOwner};

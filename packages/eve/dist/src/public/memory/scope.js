@@ -1,0 +1,1 @@
+import{principalScope}from"#shared/principal-scope.js";function byPrincipal(e){return principalScope(e.session.auth)}export{byPrincipal};

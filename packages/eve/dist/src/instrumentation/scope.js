@@ -1,0 +1,1 @@
+const key=Symbol.for(`eve.instrumentation.trace-steps`),global=globalThis,traceSteps=global[key]??=new WeakMap;function instrumentationScope(e,t){let n=e.rootSessionId===void 0?{...e,rootSessionId:e.sessionId}:e;return t!==void 0&&traceSteps.set(n,t),n}function traceStepIndex(e){return traceSteps.get(e)}export{instrumentationScope,traceStepIndex};

@@ -1,0 +1,1 @@
+const LOCAL_WORKFLOW_DELIVERY_TIMEOUT_ENV_NAMES=[`WORKFLOW_LOCAL_BODY_TIMEOUT_MS`,`WORKFLOW_LOCAL_HEADERS_TIMEOUT_MS`];function applyLocalWorkflowWorldDeliveryTimeoutDefaults(e=process.env){for(let t of LOCAL_WORKFLOW_DELIVERY_TIMEOUT_ENV_NAMES)(e[t]===void 0||e[t]===``)&&(e[t]=`0`)}export{applyLocalWorkflowWorldDeliveryTimeoutDefaults};

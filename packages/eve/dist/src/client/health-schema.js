@@ -1,0 +1,1 @@
+import{z}from"#compiled/zod/index.js";const HealthResultSchema=z.object({ok:z.literal(!0),status:z.literal(`ready`),workflowId:z.string().min(1)}).strict();export{HealthResultSchema};

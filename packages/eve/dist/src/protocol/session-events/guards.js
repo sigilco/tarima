@@ -1,0 +1,1 @@
+import{isTerminalType}from"./catalog.js";function isTerminal(e){return isTerminalType(e.type)}function isCompleted(e){return isTerminal(e)&&`outcome`in e.data&&e.data.outcome===`completed`}export{isCompleted,isTerminal};

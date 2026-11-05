@@ -1,0 +1,1 @@
+function formatAttemptLabel(e,t){return t===void 0?e:`${e}#${t}`}export{formatAttemptLabel};

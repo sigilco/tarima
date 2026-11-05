@@ -1,0 +1,1 @@
+import{vercelOidc}from"#public/channels/auth.js";function sameEnvironmentVercelOidc(){let e=vercelOidc();return async t=>{let n=await e(t);return n?.principalType===`runtime`?n:null}}export{sameEnvironmentVercelOidc};

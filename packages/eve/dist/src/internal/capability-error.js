@@ -1,0 +1,1 @@
+import{formatError}from"#internal/logging.js";function formatCapabilityError(e,t){let n=t.filter(e=>e!==void 0&&e.length>0).flatMap(e=>[e,encodeURIComponent(e)]).sort((e,t)=>t.length-e.length);return Object.fromEntries(Object.entries(formatError(e)).map(([e,t])=>[e,typeof t==`string`?n.reduce((e,t)=>e.replaceAll(t,`[redacted]`),t):t]))}export{formatCapabilityError};

@@ -1,0 +1,1 @@
+function eveNamespaceReservation(e){return e===`eve`||e.startsWith(`eve__`)?`eve reserves the "eve" namespace for its built-in tools`:void 0}export{eveNamespaceReservation};

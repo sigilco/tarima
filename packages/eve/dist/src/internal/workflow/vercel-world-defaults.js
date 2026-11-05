@@ -1,0 +1,1 @@
+function applyVercelWorkflowWorldDefaults(e){e.streamFlushIntervalMs??=10}export{applyVercelWorkflowWorldDefaults};

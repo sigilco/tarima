@@ -1,0 +1,1 @@
+export{askQuestion}from"#tools/provided/ask-question.js";

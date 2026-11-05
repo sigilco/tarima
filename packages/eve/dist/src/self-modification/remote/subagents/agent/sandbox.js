@@ -1,0 +1,1 @@
+import extension_default from"../../extension.js";import{defineDeployedSelfModificationSandbox}from"../../../deployed-sandbox.js";var sandbox_default=defineDeployedSelfModificationSandbox(extension_default.config);export{sandbox_default as default};

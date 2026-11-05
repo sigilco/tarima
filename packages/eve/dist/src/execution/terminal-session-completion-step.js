@@ -1,0 +1,1 @@
+import{publishTerminalSessionEvent}from"#execution/publish-session-events.js";async function emitTerminalSessionCompletionStep(e){"use step";let{control:t,settles:n,...r}=e;await publishTerminalSessionEvent({...r,ending:{control:t,settles:n,outcome:`completed`}})}export{emitTerminalSessionCompletionStep};

@@ -1,0 +1,1 @@
+function throwIfAborted(e){if(e===void 0)return;let t=e.throwIfAborted;if(typeof t==`function`){t.call(e);return}if(!e.aborted)return;if(e.reason!==void 0)throw e.reason;let n=Error(`The operation was aborted.`);throw n.name=`AbortError`,n}export{throwIfAborted};

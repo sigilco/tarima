@@ -1,0 +1,1 @@
+import{joinEveRoutePath}from"#shared/eve-route-path.js";function createRemoteAgentRouteUrl(e,t){let n=new URL(t,`http://eve.local`),r=new URL(e);return r.pathname=joinEveRoutePath(r.pathname,n.pathname),r.search=n.search,r.hash=n.hash,r.toString()}export{createRemoteAgentRouteUrl};

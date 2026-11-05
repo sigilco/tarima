@@ -1,0 +1,1 @@
+import{ContextKey}from"#context/key.js";const ToolStubPlaybackKey=new ContextKey(`eve.toolStubPlayback`);export{ToolStubPlaybackKey};

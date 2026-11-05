@@ -1,0 +1,1 @@
+const workspaceTails=new Map;async function withSelfModificationWorkspaceLock(e,t){let n=workspaceTails.get(e)??Promise.resolve(),r,i=new Promise(e=>{r=e}),a=n.then(()=>i);workspaceTails.set(e,a),await n;try{return await t()}finally{r(),workspaceTails.get(e)===a&&workspaceTails.delete(e)}}export{withSelfModificationWorkspaceLock};

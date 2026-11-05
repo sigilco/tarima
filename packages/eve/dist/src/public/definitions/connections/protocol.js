@@ -1,0 +1,1 @@
+const PROTOCOL_KEY=Symbol.for(`eve.connection-protocol`);function stampConnectionProtocol(e,t){Object.defineProperty(e,PROTOCOL_KEY,{configurable:!0,value:t})}function readStampedConnectionProtocol(e){if(typeof e==`object`&&e&&PROTOCOL_KEY in e)return e[PROTOCOL_KEY]}export{readStampedConnectionProtocol,stampConnectionProtocol};

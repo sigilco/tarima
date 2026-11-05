@@ -1,0 +1,1 @@
+import{routeProxiedDeliverStep}from"#execution/proxied-deliver-step.js";async function routeDeliverToChildren(e){return e.sessionState.hasProxyInputRequests?await routeProxiedDeliverStep(e):{kind:`continue`,remainder:e.delivery,stateDelta:{}}}export{routeDeliverToChildren};

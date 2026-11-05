@@ -1,0 +1,1 @@
+function scheduleDisplayName(e){return e.replace(/--[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u,``)}function projectScheduleRecord(e){return{...e,displayName:scheduleDisplayName(e.name)}}export{projectScheduleRecord,scheduleDisplayName};

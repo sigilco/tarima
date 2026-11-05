@@ -1,0 +1,4 @@
+import{extname}from"node:path";import{replyTextOf}from"#public/channels/reply.js";function formatEvalTranscript(e){let t=[],n;for(let r of e){let e=r.meta?.position?.line;if((r.type!==`delivery.consumed`||n?.line!==e)&&(n=void 0),r.type===`delivery.consumed`){n??={at:t.length,line:e};let i=(r.data.history??[]).map(({role:e,text:t})=>`${e===`user`?`User`:`Assistant`}:\n${t}`);t.splice(n.at,0,...i),n.at+=i.length;let a=r.data.parts.flatMap(e=>e.kind===`text`?[e.text]:[]);a.length>0&&t.push(`User:\n${a.join(`
+`)}`)}else if(r.type===`content.completed`){let e=replyTextOf(r.data);e!==void 0&&t.push(`Assistant:\n${e}`)}}return t.join(`
+
+`)}function inferMediaType(e){switch(extname(e).toLowerCase()){case`.gif`:return`image/gif`;case`.jpg`:case`.jpeg`:return`image/jpeg`;case`.png`:return`image/png`;case`.webp`:return`image/webp`;default:return`application/octet-stream`}}export{formatEvalTranscript,inferMediaType};

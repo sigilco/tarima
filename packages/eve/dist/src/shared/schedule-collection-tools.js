@@ -1,0 +1,1 @@
+function scheduleCollectionToolPrefix(e){return`schedule__${e.replaceAll(`/`,`-`)}`}export{scheduleCollectionToolPrefix};

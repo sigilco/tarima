@@ -1,0 +1,1 @@
+async function cleanupEvalSessions(e,t){let n=new Map;for(let t of e){let e=t.id;e!==void 0&&!n.has(e)&&n.set(e,t)}return await Promise.allSettled([...n.values()].map(async e=>await e.cleanup(t)))}export{cleanupEvalSessions};

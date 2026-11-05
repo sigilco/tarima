@@ -1,0 +1,26 @@
+/**
+ * Public definition for an instructions prompt authored in markdown or
+ * TypeScript.
+ *
+ * Authored at the agent root as either `instructions.md` or
+ * `instructions.{ts,cts,mts,js,cjs,mjs}`, or inside the
+ * `agent/instructions/` directory for multi-file setups. Module-backed
+ * static instructions execute once at build time. The compiler captures
+ * the resulting content into the compiled manifest.
+ */
+export interface PublicInstructionsDefinition {
+    readonly content: string;
+    readonly role?: "system" | "user";
+}
+export type InstructionsRole = "system" | "user";
+/**
+ * Internal definition for an instructions prompt authored in markdown or
+ * TypeScript.
+ */
+export interface InternalInstructionsDefinition {
+    readonly content: string;
+    readonly name: string;
+    readonly role: InstructionsRole;
+}
+export declare const INSTRUCTIONS_BRAND: unique symbol;
+export declare function isBrandedInstructionsEntry(value: unknown): boolean;

@@ -1,0 +1,1 @@
+const clientContextKey=`__eveClientContext`;function attachClientContext(e,t){return t!==void 0&&(e[clientContextKey]=t),e}function readClientContext(e){return e?.[clientContextKey]}export{attachClientContext,readClientContext};

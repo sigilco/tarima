@@ -1,0 +1,1 @@
+import{agentSettings}from"#execution/effective-agent-config.js";import{stepReference}from"#harness/step/context.js";function compactionConfig(e){let t=agentSettings(e).thresholdPercent??.9,n=stepReference(e).contextWindowTokens;return{...e.session.compaction,recentWindowSize:10,threshold:n===void 0?1e5:Math.max(1,Math.floor(n*t)),thresholdPercent:t}}export{compactionConfig};

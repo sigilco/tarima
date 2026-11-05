@@ -1,0 +1,1 @@
+import{auto}from"#models/auto.js";import{defineDynamic}from"#public/definitions/model.js";export{auto,defineDynamic};

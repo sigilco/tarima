@@ -1,0 +1,1 @@
+import{interopAuthoredModuleNamespace}from"#internal/authored-module.js";import{memoizeModuleNamespaceFactories}from"#compiler/source-graph.js";import{loadFrameworkProgrammaticModule}from"#framework/sources/registry.js";export{interopAuthoredModuleNamespace,loadFrameworkProgrammaticModule,memoizeModuleNamespaceFactories};

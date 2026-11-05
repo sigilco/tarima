@@ -1,0 +1,1 @@
+const BUILD_DEPLOYMENT_ID_PATTERN=/^eve_[a-f0-9]{32}$/;function installWorkflowDeploymentId(e){BUILD_DEPLOYMENT_ID_PATTERN.test(e)&&(process.env.VERCEL_DEPLOYMENT_ID||process.env.WORKFLOW_DEPLOYMENT_ID||(process.env.WORKFLOW_DEPLOYMENT_ID=e))}export{BUILD_DEPLOYMENT_ID_PATTERN,installWorkflowDeploymentId};

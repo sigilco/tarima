@@ -1,0 +1,1 @@
+const SKILL_BRAND=Symbol.for(`eve:skill-brand`);function isBrandedSkillEntry(e){return typeof e==`object`&&!!e&&e[SKILL_BRAND]===!0}export{SKILL_BRAND,isBrandedSkillEntry};

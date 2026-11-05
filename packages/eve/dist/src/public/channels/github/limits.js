@@ -1,0 +1,2 @@
+function splitGitHubCommentBody(e,t=65536){if(e.length<=t)return[e];let n=[],r=e;for(;r.length>t;){let e=findCommentSplitIndex(r,t);n.push(r.slice(0,e).trimEnd()),r=r.slice(e).trimStart()}return r.length>0&&n.push(r),n}function findCommentSplitIndex(e,t){let n=e.lastIndexOf(`
+`,t);if(n>t*.5)return n;let r=e.lastIndexOf(` `,t);return r>t*.5?r:t}export{splitGitHubCommentBody};

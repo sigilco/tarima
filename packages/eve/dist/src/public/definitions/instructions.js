@@ -1,0 +1,1 @@
+import{defineDynamic as defineDynamic$1}from"#dynamic/definition.js";import{INSTRUCTIONS_BRAND}from"#shared/instructions-definition.js";function defineInstructions(e){return Object.assign(e,{[INSTRUCTIONS_BRAND]:!0}),e}const defineDynamic=defineDynamic$1;export{defineDynamic,defineInstructions};

@@ -1,0 +1,3 @@
+function readBuiltServerStartFailure(e,t){let n=e.indexOf(`[srvx] Failed to start server:`),r=n===-1?-1:e.indexOf(`
+`,n);if(r===-1)return;let i=e.slice(n);return e.slice(n,r).includes(`EADDRINUSE`)?Error(`Port ${String(t.port)} on ${t.host} is already in use. Another process is listening there; stop it or ${t.retryHint}.`):Error([`Built eve server failed to start on ${t.host}:${String(t.port)}.`,i].join(`
+`))}export{readBuiltServerStartFailure};

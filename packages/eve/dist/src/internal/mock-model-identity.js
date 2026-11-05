@@ -1,0 +1,1 @@
+const MOCK_MODEL=Symbol.for(`eve:mock-model`);function markMockModel(e){return Object.defineProperty(e,MOCK_MODEL,{value:!0}),e}function isMockModel(e){return typeof e==`object`&&!!e&&Reflect.get(e,MOCK_MODEL)===!0}export{isMockModel,markMockModel};

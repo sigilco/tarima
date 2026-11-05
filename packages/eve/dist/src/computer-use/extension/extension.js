@@ -1,0 +1,1 @@
+import{defineExtension}from"eve/extension";var extension_default=defineExtension();export{extension_default as default};

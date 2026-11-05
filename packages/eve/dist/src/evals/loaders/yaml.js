@@ -1,0 +1,1 @@
+import{readFile}from"node:fs/promises";import{isAbsolute,resolve}from"node:path";import{parseYaml}from"#internal/helpers/frontmatter.js";async function loadYaml(e){let t=isAbsolute(e)?e:resolve(process.cwd(),e),n=await readFile(t,`utf-8`);return parseYaml(n)}export{loadYaml};

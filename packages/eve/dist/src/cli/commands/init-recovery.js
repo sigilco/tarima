@@ -1,0 +1,3 @@
+import{readdir,rm}from"node:fs/promises";import{join}from"node:path";async function cleanupFreshInitTarget(e,t,n=[]){try{if(t===`remove`)await rm(e,{recursive:!0,force:!0});else{let t=new Set(n);for(let n of await readdir(e))t.has(n)||await rm(join(e,n),{recursive:!0,force:!0})}return!0}catch{return!1}}function workspaceFailureNote(e){return e?`
+
+Shared workspace files may have changed. Review your workspace changes before committing.`:``}export{cleanupFreshInitTarget,workspaceFailureNote};

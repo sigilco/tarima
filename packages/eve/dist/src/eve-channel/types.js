@@ -1,0 +1,1 @@
+function defaultEveAuth(e){return e.eve.caller}export{defaultEveAuth};

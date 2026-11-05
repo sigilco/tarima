@@ -1,0 +1,1 @@
+export{getLocalDevCapability}from"#runtime/local-dev-capability.js";

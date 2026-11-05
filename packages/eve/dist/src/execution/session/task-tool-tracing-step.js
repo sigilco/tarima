@@ -1,0 +1,1 @@
+async function startTaskToolCallsStep(){"use step";return Date.now()}export{startTaskToolCallsStep};

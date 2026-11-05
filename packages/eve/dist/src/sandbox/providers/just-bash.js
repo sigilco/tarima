@@ -1,0 +1,1 @@
+import{createJustBashSandboxProvider}from"#execution/sandbox/bindings/local.js";import{defineSandboxProvider}from"#public/sandbox/provider.js";const JustBashSandbox=defineSandboxProvider({name:`just-bash`,environment:e=>createJustBashSandboxProvider(e)});export{JustBashSandbox};

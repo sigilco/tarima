@@ -1,0 +1,1 @@
+function declared(e,t){return e.definitions.filter(e=>e.kind===t)}export{declared};

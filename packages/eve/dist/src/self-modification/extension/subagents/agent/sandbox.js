@@ -1,0 +1,1 @@
+import extension_default from"../../extension.js";import{defineSelfModificationSandbox,defineSelfModificationSandbox as defineSelfModificationSandbox$1}from"eve/internal/self-modification/sandbox";var sandbox_default=defineSelfModificationSandbox$1({config:extension_default.config});export{sandbox_default as default,defineSelfModificationSandbox};

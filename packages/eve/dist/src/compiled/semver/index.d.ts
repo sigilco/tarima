@@ -1,0 +1,29 @@
+export interface SemVer {
+  major: number;
+}
+
+export interface Comparator {
+  value: string;
+}
+
+export interface Range {
+  set: Comparator[][];
+}
+
+export interface SemVerApi {
+  Range: new (range: string) => Range;
+  gte(version: string, minimumVersion: string): boolean;
+  intersects(rangeA: string, rangeB: string): boolean;
+  minVersion(range: string): SemVer | null;
+  subset(
+    candidateRange: string,
+    requiredRange: string,
+    options?: { includePrerelease?: boolean },
+  ): boolean;
+  valid(version: string): string | null;
+  validRange(range: string): string | null;
+}
+
+declare const semver: SemVerApi;
+
+export default semver;

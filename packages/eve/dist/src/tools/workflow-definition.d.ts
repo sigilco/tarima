@@ -1,0 +1,247 @@
+import type { MessageContent } from "#shared/message-content.js";
+import type { StandardJSONSchemaV1, StandardSchemaV1 } from "#compiled/@standard-schema/spec/index.js";
+import type { Approval } from "#approval/definition.js";
+import type { DeliveryResult, SendTurnOptions } from "#client/types.js";
+import type { AgentModelOptionsDefinition, AgentReasoningDefinition } from "#shared/agent-definition.js";
+import type { JsonObject } from "#shared/json.js";
+import { type PublicToolDefinition, type ToolContext, type ToolQuestion, type ToolAskOptions, type ToolAnswer } from "#tools/definition.js";
+import type { ToolModelOutput } from "#tools/model-output.js";
+import { type WorkflowToolEntryPoint } from "#tools/workflow-entry-point.js";
+export type { WorkflowToolEntryPoint };
+export interface WorkflowAgentMetadata {
+    readonly description: string;
+}
+/** A serializable model selection for a local `ctx.agent` session. */
+export type AgentSessionModelSelection = string | {
+    readonly model: string;
+    readonly modelContextWindowTokens?: number;
+    readonly modelOptions?: AgentModelOptionsDefinition;
+    readonly reasoning?: AgentReasoningDefinition;
+};
+/** Options that bind to a `ctx.agent` session when it opens. */
+export interface AgentSessionOptions {
+    /** Override the model for every turn in this local agent session. */
+    readonly model?: AgentSessionModelSelection;
+}
+/**
+ * Context capabilities available inside an authored `"use step"` helper.
+ *
+ * `getSandbox()` opens the sandbox of the session that made the call, the
+ * same sandbox its turns use. If the session had not recorded its sandbox
+ * when it called the tool, the step opens it with the sandbox definition of
+ * the session that owns it (the parent's, for a session that shares its
+ * parent's sandbox), so make that definition safe to run again. The step does not own the sandbox: eve lets go of the
+ * step's handle when the step ends and never stops or deletes the sandbox for
+ * it, and `stop()` and `delete()` throw. The session deletes it when the
+ * session ends. Steps can retry, so make sandbox writes safe to repeat.
+ */
+export type WorkflowStepToolContext = Pick<ToolContext, "abortSignal" | "callId" | "channel" | "session" | "toolName" | "getSandbox" | "getToken" | "requireAuth" | "to">;
+/** Options for one message to a `ctx.agent` session. */
+export interface AgentSendOptions<TOutput = unknown> {
+    /** Structured output for the turn, as on the client's `send`. */
+    readonly outputSchema?: SendTurnOptions<TOutput>["outputSchema"];
+    /** Aborting cancels the turn this message started or joined; the turn still reports. */
+    readonly signal?: AbortSignal;
+}
+/**
+ * How one delegated turn ended. Questions relay to the parent while this result waits for the
+ * final reply; session termination is separate from request completion.
+ */
+export type AgentMessageResult<TOutput = unknown> = Pick<DeliveryResult<TOutput>, "data" | "reply" | "sessionEnded"> & ({
+    readonly status: "completed" | "cancelled";
+    readonly error?: never;
+} | {
+    readonly status: "failed";
+    /** Why the turn failed. */
+    readonly error: {
+        readonly message: string;
+    };
+});
+/** The response to one message sent to a `ctx.agent` session. */
+export interface AgentResponse<TOutput = unknown> {
+    /** Resolves when the turn the message started or joined ends. */
+    result(): Promise<AgentMessageResult<TOutput>>;
+}
+/**
+ * A session the workflow run owns, opened by its first `send` and ended when
+ * the run finishes. Only the run can address it.
+ */
+export interface AgentSession {
+    /**
+     * Delivers a message. It joins the session's running turn, whose result the
+     * response resolves, or starts the next turn when the session is idle or the
+     * running turn ends before the agent reads it.
+     */
+    send<TOutput = unknown>(message: MessageContent<string | URL>, options?: AgentSendOptions<TOutput>): Promise<AgentResponse<TOutput>>;
+}
+/**
+ * Members the context of every workflow tool entry point shares.
+ * `getSandbox`, `getToken`, `requireAuth`, and `to` work only after `ctx` is
+ * passed to a `"use step"` helper; the workflow body throws when it calls them.
+ */
+export type WorkflowSharedContext = Pick<ToolContext, "channel" | "session" | "toolName" | "getSandbox" | "getToken" | "requireAuth" | "to"> & {
+    /**
+     * Returns a new session with the agent of this invocation name. Nothing
+     * starts until the first `send`.
+     */
+    agent(name: string, options?: AgentSessionOptions): AgentSession;
+    /** Metadata for agents callable by this workflow, including hidden agents. */
+    agents: Readonly<Record<string, WorkflowAgentMetadata>>;
+    /**
+     * Ask the human on the session's channel; awaiting the answer suspends the
+     * run. The request is withdrawn, resolving as `cancelled`, when
+     * `options.signal` or the call's `abortSignal` aborts.
+     */
+    ask(request: ToolQuestion, options?: ToolAskOptions): PromiseLike<ToolAnswer>;
+};
+/**
+ * Context of an `execute(input, ctx)` or `task(input, ctx)` call. When passed
+ * directly to a step, eve replaces it with {@link WorkflowStepToolContext}.
+ */
+export type WorkflowToolContext = WorkflowSharedContext & Pick<ToolContext, "callId"> & {
+    /**
+     * Aborts when the call's work should stop: the call is cancelled, by
+     * `eve__task_cancel`, `session.cancel()`, a failed turn, or the end of the
+     * session, or, for an `execute` call, a steering message arrives while the
+     * turn waits on it. Stop and return what you have. After a steering
+     * message the call settles with what the body returns, or with
+     * `{ interrupted: true }` if it rejects; a cancelled call's result is
+     * discarded. A task never sees a steering message.
+     */
+    readonly abortSignal: AbortSignal;
+};
+/**
+ * One call a `serve` body receives: the call that started the task, or a
+ * later call the model made with the task's `taskId`.
+ */
+export interface WorkflowServeCall<TInput = unknown> {
+    readonly callId: string;
+    /** The call's input, validated by the tool's `inputSchema`. */
+    readonly input: TInput;
+    /**
+     * Aborts when the task's current stretch of work is cancelled or the
+     * session ends. A stretch starts when a call reaches an idle task and ends
+     * when a reply or a cancel settles its calls; calls that arrive during it
+     * share its signal, and the next stretch gets a new one.
+     */
+    readonly abortSignal: AbortSignal;
+}
+/**
+ * Resolves with the task's next call. The first `receive()` resolves at once
+ * with the call that started the task; each later one with the next call made
+ * with the task's `taskId`, in arrival order. A pending `receive()` is shared:
+ * calling it again returns the same promise. A call counts as received once its
+ * promise resolves, even if that promise lost a `Promise.race`, and the next
+ * `ctx.reply()` settles it, so keep a raced promise until you read its call.
+ * It rejects when the session ends.
+ */
+export type WorkflowServeReceive<TInput = unknown> = () => Promise<WorkflowServeCall<TInput>>;
+/**
+ * Context of a `serve(receive, ctx)` task. Each call brings its own `callId`
+ * and `abortSignal` from `receive()`, and steering never interrupts a task, so
+ * the context has neither. `session` (its turn and auth) and `agents`
+ * describe the latest call received, the call the body serves now. A session
+ * opened with `agent()` is the child of the call served when it opens, and
+ * each message sent to it carries the auth of the call served when it is sent.
+ * `ctx.ask` throws while no call is
+ * waiting for a result. When passed directly to a step, eve replaces it with
+ * {@link WorkflowStepToolContext} for the latest call waiting for a result.
+ */
+export type WorkflowServeContext<TOutput = unknown> = WorkflowSharedContext & {
+    /**
+     * Settles every call received so far with `output`, and the task goes idle
+     * until its next call. A reply with no call left to settle, including one
+     * after a cancel, is dropped.
+     */
+    reply(output: TOutput): void;
+};
+declare const WORKFLOW_TOOL_BRAND: unique symbol;
+interface WorkflowToolDefinitionBase<TInput, TOutput> extends PublicToolDefinition<TInput, TOutput> {
+    readonly [WORKFLOW_TOOL_BRAND]: true;
+    approval?: Approval<unknown extends TInput ? Record<string, unknown> : TInput>;
+    toModelOutput?: (output: TOutput) => ToolModelOutput | Promise<ToolModelOutput>;
+}
+/** A workflow tool whose calls are ordinary tool calls: the turn waits until each settles. */
+export interface WorkflowExecuteToolDefinition<TInput = unknown, TOutput = unknown> extends WorkflowToolDefinitionBase<TInput, TOutput> {
+    execute(input: TInput, ctx: WorkflowToolContext): Promise<TOutput> | AsyncIterable<TOutput>;
+    task?: never;
+    serve?: never;
+}
+/**
+ * A workflow tool whose every call runs as a task: the model gets a receipt at
+ * once and the conversation continues, and the result arrives later in a
+ * `task.result` message.
+ */
+export interface WorkflowTaskToolDefinition<TInput = unknown, TOutput = unknown> extends WorkflowToolDefinitionBase<TInput, TOutput> {
+    task(input: TInput, ctx: WorkflowToolContext): Promise<TOutput> | AsyncIterable<TOutput>;
+    execute?: never;
+    serve?: never;
+}
+/**
+ * A workflow tool whose calls reach resumable tasks. A call without `taskId`
+ * starts a task, whose body runs once and gets that call and every later call
+ * made with its `taskId` from `receive()`; each `ctx.reply()` delivers a
+ * result. eve adds the optional `taskId` to the tool's model input, so
+ * `inputSchema` must not declare its own. Returning settles the calls still
+ * waiting and ends the task; throwing fails them.
+ */
+export interface WorkflowServeToolDefinition<TInput = unknown, TOutput = unknown> extends WorkflowToolDefinitionBase<TInput, TOutput> {
+    serve(receive: WorkflowServeReceive<TInput>, ctx: WorkflowServeContext<TOutput>): Promise<TOutput>;
+    execute?: never;
+    task?: never;
+}
+/**
+ * A static tool whose entry point runs as a durable workflow and must start
+ * with "use workflow". It defines exactly one entry point.
+ */
+export type WorkflowToolDefinition<TInput = unknown, TOutput = unknown> = WorkflowExecuteToolDefinition<TInput, TOutput> | WorkflowTaskToolDefinition<TInput, TOutput> | WorkflowServeToolDefinition<TInput, TOutput>;
+type Unbranded<T> = T extends unknown ? Omit<T, typeof WORKFLOW_TOOL_BRAND> : never;
+type WorkflowReturn<T> = T extends AsyncIterable<infer Output> ? Output : Awaited<T>;
+type Schema = StandardSchemaV1<unknown, unknown> | StandardJSONSchemaV1<unknown, unknown>;
+type EntryPointReturn<TOutput> = Promise<TOutput> | AsyncIterable<TOutput>;
+type InferOutput<TSchema extends StandardJSONSchemaV1<unknown, unknown>> = StandardJSONSchemaV1.InferOutput<TSchema>;
+type InferInput<TSchema extends Schema> = StandardSchemaV1.InferOutput<TSchema>;
+type DefinitionFields<TInput, TOutput> = Omit<WorkflowToolDefinitionBase<TInput, TOutput>, typeof WORKFLOW_TOOL_BRAND>;
+type ExecuteDefinition<TInput, TReturn> = DefinitionFields<TInput, WorkflowReturn<TReturn>> & {
+    execute(input: TInput, ctx: WorkflowToolContext): TReturn;
+    task?: never;
+    serve?: never;
+};
+type TaskDefinition<TInput, TReturn> = DefinitionFields<TInput, WorkflowReturn<TReturn>> & {
+    task(input: TInput, ctx: WorkflowToolContext): TReturn;
+    execute?: never;
+    serve?: never;
+};
+type ServeDefinition<TInput, TOutput> = DefinitionFields<TInput, TOutput> & {
+    serve(receive: WorkflowServeReceive<TInput>, ctx: WorkflowServeContext<TOutput>): Promise<TOutput>;
+    execute?: never;
+    task?: never;
+};
+type WithSchemas<TDefinition, TInputSchema, TOutputSchema> = Omit<TDefinition, "inputSchema" | "outputSchema"> & {
+    inputSchema: TInputSchema;
+    outputSchema: TOutputSchema;
+};
+type WithInputSchema<TDefinition, TSchema> = Omit<TDefinition, "inputSchema"> & {
+    inputSchema: TSchema;
+};
+export declare function defineWorkflowTool<TInputSchema extends Schema, TOutputSchema extends StandardJSONSchemaV1<unknown, unknown>, TReturn extends EntryPointReturn<InferOutput<TOutputSchema>>>(definition: WithSchemas<ExecuteDefinition<InferInput<TInputSchema>, TReturn>, TInputSchema, TOutputSchema>): WorkflowExecuteToolDefinition<InferInput<TInputSchema>, InferOutput<TOutputSchema>>;
+export declare function defineWorkflowTool<TInputSchema extends Schema, TOutputSchema extends StandardJSONSchemaV1<unknown, unknown>, TReturn extends EntryPointReturn<InferOutput<TOutputSchema>>>(definition: WithSchemas<TaskDefinition<InferInput<TInputSchema>, TReturn>, TInputSchema, TOutputSchema>): WorkflowTaskToolDefinition<InferInput<TInputSchema>, InferOutput<TOutputSchema>>;
+export declare function defineWorkflowTool<TInputSchema extends Schema, TOutputSchema extends StandardJSONSchemaV1<unknown, unknown>>(definition: WithSchemas<ServeDefinition<InferInput<TInputSchema>, InferOutput<TOutputSchema>>, TInputSchema, TOutputSchema>): WorkflowServeToolDefinition<InferInput<TInputSchema>, InferOutput<TOutputSchema>>;
+export declare function defineWorkflowTool<TSchema extends Schema, TReturn extends EntryPointReturn<unknown>>(definition: WithInputSchema<ExecuteDefinition<InferInput<TSchema>, TReturn>, TSchema>): WorkflowExecuteToolDefinition<InferInput<TSchema>, WorkflowReturn<TReturn>>;
+export declare function defineWorkflowTool<TSchema extends Schema, TReturn extends EntryPointReturn<unknown>>(definition: WithInputSchema<TaskDefinition<InferInput<TSchema>, TReturn>, TSchema>): WorkflowTaskToolDefinition<InferInput<TSchema>, WorkflowReturn<TReturn>>;
+export declare function defineWorkflowTool<TSchema extends Schema>(definition: WithInputSchema<ServeDefinition<InferInput<TSchema>, unknown>, TSchema>): WorkflowServeToolDefinition<InferInput<TSchema>>;
+export declare function defineWorkflowTool<TReturn extends EntryPointReturn<unknown>>(definition: ExecuteDefinition<Record<string, unknown>, TReturn> & {
+    inputSchema: JsonObject;
+}): WorkflowExecuteToolDefinition<Record<string, unknown>, WorkflowReturn<TReturn>>;
+export declare function defineWorkflowTool<TReturn extends EntryPointReturn<unknown>>(definition: TaskDefinition<Record<string, unknown>, TReturn> & {
+    inputSchema: JsonObject;
+}): WorkflowTaskToolDefinition<Record<string, unknown>, WorkflowReturn<TReturn>>;
+export declare function defineWorkflowTool(definition: ServeDefinition<Record<string, unknown>, unknown> & {
+    inputSchema: JsonObject;
+}): WorkflowServeToolDefinition<Record<string, unknown>>;
+export declare function defineWorkflowTool<TInput = unknown, TOutput = unknown>(definition: Unbranded<WorkflowExecuteToolDefinition<TInput, TOutput>>): WorkflowExecuteToolDefinition<TInput, TOutput>;
+export declare function defineWorkflowTool<TInput = unknown, TOutput = unknown>(definition: Unbranded<WorkflowTaskToolDefinition<TInput, TOutput>>): WorkflowTaskToolDefinition<TInput, TOutput>;
+export declare function defineWorkflowTool<TInput = unknown, TOutput = unknown>(definition: Unbranded<WorkflowServeToolDefinition<TInput, TOutput>>): WorkflowServeToolDefinition<TInput, TOutput>;
+export declare function isWorkflowToolDefinition(value: unknown): boolean;
+/** The entry points a definition defines; a workflow tool defines exactly one. */
+export declare function readWorkflowToolEntryPoints(definition: object): WorkflowToolEntryPoint[];

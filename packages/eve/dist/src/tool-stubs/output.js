@@ -1,0 +1,1 @@
+function toolStubOutput(e){if(e.throw!==void 0){let t=Error(e.throw.message);throw t.name=e.throw.name??`Error`,t}return e.response}export{toolStubOutput};

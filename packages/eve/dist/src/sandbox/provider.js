@@ -1,0 +1,1 @@
+import{createSandboxEnvironment}from"#shared/sandbox-environment.js";function defineSandboxProvider(e){return{name:e.name,environment(t){let{prepare:n,...r}=t??{};return createSandboxEnvironment({implementation:e.environment(r),prepare:n,providerName:e.name,stateProtocolVersion:e.stateProtocolVersion??1})}}}export{defineSandboxProvider};

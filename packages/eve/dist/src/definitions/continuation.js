@@ -1,0 +1,1 @@
+const REACTIONS_STATE_KEY=`eve.reactions`;function continuationKey(e,t){return`${e}:continue:${t}`}function pendingContinuation(e,t){let n=e[REACTIONS_STATE_KEY];return t!==void 0&&n?.continuation?.turnId===t?n.continuation.delivery:void 0}export{REACTIONS_STATE_KEY,continuationKey,pendingContinuation};

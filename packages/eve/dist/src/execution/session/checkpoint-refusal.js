@@ -1,0 +1,1 @@
+var CheckpointRefusal=class extends Error{};function refuse(e){throw new CheckpointRefusal(e)}export{CheckpointRefusal,refuse};

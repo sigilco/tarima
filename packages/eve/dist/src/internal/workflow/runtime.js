@@ -1,0 +1,1 @@
+import*as workflowRuntime from"#compiled/@workflow/core/runtime.js";import{resolveRunEncryptionKey}from"#compiled/@workflow/core/runtime/helpers.js";export*from"#compiled/@workflow/core/runtime.js";function setWorld(e){workflowRuntime.setWorld(e)}export{resolveRunEncryptionKey,setWorld};

@@ -4,4 +4,6 @@ research/
 *.html
 node_modules/
 packages/copy/
+packages/eve/dist
+packages/eve/docs
 apps/web/src/routeTree.gen.ts

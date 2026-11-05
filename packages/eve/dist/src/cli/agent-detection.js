@@ -1,0 +1,1 @@
+import{determineAgent}from"#compiled/@vercel/detect-agent/index.js";async function isCodingAgentLaunch(){return(await determineAgent()).isAgent}export{isCodingAgentLaunch};

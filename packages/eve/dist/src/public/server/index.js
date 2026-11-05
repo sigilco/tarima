@@ -1,0 +1,1 @@
+import{streamSessionEvents}from"#execution/session-event-stream.js";const sessions={attach(e){return{id:e,stream:t=>streamSessionEvents(e,t)}}};export{sessions};

@@ -1,0 +1,1 @@
+var InitTargetError=class extends Error{failureCode;constructor(e,t){super(t),this.failureCode=e}};export{InitTargetError};

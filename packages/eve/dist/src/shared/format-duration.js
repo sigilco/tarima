@@ -1,0 +1,1 @@
+function formatDuration(e){if(e<1e3)return`${String(Math.max(0,Math.round(e)))}ms`;let t=Math.round(e/1e3),n=Math.floor(t/3600),r=Math.floor(t%3600/60),i=t%60,a=[];return n>0&&a.push(`${String(n)}h`),r>0&&a.push(`${String(r)}m`),i>0&&a.push(`${String(i)}s`),a.join(` `)}export{formatDuration};

@@ -1,0 +1,1 @@
+import{defined}from"#harness/facts.js";function relayEvent(e,t){return{data:defined(t),type:e}}export{relayEvent};

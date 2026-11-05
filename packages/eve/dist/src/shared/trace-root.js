@@ -1,0 +1,1 @@
+import{ParentSessionKey,TraceRootKey}from"#context/keys.js";function resolveTraceRootSessionId(e,t){let n=e.get(TraceRootKey);return n?.kind===`own`?t:n?.kind===`inherited`?n.sessionId:e.get(ParentSessionKey)?.rootSessionId??t}export{resolveTraceRootSessionId};

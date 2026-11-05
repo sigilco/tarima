@@ -1,0 +1,1 @@
+export{ConnectionAuthorizationFailedError,ConnectionAuthorizationRequiredError,isConnectionAuthorizationFailedError,isConnectionAuthorizationRequiredError}from"#connections/errors.js";

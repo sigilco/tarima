@@ -1,0 +1,1 @@
+export{defineHook}from"#public/definitions/hook.js";

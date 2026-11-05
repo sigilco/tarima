@@ -1,0 +1,1 @@
+const EVE_WORKFLOW_SPEC_VERSION=9;function applyWorkflowSpecVersionDefault(e=process.env){isSet(e.WORKFLOW_SPEC_VERSION)||isSet(e.WORKFLOW_SEALED_LOG)||(e.WORKFLOW_SPEC_VERSION=`9`)}function isSet(e){return e!==void 0&&e!==``}export{EVE_WORKFLOW_SPEC_VERSION,applyWorkflowSpecVersionDefault};

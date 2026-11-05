@@ -1,0 +1,1 @@
+function mayContainWorkflowDirective(e){return e.includes(`use step`)||e.includes(`use workflow`)||e.includes(`\\`)}function readWorkflowDirective(e){let t=e?.expression,n=e?.directive??(e?.type===`ExpressionStatement`&&t?.type===`Literal`?t.value:void 0);return n===`use step`||n===`use workflow`?n:void 0}export{mayContainWorkflowDirective,readWorkflowDirective};

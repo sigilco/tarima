@@ -1,0 +1,1 @@
+function shouldCaptureInstrumentationContent(e){return e.audience===`public`||e.environment===`development`}function applyAudienceCeiling(e,t){return e.action===`drop`||e.explicitContentAudience===t.audience||shouldCaptureInstrumentationContent(t)?e:{action:`record`,recordInputs:!1,recordOutputs:!1}}export{applyAudienceCeiling,shouldCaptureInstrumentationContent};

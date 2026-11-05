@@ -1,0 +1,1 @@
+import{createHash}from"node:crypto";function stableModuleId(e){let t=e.replaceAll(`\\`,`/`).replace(/[?#].*$/,``),n=t.lastIndexOf(`/node_modules/`);if(n>=0)t=t.slice(n+14);else{let e=process.cwd().replaceAll(`\\`,`/`);t.startsWith(`${e}/`)&&(t=t.slice(e.length+1))}return createHash(`sha256`).update(t).digest(`hex`).slice(0,32)}export{stableModuleId};

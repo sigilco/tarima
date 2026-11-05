@@ -1,0 +1,1 @@
+async function closeSessionStreamStep(e){"use step";try{let t=e.sessionWritable.getWriter();try{await t.close()}finally{t.releaseLock()}}catch{}}export{closeSessionStreamStep};

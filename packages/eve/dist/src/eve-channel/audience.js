@@ -1,0 +1,1 @@
+function defaultEveAudience(e){return e.caller.type===`principal`&&(e.caller.principal.kind===`user`||e.caller.principal.kind===`service`||e.caller.principal.kind===`runtime`)?`private`:`unknown`}export{defaultEveAudience};

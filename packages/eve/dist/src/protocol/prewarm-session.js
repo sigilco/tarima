@@ -1,0 +1,1 @@
+import{z}from"#compiled/zod/index.js";const PrewarmResponseSchema=z.object({ok:z.literal(!0),status:z.enum([`ready`,`accepted`,`unsupported`,`no_active_session`])});export{PrewarmResponseSchema};

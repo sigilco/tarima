@@ -43,9 +43,25 @@
     "tests/e2e": {
       "entry": ["src/api/helpers/*.ts", "src/api/**/*.test.ts", "ui/**/*.ts"],
       "ignoreDependencies": ["@playwright/test"]
+    },
+    "packages/eve": {
+      "entry": ["bin/eve.js"],
+      "ignore": ["bin/eve.d.ts"],
+      "ignoreDependencies": ["nitro", "rolldown", "undici"]
     }
   },
-  "ignore": ["apps/api/src/server.ts", "apps/api/src/db/index.test.ts"],
+  "ignore": [
+    "apps/api/src/db/index.test.ts",
+    "apps/api/src/server.ts",
+    "apps/web/tests/turn/agent-turn.mjs",
+    "apps/web/tests/turn/turn-seed-venues.mjs"
+  ],
   "ignoreBinaries": ["validate"],
-  "ignoreDependencies": ["react", "react-dom", "@tanstack/react-router", "@tanstack/react-start"]
+  "ignoreDependencies": [
+    "@tanstack/react-router",
+    "@tanstack/react-start",
+    "react",
+    "react-cosmos-core",
+    "react-dom"
+  ]
 }

@@ -1,0 +1,1 @@
+import{defineSandboxProvider}from"#public/sandbox/provider.js";import{createVercelSandbox}from"#execution/sandbox/bindings/vercel.js";const VercelSandbox=defineSandboxProvider({name:`vercel`,environment:e=>createVercelSandbox({createOptions:e})});export{VercelSandbox};

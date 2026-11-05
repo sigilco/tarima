@@ -1,0 +1,28 @@
+import { type AgentContext, type InitializeRequest, type InitializeResponse, type NewSessionRequest, type NewSessionResponse, type PromptRequest, type PromptResponse } from "#compiled/@agentclientprotocol/sdk/index.js";
+import type { ClientOptions } from "#client/types.js";
+/** Configuration for translating one ACP client connection to an eve server. */
+export interface EveAcpAdapterOptions {
+    readonly eveVersion: string;
+    readonly auth?: ClientOptions["auth"];
+    readonly headers?: ClientOptions["headers"];
+    readonly serverUrl: string;
+    /** Local workspace root to enforce; omit when connecting to a remote deployment. */
+    readonly workspaceRoot?: string;
+}
+/**
+ * Translates stable ACP v1 sessions onto the public eve HTTP client.
+ *
+ * The adapter owns only process-local ACP identities. Conversation durability,
+ * event cursors, cancellation, and session retirement remain owned by
+ * {@link ClientSession}.
+ */
+export declare class EveAcpAdapter {
+    #private;
+    constructor(options: EveAcpAdapterOptions);
+    initialize(params: InitializeRequest): InitializeResponse;
+    newSession(params: NewSessionRequest): Promise<NewSessionResponse>;
+    prompt(params: PromptRequest, client: AgentContext, signal: AbortSignal): Promise<PromptResponse>;
+    cancel(sessionId: string): Promise<void>;
+    closeSession(sessionId: string): Promise<void>;
+    close(): Promise<void>;
+}

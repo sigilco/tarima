@@ -1,0 +1,1 @@
+export{webSearch}from"#tools/provided/web-search.js";

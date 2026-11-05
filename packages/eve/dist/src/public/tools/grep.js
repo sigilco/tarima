@@ -1,0 +1,1 @@
+import grepDefinition,{grep}from"#tools/provided/grep.js";var grep_default=grepDefinition;export{grep_default as default,grep};

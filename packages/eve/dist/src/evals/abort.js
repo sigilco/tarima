@@ -1,0 +1,1 @@
+async function runUntilAborted(e,t){let onAbort,n=new Promise((e,n)=>{onAbort=()=>n(t.reason),t.aborted?onAbort():t.addEventListener(`abort`,onAbort,{once:!0})});try{return await Promise.race([n,e])}finally{onAbort!==void 0&&t.removeEventListener(`abort`,onAbort)}}export{runUntilAborted};

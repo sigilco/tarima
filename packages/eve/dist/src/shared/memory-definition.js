@@ -1,0 +1,1 @@
+const MEMORY_DEFINITION_BRAND=Symbol.for(`eve:memory-definition`);function isMemoryDefinition(e){return typeof e==`object`&&!!e&&Reflect.get(e,MEMORY_DEFINITION_BRAND)===!0}export{MEMORY_DEFINITION_BRAND,isMemoryDefinition};

@@ -1,0 +1,1 @@
+function outputOf(e){return e===void 0?null:e.data===void 0?e.reply??null:e.data}export{outputOf};

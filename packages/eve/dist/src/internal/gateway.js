@@ -1,0 +1,1 @@
+import{withPackageUserAgent}from"#internal/user-agent.js";const GATEWAY_BASE_URL=`https://ai-gateway.vercel.sh`,AI_GATEWAY_MODELS_URL=`${GATEWAY_BASE_URL}/v1/models`,AI_GATEWAY_MODELS_CATALOG_URL=`${GATEWAY_BASE_URL}/v1/models/catalog`,vercelGatewayFetch=withPackageUserAgent();export{AI_GATEWAY_MODELS_CATALOG_URL,AI_GATEWAY_MODELS_URL,vercelGatewayFetch};

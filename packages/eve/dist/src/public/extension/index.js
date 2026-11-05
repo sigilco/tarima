@@ -1,0 +1,1 @@
+export{defineExtension}from"#public/definitions/extension.js";

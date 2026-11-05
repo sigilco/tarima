@@ -4,7 +4,6 @@
  * session (`channels/eve.ts` put users.id there).
  */
 import { db } from "@tarima/api/db";
-import type { ApiDb } from "@tarima/api/services/projects";
 
 type AuthedContext = {
   session: { auth: { current: { principalId: string } | null } };
@@ -17,4 +16,3 @@ export function callerUserId(ctx: unknown): string | undefined {
 }
 
 export { db };
-export type { ApiDb };

@@ -1,0 +1,1 @@
+import{loadContext}from"#context/container.js";function getContext(e){return loadContext().get(e)}function setContext(e,t){return loadContext().set(e,t)}function ensureContext(e,t){return loadContext().ensure(e,t)}export{ensureContext,getContext,setContext};

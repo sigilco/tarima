@@ -1,0 +1,1 @@
+import{commitOf}from"./commit.js";import{fact}from"#harness/facts.js";function completeParts(e){return commitOf(e.map(e=>fact(`content.completed`,e)))}export{completeParts};

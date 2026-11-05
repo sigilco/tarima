@@ -1,0 +1,1 @@
+const STAMPED_PACKAGE_VERSION=`1.0.0-rc.5`;function readStampedPackageVersion(){return STAMPED_PACKAGE_VERSION.startsWith(`__`)?void 0:STAMPED_PACKAGE_VERSION}export{readStampedPackageVersion};

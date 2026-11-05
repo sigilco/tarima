@@ -1,0 +1,1 @@
+const TOOL_BEHAVIOR=Symbol.for(`eve.tool-behavior`);function attachToolBehavior(e,t){return Object.defineProperty(e,TOOL_BEHAVIOR,{configurable:!1,enumerable:!1,value:t,writable:!1}),e}function readToolBehavior(e){if(typeof e==`object`&&e)return e[TOOL_BEHAVIOR]}export{attachToolBehavior,readToolBehavior};

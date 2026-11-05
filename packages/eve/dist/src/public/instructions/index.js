@@ -1,0 +1,1 @@
+export{defineDynamic,defineInstructions}from"#public/definitions/instructions.js";
