@@ -82,14 +82,31 @@ export async function handleAgentTurn(request: Request): Promise<Response> {
       signal: AbortSignal.timeout(TURN_TIMEOUT_MS),
     });
 
-    // Tool calls and per-message parts come from the session stream, not
-    // the delivery summary; read the settled stream once.
+    // Tool calls come from the session stream, not the delivery summary:
+    // eve publishes them as `call.requested` (the model asked for a
+    // capability) and `call.settled` (it finished).
     const session = client.sessions.attach(delivery.sessionId);
     const parts: AgentToolCall[] = [];
     for await (const event of session.stream({ follow: false })) {
-      const stream = event as { type?: string; data?: unknown };
-      if (stream.type === "tool.call" || stream.type === "tool.result") {
-        parts.push(stream.data as AgentToolCall);
+      const fact = event as unknown as { type?: string; data?: Record<string, unknown> };
+      if (fact.type === "call.requested") {
+        const capability = fact.data?.capability as
+          | { kind?: string; name?: string; label?: string }
+          | undefined;
+        parts.push({
+          toolName: capability?.name ?? capability?.label,
+          state: "requested",
+          input: fact.data?.input,
+        });
+      } else if (fact.type === "call.settled") {
+        const capability = fact.data?.capability as
+          | { kind?: string; name?: string; label?: string }
+          | undefined;
+        parts.push({
+          toolName: capability?.name ?? capability?.label,
+          state: "settled",
+          output: fact.data?.output,
+        });
       }
     }
 
