@@ -22,10 +22,10 @@
       "entry": ["src/index.ts", "src/*.ts"]
     },
     "apps/web": {
-      "entry": ["src/**/*.{ts,tsx}"],
+      "entry": ["src/**/*.{ts,tsx}", "vite.cosmos.config.ts", "cosmos.imports.ts"],
       "ignore": ["src/paraglide/**", "public/_worker.js"],
       "ignoreUnresolved": ["../paraglide/messages.js"],
-      "ignoreDependencies": ["@nanostores/react", "cloudflare"],
+      "ignoreDependencies": ["@nanostores/react", "cloudflare", "shadcn"],
       "ignoreBinaries": ["tsgo"]
     },
     "apps/api": {
