@@ -49,6 +49,15 @@ function normalize(email: string): string {
   return email.trim().toLowerCase();
 }
 
+// The bundler statically replaces `process.env.NODE_ENV` with the
+// build-time value ("production" for the nitro build), which would fold
+// the admin-inbox guard away. Read it through a computed key so the
+// check stays a runtime decision, like the standalone api's tsx run.
+const NODE_ENV_KEY = "NODE_ENV";
+function isProduction(): boolean {
+  return process.env[NODE_ENV_KEY] === "production";
+}
+
 function otpEmailHtml(code: string): string {
   return `<p>Your Tarima sign in code is <strong>${code}</strong>.</p><p>It expires in 5 minutes.</p>`;
 }
@@ -176,7 +185,7 @@ export async function handleVerifyOtp(request: Request): Promise<Response> {
     { ok: true, userId: user.id },
     {
       headers: {
-        "Set-Cookie": sessionCookieHeader(token, process.env.NODE_ENV === "production"),
+        "Set-Cookie": sessionCookieHeader(token, isProduction()),
       },
     },
   );
@@ -184,7 +193,7 @@ export async function handleVerifyOtp(request: Request): Promise<Response> {
 
 /** GET /internal/admin/inbox?to=<email> — 404 in production. */
 export function handleAdminInbox(request: Request): Response {
-  if (process.env.NODE_ENV === "production") {
+  if (isProduction()) {
     return new Response("not found", { status: 404 });
   }
 
