@@ -36,6 +36,7 @@ import {
   handleUiSettings,
   handleUiUnbind,
 } from "./settings";
+import { handleEmailWebhook, handleWhatsappVerify, handleWhatsappWebhook } from "./webhooks";
 import {
   handleUiAdvanceStage,
   handleUiBoard,
@@ -118,6 +119,11 @@ const routes: Route[] = [
   route("POST", "/auth/verify-otp", handleVerifyOtp),
   route("GET", "/api/dev/login", handleDevLogin),
   route("GET", "/internal/admin/inbox", handleAdminInbox),
+
+  // Inbound webhooks (email worker + Meta).
+  route("POST", "/webhooks/email", handleEmailWebhook),
+  route("GET", "/webhooks/whatsapp", handleWhatsappVerify),
+  route("POST", "/webhooks/whatsapp", handleWhatsappWebhook),
 
   route("GET", "/capabilities", handleCapabilities),
 ];

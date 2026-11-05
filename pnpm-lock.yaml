@@ -371,6 +371,9 @@ importers:
       '@tarima/auth-core':
         specifier: workspace:*
         version: link:../../packages/auth-core
+      '@tarima/channels':
+        specifier: workspace:*
+        version: link:../../packages/channels
       '@tarima/contract':
         specifier: workspace:*
         version: link:../../packages/contract

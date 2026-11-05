@@ -26,6 +26,7 @@
     "@tarima/api": "workspace:*",
     "@tarima/api-keys": "workspace:*",
     "@tarima/auth-core": "workspace:*",
+    "@tarima/channels": "workspace:*",
     "@tarima/contract": "workspace:*",
     "@tarima/obs": "workspace:*",
     "@tarima/venuesearch": "workspace:*",

@@ -22,8 +22,8 @@ function findRepoRoot(): string {
 /** Absolute path of the repository root. */
 export const repoRoot = findRepoRoot();
 
-/** The api app directory (the process the e2e suite boots). */
-export const apiDir = join(repoRoot, "apps/api");
+/** The web app directory (the nitro server the e2e suite boots). */
+export const webDir = join(repoRoot, "apps", "web");
 
-/** The `tsx` binary that runs the api sources without a build step. */
-export const tsxBin = join(apiDir, "node_modules/.bin/tsx");
+/** The built nitro server entry (produced by `pnpm -C apps/web build`). */
+export const nitroServerEntry = join(webDir, "dist", "server", "server", "index.mjs");

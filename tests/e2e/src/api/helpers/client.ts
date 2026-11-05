@@ -105,11 +105,37 @@ export async function requestOtpCode(baseUrl: string, email: string): Promise<st
 }
 
 /**
- * Log in with an email and a one-time code, and keep the session cookie.
+ * Log in through the dev-login shortcut and keep the session cookie.
+ *
+ * `GET /api/dev/login?email=...` mints the same session the OTP verify
+ * path mints, without the mail round trip. It is enabled whenever the
+ * server is not in production mode, which is exactly how the suite
+ * boots it.
  *
  * Returns the client so a test can chain the calls.
  */
 export async function login(baseUrl: string, email: string): Promise<ApiClient> {
+  const client = new ApiClient(baseUrl);
+
+  const res = await fetch(`${baseUrl}/api/dev/login?email=${encodeURIComponent(email)}`, {
+    redirect: "manual",
+  });
+  if (res.status !== 302) throw new Error(`dev-login failed: ${res.status}`);
+
+  const setCookie = res.headers.get("set-cookie");
+  const cookie = setCookie?.split(";")[0];
+  if (!cookie) throw new Error("dev-login did not set a session cookie");
+  client.cookie = cookie;
+  return client;
+}
+
+/**
+ * Log in with an email and a one-time code, and keep the session cookie.
+ *
+ * The full OTP round trip, kept for the tests that exercise the auth
+ * flow itself rather than the product loop.
+ */
+export async function loginWithOtp(baseUrl: string, email: string): Promise<ApiClient> {
   const client = new ApiClient(baseUrl);
   const code = await requestOtpCode(baseUrl, email);
 

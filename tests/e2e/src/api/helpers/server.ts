@@ -1,8 +1,9 @@
 /**
- * Boot the real api process for an e2e suite.
+ * Boot the nitro server (the one-process app: ssr + api + engine) for
+ * an e2e suite.
  *
- * The suite drives the api over HTTP, exactly like a browser or a curl
- * would, so the assertions cover routing, auth, the engine and the
+ * The suite drives the server over HTTP, exactly like a browser or a
+ * curl would, so the assertions cover routing, auth, the engine and the
  * channel adapters rather than a reimplementation of them.
  *
  * Everything the suite needs is configured through the environment:
@@ -16,13 +17,13 @@
  * The helper exposes the base url, the database path and the inbound
  * webhook secret, and tears everything down again in `stop()`.
  */
-import { spawn, type ChildProcessByStdio } from "node:child_process";
+import { spawn, spawnSync, type ChildProcessByStdio } from "node:child_process";
 import type { Readable } from "node:stream";
 import { createServer } from "node:net";
-import { mkdtempSync, rmSync } from "node:fs";
+import { existsSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { apiDir, tsxBin } from "./paths";
+import { nitroServerEntry, repoRoot, webDir } from "./paths";
 
 /** The shared secret the email webhook expects. */
 export const WEBHOOK_SECRET = "e2e-inbound-secret";
@@ -72,40 +73,69 @@ function delay(ms: number): Promise<void> {
 }
 
 /**
- * Boot the api and wait until it answers `/api/health`.
+ * Build the nitro server bundle once per suite run.
  *
- * Throws with the captured process output when the api never comes up,
- * so a failing suite shows why.
+ * The suite boots the production-shaped nitro server (the same artifact
+ * the deploy runs), so a build is required. The build takes ~20s; it
+ * runs once per suite run and the artifact is reused across every
+ * `startApiServer` call in the process. A stale-but-present artifact is
+ * reused as-is: `pnpm validate` builds the web app before the tests, so
+ * the artifact is fresh in the gate.
+ */
+function ensureNitroBuild(): void {
+  if (existsSync(nitroServerEntry)) return;
+  const result = spawnSync("pnpm", ["-C", webDir, "build"], {
+    cwd: repoRoot,
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  if (result.status !== 0 || !existsSync(nitroServerEntry)) {
+    throw new Error(
+      `the nitro build failed (status ${result.status}):\n${result.stdout ?? ""}\n${result.stderr ?? ""}`,
+    );
+  }
+}
+
+/**
+ * Boot the nitro server and wait until it answers `/api/health`.
+ *
+ * Throws with the captured process output when the server never comes
+ * up, so a failing suite shows why.
  */
 export async function startApiServer(): Promise<ApiServer> {
+  ensureNitroBuild();
   const dir = mkdtempSync(join(tmpdir(), "tarima-e2e-"));
   const databasePath = join(dir, "e2e.db");
   const port = await freePort();
 
-  const child: ChildProcessByStdio<null, Readable, Readable> = spawn(tsxBin, ["src/server.ts"], {
-    cwd: apiDir,
-    env: {
-      ...process.env,
-      NODE_ENV: "test",
-      PORT: String(port),
-      DATABASE_URL: databasePath,
-      SESSION_SECRET: "e2e-session-secret",
-      INBOUND_WEBHOOK_SECRET: WEBHOOK_SECRET,
-      EMAIL_LOOPBACK_DOMAINS: LOOPBACK_DOMAINS,
-      MAIL_FROM: "outreach@tarima.test",
-      // Compressed engine timers: the chase loop must finish inside the
-      // test budget.
-      ENGINE_STEP_POLL_MS: "50",
-      ENGINE_OUTBOX_INTERVAL_MS: "50",
-      // The follow-up timer must not fire during a test.
-      ENGINE_FOLLOW_UP_DELAY_MS: String(60 * 60 * 1000),
-      // No LLM_BASE_URL on purpose: the deterministic stub parses replies.
-      LLM_BASE_URL: "",
-      BREVO_API_KEY: "",
-      TELEGRAM_BOT_TOKEN: "",
+  const child: ChildProcessByStdio<null, Readable, Readable> = spawn(
+    process.execPath,
+    [nitroServerEntry],
+    {
+      cwd: webDir,
+      env: {
+        ...process.env,
+        NODE_ENV: "test",
+        PORT: String(port),
+        DATABASE_URL: databasePath,
+        SESSION_SECRET: "e2e-session-secret",
+        INBOUND_WEBHOOK_SECRET: WEBHOOK_SECRET,
+        EMAIL_LOOPBACK_DOMAINS: LOOPBACK_DOMAINS,
+        MAIL_FROM: "outreach@tarima.test",
+        // Compressed engine timers: the chase loop must finish inside the
+        // test budget.
+        ENGINE_STEP_POLL_MS: "50",
+        ENGINE_OUTBOX_INTERVAL_MS: "50",
+        // The follow-up timer must not fire during a test.
+        ENGINE_FOLLOW_UP_DELAY_MS: String(60 * 60 * 1000),
+        // No LLM_BASE_URL on purpose: the deterministic stub parses replies.
+        LLM_BASE_URL: "",
+        BREVO_API_KEY: "",
+        TELEGRAM_BOT_TOKEN: "",
+      },
+      stdio: ["ignore", "pipe", "pipe"],
     },
-    stdio: ["ignore", "pipe", "pipe"],
-  });
+  );
 
   let output = "";
   child.stdout.on("data", (chunk: Buffer) => {
