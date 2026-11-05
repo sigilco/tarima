@@ -7,7 +7,7 @@
 import { nanoid } from "nanoid";
 import { and, eq, like } from "drizzle-orm";
 import { db } from "@tarima/api/db";
-import { agentEvents, approvals } from "@tarima/api/db/schema";
+import { agentEvents, approvals, memoryJournal } from "@tarima/api/db/schema";
 
 /**
  * JSON.stringify that survives eve payloads: undefined, bigint, Date,
@@ -161,6 +161,46 @@ export type InteractionSettledData = {
   outcome: string;
   cause?: unknown;
 };
+
+/**
+ * Memory write journal (plan W4, step 1 toward undo): record every
+ * `save_memory` / `remove_memory` call the model makes through eve's
+ * file-memory provider. Rows key on (session, line, idx) like
+ * `agent_events`, so a retried hook step is a no-op.
+ */
+const MEMORY_TOOL_PATTERN = /^memory__(save|remove)_memory$/;
+
+/** Record a memory tool call from a `call.requested` fact; others are ignored. */
+export function rememberMemoryWrite(data: {
+  callId: string;
+  capability?: { name?: string };
+  input?: unknown;
+  sessionId: string;
+  principalId: string | null;
+  line: number;
+  index: number;
+}): void {
+  try {
+    const name = data.capability?.name;
+    const match = name ? MEMORY_TOOL_PATTERN.exec(name) : null;
+    if (!data.callId || !match) return;
+    db.insert(memoryJournal)
+      .values({
+        sessionId: data.sessionId,
+        line: data.line,
+        idx: data.index,
+        callId: data.callId,
+        principalId: data.principalId,
+        action: match[1] === "save" ? "save" : "remove",
+        payload: safeJsonRecord(data.input),
+        createdAt: Date.now(),
+      })
+      .onConflictDoNothing()
+      .run();
+  } catch (err) {
+    console.error("[eve-mirror] memory_journal insert failed", err);
+  }
+}
 
 const OUTCOME_STATUS: Record<string, string> = {
   accepted: "approved",

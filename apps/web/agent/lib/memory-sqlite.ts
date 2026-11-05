@@ -17,7 +17,7 @@
  * writes, no memory tools.
  */
 import { randomUUID } from "node:crypto";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { db } from "@tarima/api/db";
 import { memoryDocuments } from "@tarima/api/db/schema";
 import { MemoryDocumentConflictError } from "eve/memory/file";
@@ -39,6 +39,9 @@ async function readRow(key: string) {
 
 async function insertRow(key: string, content: string): Promise<boolean> {
   const now = Date.now();
+  // changes is the conflict signal: 0 means ON CONFLICT DO NOTHING ignored
+  // the insert (.returning() still yields a row for an ignored insert, so
+  // row count is NOT reliable here).
   const inserted = db
     .insert(memoryDocuments)
     .values({ key, namespace: "", content, version: randomUUID(), createdAt: now, updatedAt: now })
@@ -52,7 +55,7 @@ export const memorySqliteBackend: MemoryDocumentBackend = {
     try {
       return await readRow(key);
     } catch (err) {
-      throw new Error(`memory backend read failed: ${messageOf(err)}`);
+      throw new Error(`memory backend read failed: ${messageOf(err)}`, { cause: err });
     }
   },
 
@@ -64,13 +67,16 @@ export const memorySqliteBackend: MemoryDocumentBackend = {
         // first between our read and this write.
         if (!insertRow(key, content)) throw new MemoryDocumentConflictError(key);
       } else {
+        // The WHERE carries the version: a stale expectedVersion updates
+        // nothing (changes 0), which is the conflict the provider's retry
+        // loop resolves by re-reading.
         const updated = db
           .update(memoryDocuments)
           .set({ content, version: randomUUID(), updatedAt: now })
-          .where(eq(memoryDocuments.key, key))
+          .where(and(eq(memoryDocuments.key, key), eq(memoryDocuments.version, expectedVersion)))
           .run();
-        // A row deleted between read and write behaves like a conflict the
-        // provider's retry loop resolves by recreating it.
+        // A row deleted between read and write behaves like a conflict too:
+        // create-only against a (re)appeared row also conflicts.
         if (updated.changes === 0 && !insertRow(key, content)) {
           throw new MemoryDocumentConflictError(key);
         }
@@ -79,7 +85,7 @@ export const memorySqliteBackend: MemoryDocumentBackend = {
       if (MemoryDocumentConflictError.is(err)) throw err;
       // A throwing tool fails the model's step; surface a short reason
       // instead of a driver stack trace.
-      throw new Error(`memory backend write failed: ${messageOf(err)}`);
+      throw new Error(`memory backend write failed: ${messageOf(err)}`, { cause: err });
     }
     return (await readRow(key)) ?? { content, version: "" };
   },

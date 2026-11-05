@@ -665,3 +665,34 @@ export const memoryDocuments = sqliteTable(
 
 export type MemoryDocument = typeof memoryDocuments.$inferSelect;
 export type NewMemoryDocument = typeof memoryDocuments.$inferInsert;
+
+/**
+ * Memory change journal (plan W4): mirror of the model's memory writes
+ * through eve's file-memory tools (`memory__save_memory`,
+ * `memory__remove_memory`). Keyed by the call fact's position on the
+ * session stream like `agent_events`, so a retried hook step is a
+ * no-op. First step toward the change journal with undo.
+ */
+export const memoryJournal = sqliteTable(
+  "memory_journal",
+  {
+    sessionId: text("session_id").notNull(),
+    line: integer("line").notNull(),
+    idx: integer("idx").notNull(),
+    callId: text("call_id").notNull(),
+    principalId: text("principal_id"),
+    action: text("action").notNull(),
+    payload: text("payload", { mode: "json" })
+      .notNull()
+      .default(sql`'{}'`)
+      .$type<Record<string, unknown>>(),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [
+    primaryKey({ columns: [t.sessionId, t.line, t.idx] }),
+    index("idx_memory_journal_principal").on(t.principalId, t.createdAt),
+  ],
+);
+
+export type MemoryJournalRow = typeof memoryJournal.$inferSelect;
+export type NewMemoryJournalRow = typeof memoryJournal.$inferInsert;
