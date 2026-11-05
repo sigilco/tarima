@@ -1,0 +1,28 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "concurrency": "4",
+  "tasks": {
+    "typecheck": {
+      "dependsOn": ["compile-messages"],
+      "outputs": []
+    },
+    "compile-messages": {
+      "outputs": ["apps/web/src/paraglide/**"]
+    },
+    "lint": {
+      "dependsOn": ["compile-messages"],
+      "outputs": []
+    },
+    "test": {
+      "dependsOn": ["compile-messages"],
+      "outputs": []
+    },
+    "build": {
+      "dependsOn": ["compile-messages"],
+      "outputs": ["apps/web/dist/**", "apps/web/.output/**"]
+    },
+    "build:eve": {
+      "outputs": ["apps/web/.output/**"]
+    }
+  }
+}

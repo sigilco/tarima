@@ -2,6 +2,35 @@
 node = "24"
 pnpm = "12.16.1"
 
+[env]
+# Local-only overrides live in .env.local (gitignored); see .env.example.
+"_.file" = ".env.local"
+
+[tasks.setup]
+description = "Install deps, seed .env.local from .env.example, install git hooks"
+run = """
+set -euo pipefail
+pnpm install
+[ -f .env.local ] || cp .env.example .env.local
+pnpm exec lefthook install
+"""
+
+[tasks.dev]
+description = "Web dev server (vite) + channel mocks; eve runtime mounts in-process on demand"
+run = "node scripts/dev.ts"
+
+[tasks.preview]
+description = "Build web + eve runtime, then serve the built app with the mocks"
+run = "pnpm preview"
+
+[tasks.mocks]
+description = "Channel mocks only (telegram :3511, whatsapp :3512, mail :3513)"
+run = "node apps/web/tests/channels/mock-boot.mjs 3511 3512 3513"
+
+[tasks."db:reset"]
+description = "Wipe the local dev database (.data/)"
+run = "rm -rf apps/web/.data .data"
+
 [tasks.validate]
 description = "Full gate: typecheck + lint + format + tests + knip"
 run = "pnpm validate"
@@ -10,21 +39,21 @@ run = "pnpm validate"
 description = "Quick static gate (~10s): typecheck + lint + format, no tests/knip"
 run = "pnpm validate --quick"
 
-[tasks.dev]
-description = "Run web + api dev servers"
-run = "pnpm dev"
+[tasks."verify:smoke"]
+description = "Boot the preview build with stub LLM + mocks on a temp DB and assert the wire paths"
+run = "node scripts/smoke.ts"
+
+[tasks."test:e2e"]
+description = "Playwright browser suite (on demand / nightly)"
+run = "pnpm --filter web test:e2e"
 
 [tasks.build]
-description = "Build the web (incl. the prerendered landing in apps/web/dist/client) and the api artifact (apps/api/dist/server)"
-run = "pnpm build"
+description = "Build the web app (dist/) and the eve runtime (.output/)"
+run = "turbo run build build:eve"
 
 [tasks."build:web"]
-description = "Build only the web app; output lands in apps/web/dist/client (Pages) and apps/web/dist/ssr"
-run = "pnpm --filter web build"
-
-[tasks."build:api"]
-description = "Build only the api artifact; output lands in apps/api/dist/server"
-run = "pnpm --filter @tarima/api build"
+description = "Build only the web app; output lands in apps/web/dist"
+run = "turbo run build"
 
 [tasks."deploy:lint"]
 description = "mypy --strict the Python deploy runner + shellcheck install-host.sh"

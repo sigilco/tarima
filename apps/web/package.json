@@ -15,6 +15,7 @@
     "test:e2e": "bash tests/e2e/run.sh",
     "typecheck": "pnpm run compile-messages && tsc --noEmit",
     "compile-messages": "paraglide-js compile --project ./project.inlang --outdir ./src/paraglide",
+    "build:eve": "node node_modules/eve/bin/eve.js build --skip-sandbox-prewarm",
     "start": "node .output/server/index.mjs"
   },
   "dependencies": {

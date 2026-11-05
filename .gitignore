@@ -32,3 +32,5 @@ apps/web/cosmos-export/
 # The vendored eve runtime ships a prebuilt dist/ (see NOTICE). Un-ignore
 # just that package so the vendored artifacts are committed with the repo.
 !packages/eve/dist/
+
+.turbo/

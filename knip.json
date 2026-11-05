@@ -40,7 +40,9 @@
     "apps/web/tests/chat/chat-turn.mjs",
     "apps/web/tests/chat/approval-turn.mjs",
     "apps/web/tests/chat/approval-seed-sponsor.mjs",
-    "apps/web/tests/turn/telegram-e2e.mjs"
+    "apps/web/tests/turn/telegram-e2e.mjs",
+    "apps/web/tests/mocks/index.mjs",
+    "apps/web/tests/channels/mock-boot.mjs"
   ],
   "ignoreDependencies": [
     "@tanstack/react-router",
