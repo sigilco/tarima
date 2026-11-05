@@ -67,6 +67,17 @@ const update = (text, chatId = 777001) =>
     }),
   });
 
+// Poll `probe` until it is truthy (or `tries` elapses).
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+async function waitFor(probe, tries = 240, delayMs = 500) {
+  for (let i = 0; i < tries; i++) {
+    const value = probe();
+    if (value) return value;
+    await wait(delayMs);
+  }
+  return probe();
+}
+
 const fail = (msg) => {
   console.error(`[tg-e2e] FAIL: ${msg}`);
   fakeStop();
