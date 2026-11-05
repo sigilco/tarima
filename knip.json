@@ -46,7 +46,7 @@
     },
     "packages/eve": {
       "entry": ["bin/eve.js"],
-      "ignore": ["bin/eve.d.ts"],
+      "ignore": ["bin/eve.d.ts", "dist/**"],
       "ignoreDependencies": ["nitro", "rolldown", "undici"]
     }
   },
