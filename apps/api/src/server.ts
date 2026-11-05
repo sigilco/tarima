@@ -2,32 +2,25 @@
  * Node entry for the unified tarima runtime: Hono API routes plus the
  * TanStack Start SSR build (static assets served by Caddy in production;
  * this handler only renders the app shell).
+ *
+ * SP7 teardown: the board/room/workflow/api-key routes, the engine boot,
+ * the venue provider chain and the legacy Telegram bot are gone — the
+ * in-process handlers in apps/web/src/lib/api-handlers/ are the api now.
+ * This process keeps the session surface (auth, access-requests,
+ * settings) and the inbound webhooks.
  */
 import { serve } from "@hono/node-server";
-import { WebSocketServer } from "ws";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { serveStatic } from "@hono/node-server/serve-static";
-import { startEngine } from "./engine";
-import { setVenueSearchDeps } from "./services/venue-search";
-import { defaultProviders } from "@tarima/venuesearch/providers";
 import { accessRequestRoutes } from "./routes/access-requests";
-import { apiKeyRoutes } from "./routes/api-keys";
 import { authRoutes } from "./routes/auth";
 import { capabilityRoutes } from "./routes/capabilities";
-import { csvRoutes } from "./routes/csv";
-import { entityRoutes } from "./routes/entities";
-import { eventRoutes } from "./routes/events";
 import { mcpRoutes } from "./routes/mcp";
-import { projectRoutes } from "./routes/projects";
-import { roomRoutes } from "./routes/room";
 import { settingsRoutes } from "./routes/settings";
-import { uiRoutes } from "./routes/ui";
 import { webhookRoutes } from "./routes/webhooks";
-import { workflowRoutes } from "./routes/workflows";
-import { startTelegram } from "./telegram";
 
 const here = dirname(fileURLToPath(import.meta.url));
 
@@ -54,16 +47,8 @@ app.route("/", accessRequestRoutes);
 app.route("/", webhookRoutes);
 
 app.route("/", authRoutes);
-app.route("/", apiKeyRoutes);
-app.route("/", projectRoutes);
-app.route("/", entityRoutes);
-app.route("/", workflowRoutes);
-app.route("/", csvRoutes);
 app.route("/", mcpRoutes);
 app.route("/", capabilityRoutes);
-app.route("/", roomRoutes);
-app.route("/", eventRoutes);
-app.route("/", uiRoutes);
 app.route("/", settingsRoutes);
 
 // Static client assets (vite build output) and the SSR handler for
@@ -86,24 +71,8 @@ app.all("*", async (c) => {
 
 const port = Number(process.env.PORT ?? 3001);
 
-// The engine (step runner + outbox pump) starts before the server
-// listens: a triggered workflow must find a worker already claiming
-// steps, and a crash-recovery sweep runs before the first claim.
-startEngine();
-
-// The venue provider chain (stream F): curation falls back to a live
-// search when the catalog has nothing for the city. The providers are
-// the public, keyless ones (Photon discovery, Overpass enrichment).
-setVenueSearchDeps(defaultProviders());
-
-const wss = new WebSocketServer({ noServer: true });
-
-serve({ fetch: app.fetch, port, hostname: "127.0.0.1", websocket: { server: wss } }, (info) => {
+serve({ fetch: app.fetch, port, hostname: "127.0.0.1" }, (info) => {
   console.log(`tarima listening on :${info.port}`);
 });
-
-// The Telegram bot is optional: without TELEGRAM_BOT_TOKEN this is a
-// no-op, so dev and CI boot the api without a bot.
-startTelegram().catch((err) => console.error("[telegram] boot failed", err));
 
 export default app;

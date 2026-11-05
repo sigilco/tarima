@@ -14,7 +14,7 @@ const { Hono } = await import("hono");
 const { db } = await import("../db");
 const { users } = await import("../db/schema");
 const { mcpRoutes } = await import("./mcp");
-const { createApiKeyForUser } = await import("../services/api-keys");
+const { createApiKeyForUser } = await import("../services/api-key-auth");
 
 afterAll(() => rmSync(dir, { recursive: true, force: true }));
 
@@ -24,7 +24,7 @@ if (db.select().from(users).all().length === 0) {
   db.insert(users).values({ id: USER_ID, email: "mcp@tarima.test", createdAt: Date.now() }).run();
 }
 
-const KEY = createApiKeyForUser(db, USER_ID, "test", [
+const KEY = createApiKeyForUser(USER_ID, "test", [
   "projects:read",
   "projects:write",
   "entities:read",

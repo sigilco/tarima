@@ -9,8 +9,6 @@
         "oxfmt",
         "@logtape/file",
         "@logtape/logtape",
-        "valibot",
-        "vitest",
         "nanostores"
       ]
     },
@@ -22,37 +20,21 @@
       "entry": ["src/index.ts", "src/*.ts"]
     },
     "apps/web": {
-      "entry": ["src/**/*.{ts,tsx}", "vite.cosmos.config.ts", "cosmos.imports.ts"],
-      "ignore": ["src/paraglide/**", "public/_worker.js"],
-      "ignoreUnresolved": ["../paraglide/messages.js"],
-      "ignoreDependencies": ["@nanostores/react", "cloudflare", "shadcn"],
-      "ignoreBinaries": ["tsgo"]
+      "entry": ["src/**/*.{ts,tsx}", "vite.cosmos.config.ts"],
+      "ignore": ["public/_worker.js"],
+      "ignoreDependencies": ["shadcn"]
     },
-    "apps/api": {
-      "ignoreDependencies": ["grammy", "node-html-parser", "postal-mime"]
-    },
+    "apps/api": {},
     "apps/inbound-worker": {
       "entry": ["src/**/*.ts"]
     },
-    "packages/engine": {
-      "entry": ["src/journal.ts", "src/runner.ts", "src/db.ts", "src/schema.ts", "src/types.ts"]
-    },
-    "packages/chase": {
-      "entry": ["src/sfm.ts", "src/template.ts", "src/handlers.ts", "src/llm.ts", "src/register.ts"]
-    },
-    "tests/e2e": {
-      "entry": ["src/api/helpers/*.ts", "src/api/**/*.test.ts", "ui/**/*.ts"],
-      "ignoreDependencies": ["@playwright/test"]
-    },
     "packages/eve": {
-      "entry": ["bin/eve.js"],
+      "entry": [],
       "ignore": ["bin/eve.d.ts", "dist/**"],
-      "ignoreDependencies": ["nitro", "rolldown", "undici"]
+      "ignoreDependencies": ["nitro"]
     }
   },
   "ignore": [
-    "apps/api/src/db/index.test.ts",
-    "apps/api/src/server.ts",
     "apps/web/tests/turn/agent-turn.mjs",
     "apps/web/tests/turn/turn-seed-venues.mjs",
     "apps/web/tests/chat/chat-turn.mjs",
@@ -60,7 +42,6 @@
     "apps/web/tests/chat/approval-seed-sponsor.mjs",
     "apps/web/tests/turn/telegram-e2e.mjs"
   ],
-  "ignoreBinaries": ["validate"],
   "ignoreDependencies": [
     "@tanstack/react-router",
     "@tanstack/react-start",

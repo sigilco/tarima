@@ -2,8 +2,6 @@ import { createFileRoute, redirect, useNavigate, useRouter } from "@tanstack/rea
 
 import { ProjectList } from "#/components/workspace/ProjectList";
 import { WorkspaceShell } from "#/components/workspace/WorkspaceShell";
-import { createServerFn } from "@tanstack/react-start";
-
 import { createProject } from "../../lib/api";
 import { fetchProjectsFn } from "../../lib/api-server";
 
@@ -16,15 +14,17 @@ import { fetchProjectsFn } from "../../lib/api-server";
  * The loader fetches the projects server-side (SSR) with the session
  * cookie forwarded; a 401 redirects to /login. Create posts through the
  * api from the browser and navigates to the new project view.
+ *
+ * One server function, called directly: an earlier version wrapped
+ * `fetchProjectsFn` in a second `createServerFn` and called the inner one.
+ * Only the outer id was registered in the server-fn manifest, so the inner
+ * id 500'd the route with "Server function info not found" once the inner
+ * module was small enough to be inlined into this chunk (SP7).
  */
-
-const fetchWorkspaceProjectsFn = createServerFn({ method: "GET", strict: false }).handler(
-  async (): Promise<{ status: number; body: { projects: unknown[] } | null }> => fetchProjectsFn(),
-);
 
 export const Route = createFileRoute("/app/")({
   loader: async () => {
-    const served = await fetchWorkspaceProjectsFn();
+    const served = await fetchProjectsFn();
     if (served.status === 401) {
       throw redirect({ to: "/login", search: { step: "email", email: "" } });
     }

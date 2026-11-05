@@ -189,11 +189,79 @@ export const loopbackInbox = sqliteTable(
 
 // ---------- Durable engine journal ----------
 
-// The durable journal tables (workflows, steps, outbox) live in
-// @tarima/engine/schema; re-exported here so the app's drizzle instance
-// sees one schema. SQL is unchanged, so apps/api/drizzle/*.sql stays the
+// The durable journal tables (workflows, steps, outbox) used to live in
+// @tarima/engine/schema; SP7 inlined them here when the engine package
+// was removed. SQL is unchanged, so apps/api/drizzle/*.sql stays the
 // migration source of truth.
-export { workflows, steps, outbox } from "@tarima/engine/schema";
+export const workflows = sqliteTable(
+  "workflows",
+  {
+    id: text("id").primaryKey(),
+    type: text("type").notNull(),
+    status: text("status").notNull().$type<"running" | "done" | "failed">().default("running"),
+    // Current SFM state, owned by the domain layer.
+    state: text("state").notNull().default(""),
+    context: text("context", { mode: "json" })
+      .notNull()
+      .default(sql`'{}'`)
+      .$type<Record<string, unknown>>(),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+    updatedAt: integer("updated_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [index("idx_workflows_status").on(t.status)],
+);
+
+export const steps = sqliteTable(
+  "steps",
+  {
+    id: text("id").primaryKey(),
+    runId: text("run_id")
+      .notNull()
+      .references(() => workflows.id, { onDelete: "cascade" }),
+    stepKey: text("step_key").notNull(),
+    status: text("status")
+      .notNull()
+      .$type<"pending" | "running" | "done" | "failed">()
+      .default("pending"),
+    input: text("input", { mode: "json" })
+      .notNull()
+      .default(sql`'{}'`)
+      .$type<Record<string, unknown>>(),
+    output: text("output", { mode: "json" }).$type<Record<string, unknown>>(),
+    retries: integer("retries").notNull().default(0),
+    leaseOwner: text("lease_owner"),
+    leaseExpiresAt: integer("lease_expires_at"),
+    runAt: integer("run_at").notNull().$defaultFn(nowMs),
+    error: text("error"),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+    updatedAt: integer("updated_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [
+    uniqueIndex("idx_steps_run_key").on(t.runId, t.stepKey),
+    index("idx_steps_due").on(t.status, t.runAt),
+  ],
+);
+
+export const outbox = sqliteTable(
+  "outbox",
+  {
+    id: text("id").primaryKey(),
+    // Side-effect idempotency key: senders must treat duplicates as no-ops.
+    idempotencyKey: text("idempotency_key").notNull(),
+    type: text("type").notNull(),
+    payload: text("payload", { mode: "json" })
+      .notNull()
+      .default(sql`'{}'`)
+      .$type<Record<string, unknown>>(),
+    status: text("status")
+      .notNull()
+      .$type<"pending" | "staged" | "sent" | "failed">()
+      .default("pending"),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+    sentAt: integer("sent_at"),
+  },
+  (t) => [uniqueIndex("idx_outbox_key").on(t.idempotencyKey)],
+);
 
 // ---------- Stage 3: auth-core OTP ----------
 

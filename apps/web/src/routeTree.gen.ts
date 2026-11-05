@@ -12,11 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppIndexRouteImport } from './routes/app/index'
-import { Route as AppSettingsRouteImport } from './routes/app/settings'
-import { Route as AppPProjectIdRouteImport } from './routes/app/p/$projectId'
 import { Route as AppWProjectIdRouteImport } from './routes/app/w/$projectId'
-import { Route as ProjectsProjectIdRoomRouteImport } from './routes/projects/$projectId_.room'
-import { Route as AppPProjectIdRoomRouteImport } from './routes/app/p/$projectId_.room'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -33,105 +29,44 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/app/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AppSettingsRoute = AppSettingsRouteImport.update({
-  id: '/app/settings',
-  path: '/app/settings',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AppPProjectIdRoute = AppPProjectIdRouteImport.update({
-  id: '/app/p/$projectId',
-  path: '/app/p/$projectId',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AppWProjectIdRoute = AppWProjectIdRouteImport.update({
   id: '/app/w/$projectId',
   path: '/app/w/$projectId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProjectsProjectIdRoomRoute = ProjectsProjectIdRoomRouteImport.update({
-  id: '/projects/$projectId_/room',
-  path: '/projects/$projectId/room',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AppPProjectIdRoomRoute = AppPProjectIdRoomRouteImport.update({
-  id: '/app/p/$projectId_/room',
-  path: '/app/p/$projectId/room',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
-  '/app/p/$projectId': typeof AppPProjectIdRoute
   '/app/w/$projectId': typeof AppWProjectIdRoute
-  '/projects/$projectId/room': typeof ProjectsProjectIdRoomRoute
-  '/app/p/$projectId/room': typeof AppPProjectIdRoomRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/app/settings': typeof AppSettingsRoute
   '/app': typeof AppIndexRoute
-  '/app/p/$projectId': typeof AppPProjectIdRoute
   '/app/w/$projectId': typeof AppWProjectIdRoute
-  '/projects/$projectId/room': typeof ProjectsProjectIdRoomRoute
-  '/app/p/$projectId/room': typeof AppPProjectIdRoomRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
-  '/app/p/$projectId': typeof AppPProjectIdRoute
   '/app/w/$projectId': typeof AppWProjectIdRoute
-  '/projects/$projectId_/room': typeof ProjectsProjectIdRoomRoute
-  '/app/p/$projectId_/room': typeof AppPProjectIdRoomRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/login'
-    | '/app/settings'
-    | '/app/'
-    | '/app/p/$projectId'
-    | '/app/w/$projectId'
-    | '/projects/$projectId/room'
-    | '/app/p/$projectId/room'
+  fullPaths: '/' | '/login' | '/app/' | '/app/w/$projectId'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/login'
-    | '/app/settings'
-    | '/app'
-    | '/app/p/$projectId'
-    | '/app/w/$projectId'
-    | '/projects/$projectId/room'
-    | '/app/p/$projectId/room'
-  id:
-    | '__root__'
-    | '/'
-    | '/login'
-    | '/app/settings'
-    | '/app/'
-    | '/app/p/$projectId'
-    | '/app/w/$projectId'
-    | '/projects/$projectId_/room'
-    | '/app/p/$projectId_/room'
+  to: '/' | '/login' | '/app' | '/app/w/$projectId'
+  id: '__root__' | '/' | '/login' | '/app/' | '/app/w/$projectId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
-  AppSettingsRoute: typeof AppSettingsRoute
   AppIndexRoute: typeof AppIndexRoute
-  AppPProjectIdRoute: typeof AppPProjectIdRoute
   AppWProjectIdRoute: typeof AppWProjectIdRoute
-  ProjectsProjectIdRoomRoute: typeof ProjectsProjectIdRoomRoute
-  AppPProjectIdRoomRoute: typeof AppPProjectIdRoomRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -157,39 +92,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/app/settings': {
-      id: '/app/settings'
-      path: '/app/settings'
-      fullPath: '/app/settings'
-      preLoaderRoute: typeof AppSettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/app/p/$projectId': {
-      id: '/app/p/$projectId'
-      path: '/app/p/$projectId'
-      fullPath: '/app/p/$projectId'
-      preLoaderRoute: typeof AppPProjectIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/app/w/$projectId': {
       id: '/app/w/$projectId'
       path: '/app/w/$projectId'
       fullPath: '/app/w/$projectId'
       preLoaderRoute: typeof AppWProjectIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/projects/$projectId_/room': {
-      id: '/projects/$projectId_/room'
-      path: '/projects/$projectId/room'
-      fullPath: '/projects/$projectId/room'
-      preLoaderRoute: typeof ProjectsProjectIdRoomRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/app/p/$projectId_/room': {
-      id: '/app/p/$projectId_/room'
-      path: '/app/p/$projectId/room'
-      fullPath: '/app/p/$projectId/room'
-      preLoaderRoute: typeof AppPProjectIdRoomRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -198,12 +105,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
-  AppSettingsRoute: AppSettingsRoute,
   AppIndexRoute: AppIndexRoute,
-  AppPProjectIdRoute: AppPProjectIdRoute,
   AppWProjectIdRoute: AppWProjectIdRoute,
-  ProjectsProjectIdRoomRoute: ProjectsProjectIdRoomRoute,
-  AppPProjectIdRoomRoute: AppPProjectIdRoomRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
