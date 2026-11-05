@@ -1,5 +1,6 @@
 import { defineAgent } from "eve";
 import { createOpenAI } from "eve/compiled/openai";
+import { agentApprovalPolicy } from "./approval";
 
 /**
  * The bifrost gateway speaks the OpenAI wire protocol on /v1, so the
@@ -25,6 +26,10 @@ export default defineAgent({
   // the compiled responses provider's schema on this gateway.
   model: provider.chat(process.env.TARIMA_AGENT_MODEL ?? "zai-coding-plan/glm-5"),
   modelContextWindowTokens: AGENT_CONTEXT_WINDOW_TOKENS,
+  // Agent-wide approval gate (see approval.ts): read-only tools never
+  // prompt; the outbound family always does. Stacks with a tool's own
+  // `approval` (stricter wins).
+  approval: agentApprovalPolicy,
   build: {
     // better-sqlite3 is a native addon: keep it out of the authored
     // bundle so Node resolves the installed prebuild at runtime.
