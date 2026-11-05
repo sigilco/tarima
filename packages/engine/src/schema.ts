@@ -71,7 +71,10 @@ export const outbox = sqliteTable(
       .notNull()
       .default(sql`'{}'`)
       .$type<Record<string, unknown>>(),
-    status: text("status").notNull().$type<"pending" | "sent" | "failed">().default("pending"),
+    status: text("status")
+      .notNull()
+      .$type<"pending" | "sent" | "failed" | "staged">()
+      .default("pending"),
     createdAt: integer("created_at").notNull().$defaultFn(nowMs),
     sentAt: integer("sent_at"),
   },
