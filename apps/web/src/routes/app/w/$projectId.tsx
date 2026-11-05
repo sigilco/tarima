@@ -3,6 +3,7 @@ import { createFileRoute, redirect, useNavigate, useRouter } from "@tanstack/rea
 import { ProjectView } from "#/components/workspace/ProjectView";
 import { WorkspaceShell } from "#/components/workspace/WorkspaceShell";
 import { createServerFn } from "@tanstack/react-start";
+import { getRequest } from "@tanstack/react-start/server";
 
 /**
  * /app/w/$projectId (screen workspace-3): one project inside the NEW
@@ -24,9 +25,40 @@ type EntityShape = {
   updatedAt: string;
 };
 
+/**
+ * Fetch one of our own api endpoints from a server function.
+ *
+ * On the browser the origin is the page's. On the server there is no
+ * `window`, and a relative URL is not a valid fetch target in Node — the
+ * old code passed `""` and every project route 500'd with "Failed to
+ * parse URL". The api is mounted in-process, so the server can call it on
+ * the very origin the request came in on (the same trick
+ * `lib/api-server.ts` uses); outside a request (build, prerender) we fall
+ * back to the server's own port.
+ */
+function requestOrigin(): string {
+  if (typeof window !== "undefined") return window.location.origin;
+  try {
+    return new URL(getRequest().url).origin;
+  } catch {
+    return process.env.VITE_API_ORIGIN ?? `http://localhost:${process.env.PORT ?? 3000}`;
+  }
+}
+
 const fetchRaw = (path: string): Promise<Response> => {
-  const origin = typeof window === "undefined" ? "" : window.location.origin;
-  return fetch(`${origin}${path}`, { headers: { "x-tarima-internal": "1" } });
+  const headers = new Headers({ "x-tarima-internal": "1" });
+  // Forward the caller's session cookie: the api resolves it to the
+  // principal, and without it the project route answers 401 (which the
+  // loader turns into a redirect to /login).
+  if (typeof window === "undefined") {
+    try {
+      const cookie = getRequest().headers.get("cookie");
+      if (cookie) headers.set("cookie", cookie);
+    } catch {
+      // No request context (build, prerender): the api answers 401.
+    }
+  }
+  return fetch(`${requestOrigin()}${path}`, { headers });
 };
 
 const fetchProjectFn = createServerFn({ method: "GET", strict: false })
