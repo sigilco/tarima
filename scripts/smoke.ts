@@ -126,7 +126,14 @@ try {
   const landing = await fetch(`${BASE}/`);
   const html = await landing.text();
   const asset = html.match(/(?:src|href)="(\/assets\/[^"]+)"/)?.[1];
-  const assetOk = asset ? (await fetch(`${BASE}${asset}`)).ok : false;
+  // The first asset hit after a cold boot can transiently fail while the
+  // eve world warms up; retry once before calling it broken.
+  let assetOk = false;
+  for (let i = 0; i < 2 && asset; i++) {
+    assetOk = (await fetch(`${BASE}${asset}`)).ok;
+    if (assetOk) break;
+    await new Promise((r) => setTimeout(r, 500));
+  }
   ok =
     step("landing + asset", landing.ok && Boolean(asset) && assetOk, asset ?? "no asset in html") &&
     ok;
@@ -146,7 +153,8 @@ try {
   // 3. Eve session through the proxy (the /eve/eve double-prefix bug).
   const sessionRes = await fetch(`${BASE}/api/eve/v1/session`, {
     method: "POST",
-    headers,
+    headers: { ...headers, "content-type": "application/json" },
+    body: JSON.stringify({ message: "Say hello from the smoke gate." }),
   });
   const session = await sessionRes.json().catch(() => ({}));
   const sessionId = session.sessionId ?? session.id ?? session.session?.id;

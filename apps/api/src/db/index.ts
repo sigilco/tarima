@@ -1,8 +1,19 @@
+import { mkdirSync } from "node:fs";
+import { dirname, isAbsolute, resolve } from "node:path";
 import Database from "better-sqlite3";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import * as schema from "./schema";
 
-const sqlite = new Database(process.env.DATABASE_URL ?? "tarima.db");
+const APP_ROOT = resolve(import.meta.dirname, "../../..");
+
+// mise injects .env.local, whose DATABASE_URL (.data/dev.db) is relative
+// to the repo root; resolve it here so servers and tests started from
+// any cwd share the file, and create the parent directory if missing.
+const databaseUrl = process.env.DATABASE_URL ?? "tarima.db";
+const databasePath = isAbsolute(databaseUrl) ? databaseUrl : resolve(APP_ROOT, databaseUrl);
+mkdirSync(dirname(databasePath), { recursive: true });
+
+const sqlite = new Database(databasePath);
 sqlite.pragma("journal_mode = WAL");
 
 // Bootstrap DDL so a fresh `pnpm dev` or test run lands on a working
