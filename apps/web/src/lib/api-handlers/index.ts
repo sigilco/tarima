@@ -11,6 +11,7 @@ import { handleAccessRequest } from "./access-requests";
 import { handleCreateApiKey, handleListApiKeys, handleRevokeApiKey } from "./api-keys";
 import { handleAdminInbox, handleRequestOtp, handleVerifyOtp } from "./auth";
 import { handleCapabilities } from "./capabilities";
+import { handleDevLogin } from "./dev-login";
 import { segments } from "./helpers";
 import {
   handleBulkIntakeCsv,
@@ -115,6 +116,7 @@ const routes: Route[] = [
   // Auth (OTP) and the loopback admin inbox.
   route("POST", "/auth/request-otp", handleRequestOtp),
   route("POST", "/auth/verify-otp", handleVerifyOtp),
+  route("GET", "/api/dev/login", handleDevLogin),
   route("GET", "/internal/admin/inbox", handleAdminInbox),
 
   route("GET", "/capabilities", handleCapabilities),

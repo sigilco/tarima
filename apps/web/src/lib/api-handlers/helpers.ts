@@ -103,3 +103,14 @@ export function withCors(response: Response): Response {
 export function segments(pathname: string): string[] {
   return pathname.split("/").filter(Boolean).map(decodeURIComponent);
 }
+
+// The bundler statically replaces `process.env.NODE_ENV` with the
+// build-time value ("production" for the nitro build), which would fold
+// a literal guard away. Read it through a computed key so the check
+// stays a runtime decision, like the standalone api's tsx run.
+const NODE_ENV_KEY = "NODE_ENV";
+
+/** Runtime NODE_ENV === "production" check (not bundler-folded). */
+export function isProduction(): boolean {
+  return process.env[NODE_ENV_KEY] === "production";
+}

@@ -34,7 +34,7 @@ import { loopbackInbox, otpCodes, sessions, users } from "@tarima/api/db/schema"
 import { extractOtp } from "@tarima/api/lib/extract-otp";
 import { sendMail } from "@tarima/api/mail";
 import { sessionSecret } from "@tarima/api/services/session";
-import { readJson } from "./helpers";
+import { isProduction, readJson } from "./helpers";
 
 const requestSchema = v.object({
   email: v.pipe(v.string(), v.trim(), v.email()),
@@ -47,15 +47,6 @@ const verifySchema = v.object({
 
 function normalize(email: string): string {
   return email.trim().toLowerCase();
-}
-
-// The bundler statically replaces `process.env.NODE_ENV` with the
-// build-time value ("production" for the nitro build), which would fold
-// the admin-inbox guard away. Read it through a computed key so the
-// check stays a runtime decision, like the standalone api's tsx run.
-const NODE_ENV_KEY = "NODE_ENV";
-function isProduction(): boolean {
-  return process.env[NODE_ENV_KEY] === "production";
 }
 
 function otpEmailHtml(code: string): string {
