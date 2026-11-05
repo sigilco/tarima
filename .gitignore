@@ -23,3 +23,4 @@ scripts/og-preview/*.woff2
 # react-cosmos vite plugin auto-generates this renderer entry on first run;
 # committing it would shadow TanStack Start's prerendered landing.
 apps/web/index.html
+apps/web/cosmos.imports.ts
