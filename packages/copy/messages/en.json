@@ -330,5 +330,7 @@
   "playful.phone.prompt.sponsorsText": "Chase the 12 sponsor logos still missing",
   "playful.phone.prompt.venuesText": "Call the venues that have not replied",
   "playful.phone.reply.sponsors": "Chased all 12 sponsors. 4 replied, 8 still pending.",
-  "playful.phone.reply.venues": "Called 3 venues. 2 quoted, 1 will confirm tomorrow."
+  "playful.phone.reply.venues": "Called 3 venues. 2 quoted, 1 will confirm tomorrow.",
+  "login.rateLimited": "Too many attempts. Wait a minute and try again.",
+  "login.expiresIn": "Code expires in {time}"
 }

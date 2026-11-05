@@ -1,10 +1,14 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import * as v from "valibot";
-import * as m from "../paraglide/messages.js";
+
+import { AuthShell } from "#/components/auth/AuthShell";
+import { CodeStep, type CodeStepError } from "#/components/auth/CodeStep";
+import { EmailStep, type EmailStepError } from "#/components/auth/EmailStep";
 
 /**
- * /login (Stage 5, T5.2): the two-step email -> code flow of login.md.
+ * /login (Stage 5, T5.2): the two-step email -> code flow of login.md,
+ * re-themed on shadcn (screens auth-1/auth-2).
  *
  * The step lives in the URL (`?step=email|code&email=…`) so a refresh or
  * a shared link lands on the same step; validateSearch parses and clamps
@@ -37,7 +41,7 @@ export const Route = createFileRoute("/login")({
   component: Login,
 });
 
-type LoginError = "invalid_email" | "invalid_code" | "not_allowlisted" | "offline" | null;
+type LoginError = EmailStepError | CodeStepError;
 
 function Login() {
   const navigate = useNavigate();
@@ -49,16 +53,6 @@ function Login() {
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<LoginError>(null);
-
-  const emailError = m["login.invalidEmail"]();
-  const codeError =
-    error === "invalid_code"
-      ? m["login.invalidCode"]()
-      : error === "not_allowlisted"
-        ? m["login.notAllowlisted"]()
-        : error === "offline"
-          ? m["errors.offline"]()
-          : "";
 
   async function requestCode(e: FormEvent) {
     e.preventDefault();
@@ -76,6 +70,10 @@ function Login() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ email: parsed.output }),
       });
+      if (res.status === 429) {
+        setError("rate_limited");
+        return;
+      }
       if (!res.ok) throw new Error(String(res.status));
       await navigate({
         to: "/login",
@@ -123,6 +121,10 @@ function Login() {
         setError("not_allowlisted");
         return;
       }
+      if (res.status === 429) {
+        setError("rate_limited");
+        return;
+      }
       if (!res.ok) throw new Error(String(res.status));
       await navigate({ to: "/app", replace: true });
     } catch {
@@ -143,6 +145,10 @@ function Login() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ email: parsed.output }),
       });
+      if (res.status === 429) {
+        setError("rate_limited");
+        return;
+      }
       if (!res.ok) throw new Error(String(res.status));
     } catch {
       setError("offline");
@@ -152,103 +158,29 @@ function Login() {
   }
 
   return (
-    <main className="grain flex min-h-[100dvh] items-center justify-center bg-surface px-5 py-16 text-content">
-      <div className="w-full max-w-sm">
-        <a href="/" className="flex items-center gap-2.5">
-          <img src="/mark.png" alt="" className="h-5 w-5 rounded-[5px]" />
-          <span className="font-display text-[19px] tracking-tight text-content">
-            {m["app.title"]()}
-          </span>
-        </a>
-
-        {step === "email" ? (
-          <form onSubmit={requestCode} className="mt-10">
-            <h1 className="font-display text-4xl leading-tight text-content">
-              {m["login.title"]()}
-            </h1>
-            <p className="mt-3 text-[14px] leading-relaxed text-content-muted">
-              {m["login.sub"]()}
-            </p>
-
-            <input
-              type="email"
-              required
-              autoFocus
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder={m["login.emailPlaceholder"]()}
-              aria-invalid={error === "invalid_email"}
-              className="mt-6 w-full rounded-2xl border border-border-subtle bg-surface-raised px-4 py-3 text-[15px] text-content outline-none placeholder:text-content-faint focus:border-content-faint"
-            />
-            {error === "invalid_email" ? (
-              <p className="mt-2 text-[13px] text-danger">{emailError}</p>
-            ) : null}
-            {error === "offline" ? (
-              <p className="mt-2 text-[13px] text-danger">{m["errors.offline"]()}</p>
-            ) : null}
-
-            <button
-              type="submit"
-              disabled={busy}
-              className="mt-4 w-full rounded-full bg-content px-5 py-3 text-[14px] font-medium text-surface transition-transform duration-300 ease-[cubic-bezier(0.34,1.4,0.4,1)] hover:scale-[1.01] active:scale-[0.99] disabled:opacity-60"
-            >
-              {busy ? m["login.sending"]() : m["login.sendCode"]()}
-            </button>
-          </form>
-        ) : (
-          <form onSubmit={verifyCode} className="mt-10">
-            <h1 className="font-display text-4xl leading-tight text-content">
-              {m["login.codeTitle"]()}
-            </h1>
-            <p className="mt-3 text-[14px] leading-relaxed text-content-muted">
-              {m["login.codeSub"]({ email: emailInUrl })}
-            </p>
-
-            <input
-              type="text"
-              inputMode="numeric"
-              pattern="\d{6}"
-              maxLength={6}
-              required
-              autoFocus
-              value={code}
-              onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-              placeholder={m["login.codePlaceholder"]()}
-              aria-invalid={error === "invalid_code"}
-              className="mt-6 w-full rounded-2xl border border-border-subtle bg-surface-raised px-4 py-3 text-center font-display text-2xl tracking-[0.35em] text-content outline-none placeholder:text-content-faint focus:border-content-faint"
-            />
-            {codeError ? <p className="mt-2 text-[13px] text-danger">{codeError}</p> : null}
-
-            <button
-              type="submit"
-              disabled={busy}
-              className="mt-4 w-full rounded-full bg-content px-5 py-3 text-[14px] font-medium text-surface transition-transform duration-300 ease-[cubic-bezier(0.34,1.4,0.4,1)] hover:scale-[1.01] active:scale-[0.99] disabled:opacity-60"
-            >
-              {busy ? m["login.verifying"]() : m["login.verify"]()}
-            </button>
-
-            <div className="mt-4 flex items-center justify-between text-[13px]">
-              <button
-                type="button"
-                onClick={resend}
-                disabled={busy}
-                className="text-content-muted underline-offset-4 transition-colors hover:text-content hover:underline disabled:opacity-60"
-              >
-                {m["login.resend"]()}
-              </button>
-              <button
-                type="button"
-                onClick={() =>
-                  navigate({ to: "/login", search: { step: "email", email: "" }, replace: true })
-                }
-                className="text-content-muted underline-offset-4 transition-colors hover:text-content hover:underline"
-              >
-                {m["login.changeEmail"]()}
-              </button>
-            </div>
-          </form>
-        )}
-      </div>
-    </main>
+    <AuthShell>
+      {step === "email" ? (
+        <EmailStep
+          email={email}
+          busy={busy}
+          error={error as EmailStepError}
+          onEmailChange={setEmail}
+          onSubmit={requestCode}
+        />
+      ) : (
+        <CodeStep
+          email={emailInUrl}
+          code={code}
+          busy={busy}
+          error={error as CodeStepError}
+          onCodeChange={setCode}
+          onSubmit={verifyCode}
+          onResend={resend}
+          onChangeEmail={() =>
+            navigate({ to: "/login", search: { step: "email", email: "" }, replace: true })
+          }
+        />
+      )}
+    </AuthShell>
   );
 }

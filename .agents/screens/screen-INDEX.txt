@@ -2,8 +2,8 @@ generated: 2026-11-05
 
 screen          name                    route       file                                    status
 ------          ----                    -----       ----                                    ------
-auth-1          Login — email step      /login      apps/web/src/routes/login.tsx           planned (SP2-B)
-auth-2          Login — code step       /login      apps/web/src/routes/login.tsx           planned (SP2-B)
+auth-1          Login — email step      /login      apps/web/src/routes/login.tsx           done (SP2-B)
+auth-2          Login — code step       /login      apps/web/src/routes/login.tsx           done (SP2-B)
 chat-1          Chat panel              /p/$id      apps/web/src/routes/p/$projectId.tsx    planned (SP4)
 shell-1         Workspace shell         /p/$id      apps/web/src/routes/p/$projectId.tsx    planned (SP5)
 

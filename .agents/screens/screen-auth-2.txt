@@ -1,0 +1,86 @@
+screen: auth-2
+name: Login — code step
+route: /login (?step=code&email=…)
+file: apps/web/src/routes/login.tsx
+theme: light
+components: card, input, button, label, spinner (AuthShell + CodeStep under apps/web/src/components/auth/)
+
+Second step of OTP login, reachable only with `email` in the URL
+(beforeLoad redirects to step=email otherwise). Shows the 6-digit code
+input, a resend link, a change-email link, and a client-side expiry
+countdown (codes expire server-side; the countdown is a hint only).
+POST /auth/verify-otp sets the `tarima_session` cookie on success and the
+route redirects to /app.
+
+State: idle — arrived after request-otp 200
+
+┌──────────────────────────────────────────────────────────┐
+│  [mark] tarima                                           │
+│                                                          │
+│  Check your inbox                                        │
+│  Enter the 6-digit code we sent to qa@tarima.test.       │
+│                                                          │
+│  ┌────────────────────────────────────────────────────┐  │
+│  │        1 2 3 4 5 6        ← centered, wide tracking │  │
+│  └────────────────────────────────────────────────────┘  │
+│  Code expires in 9:41     ← muted countdown              │
+│                                                          │
+│  ( Verify )               ← clay primary, full width     │
+│                                                          │
+│  Resend            Use another email                     │
+│                                                          │
+└──────────────────────────────────────────────────────────┘
+
+State: verifying — busy while POST /auth/verify-otp is in flight
+
+┌──────────────────────────────────────────────────────────┐
+│  … same as idle, button shows spinner + "Verifying…"     │
+│  and is disabled; Resend disabled                        │
+└──────────────────────────────────────────────────────────┘
+
+State: invalid-code — 401 from verify-otp
+
+┌──────────────────────────────────────────────────────────┐
+│  ┌────────────────────────────────────────────────────┐  │
+│  │        9 9 9 9 9 9      (aria-invalid)             │  │
+│  └────────────────────────────────────────────────────┘  │
+│  That code is not right. Try again.   ← danger text      │
+└──────────────────────────────────────────────────────────┘
+
+State: not-allowlisted — 403 from verify-otp (beta gate)
+
+┌──────────────────────────────────────────────────────────┐
+│  This email is not on the beta list yet. Request access  │
+│  and we will add you.                 ← danger text      │
+└──────────────────────────────────────────────────────────┘
+
+State: expired — resend after countdown hits 0
+
+┌──────────────────────────────────────────────────────────┐
+│  Your code expired. Send a new one.   ← danger text      │
+│  (countdown replaced by expiry message; Resend enabled)  │
+└──────────────────────────────────────────────────────────┘
+
+States: idle | verifying | invalid-code (401) | not-allowlisted (403) |
+offline (network/5xx → errors.offline) | expired (countdown 0) |
+resending (Resend disabled while request-otp in flight)
+Transitions: Verify → 200 → navigate /app (replace, cookie set by the
+API); Verify → 401/403 → inline danger copy, stays on step; Resend →
+request-otp 200 → countdown restarts; Use another email → step=email.
+Animations: countdown ticks once per second (text swap, no motion);
+otherwise shadcn defaults only.
+Copy:
+  copy.codeTitle: login.codeTitle — Check your inbox
+  copy.codeSub: login.codeSub — Enter the 6-digit code we sent to {email}.
+  copy.codePlaceholder: login.codePlaceholder — 123456
+  copy.verify: login.verify — Verify
+  copy.verifying: login.verifying — Verifying…
+  copy.resend: login.resend — Resend
+  copy.changeEmail: login.changeEmail — Use another email
+  copy.invalidCode: login.invalidCode — That code is not right. Try again.
+  copy.notAllowlisted: login.notAllowlisted
+  copy.expired: login.expired — Your code expired. Send a new one.
+  copy.expiresIn: login.expiresIn — Code expires in {time}
+  copy.offline: errors.offline
+Tokens: background #FAFAFA, card #ffffff, primary clay #b8491f,
+amber #FDE047 accent mark only.

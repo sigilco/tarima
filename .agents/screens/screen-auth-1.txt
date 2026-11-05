@@ -1,0 +1,73 @@
+screen: auth-1
+name: Login — email step
+route: /login (?step=email&email=)
+file: apps/web/src/routes/login.tsx
+theme: light
+components: card, input, button, label, spinner (AuthShell + EmailStep under apps/web/src/components/auth/)
+
+The entry screen of the two-step OTP login. Users arrive from the header
+sign-in link or are redirected here by route guards. The step lives in the
+URL (`?step=email|code&email=…`) so a refresh lands on the same step; the
+component holds email/code/busy/error in local state. POST /auth/request-otp
+sends the code (beta allowlist enforced server-side). Off-white #FAFAFA
+surface, ink foreground, clay #b8491f primary button; amber #FDE047 only as
+a small accent mark. Same family as the landing hero, calmer.
+
+State: idle — default on arrival
+
+┌──────────────────────────────────────────────────────────┐
+│  [mark] tarima                                           │
+│                                                          │
+│  Sign in                                                 │
+│  Enter your email and we send you a code.                │
+│                                                          │
+│  ┌────────────────────────────────────────────────────┐  │
+│  │ you@your-event.org                                 │  │
+│  └────────────────────────────────────────────────────┘  │
+│                                                          │
+│  ( Send code )            ← clay primary, full width     │
+│                                                          │
+└──────────────────────────────────────────────────────────┘
+
+State: idle-error — invalid email or network failure
+
+┌──────────────────────────────────────────────────────────┐
+│  [mark] tarima                                           │
+│                                                          │
+│  Sign in                                                 │
+│  Enter your email and we send you a code.                │
+│                                                          │
+│  ┌────────────────────────────────────────────────────┐  │
+│  │ not-an-email                          (aria-invalid)│  │
+│  └────────────────────────────────────────────────────┘  │
+│  Enter a valid email address.    ← danger text           │
+│                                                          │
+│  ( Send code )                                           │
+│                                                          │
+└──────────────────────────────────────────────────────────┘
+
+State: sending — busy while POST /auth/request-otp is in flight
+
+┌──────────────────────────────────────────────────────────┐
+│  … same as idle, button shows spinner + "Sending…"       │
+│  and is disabled                                         │
+└──────────────────────────────────────────────────────────┘
+
+States: idle | sending | idle-error (invalid_email, offline) |
+rate-limited (server 429 → login.rateLimited copy, button disabled while
+cooldown text shows) | focus rings on input/button per shadcn defaults
+Transitions: Send code → 200 → navigate to /login?step=code&email=…
+(replace, no full reload); validation failure → inline error, no request.
+Animations: button hover scale on the shell brand mark; transitions come
+from the shadcn button/input defaults only.
+Copy:
+  copy.title: login.title — Sign in
+  copy.sub: login.sub — Enter your email and we send you a code.
+  copy.emailPlaceholder: login.emailPlaceholder — you@your-event.org
+  copy.sendCode: login.sendCode — Send code
+  copy.sending: login.sending — Sending…
+  copy.invalidEmail: login.invalidEmail — Enter a valid email address.
+  copy.offline: errors.offline
+  copy.rateLimited: login.rateLimited — Too many attempts. Wait a minute and try again.
+Tokens: background #FAFAFA, card #ffffff, primary clay #b8491f,
+amber #FDE047 accent mark only. No paper/clay surfaces.
