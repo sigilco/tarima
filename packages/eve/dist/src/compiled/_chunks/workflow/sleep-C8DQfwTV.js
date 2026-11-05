@@ -1,0 +1,1 @@
+import{i as e}from"./attribute-changes-CZ1IbpSN.js";import{Ni as t}from"./serialization-BsJ0NayH.js";async function n(r){let i=globalThis[t];return i||e(`sleep()`,`https://workflow-sdk.dev/docs/api-reference/workflow/sleep`,n),i(r)}export{n as t};

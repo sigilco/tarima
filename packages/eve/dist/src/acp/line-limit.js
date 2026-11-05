@@ -1,0 +1,1 @@
+const ACP_MAX_LINE_BYTES=10485760;function limitAcpLineBytes(e=ACP_MAX_LINE_BYTES){let t=0;return new TransformStream({transform(n,r){for(let i of n)if(i===10)t=0;else if(t+=1,t>e){r.error(Error(`ACP message exceeds the ${e}-byte line limit.`));return}r.enqueue(n)}})}export{ACP_MAX_LINE_BYTES,limitAcpLineBytes};

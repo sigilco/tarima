@@ -1,0 +1,1 @@
+import{isStoredLine}from"./session-events/envelope.js";function isV26Line(e){return typeof e==`object`&&!!e&&!Array.isArray(e)&&typeof e.type==`string`&&!isStoredLine(e)}export{isV26Line};

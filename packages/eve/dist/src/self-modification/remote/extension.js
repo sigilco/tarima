@@ -1,0 +1,1 @@
+import{deployedSelfModificationConfigSchema}from"./config-schema.js";import{defineExtension}from"eve/extension";var extension_default=defineExtension({config:deployedSelfModificationConfigSchema});export{extension_default as default};

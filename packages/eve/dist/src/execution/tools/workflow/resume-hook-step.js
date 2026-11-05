@@ -1,0 +1,1 @@
+import{resumeHook}from"#internal/workflow/runtime.js";import{isTaskWorkflowTargetGone}from"#execution/tasks/workflow-target.js";async function resumeHookStep(e,t,n){"use step";try{await resumeHook(e,t)}catch(e){if(n?.ifPresent===!0&&isTaskWorkflowTargetGone(e))return;throw e}}export{resumeHookStep};

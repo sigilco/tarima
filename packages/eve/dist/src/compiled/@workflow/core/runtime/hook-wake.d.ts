@@ -1,0 +1,124 @@
+import { type Event, type Hook, type World } from '#compiled/@workflow/world/index.js';
+/**
+ * A wake failure worth retrying is transport-shaped (network error, 5xx,
+ * throttle). A definitive rejection will not change on a 25ms retry, so
+ * spending the budget on it only delays the caller's error.
+ *
+ * `@vercel/queue` errors carry no `status` field — they are bare `Error`
+ * subclasses distinguished by `name` — so classification checks the World's
+ * deployment-unavailable hook first (a deployment the queue cannot discover
+ * will not come back within this function's ~125ms budget), then a numeric
+ * status when one exists (non-Vercel queue implementations), then the queue
+ * client's definitive-4xx error names.
+ */
+export declare function isRetryableWakeError(error: unknown, isDeploymentUnavailableError?: (error: unknown) => boolean): boolean;
+/**
+ * Publish a workflow wake, retrying transport-shaped failures.
+ *
+ * A publish may succeed even when its response is lost, so a retry can
+ * enqueue a duplicate wake. That is harmless: the event the wake exists to
+ * deliver is already durable, and deterministic replay makes a second
+ * delivery of the same run a no-op.
+ */
+export declare function publishHookWakeWithRetry(publish: () => Promise<unknown>, isDeploymentUnavailableError?: (error: unknown) => boolean): Promise<void>;
+/**
+ * Wake the run a force-claimed hook took its token from.
+ *
+ * The takeover left a `hook_disposed{forceClaimedBy}` in that run's log, and
+ * a run suspended on `await hook` reads it only when something invokes it.
+ * The World cannot publish that wake (it has no queue), so the claimer's
+ * runtime does, right after its `hook_created` returns, from the victim's
+ * `workflowName` / `deploymentId` the World recorded on `hook.claimedFrom`.
+ *
+ * Same durability contract as `resumeHook()`'s wake: the row is durable
+ * before this runs, the publish is retried on transport-shaped failures, and
+ * a publish that still fails is logged rather than failing the claimer —
+ * nothing of the claimer's is wrong, every later replay of the claimer inside
+ * the republish window tries again ({@link forcedCreationsOwingWake}), and
+ * the victim reads the row on its next invocation for any reason.
+ *
+ * On a spec 9 victim the wake, like every orchestrator wake, carries no
+ * idempotency key: a key could be absorbed by an orchestrator delivery that is
+ * already exiting and lose the wakeup, while a republish costs the victim one
+ * more delivery, which exits without a replay when its log holds nothing new.
+ * On an older victim every delivery is a full replay, so the key is the
+ * claimer's hook id and the republishes collapse into one wake.
+ *
+ * Skipped when the victim is the claimer itself (a run taking over its own
+ * earlier hook is already running) and when the World recorded no
+ * `workflowName` for the victim (a legacy hook; nothing to address a queue
+ * message to).
+ */
+export declare function publishForceClaimVictimWake(world: World, claimerRunId: string, hook: Pick<Hook, 'hookId' | 'claimedFrom'>): Promise<'published' | 'skipped' | 'failed'>;
+/**
+ * How long after a forced `hook_created` a replay of the claimer keeps
+ * republishing its victim's wake: 24 hours, measured from the row's
+ * `createdAt`.
+ *
+ * The bound has to outlast every redelivery of the invocation that journaled
+ * the creation, because that redelivery is the replay that must repay a wake
+ * the invocation died before publishing. A queue message is retained for 24
+ * hours from its send and the creation is written after the send, so any such
+ * redelivery arrives within 24 hours of the creation. The wake carries no
+ * idempotency key, so each republish inside the window is one more delivery
+ * of the victim, which exits without a replay when its log holds nothing new;
+ * the bound keeps a long-lived claimer from paying that on every replay
+ * forever.
+ */
+export declare const FORCE_CLAIM_WAKE_REPUBLISH_WINDOW_MS: number;
+/**
+ * The forced hook creations whose victim wake this run may still owe: every
+ * forced `hook_created` (one carrying `forceClaimedFrom`) in the log whose
+ * `createdAt` is within {@link FORCE_CLAIM_WAKE_REPUBLISH_WINDOW_MS} of
+ * `nowMs`.
+ *
+ * A forced creation is followed by a wake of the run it took the token from.
+ * If the invocation died between the two, the creation is in the log and the
+ * victim was never told; the row itself is the durable record of that debt,
+ * and nothing records that the wake went out. So the replay does not try to
+ * infer it: it republishes for every recent forced creation, and a wake that
+ * did go out costs the victim one more delivery, which exits without a replay
+ * when its log holds nothing new.
+ *
+ * The rule reads nothing written after the creation, which is what makes it
+ * sound. Any row can land between the creation and the wake: a step, wait,
+ * attribute or other hook row the same suspension writes concurrently
+ * (neither engine holds those for the wake), a step or wait terminal from
+ * another invocation, a delivery's `hook_received`, a sealed-log `noop`, or a
+ * later claimer's `hook_disposed{forceClaimedBy}` taking the token from this
+ * run. None of them says the wake was published. The last is the chain case:
+ * this run took the token from A, died before waking A, and was taken from by
+ * C; C's wake of this run is the invocation that repays A's.
+ *
+ * The time is the row's `createdAt`, never one decoded from its event id (a
+ * slot-numbered id carries none). Under slot identity it is the writer's
+ * client clock, clamped by the World to at most an hour ahead of its own, so
+ * skew moves the window's edge by at most that much; a creation dated ahead of
+ * `nowMs` counts as recent, and one whose time cannot be read is treated as
+ * recent too, erring toward a wake rather than a stranded victim.
+ */
+export declare function forcedCreationsOwingWake(events: readonly Event[] | undefined, nowMs?: number): (Event & {
+    eventType: 'hook_created';
+})[];
+/**
+ * Republish the wakes {@link forcedCreationsOwingWake} says may be owed.
+ * Shared by the node:vm suspension handler and the QuickJS entrypoint so the
+ * two engines cannot drift on the durability contract.
+ *
+ * `alreadyWoken` is the invocation's record of the hooks whose victim wake it
+ * has already published or attempted, the forced creations it made itself
+ * included: an engine that replays more than once per invocation passes the
+ * same set every time, so each hook costs one send per invocation. Hooks this
+ * call publishes are added to it.
+ *
+ * Self-claims and victims with no recorded `workflowName` are skipped
+ * silently: the creating invocation already logged the latter, and a replay
+ * repeating it would say nothing new. Never rejects; a publish that fails
+ * after its retries is logged, and the next replay inside the window tries
+ * again.
+ */
+export declare function republishOwedForceClaimVictimWakes(world: World, runId: string, events: readonly Event[] | undefined, options?: {
+    alreadyWoken?: Set<string>;
+    nowMs?: number;
+}): Promise<void>;
+//# sourceMappingURL=hook-wake.d.ts.map

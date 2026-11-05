@@ -1,0 +1,1 @@
+const DURABLE_SESSION_VERSION=2;function readDurableSession(e){if(e.version!==2||e.snapshot?.session===void 0)throw Error(`Unsupported session checkpoint. Start a new session on this deployment.`);return e.snapshot.session}export{DURABLE_SESSION_VERSION,readDurableSession};

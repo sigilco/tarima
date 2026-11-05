@@ -1,0 +1,1 @@
+const inputTextKey=`__eveInputText`;function attachInputText(e,t){return t!==void 0&&(e[inputTextKey]=t),e}function readInputText(e){return e?.[inputTextKey]}function readAnswerText(e){if(typeof e?.message==`string`)return readInputText(e)??e.message}export{attachInputText,inputTextKey,readAnswerText,readInputText};

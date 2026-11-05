@@ -1,0 +1,1 @@
+import{SCHEDULE_COLLECTION_DEFINITION_BRAND}from"#shared/schedule-collection-definition.js";import{vercelScheduleProvider}from"#public/schedules/providers/vercel.js";function defineDynamicSchedules(e){return Object.assign(e,{provider:e.provider??vercelScheduleProvider(),tool:e.tool??!0,[SCHEDULE_COLLECTION_DEFINITION_BRAND]:!0}),e}export{defineDynamicSchedules};

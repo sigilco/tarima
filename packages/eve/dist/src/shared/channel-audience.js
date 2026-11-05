@@ -1,0 +1,1 @@
+const CHANNEL_AUDIENCES=[`public`,`private`,`unknown`];function normalizeChannelAudience(e){return typeof e==`string`&&CHANNEL_AUDIENCES.includes(e)?e:`unknown`}export{CHANNEL_AUDIENCES,normalizeChannelAudience};

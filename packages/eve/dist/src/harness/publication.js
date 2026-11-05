@@ -1,0 +1,1 @@
+function eventsOf(e){return Array.isArray(e)?e:[e]}export{eventsOf};

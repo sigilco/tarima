@@ -1,0 +1,22 @@
+import type { CatalogEntry } from "./subagents/agent/tools/search_registry.js";
+/**
+ * The split rule.
+ *
+ * An item that declares no setup is installed by the tool. An item that declares
+ * setup is handed to the terminal whole, before anything is installed — every
+ * question a setup flow asks, and every browser
+ * authorization or secret it needs, belongs to the surface built to ask.
+ *
+ * The rule reads catalog metadata only. It never predicts whether a particular
+ * setup would in fact ask something, because a wrong prediction installs half
+ * an item and reports success.
+ */
+export declare function classifyCatalogEntry(entry: CatalogEntry): {
+    readonly kind: "installable";
+} | {
+    readonly kind: "needs-terminal";
+    readonly reason: string;
+} | {
+    readonly kind: "self-modification-mount";
+    readonly reason: string;
+};

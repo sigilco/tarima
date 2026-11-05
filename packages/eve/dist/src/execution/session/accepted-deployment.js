@@ -1,0 +1,1 @@
+function readAcceptedDeploymentId(e){let t=e.deliveryMetadata?.[0]?.acceptedDeploymentId;if(t!==void 0&&t.length!==0&&t!==`latest`)return e.deliveryMetadata?.every(e=>e.acceptedDeploymentId===t)?t:void 0}export{readAcceptedDeploymentId};

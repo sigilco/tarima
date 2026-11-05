@@ -1,0 +1,1 @@
+function resolveRuntimeActionResultsForCallIds(e){let t=new Set(e.pendingCallIds),n=new Map;for(let r of e.results)t.has(r.callId)&&n.set(r.callId,r);let r=[];for(let t of e.pendingCallIds){let e=n.get(t);if(e===void 0)return;r.push(e)}return r}export{resolveRuntimeActionResultsForCallIds};

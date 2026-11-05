@@ -1,0 +1,1 @@
+import{displayTitle}from"#protocol/session-projection/display-name.js";import{actionRequestName}from"#shared/action-request-name.js";function actionLabel(e,t){return t?.[e.callId]?.label??displayTitle(actionRequestName(e))}export{actionLabel};

@@ -1,0 +1,1 @@
+import{relative}from"node:path";import{shellQuote}from"#shared/shell-quote.js";const quoteVercelShellArgument=shellQuote;function toVercelRelativePath(e,t){return relative(e,t).replaceAll(`\\`,`/`)||`.`}export{quoteVercelShellArgument,toVercelRelativePath};

@@ -1,0 +1,3 @@
+import{truncateDiagnostic}from"#evals/diagnostics.js";function formatAssertionFailureHeadline(e){let t=e.threshold===void 0||e.score===void 0?``:` (${formatPercent(e.score)} < ${formatPercent(e.threshold)})`,[n]=e.message?.split(`
+`)??[],r=n===void 0?``:`: ${truncateDiagnostic(n,240)}`;return`${e.name}${t}${r}`}function formatAssertionFailureDetailLines(e){let[,...t]=e.message?.split(`
+`)??[],n=t.slice(0,4).map(e=>truncateDiagnostic(e,240));return t.length>4?[...n,`…`]:n}function formatPercent(e){return`${Math.round(e*100)}%`}export{formatAssertionFailureDetailLines,formatAssertionFailureHeadline};

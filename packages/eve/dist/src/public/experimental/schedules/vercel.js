@@ -1,0 +1,1 @@
+export{vercelScheduleProvider}from"#public/schedules/providers/vercel.js";

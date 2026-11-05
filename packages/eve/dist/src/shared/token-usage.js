@@ -1,0 +1,1 @@
+import{z}from"#compiled/zod/index.js";const tokenUsageWithCostSchema=z.object({cacheReadTokens:z.number().int().nonnegative(),cacheWriteTokens:z.number().int().nonnegative(),inputTokens:z.number().int().nonnegative(),outputTokens:z.number().int().nonnegative()}).extend({costUsd:z.number().finite().nonnegative().optional()});export{tokenUsageWithCostSchema};

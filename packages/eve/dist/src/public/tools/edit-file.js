@@ -1,0 +1,1 @@
+import editFileDefinition,{editFile}from"#tools/provided/edit-file.js";var edit_file_default=editFileDefinition;export{edit_file_default as default,editFile};

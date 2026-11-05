@@ -1,0 +1,1 @@
+import{createHash}from"node:crypto";function createConnectionInstanceId(e){return`connection:${createHash(`sha256`).update(JSON.stringify([e.sourceId,e.connectionName,e.protocol,e.url,e.instanceKey??``])).digest(`base64url`)}`}export{createConnectionInstanceId};

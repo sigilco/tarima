@@ -1,0 +1,1 @@
+import{readFile}from"node:fs/promises";import{isAbsolute,resolve}from"node:path";async function loadJson(e){let t=isAbsolute(e)?e:resolve(process.cwd(),e),n=await readFile(t,`utf-8`);return JSON.parse(n)}export{loadJson};

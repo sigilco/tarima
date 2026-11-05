@@ -1,0 +1,2 @@
+const MAX_STREAM_CHARS=8e3;function boundedStream(e,t){let n=t.trim();if(n)return n.length<=MAX_STREAM_CHARS?`${e}:\n${n}`:`${e} (last ${MAX_STREAM_CHARS} characters):\n${n.slice(-8e3)}`}function commandFailureDetail(e){return[boundedStream(`stdout`,e.stdout),boundedStream(`stderr`,e.stderr)].filter(e=>e!==void 0).join(`
+`)||`no command output`}export{commandFailureDetail};

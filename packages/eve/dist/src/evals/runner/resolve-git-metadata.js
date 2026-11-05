@@ -1,0 +1,1 @@
+import{execSync}from"node:child_process";function resolveLocalGitMetadata(e){let t=execGitCommand(`git rev-parse HEAD`,e);return{branch:execGitCommand(`git branch --show-current`,e)||void 0,sha:t||void 0}}function execGitCommand(e,t){try{return execSync(e,{cwd:t,encoding:`utf8`,stdio:[`pipe`,`pipe`,`pipe`],timeout:5e3}).trim()}catch{return}}export{resolveLocalGitMetadata};

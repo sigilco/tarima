@@ -1,0 +1,356 @@
+import type { Principal } from "#protocol/session-events/envelope.js";
+import type { ToolExecutionOptions } from "ai";
+import type { HistoryMessage as ModelMessage } from "#shared/history-message.js";
+import type { StandardJSONSchemaV1, StandardSchemaV1 } from "#compiled/@standard-schema/spec/index.js";
+import type { Approval } from "#approval/definition.js";
+import type { CrossChannelToFn } from "#channel/cross-channel-receive.js";
+import type { InstrumentationChannel } from "#shared/instrumentation-channel.js";
+import type { SessionAuthContext } from "#channel/types.js";
+import type { SessionContext } from "#context/session-context.js";
+import type { JsonObject } from "#shared/json.js";
+import type { TokenResult } from "#shared/connection-types.js";
+import type { ToolAuthOptions, ToolAuthProvider } from "#tools/auth.js";
+import type { InteractionRequest } from "#protocol/session-events/families/interaction.js";
+import type { ToolModelOutput } from "#tools/model-output.js";
+type ApprovalContextInput<TInput> = 0 extends 1 & TInput ? TInput : unknown extends TInput ? Record<string, unknown> : TInput;
+export type { ToolAuthDefinition, ToolAuthOptions, ToolAuthProvider } from "#tools/auth.js";
+export type { ToolModelOutput, ToolModelOutputPart } from "#tools/model-output.js";
+export type ToolExecuteOptions = Omit<ToolExecutionOptions<unknown>, "context"> & {
+    /** Who approved the call, when it runs after a person approved it. */
+    readonly approval?: {
+        readonly responder: SessionAuthContext;
+    };
+};
+export type ToolExecuteFn<TInput = unknown, TOutput = unknown> = (input: TInput, options: ToolExecuteOptions) => Promise<TOutput> | TOutput | AsyncIterable<TOutput>;
+interface ToolDefinitionBase {
+    /** Whether delegated agent sessions receive this tool. Defaults to `true`. */
+    readonly availableInSubagents?: boolean;
+    /**
+     * Keeps this tool out of the model's tool list. The model finds it with
+     * `eve__search` and calls it with `eve__tool`. Defaults to `false`.
+     */
+    readonly deferred?: boolean;
+    readonly description: string;
+}
+export interface ToolLabelDefinition<TInput = unknown, TOutput = unknown> {
+    /** Returns the presentation-safe label when one action invocation starts. */
+    start(input: Readonly<TInput>): string;
+    /** Projects one preliminary output snapshot into presentation-safe label text. */
+    delta?(input: Readonly<TInput>, partial: Readonly<TOutput>): string;
+    /** Projects a successful final output into presentation-safe settlement text. */
+    complete?(input: Readonly<TInput>, output: Readonly<TOutput>): string;
+}
+/**
+ * Internal/compiled tool definition shape. Carries `name` because the
+ * compiler stamps a path-derived identifier onto every tool entry.
+ *
+ * Authored public definitions (see {@link PublicToolDefinition}) do not
+ * carry `name`; identity comes from the file path.
+ */
+export interface InternalToolLabelDefinition {
+    readonly complete?: (input: unknown, output: unknown) => string;
+    readonly delta?: (input: unknown, partial: unknown) => string;
+    readonly start?: (input: unknown) => string;
+}
+export interface InternalToolDefinition extends ToolDefinitionBase {
+    readonly endsTurn?: ToolDefinition["endsTurn"];
+    label?: InternalToolLabelDefinition;
+    name: string;
+    inputSchema: JsonObject | null;
+    outputSchema?: JsonObject;
+}
+export type PublicToolInputSchema<TInput = unknown> = StandardSchemaV1<unknown, TInput> | StandardJSONSchemaV1<unknown, TInput> | JsonObject;
+export type PublicToolOutputSchema<TOutput = unknown> = StandardJSONSchemaV1<unknown, TOutput> | JsonObject;
+/**
+ * Authored public tool definition shape. Identity is derived from the
+ * file path at compile time, so `name` is intentionally absent here.
+ */
+export interface PublicToolDefinition<TInput = unknown, TOutput = unknown> extends ToolDefinitionBase {
+    label?: ToolLabelDefinition<TInput, TOutput>;
+    inputSchema: PublicToolInputSchema<TInput>;
+    /**
+     * Optional schema describing the value returned by the tool executor.
+     * The AI SDK can use this for tool result typing.
+     */
+    outputSchema?: PublicToolOutputSchema<TOutput>;
+}
+export interface InternalToolDefinitionWithExecuteFn<TInput = unknown, TOutput = unknown> extends InternalToolDefinition {
+    execute: ToolExecuteFn<TInput, TOutput>;
+}
+/**
+ * A question a workflow tool asks the human on the session's channel, sent
+ * with `ctx.ask` from a `defineWorkflowTool` executor. Channels render it the
+ * way they render tool approvals.
+ */
+export type ToolQuestion = Pick<InteractionRequest, "prompt" | "title" | "options" | "allowFreeform" | "display">;
+/**
+ * The outcome of a {@link ToolQuestion}.
+ *
+ * - `answered`: the user picked an option or typed an answer. An answer the
+ *   session accepted before a withdrawal wins, even after a signal aborted.
+ * - `cancelled`: the request was withdrawn before anyone answered it, because
+ *   the ask's `signal` or the call's `abortSignal` aborted.
+ * - `unavailable`: the session cannot reach a human, such as a scheduled run,
+ *   so the request resolved immediately without being shown.
+ */
+export type ToolAnswer = {
+    readonly status: "answered";
+    /** The selected option's `id`, when the user picked one. */
+    readonly optionId?: string;
+    /** Authenticated identity of the responder, without channel attributes. */
+    readonly responder?: Principal;
+    /** Free text, when the user typed an answer. */
+    readonly text?: string;
+} | {
+    readonly status: "cancelled";
+} | {
+    readonly status: "unavailable";
+};
+/** Options for `ctx.ask` in a `defineWorkflowTool` executor. */
+export interface ToolAskOptions {
+    /**
+     * Withdraws the request when it aborts: the channel stops offering the
+     * question and the ask resolves as `cancelled`, unless the session accepted
+     * an answer first, which the ask then resolves with. The call's
+     * `abortSignal` withdraws the request the same way without being passed.
+     */
+    readonly signal?: AbortSignal;
+}
+/**
+ * Authored tool context. Passed as the last argument to
+ * {@link ToolDefinition.execute}.
+ *
+ * Extends {@link SessionContext} with token accessors. Passing a provider
+ * resolves that provider inline, which lets one tool use multiple credentials.
+ *
+ * Workflow tools use the separate `WorkflowToolContext` provided by
+ * `defineWorkflowTool`.
+ */
+export type ToolContext = SessionContext & {
+    /**
+     * Aborts when the work this tool is doing is cancelled: the active turn
+     * for an ordinary tool, the durable run for a workflow tool. In a workflow
+     * body the signal is durable — it survives replay and steps that receive it
+     * observe the abort — and the run waits a grace period for the body to
+     * unwind through `finally` before it ends.
+     */
+    readonly abortSignal: AbortSignal;
+    /**
+     * Id of the current tool call — the same `callId` carried by the call's
+     * stream events and its {@link ApprovalContext}.
+     */
+    readonly callId: string;
+    /**
+     * Final runtime name of the current tool, including any namespace
+     * qualification. This is the same `toolName` carried by stream events and
+     * the tool's {@link ApprovalContext}.
+     */
+    readonly toolName: string;
+    /**
+     * Messages sent to the model for the step that requested this call, oldest
+     * first — the same model input a `step.started` dynamic resolver reads from
+     * `ctx.messages`. Excludes system instructions and the assistant response
+     * that contains this call. Includes eve-authored context messages, such as
+     * request context and recalled memory, and reflects history projection and
+     * compaction.
+     */
+    readonly messages: readonly ModelMessage[];
+    /**
+     * Resolves the bearer token for an inline provider. This accepts the same
+     * auth shapes as a connection's `auth` field, including `connect("...")`
+     * from `@vercel/connect/eve`.
+     */
+    getToken(provider: ToolAuthProvider, options?: ToolAuthOptions): Promise<TokenResult>;
+    /**
+     * Signals that the caller must complete authorization for an inline
+     * provider before proceeding. Use this after a downstream `401` rejects a
+     * token returned by {@link getToken}.
+     */
+    requireAuth(provider: ToolAuthProvider, options?: ToolAuthOptions): never;
+    /**
+     * Starts or continues a session on one of the agent's channels, as a route
+     * handler's `ctx.to()` does: `ctx.to(slack, target).send(message, options)`
+     * runs the channel's `receive()` hook and returns the delivery. The session
+     * belongs to the channel, not this one, and keeps running after the tool
+     * returns. The tool runs again when its step retries, so pass
+     * `` idempotencyKey: `${ctx.session.id}:${ctx.callId}` `` to deliver once.
+     * `callId` alone is unique only within this session, and every sender to the
+     * destination shares its keys. Throws in a delegated
+     * session: a subagent, a root copy, or a remote agent call.
+     */
+    readonly to: CrossChannelToFn;
+    /**
+     * The channel serving the calling session, as hooks and dynamic resolvers
+     * read it: the channel's `kind`, the session's `continuationToken` there, and
+     * what the channel's `metadata(state)` hook projects, such as a Slack
+     * thread's `channelId` and `threadTs`.
+     */
+    readonly channel: InstrumentationChannel;
+    /**
+     * The person who approved this call. Present only when the call runs after a
+     * person approved it; absent for calls that needed no approval.
+     */
+    readonly approval?: ApprovedCall;
+};
+/**
+ * The approval behind an approved tool call. The call still runs as the
+ * requester, `ctx.session.auth.current`; this only lets it read who approved
+ * it and act with their credentials where the tool chooses to.
+ */
+export interface ApprovedCall {
+    /** Who approved the call: the same principal its response policy saw. */
+    readonly responder: ApprovalResponder;
+}
+/**
+ * The person who approved a call, with access to their own credentials. A
+ * transient object built for each approved call: its identity fields are the
+ * stored responder record, and `getToken` is not serialized with them.
+ */
+export interface ApprovalResponder extends SessionAuthContext {
+    /**
+     * Resolves the responder's token for an inline provider, as
+     * {@link ToolContext.getToken} does for the requester. It never starts a
+     * sign-in: when the responder has no token, it throws a non-retryable
+     * `ConnectionAuthorizationFailedError` with
+     * `reason: "approver_authorization_required"`. It shares the call's
+     * providers with `ctx.getToken`, so two inline providers without provider
+     * metadata need `options.authKey` across both getters too.
+     */
+    getToken(provider: ToolAuthProvider, options?: ToolAuthOptions): Promise<TokenResult>;
+}
+/**
+ * Public tool definition authored in `agent/tools/*.ts`.
+ *
+ * The tool's runtime name is the filename slug under `agent/tools/` without
+ * the extension (`agent/tools/get_weather.ts` registers as `get_weather`).
+ * Authored definitions have no `name` field; identity is path-derived.
+ */
+export interface ToolDefinition<TInput = unknown, TOutput = unknown> extends PublicToolDefinition<TInput, TOutput> {
+    execute(input: TInput, ctx: ToolContext): Promise<TOutput> | TOutput | AsyncIterable<TOutput>;
+    /**
+     * Ends the turn after this tool succeeds, without another model call and
+     * without a final reply. Use it for a tool whose action is the whole
+     * answer, such as reacting to a message. The turn ends only when every
+     * tool call in the model's step ends the turn and succeeds; a failed call
+     * lets the model recover. Ignored in delegated sessions, which must return
+     * a reply to their caller, and on turns that request structured output.
+     * With `true`, eve appends a sentence to the description the model sees
+     * telling it the call ends its turn, so write `description` for what the
+     * tool does.
+     *
+     * Pass a function to decide from the result. eve calls it with the output
+     * of `execute` after each successful call, and the call ends the turn only
+     * when it returns `true`; if it throws, the turn continues as though it
+     * returned `false`. The model sees no appended sentence, so describe
+     * when the call ends the turn in `description` if the model needs to know.
+     * Defaults to `false`.
+     */
+    endsTurn?: boolean | ((output: TOutput) => boolean | Promise<boolean>);
+    /**
+     * Optional per-tool approval gate. The return value determines whether
+     * user approval is required before executing this tool.
+     *
+     * Use the helpers from `eve/tools/approval` for common cases:
+     * - {@link always}: always require approval
+     * - {@link never}: never require approval
+     * - {@link once}: require approval only the first time per session
+     */
+    approval?: Approval<ApprovalContextInput<TInput>>;
+    /**
+     * Optional projection controlling what the model sees as the tool result.
+     * Receives the full `TOutput` from {@link execute} and returns the
+     * model-facing {@link ToolModelOutput}.
+     *
+     * When omitted, the model sees the full `execute` return value
+     * (default AI SDK serialization). Channel event handlers
+     * (`call.settled`) always receive the full output regardless.
+     */
+    toModelOutput?: (output: TOutput) => ToolModelOutput | Promise<ToolModelOutput>;
+}
+type ToolOutputFromExecuteReturn<TReturn> = TReturn extends Promise<infer TOutput> ? TOutput : TReturn extends AsyncIterable<infer TOutput> ? TOutput : TReturn;
+type ToolDefinitionWithExecuteReturn<TInput, TOutput, TReturn> = ToolDefinition<TInput, TOutput> & {
+    execute(input: TInput, ctx: ToolContext): TReturn;
+};
+/**
+ * Defines a tool configuration, used both for static tools (default export
+ * from `agent/tools/*.ts`) and as the entry wrapper inside `defineDynamic`
+ * resolvers.
+ *
+ * For static tools, the runtime tool name is the filename slug. `defineTool`
+ * stamps a brand that lifecycle code validates; it rejects raw object literals.
+ */
+export declare function defineTool<TInputSchema extends StandardSchemaV1<unknown, unknown> | StandardJSONSchemaV1<unknown, unknown>, TOutputSchema extends StandardJSONSchemaV1<unknown, unknown>, TReturn extends Promise<StandardJSONSchemaV1.InferOutput<TOutputSchema>> | StandardJSONSchemaV1.InferOutput<TOutputSchema> | AsyncIterable<StandardJSONSchemaV1.InferOutput<TOutputSchema>>>(definition: {
+    description: ToolDefinition<unknown, unknown>["description"];
+    endsTurn?: ToolDefinition<unknown, StandardJSONSchemaV1.InferOutput<TOutputSchema>>["endsTurn"];
+    inputSchema: TInputSchema;
+    outputSchema: TOutputSchema;
+    execute(input: StandardSchemaV1.InferOutput<TInputSchema>, ctx: ToolContext): TReturn;
+    label?: ToolDefinition<StandardSchemaV1.InferOutput<TInputSchema>, StandardJSONSchemaV1.InferOutput<TOutputSchema>>["label"];
+    approval?: ToolDefinition<StandardSchemaV1.InferOutput<TInputSchema>, unknown>["approval"];
+    toModelOutput?: ToolDefinition<unknown, StandardJSONSchemaV1.InferOutput<TOutputSchema>>["toModelOutput"];
+}): ToolDefinitionWithExecuteReturn<StandardSchemaV1.InferOutput<TInputSchema>, StandardJSONSchemaV1.InferOutput<TOutputSchema>, TReturn>;
+export declare function defineTool<TSchema extends StandardSchemaV1<unknown, unknown> | StandardJSONSchemaV1<unknown, unknown>, TReturn>(definition: {
+    description: ToolDefinition<unknown, unknown>["description"];
+    endsTurn?: ToolDefinition<unknown, ToolOutputFromExecuteReturn<TReturn>>["endsTurn"];
+    inputSchema: TSchema;
+    outputSchema?: JsonObject;
+    execute(input: StandardSchemaV1.InferOutput<TSchema>, ctx: ToolContext): TReturn;
+    label?: ToolDefinition<StandardSchemaV1.InferOutput<TSchema>, ToolOutputFromExecuteReturn<TReturn>>["label"];
+    approval?: ToolDefinition<StandardSchemaV1.InferOutput<TSchema>, unknown>["approval"];
+    toModelOutput?: ToolDefinition<unknown, ToolOutputFromExecuteReturn<TReturn>>["toModelOutput"];
+}): ToolDefinitionWithExecuteReturn<StandardSchemaV1.InferOutput<TSchema>, ToolOutputFromExecuteReturn<TReturn>, TReturn>;
+export declare function defineTool<TOutputSchema extends StandardJSONSchemaV1<unknown, unknown>, TReturn extends Promise<StandardJSONSchemaV1.InferOutput<TOutputSchema>> | StandardJSONSchemaV1.InferOutput<TOutputSchema> | AsyncIterable<StandardJSONSchemaV1.InferOutput<TOutputSchema>>>(definition: {
+    description: ToolDefinition<unknown, unknown>["description"];
+    endsTurn?: ToolDefinition<unknown, StandardJSONSchemaV1.InferOutput<TOutputSchema>>["endsTurn"];
+    inputSchema: JsonObject;
+    outputSchema: TOutputSchema;
+    execute(input: Record<string, unknown>, ctx: ToolContext): TReturn;
+    label?: ToolDefinition<Record<string, unknown>, StandardJSONSchemaV1.InferOutput<TOutputSchema>>["label"];
+    approval?: ToolDefinition<Record<string, unknown>, unknown>["approval"];
+    toModelOutput?: ToolDefinition<unknown, StandardJSONSchemaV1.InferOutput<TOutputSchema>>["toModelOutput"];
+}): ToolDefinitionWithExecuteReturn<Record<string, unknown>, StandardJSONSchemaV1.InferOutput<TOutputSchema>, TReturn>;
+export declare function defineTool<TReturn>(definition: {
+    description: ToolDefinition<unknown, unknown>["description"];
+    endsTurn?: ToolDefinition<unknown, ToolOutputFromExecuteReturn<TReturn>>["endsTurn"];
+    inputSchema: JsonObject;
+    outputSchema?: JsonObject;
+    execute(input: Record<string, unknown>, ctx: ToolContext): TReturn;
+    label?: ToolDefinition<Record<string, unknown>, ToolOutputFromExecuteReturn<TReturn>>["label"];
+    approval?: ToolDefinition<Record<string, unknown>, unknown>["approval"];
+    toModelOutput?: ToolDefinition<unknown, ToolOutputFromExecuteReturn<TReturn>>["toModelOutput"];
+}): ToolDefinitionWithExecuteReturn<Record<string, unknown>, ToolOutputFromExecuteReturn<TReturn>, TReturn>;
+export declare function defineTool<TInput = unknown, TOutput = unknown>(definition: ToolDefinition<TInput, TOutput>): ToolDefinition<TInput, TOutput>;
+export declare function stampToolDefinition<T extends {
+    readonly description: string;
+    readonly inputSchema?: unknown;
+    readonly outputSchema?: unknown;
+    readonly execute?: (...args: never[]) => unknown;
+    readonly label?: ToolLabelDefinition;
+    readonly approval?: Approval<never>;
+    readonly toModelOutput?: (...args: never[]) => unknown;
+}>(definition: T, definer: "defineTool" | "defineWorkflowTool"): T;
+/**
+ * Cross-instance brand on a {@link DisabledToolSentinel}. `Symbol.for` lets the compiler's module
+ * copy and the author's import share the key; keeping it unexported makes the sentinel opaque, so
+ * only {@link disableTool} produces one.
+ */
+declare const DISABLED_TOOL: unique symbol;
+/**
+ * Opaque value returned from {@link disableTool}. Export this as the default
+ * export of a file in `agent/tools/` to remove the model tool whose name
+ * matches the file's slug, including framework defaults and derived subagent
+ * tools.
+ */
+export interface DisabledToolSentinel {
+    readonly [DISABLED_TOOL]: true;
+}
+/**
+ * Returns a sentinel that disables the model tool whose name matches the
+ * containing file's slug.
+ */
+export declare function disableTool(): DisabledToolSentinel;
+/**
+ * Type guard: returns whether `value` is a {@link DisabledToolSentinel}
+ * produced by {@link disableTool}.
+ */
+export declare function isDisabledToolSentinel(value: unknown): value is DisabledToolSentinel;

@@ -1,0 +1,189 @@
+import { type AuthoringEventType } from "#protocol/session-events/authoring.js";
+import type { SessionEvent } from "#protocol/session-event.js";
+import type { CommittedLine } from "#channel/adapter.js";
+export type { CommittedLine } from "#channel/adapter.js";
+export type { ChannelDelivery } from "#shared/channel-delivery.js";
+import { type ChannelReference } from "#channel/compiled-channel.js";
+import { type ChannelCorsOptions } from "#channel/cors.js";
+import type { ChannelCreateOptions, ChannelCreateResult, ChannelFrom, ChannelReceiveContext, ChannelResolveSession, ChannelRespondOptions, ChannelSendOptions, ChannelSource } from "#channel/channel-operations.js";
+import type { RouteDefinition } from "#channel/routes.js";
+import type { ChannelContinuationOps } from "#shared/channel-context.js";
+export type { ChannelContext, ChannelContinuationOps } from "#shared/channel-context.js";
+import type { Delivery } from "#shared/delivery.js";
+export type { Delivery, DeliveryResult } from "#shared/delivery.js";
+export { SessionNotActiveError } from "#channel/session-not-active-error.js";
+import type { TurnPolicy } from "#channel/types.js";
+import type { SessionContext } from "#public/definitions/callback-context.js";
+import type { FactPosition } from "#protocol/session-events/envelope.js";
+import { type SessionView } from "#protocol/session-projection/session-view.js";
+import type { GenericChannelDefinition, GenericReceiveInput } from "#shared/channel-definition.js";
+declare const CHANNEL_METADATA_TYPE: unique symbol;
+export type { CancelTurnResult, ClearSessionResult, CompactSessionResult, EndSessionResult, SessionCallback, TurnPolicy, } from "#channel/types.js";
+export { SessionStrandedError } from "#channel/session-stranded-error.js";
+export type { Session } from "#channel/session.js";
+export type { ChannelAudience } from "#shared/channel-audience.js";
+export type { AudienceCaller, AudienceContext, ConversationEnvironment, } from "#shared/conversation-context.js";
+export type { SessionRespondOptions, SessionSendOptions } from "#channel/session.js";
+export type { ChannelCreateOptions, ChannelCreateResult, ChannelFrom, ChannelReceiveContext, ChannelResolveSession, ChannelRespondOptions, ChannelSendOptions, ChannelSource, };
+export type { ChannelCors, ChannelCorsOptions } from "#channel/cors.js";
+export type { AgentDescription, AgentSkillDescription, AgentSkillFileDescription, AgentToolDescription, } from "#channel/agent-description.js";
+export type { InvokeToolFn, InvokeToolOptions, InvokeToolResult } from "#channel/invoke-tool.js";
+export { DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT, WS } from "#channel/routes.js";
+export type { AttachSessionFn, HttpRouteDefinition, RouteDefinition, RouteHandlerArgs, WebSocketMessage, WebSocketPeer, WebSocketRouteDefinition, WebSocketRouteHandler, WebSocketRouteHooks, WebSocketUpgradeRequest, WebSocketUpgradeResult, } from "#channel/routes.js";
+/**
+ * HTTP method a route handles. Defaults to `"POST"` — almost every route
+ * is a webhook. Override only when authoring a non-webhook route such as a
+ * long-poll endpoint or an event-stream reader.
+ */
+export type ChannelMethod = "GET" | "HEAD" | "POST" | "PUT" | "PATCH" | "DELETE" | "OPTIONS";
+/**
+ * Method-like discriminator used by compiled channel route entries.
+ *
+ * WebSocket routes are not HTTP methods, but they still need a stable
+ * route key in the compiler manifest and runtime route table.
+ */
+export type ChannelRouteMethod = ChannelMethod | "WEBSOCKET";
+/**
+ * Per-request surface exposed to a route's `fetch` handler. The
+ * framework constructs this per request and passes it as the second
+ * argument.
+ *
+ * Framework callback routes use this for request metadata and background work.
+ */
+export interface RouteContext {
+    /**
+     * Hands a background promise to the request host so the serverless
+     * invocation stays alive until the promise resolves. Use this when the
+     * route responds to the platform immediately (e.g. a Slack `200 OK`
+     * acknowledgement) but still needs to finish background work.
+     */
+    readonly waitUntil: (task: Promise<unknown>) => void;
+    /**
+     * Path parameter values extracted from `[name]` segments in the route's
+     * filesystem path. For `agent/channels/sessions/[sessionId]/stream.ts`
+     * mounted at `GET /sessions/:sessionId/stream`, the matched value lives at
+     * `params.sessionId`.
+     * Empty for routes with no path parameters.
+     */
+    readonly params: Readonly<Record<string, string>>;
+    /**
+     * Trusted peer IP for this request, extracted by the host transport
+     * before the route handler runs. `null` when the host can't observe a
+     * peer address (e.g. unit tests calling `route.fetch` directly).
+     *
+     * Pass this to {@link isIpAllowed} from `eve/channels/auth`
+     * when implementing IP allowlisting in a route.
+     */
+    readonly requestIp: string | null;
+}
+/**
+ * Cross-instance brand on a {@link DisabledRouteSentinel}. `Symbol.for` lets the compiler's module
+ * copy and the author's import share the key; keeping it unexported makes the sentinel opaque, so
+ * only {@link disableRoute} produces one.
+ */
+declare const DISABLED_ROUTE: unique symbol;
+/**
+ * Opaque value returned from {@link disableRoute}. Export this as the
+ * default export of a file in `agent/channels/` to remove the framework
+ * default route whose logical name matches the file's slug path.
+ */
+export interface DisabledRouteSentinel {
+    readonly [DISABLED_ROUTE]: true;
+}
+/**
+ * Returns a sentinel that disables the framework route whose logical name
+ * matches the containing file's slug path.
+ *
+ * Export it as the default export of a file in `agent/channels/`.
+ */
+export declare function disableRoute(): DisabledRouteSentinel;
+/**
+ * Type guard: returns whether `value` is a {@link DisabledRouteSentinel}
+ * produced by {@link disableRoute}.
+ */
+export declare function isDisabledRouteSentinel(value: unknown): value is DisabledRouteSentinel;
+/** The session event a handler keyed `T` observes. */
+export type ChannelEventOf<T extends SessionEvent["type"]> = Extract<SessionEvent, {
+    type: T;
+}>;
+/** Continuation routing on the `ctx.channel` of every channel event handler. */
+/**
+ * What a channel event handler knows beyond the event it observes: the channel's own context,
+ * where the event sits on the stream, and the session's tables. Observer-only, so tools never see
+ * it.
+ */
+export interface ChannelEventContext<TChannel = ChannelContinuationOps> extends SessionContext {
+    /** The channel's context, as its `context()` built it, with continuation routing. */
+    readonly channel: TChannel;
+    /** The position of the event's line, and its index in that line. */
+    readonly position: FactPosition;
+    /** Immutable observation snapshot of the whole commit the event is in. */
+    readonly view: SessionView;
+}
+/**
+ * Handles one session event: the fact or progress record, with its `type`, `data`, and `scope`,
+ * and the {@link ChannelEventContext}. Hooks receive the same event.
+ */
+export type ChannelEventHandler<T extends SessionEvent["type"], TCtx = void> = (event: ChannelEventOf<T>, ctx: ChannelEventContext<TCtx & ChannelContinuationOps>) => void | Promise<void>;
+/**
+ * Handles one committed line, once its events' handlers ran: the facts the channel heard, and the
+ * {@link ChannelEventContext} with the session's tables as of the line. For what a channel keeps
+ * in step with the tables, such as a status, a card, or the prompts still open, so it renders
+ * once per change rather than once per event.
+ */
+export type ChannelCommitHandler<TCtx = void> = (line: CommittedLine, ctx: ChannelEventContext<TCtx & ChannelContinuationOps>) => void | Promise<void>;
+/**
+ * Optional handlers keyed by session event type: the session's facts and the progress records a
+ * channel streams (`content.delta`, `call.input`, `call.progress`). Each handler receives the
+ * event and a {@link ChannelEventContext} whose `channel` is the channel's own context. Handlers
+ * run after the event is written, so they observe it and never shape it. `committed` runs once
+ * per committed line, after them.
+ */
+export type ChannelEvents<TCtx = void> = {
+    readonly [T in AuthoringEventType]?: ChannelEventHandler<T, TCtx>;
+} & {
+    readonly committed?: ChannelCommitHandler<TCtx>;
+};
+/**
+ * Input passed to a channel's `receive` callback when another channel or
+ * schedule proactively routes a message to it.
+ */
+export type ReceiveInput<TReceiveTarget = Record<string, unknown>> = GenericReceiveInput<TReceiveTarget>;
+/**
+ * The object passed to {@link defineChannel}. `routes` is required; `state`
+ * seeds durable adapter state, `context` builds the per-step channel context
+ * for `events` (as `ctx.channel`) and `deliver`, `events` handle session lifecycle, `receive`
+ * accepts cross-channel handoffs, `fetchFile` stages remote file URLs, and
+ * `metadata` projects observability data.
+ *
+ * Generics: `TState` (adapter state), `TCtx` (context factory return type),
+ * `TReceiveTarget` (cross-channel target shape), `TMetadata` (instrumentation
+ * projection).
+ */
+export type ChannelDefinition<TState = undefined, TCtx = void, TReceiveTarget = Record<string, unknown>, TMetadata extends Record<string, unknown> = Record<string, unknown>> = GenericChannelDefinition<ChannelEvents<TCtx>, TState, TCtx, TReceiveTarget, TMetadata>;
+/**
+ * Opaque channel value produced by {@link defineChannel} and exported from
+ * `agent/channels/<name>.ts`. Exposes the channel's routes, an optional
+ * `receive` hook, and (via a phantom property) its metadata shape. Unlike
+ * {@link ChannelDefinition} it has no `TCtx` parameter: the context type is
+ * internal to the definition.
+ */
+export interface Channel<TState = undefined, TReceiveTarget = Record<string, unknown>, TMetadata extends Record<string, unknown> = Record<string, unknown>> extends ChannelReference<TReceiveTarget> {
+    readonly [CHANNEL_METADATA_TYPE]?: TMetadata;
+    readonly routes: readonly RouteDefinition<TState>[];
+    readonly cors?: ChannelCorsOptions;
+    readonly receive?: (input: ReceiveInput<TReceiveTarget>, ctx: ChannelReceiveContext<TState>) => Promise<Delivery>;
+    readonly turnPolicy?: TurnPolicy;
+}
+/**
+ * Extracts the metadata projection type (`TMetadata`) from a {@link Channel}.
+ * Resolves to `Record<string, unknown>` when the value is not a Channel.
+ */
+export type InferChannelMetadata<TChannel> = TChannel extends Channel<any, any, infer TMetadata> ? TMetadata : Record<string, unknown>;
+/**
+ * Builds a {@link Channel} from a {@link ChannelDefinition}. Returns a value
+ * placed at `agent/channels/<name>.ts`; the file path supplies the channel name
+ * (do not add a `name` field). `TCtx` (the context factory's return type) is
+ * internal to the definition and is not part of the returned Channel signature.
+ */
+export declare function defineChannel<TState = undefined, TCtx = void, TReceiveTarget = Record<string, unknown>, TMetadata extends Record<string, unknown> = Record<string, unknown>>(definition: ChannelDefinition<TState, TCtx, TReceiveTarget, TMetadata>): Channel<TState, TReceiveTarget, TMetadata>;

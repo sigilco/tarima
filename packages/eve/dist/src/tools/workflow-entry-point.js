@@ -1,0 +1,1 @@
+const WORKFLOW_TOOL_ENTRY_POINTS=[`execute`,`task`,`serve`];export{WORKFLOW_TOOL_ENTRY_POINTS};

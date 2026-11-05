@@ -1,0 +1,1 @@
+function readWorkflowFunctionId(e){if(typeof e!=`function`)return;let t=Reflect.get(e,`workflowId`);return typeof t==`string`&&t.length>0?t:void 0}export{readWorkflowFunctionId};

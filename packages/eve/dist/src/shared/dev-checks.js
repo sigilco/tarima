@@ -1,0 +1,1 @@
+function checksSessionEvents(){let e=process.env.EVE_CHECK_SESSION_EVENTS;return e===`1`||e!==`0`&&process.env.EVE_DEV===`1`}export{checksSessionEvents};

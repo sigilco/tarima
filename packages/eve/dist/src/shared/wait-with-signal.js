@@ -1,0 +1,1 @@
+async function waitWithSignal(e,t){if(t===void 0)return await e;let n=Promise.withResolvers(),onAbort=()=>n.reject(t.reason);t.addEventListener(`abort`,onAbort,{once:!0}),t.aborted&&onAbort();try{return await Promise.race([n.promise,e])}finally{t.removeEventListener(`abort`,onAbort)}}export{waitWithSignal};

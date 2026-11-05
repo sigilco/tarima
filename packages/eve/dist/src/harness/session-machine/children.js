@@ -1,0 +1,1 @@
+import{commitOf}from"./commit.js";import{fact}from"#harness/facts.js";function openChild(e,t){return commitOf([{...fact(`child.opened`,e),scope:scoped(t)}])}function recordChildSent(e,t){return commitOf([{...fact(`child.sent`,e),scope:scoped(t)}])}function scoped(e){return e.taskId===void 0?{turnId:e.turnId}:{turnId:e.turnId,taskId:e.taskId}}export{openChild,recordChildSent};

@@ -1,0 +1,1 @@
+function e(e,t,n){let r=Symbol.for(`${e}/v${t}`),i=globalThis,a=i[r];if(a!==void 0)return a;let o=n();return i[r]=o,o}export{e as t};

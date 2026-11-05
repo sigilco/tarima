@@ -1,0 +1,1 @@
+function lazyBackend(e){let t,get=()=>t??=e();return{read:e=>get().read(e),write:e=>get().write(e)}}export{lazyBackend};

@@ -1,0 +1,1 @@
+const TRUSTED_TOOLING_ROOT=`/usr/local/lib/eve-code`,GITHUB_TOOLING_PATHS={ghReal:`${TRUSTED_TOOLING_ROOT}/gh`,trustedSignedCommit:`${TRUSTED_TOOLING_ROOT}/gh-signed-commit`};export{GITHUB_TOOLING_PATHS};

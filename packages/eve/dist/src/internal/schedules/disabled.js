@@ -1,0 +1,1 @@
+const EVE_SCHEDULES_DISABLED_ENV=`EVE_SCHEDULES_DISABLED`;function areSchedulesDisabled(e=process.env){let t=e[EVE_SCHEDULES_DISABLED_ENV]?.toLowerCase();return t===`1`||t===`true`}export{EVE_SCHEDULES_DISABLED_ENV,areSchedulesDisabled};

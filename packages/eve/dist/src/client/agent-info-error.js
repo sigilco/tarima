@@ -1,0 +1,1 @@
+import{EveError}from"#shared/eve-error.js";var AgentInfoResponseError=class extends EveError{static errorName=`AgentInfoResponseError`;issues;constructor(e=[]){let t=e.length===0?``:` (${e.join(`; `)})`;super(`invalid_agent_info_response`,`The server returned an unrecognized response from the eve agent info route.${t}`),this.issues=e}};export{AgentInfoResponseError};

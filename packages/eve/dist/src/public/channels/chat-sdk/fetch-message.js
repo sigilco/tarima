@@ -1,0 +1,1 @@
+async function fetchMessageBestEffort(e,t,n){if(e.fetchMessage===void 0)return null;let r;try{return await Promise.race([e.fetchMessage(t,n),new Promise(e=>{r=setTimeout(e,3e3,null)})])}catch{return null}finally{clearTimeout(r)}}export{fetchMessageBestEffort};

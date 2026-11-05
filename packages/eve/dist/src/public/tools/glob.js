@@ -1,0 +1,1 @@
+import globDefinition,{glob}from"#tools/provided/glob.js";var glob_default=globDefinition;export{glob_default as default,glob};

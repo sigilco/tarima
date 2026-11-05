@@ -1,0 +1,1 @@
+import{randomBytes}from"node:crypto";async function createWorkflowProgramContinuationSecurityStep(){"use step";return{maxAgeMs:31536e6,signingKey:randomBytes(32).toString(`base64url`)}}export{createWorkflowProgramContinuationSecurityStep};

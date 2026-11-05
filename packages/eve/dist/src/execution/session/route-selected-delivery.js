@@ -1,0 +1,1 @@
+import{routeDeliverToChildren}from"#execution/route-child-delivery.js";async function routeSelectedDelivery(e,t){let n=await t.advance(t=>routeDeliverToChildren({delivery:e.delivery,...t}));return n.kind===`cancel-turn`?{kind:`cancel-turn`}:n.remainder===void 0?{kind:`consumed`}:{...e,delivery:n.remainder}}export{routeSelectedDelivery};

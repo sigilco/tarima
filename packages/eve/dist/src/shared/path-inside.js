@@ -1,0 +1,1 @@
+import{isAbsolute,relative,resolve,sep}from"node:path";function isPathInsideOrEqual(e,t){let n=relative(resolve(t),resolve(e));return n===``||n!==`..`&&!n.startsWith(`..${sep}`)&&!isAbsolute(n)}export{isPathInsideOrEqual};

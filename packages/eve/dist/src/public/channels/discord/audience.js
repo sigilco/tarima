@@ -1,0 +1,1 @@
+function discordAudience(e){return e===1||e===3||e===12?`private`:`unknown`}function discordInstrumentationMetadata(e){return{channelId:e.channelId,guildId:e.guildId}}export{discordAudience,discordInstrumentationMetadata};

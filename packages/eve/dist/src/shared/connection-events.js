@@ -1,0 +1,1 @@
+function readConnectionEventsBackend(e){if(e!==void 0){if(typeof e!=`object`||!e||!(`createAdapter`in e)||typeof e.createAdapter!=`function`||!(`verify`in e)||typeof e.verify!=`function`)throw TypeError(`Connect experimental_events must provide createAdapter and verify methods.`);return e}}export{readConnectionEventsBackend};

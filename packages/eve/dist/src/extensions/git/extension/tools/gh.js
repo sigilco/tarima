@@ -1,0 +1,1 @@
+import extension_default from"../extension.js";import{defineGhTool}from"../lib/gh-tool.js";import{defineDynamic}from"eve/tools";var gh_default=defineDynamic(()=>extension_default.config.github===void 0?null:defineGhTool(()=>extension_default.config.github));export{gh_default as default};

@@ -1,0 +1,1 @@
+import{defineGhTool}from"./extension/lib/gh-tool.js";import extension_default from"./extension/extension.js";const gh=defineGhTool(()=>extension_default.config.github);export{gh};

@@ -1,0 +1,1 @@
+function isObject(e){return typeof e==`object`&&!!e&&!Array.isArray(e)}export{isObject};

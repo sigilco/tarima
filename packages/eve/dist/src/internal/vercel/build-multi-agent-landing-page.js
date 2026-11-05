@@ -1,0 +1,1 @@
+import{buildHomePageHtml}from"#internal/nitro/routes/index.js";function buildMultiAgentLandingPage(e){let t=e.members.length;return buildHomePageHtml({name:`eve agents`,statusDetail:`${t} ${t===1?`agent is`:`agents are`} up and accepting messages.`})}export{buildMultiAgentLandingPage};

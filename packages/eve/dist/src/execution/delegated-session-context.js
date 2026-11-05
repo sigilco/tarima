@@ -1,0 +1,1 @@
+function hasDelegatedSessionContext(e){if(e[`eve.sessionCallback`]!==void 0)return!0;let t=e[`eve.channel`];return typeof t==`object`&&!!t&&Reflect.get(t,`kind`)===`subagent`}export{hasDelegatedSessionContext};

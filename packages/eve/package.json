@@ -57,7 +57,7 @@
       "default": "./dist/src/public/next/index.js"
     },
     "./vercel": {
-      "eve-source": "./src/public/vercel/index.ts",
+      "eve-source": "./dist/src/public/vercel/index.js",
       "types": "./dist/src/public/vercel/index.d.ts",
       "import": "./dist/src/public/vercel/index.js",
       "default": "./dist/src/public/vercel/index.js"
@@ -173,19 +173,19 @@
       "default": "./dist/src/public/tools/workflow.js"
     },
     "./workflow": {
-      "eve-source": "./src/public/workflow/index.ts",
+      "eve-source": "./dist/src/public/workflow/index.js",
       "types": "./dist/src/public/workflow/index.d.ts",
       "import": "./dist/src/public/workflow/index.js",
       "default": "./dist/src/public/workflow/index.js"
     },
     "./workflow/api": {
-      "eve-source": "./src/public/workflow/api.ts",
+      "eve-source": "./dist/src/public/workflow/api.js",
       "types": "./dist/src/public/workflow/api.d.ts",
       "import": "./dist/src/public/workflow/api.js",
       "default": "./dist/src/public/workflow/api.js"
     },
     "./workflow-modules": {
-      "eve-source": "./dist/src/public/workflow-modules.d.ts",
+      "eve-source": "./dist/src/public/workflow-modules.d.js",
       "types": "./dist/src/public/workflow-modules.d.ts"
     },
     "./ai": {
@@ -299,7 +299,7 @@
       "default": "./dist/src/internal/programmatic-source-loader.js"
     },
     "./internal/mount-state": {
-      "eve-source": "./src/internal/mount-state.ts",
+      "eve-source": "./dist/src/internal/mount-state.js",
       "types": "./dist/src/internal/mount-state.d.ts",
       "import": "./dist/src/internal/mount-state.js",
       "default": "./dist/src/internal/mount-state.js"
@@ -365,37 +365,37 @@
       "default": "./dist/src/public/server/index.js"
     },
     "./experimental/workspace": {
-      "eve-source": "./src/public/experimental/workspace/index.ts",
+      "eve-source": "./dist/src/public/experimental/workspace/index.js",
       "types": "./dist/src/public/experimental/workspace/index.d.ts",
       "import": "./dist/src/public/experimental/workspace/index.js",
       "default": "./dist/src/public/experimental/workspace/index.js"
     },
     "./experimental/sandbox/just-bash": {
-      "eve-source": "./src/public/experimental/sandbox/just-bash.ts",
+      "eve-source": "./dist/src/public/experimental/sandbox/just-bash.js",
       "types": "./dist/src/public/experimental/sandbox/just-bash.d.ts",
       "import": "./dist/src/public/experimental/sandbox/just-bash.js",
       "default": "./dist/src/public/experimental/sandbox/just-bash.js"
     },
     "./experimental/channels/discord/gateway": {
-      "eve-source": "./src/public/experimental/channels/discord/gateway.ts",
+      "eve-source": "./dist/src/public/experimental/channels/discord/gateway.js",
       "types": "./dist/src/public/experimental/channels/discord/gateway.d.ts",
       "import": "./dist/src/public/experimental/channels/discord/gateway.js",
       "default": "./dist/src/public/experimental/channels/discord/gateway.js"
     },
     "./experimental/schedules/testing": {
-      "eve-source": "./src/public/experimental/schedules/testing.ts",
+      "eve-source": "./dist/src/public/experimental/schedules/testing.js",
       "types": "./dist/src/public/experimental/schedules/testing.d.ts",
       "import": "./dist/src/public/experimental/schedules/testing.js",
       "default": "./dist/src/public/experimental/schedules/testing.js"
     },
     "./experimental/schedules": {
-      "eve-source": "./src/public/experimental/schedules/index.ts",
+      "eve-source": "./dist/src/public/experimental/schedules/index.js",
       "types": "./dist/src/public/experimental/schedules/index.d.ts",
       "import": "./dist/src/public/experimental/schedules/index.js",
       "default": "./dist/src/public/experimental/schedules/index.js"
     },
     "./experimental/schedules/vercel": {
-      "eve-source": "./src/public/experimental/schedules/vercel.ts",
+      "eve-source": "./dist/src/public/experimental/schedules/vercel.js",
       "types": "./dist/src/public/experimental/schedules/vercel.d.ts",
       "import": "./dist/src/public/experimental/schedules/vercel.js",
       "default": "./dist/src/public/experimental/schedules/vercel.js"
@@ -478,13 +478,13 @@
       "default": "./dist/src/self-modification/sandbox.js"
     },
     "./internal/legacy-events": {
-      "eve-source": "./src/internal/legacy-events.ts",
+      "eve-source": "./dist/src/internal/legacy-events.js",
       "types": "./dist/src/internal/legacy-events.d.ts",
       "import": "./dist/src/internal/legacy-events.js",
       "default": "./dist/src/internal/legacy-events.js"
     },
     "./internal/scaffold": {
-      "eve-source": "./src/internal/scaffold.ts",
+      "eve-source": "./dist/src/internal/scaffold.js",
       "types": "./dist/src/internal/scaffold.d.ts",
       "import": "./dist/src/internal/scaffold.js",
       "default": "./dist/src/internal/scaffold.js"

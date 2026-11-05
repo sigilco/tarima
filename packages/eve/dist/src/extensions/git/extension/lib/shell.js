@@ -1,0 +1,1 @@
+function shellQuote(e){return`'${e.replaceAll(`'`,`'"'"'`)}'`}export{shellQuote};

@@ -1,0 +1,1 @@
+import{applyValueDelta}from"#shared/value-delta.js";function applySessionStateDelta(e,t){return{serializedContext:applyValueDelta(e.serializedContext,t.serializedContext),sessionState:applyValueDelta(e.sessionState,t.sessionState),history:applyValueDelta(e.history,t.history)}}export{applySessionStateDelta};

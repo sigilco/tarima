@@ -1,0 +1,1 @@
+import{defineDynamic as defineDynamic$1}from"#dynamic/definition.js";import{SKILL_BRAND}from"#shared/skill-definition.js";function defineSkill(e){return Object.defineProperty(e,SKILL_BRAND,{value:!0}),e}const defineDynamic=defineDynamic$1;export{defineDynamic,defineSkill};

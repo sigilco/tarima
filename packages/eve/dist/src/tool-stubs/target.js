@@ -1,0 +1,1 @@
+function stubToolPath(e,t){return e?.agentPath===void 0?t:`${e.agentPath}/${t}`}function findStubTarget(e,t){if(e!==void 0)return t=stubToolPath(e,t),e.rules.some(e=>e.tool===t)?{scope:e,tool:t}:void 0}function stubCallId(e,t,n){return`${e}:${t}:${n}`}export{findStubTarget,stubCallId,stubToolPath};

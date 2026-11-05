@@ -1,0 +1,1 @@
+import{z}from"#compiled/zod/index.js";const mountIdSchema=z.string().min(1);export{mountIdSchema};

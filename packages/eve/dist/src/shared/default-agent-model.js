@@ -1,0 +1,1 @@
+const DEFAULT_AGENT_MODEL_ID=`openai/gpt-6-luna-fast`,DEFAULT_AGENT_REASONING=`high`;function resolveInitAgentSettings(e){return{model:e.model??`openai/gpt-6-luna-fast`,reasoning:e.reasoning??(e.model===void 0?`high`:void 0)}}export{DEFAULT_AGENT_MODEL_ID,DEFAULT_AGENT_REASONING,resolveInitAgentSettings};

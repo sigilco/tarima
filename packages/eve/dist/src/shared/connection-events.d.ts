@@ -1,0 +1,84 @@
+import type { ConnectionPrincipal } from "#shared/connection-types.js";
+import type { ConnectionEvent } from "#public/definitions/connections/events.js";
+export type EventJson = string | number | boolean | null | readonly EventJson[] | EventJsonObject;
+export type EventJsonObject = {
+    [key: string]: EventJson | undefined;
+};
+export interface ManagedEventSubscription {
+    id: string;
+    name: string;
+    arguments: EventJsonObject;
+    status: "pending" | "active" | "needs_auth" | "stopped" | "expired" | "failed";
+    expiresAt: string | null;
+    cleanupStatus?: "pending" | "complete" | "exhausted";
+}
+export type ManagedEventSubscribeInput = {
+    name: string;
+    arguments: EventJsonObject;
+    context?: EventJsonObject;
+    idempotencyKey: string;
+    /** Application lifetime in milliseconds, or null until explicitly stopped. */
+    ttlMs: number | null;
+    options?: {
+        signal?: AbortSignal;
+        timeout?: number;
+        maxTotalTimeout?: number;
+    };
+};
+export interface ConnectionEventsAdapter {
+    subscribe(input: ManagedEventSubscribeInput): Promise<ManagedEventSubscription>;
+    getSubscription(input: {
+        id: string;
+        options?: {
+            timeout?: number;
+        };
+    }): Promise<ManagedEventSubscription>;
+    unsubscribe(input: {
+        id: string;
+        options?: {
+            timeout?: number;
+        };
+    }): Promise<ManagedEventSubscription>;
+}
+export type ConnectionEventDelivery = {
+    version: 1;
+    deliveryId: string;
+    subscriptionId: string;
+    source: {
+        type: "mcp";
+        connectorId: string;
+    };
+    context: Record<string, unknown>;
+} & ({
+    event: ConnectionEvent;
+} | {
+    control: {
+        type: "gap";
+        cursor: string | null;
+        truncated?: true;
+    };
+} | {
+    control: {
+        type: "terminated";
+        error: {
+            code: number;
+            message: string;
+            data?: unknown;
+        };
+    };
+});
+export interface ConnectionEventsBackend {
+    createAdapter(input: {
+        principal: ConnectionPrincipal;
+        connection: {
+            url: string;
+        };
+        destination: {
+            path: string;
+        };
+    }): Promise<ConnectionEventsAdapter>;
+    verify(request: Request, options: {
+        path: string;
+    }): Promise<ConnectionEventDelivery>;
+}
+export declare function readConnectionEventsBackend(value: unknown): ConnectionEventsBackend | undefined;

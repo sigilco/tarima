@@ -1,0 +1,1 @@
+import bashDefinition,{bash}from"#tools/provided/bash.js";var bash_default=bashDefinition;export{bash,bash_default as default};

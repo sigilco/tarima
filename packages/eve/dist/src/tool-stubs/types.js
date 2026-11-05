@@ -1,0 +1,1 @@
+const STUB_CONTEXT_KEY=`eve.toolStubs`,STUB_MATCHES_NAMESPACE=`eve.tool-stubs.matches`,STUB_FAILURE_NAMESPACE=`eve.tool-stubs.failure`,stubResponseNamespace=e=>`eve.tool-stubs.${e}`;export{STUB_CONTEXT_KEY,STUB_FAILURE_NAMESPACE,STUB_MATCHES_NAMESPACE,stubResponseNamespace};

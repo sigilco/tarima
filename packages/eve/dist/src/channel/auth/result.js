@@ -1,0 +1,1 @@
+const IDENTITY_KEYS=Object.keys({attributes:!0,authenticator:!0,issuer:!0,principalId:!0,principalType:!0,subject:!0});function sessionAuthFromResult(e){let t={};for(let n of IDENTITY_KEYS)e[n]!==void 0&&(t[n]=e[n]);return t}export{sessionAuthFromResult};

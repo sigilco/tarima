@@ -1,0 +1,1 @@
+const EVE_WORKFLOW_FLOW_ROUTE_PATH=`/.well-known/workflow/v1/flow`;export{EVE_WORKFLOW_FLOW_ROUTE_PATH};

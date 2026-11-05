@@ -1,0 +1,1 @@
+export{defineWorkspaceAgent}from"#public/definitions/workspace-agent.js";

@@ -1,0 +1,413 @@
+import type { JsonObject } from "#shared/json.js";
+import type { ApprovalPolicy } from "#approval/definition.js";
+import type { ModuleSourceRef } from "#shared/source-ref.js";
+import type { TokenUsage } from "#shared/token-usage.js";
+import { type DynamicModelContext, type DynamicSentinel } from "#dynamic/definition.js";
+/**
+ * Optional overrides that eve forwards to the AI SDK model runtime call for
+ * this model.
+ */
+export interface AgentModelOptionsDefinition {
+    readonly providerOptions?: Record<string, JsonObject>;
+    /** Prompt-cache breakpoints eve places for this model. */
+    readonly promptCache?: AgentPromptCacheDefinition;
+}
+/**
+ * Prompt-cache breakpoints eve places for a model it calls directly. AI Gateway models cache
+ * through `providerOptions.gateway.caching` instead and reject this option.
+ */
+export interface AgentPromptCacheDefinition {
+    /**
+     * Places Anthropic cache breakpoints on every call. eve already does this for Anthropic models
+     * it recognizes by provider or model id; set it for one it can't, such as a Bedrock application
+     * inference profile, or to change the cache lifetime.
+     */
+    readonly anthropic?: AgentAnthropicPromptCacheDefinition;
+}
+export interface AgentAnthropicPromptCacheDefinition {
+    /**
+     * How long each breakpoint's cache entry lives: `"5m"` (the default) or `"1h"`. A 1-hour write
+     * costs more than a 5-minute one, so `"1h"` pays off when turns often land between five minutes
+     * and an hour apart. Only some Claude models accept a 1-hour TTL.
+     */
+    readonly ttl?: AnthropicPromptCacheTtl;
+}
+export type AnthropicPromptCacheTtl = "5m" | "1h";
+export declare const ANTHROPIC_PROMPT_CACHE_TTLS: readonly AnthropicPromptCacheTtl[];
+/**
+ * Provider-agnostic reasoning effort forwarded to the AI SDK model call.
+ * The AI SDK's `max` level is not supported yet: eve's manifest and agent info list the levels.
+ */
+export type AgentReasoningDefinition = "provider-default" | "none" | "minimal" | "low" | "medium" | "high" | "xhigh";
+/**
+ * How an agent's model is reached at runtime, decided at compile time from the
+ * authored model value.
+ *
+ * - `gateway`: routed through the Vercel AI Gateway. This covers a bare model
+ *   id string (resolved via the AI SDK global default provider), a
+ *   `gateway(...)` instance, and a gateway id whose provider key is forwarded
+ *   to the gateway via `providerOptions.gateway.byok`. `target` is the upstream
+ *   provider slug carried in the model id (e.g. `"anthropic"`), best-effort.
+ *   `byok` is set to that provider slug when a `providerOptions.gateway.byok`
+ *   block is present.
+ * - `external`: a direct provider instance (e.g. `anthropic(...)`) that bypasses
+ *   the gateway and talks to the provider's own endpoint. `provider` is the AI
+ *   SDK provider name (e.g. `"anthropic"`).
+ *
+ * This is a routing fact, not a model-existence check; it does not assert the
+ * model id names a real model.
+ */
+export type ModelRouting = {
+    kind: "gateway";
+    target: string;
+    byok?: string;
+} | {
+    kind: "external";
+    provider: string;
+};
+export type InternalAgentModelDefinition = {
+    id: string;
+    contextWindowTokens?: number;
+    source?: ModuleSourceRef;
+    /** Field of the `source` agent config export that holds this model; absent means `model`. */
+    sourceField?: "compaction.model";
+    providerOptions?: Record<string, JsonObject>;
+    promptCache?: AgentPromptCacheDefinition;
+};
+/**
+ * A language model instance eve calls directly, such as one returned by `anthropic()` or
+ * `openai()` from `eve/models/*`, or by an AI SDK provider. Any AI SDK language model
+ * (specification `v2`, `v3`, or `v4`) is assignable. eve invokes `doGenerate` and `doStream`
+ * itself, so their call options and results stay opaque here.
+ */
+export interface EveLanguageModel {
+    readonly specificationVersion: "v2" | "v3" | "v4";
+    readonly provider: string;
+    readonly modelId: string;
+    doGenerate(options: never): PromiseLike<unknown>;
+    doStream(options: never): PromiseLike<unknown>;
+}
+/** A concrete model handle: an AI Gateway model id string or an {@link EveLanguageModel}. */
+export type PublicAgentStaticModelDefinition = string | EveLanguageModel;
+export interface PublicAgentModelSelectionDefinition {
+    readonly model: PublicAgentStaticModelDefinition;
+    /** Override the agent reasoning effort for this selection; omitted values inherit it. */
+    readonly reasoning?: AgentReasoningDefinition;
+    /** Context window of the selected model, in tokens. */
+    readonly modelContextWindowTokens?: number;
+    /** Provider options for the selected model. */
+    readonly modelOptions?: AgentModelOptionsDefinition;
+}
+export type PublicAgentDynamicModelResult = PublicAgentStaticModelDefinition | PublicAgentModelSelectionDefinition;
+/**
+ * A `model` chosen per model call: `defineDynamic()` from `eve` or `eve/models`, or `auto()`. Its
+ * function runs before the model is chosen, so its context has no `model`.
+ */
+export type PublicAgentDynamicModelDefinition = DynamicSentinel<PublicAgentDynamicModelResult, DynamicModelContext>;
+export declare function isDynamicModelDefinition(value: unknown): value is PublicAgentDynamicModelDefinition;
+/**
+ * The model handle you assign to an agent's `model` field: a static model, or one chosen per
+ * session with `defineDynamic()` from `eve/models` or `auto()`.
+ */
+export type PublicAgentModelDefinition = PublicAgentStaticModelDefinition | PublicAgentDynamicModelDefinition;
+export interface InternalAgentCompactionDefinition {
+    /**
+     * Optional model used only for generating compaction summaries.
+     *
+     * When omitted, eve uses the active turn model for the summary call.
+     */
+    model?: InternalAgentModelDefinition;
+    /**
+     * Fraction of the primary model context window that triggers compaction.
+     *
+     * eve defaults to `0.9` when this is omitted.
+     */
+    thresholdPercent?: number;
+}
+/**
+ * Configures conversation compaction: when the model context window fills past
+ * `threshold`, eve summarizes earlier turns to reclaim space. Every
+ * field is optional; omit the block to use eve's defaults.
+ */
+export interface PublicAgentCompactionDefinition {
+    /**
+     * Optional override for the compaction summary model's context window size,
+     * in tokens.
+     *
+     * Same escape hatch as the agent-level `modelContextWindowTokens`. When set,
+     * eve uses this value verbatim and skips the AI Gateway lookup for the
+     * compaction summary model.
+     */
+    readonly modelContextWindowTokens?: number;
+    /**
+     * Optional model used only for generating compaction summaries.
+     *
+     * When omitted, eve uses the active turn model for the summary call.
+     */
+    readonly model?: PublicAgentStaticModelDefinition;
+    /**
+     * Fraction of the primary model context window that triggers compaction.
+     *
+     * eve defaults to `0.9` when this is omitted.
+     */
+    readonly threshold?: number;
+}
+/**
+ * Configures framework-owned runtime limits for this agent's runs.
+ */
+export interface AgentLimitsDefinition {
+    /**
+     * How long a session may sit idle before eve completes it, in milliseconds.
+     *
+     * The idle window starts at creation and restarts each time a turn settles.
+     * A session never expires while a turn is open, including a turn held open
+     * for working tasks or human input.
+     *
+     * `false` disables the timeout.
+     *
+     * @default 2_592_000_000 (30 days)
+     */
+    readonly sessionTimeoutMs?: number | false;
+    /**
+     * Decides whether a session has reached its usage limit. eve calls it before
+     * each model call; returning `true` pauses the turn on a continuation prompt,
+     * or fails it when nobody can answer. Approving starts a new window.
+     *
+     * Subagent sessions without their own `sessionUsage` use the root agent's.
+     * Set `sessionUsage: false` to leave sessions uncapped.
+     *
+     * @default ({ window }) => window.inputTokens - window.cacheReadTokens >= 40_000_000
+     */
+    readonly sessionUsage?: SessionUsageLimit | false;
+}
+/**
+ * Usage limit check for one session. `inputTokens` includes cache reads and
+ * writes. Usage counts what the session's subagents spent once they reply.
+ */
+export type SessionUsageLimit = (usage: {
+    /** Everything the session has spent. */
+    readonly total: TokenUsage;
+    /** What the session has spent since the last approved continuation. */
+    readonly window: TokenUsage;
+}) => boolean;
+/**
+ * Experimental, opt-in agent capabilities authored in `agent.ts`.
+ *
+ * These options are unstable and may change or be removed in any release.
+ */
+export interface AgentExperimentalDefinition {
+    /**
+     * Durable Workflow runtime configuration.
+     */
+    readonly workflow?: AgentWorkflowDefinition;
+}
+/**
+ * Advanced hosted-build controls authored in `agent.ts`.
+ *
+ * These affect packaging and bundling only. They do not affect the runtime
+ * prompt or authored execution APIs.
+ */
+export interface AgentBuildDefinition {
+    /**
+     * Additional imported package names that eve should keep external and trace
+     * into hosted build output. eve also keeps matching imports external while
+     * compiling authored TypeScript modules such as tools, channels, and
+     * schedules.
+     *
+     * Prefer this when a package is sensitive to bundling and should ship via
+     * `server/node_modules` in hosted output.
+     */
+    readonly externalDependencies?: string[];
+}
+/**
+ * Package name for a Workflow world module.
+ *
+ * The package must export either a default factory or a `createWorld` factory.
+ * The factory is called at runtime so credentials and deployment-specific
+ * options can come from environment variables instead of the compiled manifest.
+ */
+export type AgentWorkflowWorldDefinition = string;
+/**
+ * Accepted values for `experimental.workflow.retention`.
+ *
+ * Declared as eve's own tuple so the authored type, the manifest schema, and
+ * the authored-definition normalizer share one source of truth. A drift test
+ * keeps it aligned with what the Workflow SDK accepts.
+ */
+export declare const AGENT_WORKFLOW_RETENTION_VALUES: readonly [0, "default"];
+/**
+ * How long the durable runtime keeps a run's data after the run finishes.
+ *
+ * The value is a duration, and zero is currently the only one besides the
+ * world's default.
+ */
+export type AgentWorkflowRetentionDefinition = (typeof AGENT_WORKFLOW_RETENTION_VALUES)[number];
+/**
+ * Advanced durable-runtime configuration for eve's Workflow SDK integration.
+ */
+export interface AgentWorkflowDefinition {
+    /**
+     * Maximum number of turn-model calls eve may run inside one durable Workflow step.
+     *
+     * Values greater than one reduce Workflow checkpoint overhead but widen the
+     * replay unit: if the Workflow step is interrupted, earlier model calls and
+     * inline tool executions in the same step may run again.
+     *
+     * @default 1
+     */
+    readonly modelCallsPerStep?: number;
+    /**
+     * How long the agent's run data is kept after the run finishes.
+     * Applied to every run that owns the session, including successors created
+     * by deployment handoff.
+     *
+     * When omitted, eve uses the session's resolved OTel trace decision: full
+     * input and output capture keeps the World's default; dropped traces or
+     * either excluded content direction request `0`. Destination export filters
+     * and lifecycle-provider policies do not affect this choice.
+     *
+     * An explicit value overrides this automatic choice:
+     * - `"default"`: the Workflow SDK World decides, regardless of tracing.
+     *   On Vercel this follows your team's plan.
+     * - `0`: the world deletes run payloads and stream chunks as soon as the run
+     *   completes or fails. Metadata such as run IDs, status, and timestamps may
+     *   persist up to the default period.
+     *
+     * The World enforces deletion. Worlds older than spec version 4 reject `0`;
+     * spec version 4 Worlds without retention support keep the data. Run, step,
+     * and event metadata and attributes remain for the default period. Exported
+     * traces are not deleted.
+     *
+     * Note that with retention set to `0`, data deletion can race reads of a finished
+     * run, so results and transcripts of completed sessions generally become
+     * unreadable. Persist anything you need to keep from inside a tool.
+     *
+     * @default Derived from the session's resolved trace policy.
+     */
+    readonly retention?: AgentWorkflowRetentionDefinition;
+    /**
+     * Workflow world module used for durable workflow storage, queueing, hooks,
+     * and streaming.
+     */
+    readonly world?: AgentWorkflowWorldDefinition;
+}
+/**
+ * How eve exposes an agent to its parent model: `true` as a tool in the
+ * model's tool list, `"deferred"` as a catalog entry the model finds with
+ * `eve__search` and calls with `eve__tool`, and `false` not at all.
+ */
+export type AgentToolExposure = boolean | "deferred";
+/**
+ * Compiled-side agent definition. Carries a `name` because the compiler
+ * stamps the path-derived `agentId` onto every compiled agent node.
+ */
+export type InternalAgentDefinition = {
+    name: string;
+    /** Whether `agent.ts` authors an `approval`; the runtime loads it from `source`. */
+    approval?: boolean;
+    description?: string;
+    build?: AgentBuildDefinition;
+    compaction?: InternalAgentCompactionDefinition;
+    defaultTools?: boolean;
+    experimental?: AgentExperimentalDefinition;
+    model: InternalAgentModelDefinition;
+    reasoning?: AgentReasoningDefinition;
+    source?: ModuleSourceRef;
+    tool?: AgentToolExposure;
+    limits?: CompiledAgentLimitsDefinition;
+};
+/**
+ * Compiled `limits`. `sessionUsage` is a function, so the manifest only marks that the agent
+ * config module authors one; the runtime loads it from `source`.
+ */
+export interface CompiledAgentLimitsDefinition {
+    readonly sessionTimeoutMs?: number | false;
+    readonly sessionUsage?: boolean;
+}
+/**
+ * Shared public definition for an agent.
+ *
+ * Identity is derived at compile time from `manifest.agentId` (the
+ * package name or app-root basename). Authored definitions do not carry
+ * a `name` field.
+ */
+type PublicAgentDefinitionBase = {
+    /**
+     * Human-readable description of the agent's purpose. Required for
+     * subagents (authored under `subagents/<id>/agent.ts`): surfaced to
+     * the parent agent as the lowered subagent tool's description.
+     */
+    readonly description?: string;
+    /**
+     * One approval policy for every call this agent's model makes: authored, built-in, extension,
+     * dynamic, workflow, and connection tools, and subagents. It runs beside each entry's own
+     * `approval`, and the stricter status wins (denied, then user approval, then approved), so it
+     * can add a gate but never remove one. Returning `undefined` leaves the entry's own decision.
+     *
+     * The root agent's policy also applies in every local subagent session; a subagent's own can only
+     * add to it. A remote agent's deployment governs its own calls; this policy gates the call to it.
+     * `eve__search`, `eve__skill`, task controls, connection sign-in, `ctx.agent()` calls from
+     * workflow code, and provider-executed tools such as a provider's native web search are not
+     * covered.
+     *
+     * ```ts
+     * approval: ({ toolName, toolAnnotations }) =>
+     *   toolName.startsWith("billing__") || toolAnnotations?.destructiveHint === true
+     *     ? "user-approval"
+     *     : undefined, // leave the tool's own decision
+     * ```
+     */
+    readonly approval?: ApprovalPolicy;
+    readonly build?: AgentBuildDefinition;
+    readonly compaction?: PublicAgentCompactionDefinition;
+    /**
+     * Whether eve automatically adds its optional default tools. Defaults to `true`.
+     * Required connection tooling and tools authored under `agent/tools/` remain
+     * available when this is `false`.
+     */
+    readonly defaultTools?: boolean;
+    /**
+     * Experimental, opt-in capabilities. Unstable, see
+     * {@link AgentExperimentalDefinition}.
+     */
+    readonly experimental?: AgentExperimentalDefinition;
+    /**
+     * Provider-agnostic reasoning effort for the agent's turn model calls.
+     * Support for individual levels depends on the selected model and provider.
+     */
+    readonly reasoning?: AgentReasoningDefinition;
+    /**
+     * Framework-owned runtime limits for this agent's runs.
+     */
+    readonly limits?: AgentLimitsDefinition;
+    /**
+     * How eve exposes this agent to its parent model. `true` lists it as a
+     * tool, `"deferred"` makes it a catalog entry the model finds with `eve__search`
+     * and calls with `eve__tool`, and `false` hides it from the model. On the root
+     * agent, this controls the built-in `agent` tool. Defaults to `true`.
+     *
+     * A subagent with this set to `false` remains callable through `ctx.agent()`
+     * in workflow tools.
+     */
+    readonly tool?: AgentToolExposure;
+};
+/**
+ * Shared public definition for an agent. Static models may carry definition-level
+ * metadata; dynamic models must return metadata with each concrete selection.
+ */
+export type PublicAgentDefinition = PublicAgentDefinitionBase & ({
+    /** Language model used for agent turns. */
+    readonly model: PublicAgentStaticModelDefinition;
+    /** Optional context-window override for the static model. */
+    readonly modelContextWindowTokens?: number;
+    readonly modelOptions?: AgentModelOptionsDefinition;
+} | {
+    /**
+     * The model chosen per session. `render` returns the model with its context window,
+     * options, and reasoning, so those fields don't sit beside it.
+     */
+    readonly model: PublicAgentDynamicModelDefinition;
+    readonly modelContextWindowTokens?: never;
+    readonly modelOptions?: never;
+});
+export {};

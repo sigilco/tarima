@@ -1,0 +1,106 @@
+import type { ConversationEnvironment } from "#shared/conversation-context.js";
+/**
+ * The provider contract authored under `agent/instrumentation/`.
+ *
+ * Each file in the directory declares one independently configured provider.
+ */
+import type { InstrumentationEvent } from "#instrumentation/lifecycle.js";
+import type { JsonValue } from "#shared/json.js";
+import type { TraceCapturePolicy } from "#shared/trace-policy.js";
+export type { JsonValue } from "#shared/json.js";
+export type { InstrumentationScope, InstrumentationEvent, InstrumentationModelInput, InstrumentationParentLineage, InstrumentationUsage, } from "#instrumentation/lifecycle.js";
+export type { TraceCaptureContext, TraceCapturePolicy, TracePolicyDecision, } from "#shared/trace-policy.js";
+/**
+ * Marks a value as having come from `defineInstrumentation` or a built-in
+ * factory.
+ *
+ * The brand catches a default export that never went through eve.
+ */
+export declare const PROVIDER: unique symbol;
+/** Marks a slot the author turned off rather than configured. */
+export declare const DISABLED: unique symbol;
+/**
+ * Passed to {@link InstrumentationProvider.setup} once at server startup,
+ * before any event is published.
+ */
+export interface InstrumentationSetupContext {
+    /** The agent name declared by `defineAgent`. */
+    readonly agentName: string;
+    /** Where the agent is running when setup fires. */
+    readonly environment: ConversationEnvironment;
+    /** Present only when this server was started for a local `eve eval` run. */
+    readonly evaluation?: {
+        readonly runId: string;
+    };
+    /** The eve version running the agent. */
+    readonly frameworkVersion: string;
+}
+export interface InstrumentationState {
+    get(): JsonValue | undefined;
+    /** Stages a JSON value; `undefined` releases this operation's slot. */
+    set(value: JsonValue | undefined): void;
+}
+export interface InstrumentationContext {
+    readonly state: InstrumentationState;
+}
+/**
+ * One event handler.
+ *
+ * A handler can carry durable JSON state from a start to its terminal through
+ * `ctx.state`. eve scopes and releases that state by provider and operation.
+ */
+export type InstrumentationHandler<K extends InstrumentationEvent["type"]> = (event: InstrumentationEvent<K>, ctx: InstrumentationContext) => void | PromiseLike<void>;
+/**
+ * The events a provider may handle, one optional handler per event type.
+ *
+ * Derived from the event union rather than written out, so a new event reaches
+ * providers the moment the bus can publish it.
+ */
+export type InstrumentationEvents = {
+    readonly [TType in InstrumentationEvent["type"]]?: InstrumentationHandler<TType>;
+};
+/**
+ * What an author writes for one file under `agent/instrumentation/`.
+ *
+ * Setup runs in slot order, but event handlers across authored providers run
+ * concurrently and are failure-isolated. Do not coordinate providers through
+ * completion order.
+ */
+export interface InstrumentationDefinition {
+    /**
+     * Whether this provider receives events and which content directions they
+     * include. Defaults to emitting every audience, with content only for public
+     * conversations. Boolean `true` uses the same audience-aware content rule;
+     * an explicit emitted decision can authorize either direction independently.
+     * A thrown error disables this provider for the trace. The policy can run
+     * again across durable steps, so it must be deterministic.
+     */
+    readonly tracePolicy?: TraceCapturePolicy;
+    readonly events?: InstrumentationEvents;
+    /** Runs once at server startup, before any event is published. */
+    readonly setup?: (context: InstrumentationSetupContext) => void | PromiseLike<void>;
+    /** Drains anything buffered. eve calls this before a session goes idle. */
+    readonly flush?: () => void | PromiseLike<void>;
+    /** Releases resources when the process is going away. */
+    readonly shutdown?: () => void | PromiseLike<void>;
+}
+/** Declares one instrumentation provider. */
+export declare function defineInstrumentation(definition: InstrumentationDefinition): InstrumentationProvider;
+/** A {@link InstrumentationDefinition} that has been through `defineInstrumentation`. */
+export type InstrumentationProvider = InstrumentationDefinition & {
+    readonly [PROVIDER]: true;
+};
+/** A slot the author turned off. eve registers nothing for it. */
+export interface InstrumentationDisabled {
+    readonly [DISABLED]: true;
+}
+/**
+ * Turns off the slot the file it is exported from names.
+ *
+ * Export it as the default of `agent/instrumentation/local.ts` to stop eve
+ * spooling local traces, for instance. Omitting the file entirely leaves eve's
+ * default in place, which is why turning one off takes a value.
+ */
+export declare function disableInstrumentation(): InstrumentationDisabled;
+export declare function isInstrumentationProvider(value: unknown): value is InstrumentationProvider;
+export declare function isInstrumentationDisabled(value: unknown): value is InstrumentationDisabled;

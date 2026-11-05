@@ -1,0 +1,1 @@
+import{defineSandbox}from"#public/definitions/sandbox.js";import{DefaultSandbox}from"#sandbox/providers.js";const environment=DefaultSandbox.environment();var sandbox_default=defineSandbox(()=>environment.open());export{sandbox_default as default,environment};

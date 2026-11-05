@@ -1,0 +1,2 @@
+function latestTurn(e){let t=e.session.latestTurnId,n=t===void 0?void 0:e.turns[t];return n===void 0?null:{id:n.turnId,input:turnInput(e,n),status:n.status}}function turnInput(e,t){let n=`deliveryId`in t.cause?t.cause.deliveryId:void 0;return Object.values(e.deliveries).filter(e=>e.turnId===t.turnId&&e.parts!==void 0&&(e.deliveryId===n||e.introducedAt<t.introducedAt)).sort((e,t)=>e.introducedAt-t.introducedAt).flatMap(e=>e.parts??[])}function turnInputText(e){return e.input.flatMap(e=>e.kind===`text`?[e.text]:[]).join(`
+`)}export{latestTurn,turnInput,turnInputText};

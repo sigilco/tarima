@@ -1,0 +1,1 @@
+const FRAMEWORK_CHANNEL_KINDS=new Set([`http`,`schedule`,`subagent`]);function isInstrumentationChannelKind(e){return e.startsWith(`channel:`)||FRAMEWORK_CHANNEL_KINDS.has(e)}function normalizeInstrumentationChannelKind(e){return e!==void 0&&isInstrumentationChannelKind(e)?e:`unknown`}export{isInstrumentationChannelKind,normalizeInstrumentationChannelKind};

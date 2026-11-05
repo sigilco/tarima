@@ -1,0 +1,1 @@
+function normalizeOrigin(e){return new URL(e.trim()).origin}export{normalizeOrigin};

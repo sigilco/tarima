@@ -1,0 +1,1 @@
+import{principalOf}from"#execution/session/delivery-facts.js";function controlDeliveryOf(e){let t=principalOf(e.auth);return t===void 0?{deliveryId:e.deliveryId}:{deliveryId:e.deliveryId,principal:t}}export{controlDeliveryOf};

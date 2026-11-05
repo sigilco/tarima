@@ -1,0 +1,70 @@
+import type { HarnessModelMessage } from "#harness/messages.js";
+import type { CompactionState, HarnessSession, HarnessSessionBase, SessionStateMap } from "#harness/types.js";
+import type { SandboxState } from "#sandbox/state.js";
+import type { JsonObject } from "#shared/json.js";
+import { DURABLE_SESSION_VERSION } from "#execution/durable-session-read.js";
+export { DURABLE_SESSION_VERSION, readDurableSession } from "#execution/durable-session-read.js";
+/**
+ * Serializable handle to a durable session.
+ *
+ * Carries the current session snapshot plus the small projections the
+ * workflow body needs without taking a step boundary: identity, the
+ * hook continuation token,
+ * `hasProxyInputRequests` (a closed-contract short-circuit that lets
+ * the owner skip a per-delivery proxy-routing step when no
+ * descendant subagent is active). Turn coordinates come from the stored
+ * projection in the serialized context. Turn steps return state transitions to the owning
+ * `SessionStateCursor`; policy-only turn outcomes never carry snapshots.
+ */
+export interface DurableSessionState {
+    readonly version: typeof DURABLE_SESSION_VERSION;
+    readonly sessionId: string;
+    readonly continuationToken: string;
+    readonly hasProxyInputRequests: boolean;
+    readonly snapshot: DurableSessionSnapshot;
+}
+/**
+ * Durable projection of {@link HarnessSession} embedded in state
+ * snapshots.
+ *
+ * Omits `history`: the session workflow carries it as its own value, so
+ * only the steps that read or change it receive it as input.
+ * The system prompt isn't stored: each model step renders it from the
+ * current deployment's bundle.
+ */
+export interface DurableSession {
+    readonly sessionId: string;
+    /**
+     * Top user-facing session id in the dispatch chain. Optional because
+     * a top-level session is its own root. Persisted so a rehydrated
+     * subagent session still knows its root after a workflow step
+     * boundary.
+     */
+    readonly rootSessionId?: string;
+    readonly continuationToken: string;
+    readonly outputSchema?: JsonObject;
+    readonly state?: SessionStateMap;
+    readonly sandboxState?: SandboxState;
+    readonly compaction?: CompactionState;
+}
+/** Session state persisted atomically with Workflow step results. */
+export interface DurableSessionSnapshot {
+    readonly session: DurableSession;
+}
+/**
+ * Creates the projected {@link DurableSessionState} with the current
+ * snapshot embedded in the Workflow step result.
+ */
+export declare function createDurableSessionState(input: {
+    readonly session: HarnessSessionBase;
+}): DurableSessionState;
+/** The session state and history a step that ran with the history leaves. */
+export declare function createDurableSessionValues(session: HarnessSession): {
+    readonly history: HarnessModelMessage[];
+    readonly sessionState: DurableSessionState;
+};
+/** Replaces the persisted session state and refreshes its workflow projections. */
+export declare function replaceDurableSessionSnapshot(input: {
+    readonly session: DurableSession;
+    readonly state: DurableSessionState;
+}): DurableSessionState;

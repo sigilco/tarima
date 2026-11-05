@@ -1,0 +1,1 @@
+import{createHash}from"node:crypto";function deriveEveScheduleQueueTopic(e){let t=e.trim();if(t.length===0)throw Error(`Schedule application must not be empty.`);return`__eve_schedule_${createHash(`sha256`).update(t).digest(`hex`).slice(0,32)}`}export{deriveEveScheduleQueueTopic};

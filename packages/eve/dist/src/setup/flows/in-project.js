@@ -1,0 +1,1 @@
+import{createDefaultSetupState}from"../state.js";import{basename}from"node:path";function inProjectSetupState(e,t,n){return{...createDefaultSetupState(),project:t,agentName:basename(e),projectPath:{kind:`resolved`,inPlace:!0,path:e},...n}}function prompterSink(e){return{write:t=>e.log.message(t)}}export{inProjectSetupState,prompterSink};

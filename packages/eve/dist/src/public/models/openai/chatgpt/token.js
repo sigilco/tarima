@@ -1,0 +1,1 @@
+var ChatGptSignedOutError=class extends Error{};function isChatGptTokenFresh(e,t){return e!==void 0&&(e.expiresAt===void 0||e.expiresAt-3e5>t)}export{ChatGptSignedOutError,isChatGptTokenFresh};

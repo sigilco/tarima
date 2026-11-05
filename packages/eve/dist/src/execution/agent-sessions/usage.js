@@ -1,0 +1,1 @@
+import{addTokenUsage}from"#shared/token-usage-math.js";function createRunUsageTally(e){let t;return{record(n){t=t===void 0?n:addTokenUsage(t,n),e?.()},total:()=>t}}export{createRunUsageTally};

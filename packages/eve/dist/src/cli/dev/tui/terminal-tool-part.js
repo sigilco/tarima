@@ -1,0 +1,1 @@
+function isTerminalToolCallPart(e){return e.type===`tool`&&e.kind===`tool`}export{isTerminalToolCallPart};

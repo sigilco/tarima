@@ -1,0 +1,1 @@
+export{resolveApprovalPolicy}from"#approval/definition.js";

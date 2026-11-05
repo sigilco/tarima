@@ -1,0 +1,1 @@
+const INSTRUCTIONS_BRAND=Symbol.for(`eve:instructions-brand`);function isBrandedInstructionsEntry(e){return typeof e==`object`&&!!e&&e[INSTRUCTIONS_BRAND]===!0}export{INSTRUCTIONS_BRAND,isBrandedInstructionsEntry};

@@ -1,0 +1,3 @@
+import{readFile,writeFile}from"node:fs/promises";async function appendEnv(e,t,n={}){let r=``;try{r=await readFile(e,`utf8`)}catch(e){if(e.code!==`ENOENT`)throw e}let i=r.split(`
+`),a=[],o=[];for(let[e,r]of Object.entries(t)){let t=i.findIndex(t=>t.startsWith(`${e}=`));t>=0?n.force?(i[t]=`${e}=${r}`,a.push(e)):o.push(e):(i.push(`${e}=${r}`),a.push(e))}for(;i.length>0&&i[i.length-1]===``;)i.pop();return await writeFile(e,`${i.join(`
+`)}\n`,`utf8`),{written:a,skipped:o}}export{appendEnv};

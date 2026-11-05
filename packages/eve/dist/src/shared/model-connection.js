@@ -1,0 +1,1 @@
+const CONNECTIONS=[`chatgpt`,`vercel`,`ai-gateway-key`,`openai`,`anthropic`];function isModelConnection(e){return CONNECTIONS.some(t=>t===e)}export{CONNECTIONS,isModelConnection};

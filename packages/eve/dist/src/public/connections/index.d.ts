@@ -1,0 +1,11 @@
+/**
+ * Connection authoring helpers for `agent/connections/*.ts` files.
+ */
+export type { AuthorizationCallback, AuthorizationDefinition, ConnectionAuthDefinition, ConnectionCallbackContext, ConnectionAuthResolver, ConnectionPrincipal, HeadersDefinition, InteractiveAuthorizationDefinition, NonInteractiveAuthorizationDefinition, TokenResult, ToolFilterDefinition, } from "#shared/connection-types.js";
+export { defineInteractiveAuthorization } from "#shared/connection-types.js";
+export { defineDynamic, type DynamicConnectionDefinition, type DynamicConnectionResult, type DynamicConnectionSet, } from "#public/definitions/connections/dynamic.js";
+export type { DynamicContext, DynamicKey, DynamicModelContext, DynamicSentinel, DynamicTurn, Memo, Occurrence, SessionFrame, } from "#dynamic/definition.js";
+export { defineMcpClientConnection, type McpClientConnectionDefinition, } from "#public/definitions/connections/mcp.js";
+export type { ConnectionToolCallDefinition, ProvidedArgumentContext, ProvidedArgumentsDefinition, ProvidedArgumentValue, } from "#public/definitions/connections/tool-call.js";
+export { defineOpenAPIConnection, type OpenAPIConnectionDefinition, type OpenAPISpecSource, } from "#public/definitions/connections/openapi.js";
+export { type ConnectionAuthorizationChallenge, ConnectionAuthorizationFailedError, type ConnectionAuthorizationFailedErrorOptions, ConnectionAuthorizationRequiredError, type ConnectionAuthorizationRequiredErrorOptions, isConnectionAuthorizationFailedError, isConnectionAuthorizationRequiredError, } from "#public/connections/errors.js";

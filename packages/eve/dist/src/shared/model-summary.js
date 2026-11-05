@@ -1,0 +1,1 @@
+function formatModelSummary(e){return[e.model.slice(e.model.lastIndexOf(`/`)+1).replace(/-fast$/u,``),e.reasoning,e.fastGlyph].filter(e=>e!==void 0).join(` · `)}export{formatModelSummary};

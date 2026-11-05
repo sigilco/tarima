@@ -1,0 +1,1 @@
+function deliveryStatus(e,t,n){switch(e){case void 0:return n===`failed`?`failed`:`working`;case`awaiting-input`:return`awaiting-input`;case`failed`:case`refused`:return`failed`;case`ignored`:case`applied`:return`completed`;case`handled`:return t===`cancelled`?`cancelled`:t===`failed`?`failed`:`completed`;default:return`failed`}}export{deliveryStatus};

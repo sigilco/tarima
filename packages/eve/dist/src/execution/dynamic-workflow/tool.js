@@ -1,0 +1,1 @@
+import{runJsProgram}from"#execution/dynamic-workflow/workflow.js";async function runWorkflowProgramTask(e,t){"use workflow";return runJsProgram(e.js,t,{maxSubagents:e.maxSubagents??0})}runWorkflowProgramTask.workflowId=`workflow//eve@1.0.0-rc.5//runWorkflowProgramTask`;export{runWorkflowProgramTask};

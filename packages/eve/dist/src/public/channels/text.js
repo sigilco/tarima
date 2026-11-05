@@ -1,0 +1,1 @@
+function truncate(e,t){return t<=0?``:e.length<=t?e:`${e.slice(0,Math.max(0,t-3)).trimEnd()}...`}function chunk(e,t){let n=[];for(let r=0;r<e.length;r+=t)n.push(e.slice(r,r+t));return n}export{chunk,truncate};

@@ -1,0 +1,1 @@
+import{HTTPError}from"nitro";function rejectHeadRequest(e,t){let n=e.req.method;if(n!==`HEAD`)return;let r=new Headers(e.res.errHeaders);throw r.set(`allow`,t),new HTTPError({headers:r,message:`Method ${n} is not allowed for ${e.url.pathname} (allowed: ${t})`,status:405,statusText:`Method Not Allowed`})}export{rejectHeadRequest};

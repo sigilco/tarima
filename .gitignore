@@ -20,3 +20,7 @@ coverage
 # @fontsource package by scripts/og-preview/build-og-preview.sh.
 scripts/og-preview/*.woff2
 .eve/
+
+# The vendored eve runtime ships a prebuilt dist/ (see NOTICE). Un-ignore
+# just that package so the vendored artifacts are committed with the repo.
+!packages/eve/dist/

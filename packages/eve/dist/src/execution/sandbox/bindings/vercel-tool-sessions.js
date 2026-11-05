@@ -1,0 +1,1 @@
+const VERCEL_TOOL_SESSION_SNAPSHOT_EXPIRATION_MS=864e5;function withToolSessionRetention(e){return{...e,keepLastSnapshots:{count:1},snapshotExpiration:VERCEL_TOOL_SESSION_SNAPSHOT_EXPIRATION_MS}}export{VERCEL_TOOL_SESSION_SNAPSHOT_EXPIRATION_MS,withToolSessionRetention};

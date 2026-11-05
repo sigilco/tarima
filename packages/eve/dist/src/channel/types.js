@@ -1,0 +1,1 @@
+const DEFAULT_TURN_POLICY=`steer`;function controlCommand(e,t){let n=crypto.randomUUID();return t?.auth===void 0?{...e,deliveryId:n}:{...e,auth:t.auth,deliveryId:n}}export{DEFAULT_TURN_POLICY,controlCommand};

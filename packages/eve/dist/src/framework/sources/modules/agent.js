@@ -1,0 +1,1 @@
+import{DEFAULT_AGENT_MODEL_ID,DEFAULT_AGENT_REASONING}from"#shared/default-agent-model.js";import{defineAgent}from"#public/definitions/agent.js";var agent_default=defineAgent({model:DEFAULT_AGENT_MODEL_ID,reasoning:DEFAULT_AGENT_REASONING});export{agent_default as default};

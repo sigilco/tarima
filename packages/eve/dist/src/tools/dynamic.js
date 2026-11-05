@@ -1,0 +1,1 @@
+import{defineDynamic as defineDynamic$1}from"#dynamic/definition.js";const defineDynamic=defineDynamic$1,TOOL_BRAND=Symbol.for(`eve:tool-brand`);function isBrandedToolEntry(e){return typeof e==`object`&&!!e&&e[TOOL_BRAND]===!0}export{TOOL_BRAND,defineDynamic,isBrandedToolEntry};

@@ -1,0 +1,1 @@
+var CompactionOverLimitError=class extends Error{name=`CompactionOverLimitError`};export{CompactionOverLimitError};

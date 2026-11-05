@@ -1,0 +1,1 @@
+function levenshteinSimilarity(e,t){if(e===t)return 1;e.length<t.length&&([e,t]=[t,e]);let n=Array.from({length:t.length+1},(e,t)=>t);for(let r=1;r<=e.length;r++){let i=n[0];n[0]=r;for(let a=1;a<=t.length;a++){let o=n[a];n[a]=Math.min(o+1,n[a-1]+1,i+(e[r-1]===t[a-1]?0:1)),i=o}}return 1-n[t.length]/e.length}export{levenshteinSimilarity};

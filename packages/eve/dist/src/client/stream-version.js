@@ -1,0 +1,1 @@
+import{EVE_MESSAGE_STREAM_VERSION,EVE_STREAM_VERSION_HEADER}from"#protocol/session-http.js";function readMessageStreamVersion(e){let t=e.get(EVE_STREAM_VERSION_HEADER);if(t===EVE_MESSAGE_STREAM_VERSION)return t;throw TypeError(t===null?`Missing ${EVE_STREAM_VERSION_HEADER} response header.`:`Unsupported message stream version: ${t}.`)}export{readMessageStreamVersion};

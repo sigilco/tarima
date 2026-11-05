@@ -1,0 +1,1 @@
+import writeFileDefinition,{writeFile}from"#tools/provided/write-file.js";var write_file_default=writeFileDefinition;export{write_file_default as default,writeFile};

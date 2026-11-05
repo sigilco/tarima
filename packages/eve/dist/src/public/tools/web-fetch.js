@@ -1,0 +1,1 @@
+import webFetchDefinition,{webFetch}from"#tools/provided/web-fetch.js";var web_fetch_default=webFetchDefinition;export{web_fetch_default as default,webFetch};

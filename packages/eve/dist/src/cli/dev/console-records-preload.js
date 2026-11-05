@@ -1,0 +1,1 @@
+import{installConsoleRecords}from"./console-records.js";installConsoleRecords();export{};

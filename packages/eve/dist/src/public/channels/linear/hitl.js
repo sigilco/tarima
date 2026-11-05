@@ -1,0 +1,3 @@
+import{renderTextInteraction}from"#channel/resolve-text.js";function renderLinearInteractions(e){return e.map(renderLinearInteraction).join(`
+
+`)}function linearInteractionSignal(e){let t=e.length===1?e[0]:void 0;return t?.request.options===void 0||t.request.options.length===0?{}:{signal:`select`,signalMetadata:{options:t.request.options.map(e=>({label:e.label,value:e.id}))}}}function renderLinearInteraction(e){let t=renderTextInteraction(e.request);return e.request.allowFreeform===!0?`${t}\n\nYou can also reply with a custom answer.`:t}export{linearInteractionSignal,renderLinearInteractions};

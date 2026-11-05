@@ -1,0 +1,1 @@
+import extension_default from"../extension.js";import{prSkillDescription,prSkillMarkdown}from"../lib/github-guidance.js";import{defineDynamic,defineSkill}from"eve/skills";var pr_default=defineDynamic(()=>{let e=extension_default.config.github!==void 0;return defineSkill({description:prSkillDescription(e),content:prSkillMarkdown(e)})});export{pr_default as default};

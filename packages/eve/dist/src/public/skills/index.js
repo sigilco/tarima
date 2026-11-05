@@ -1,0 +1,1 @@
+export{defineDynamic,defineSkill}from"#public/definitions/skill.js";

@@ -1,0 +1,1 @@
+import{EveError}from"#shared/eve-error.js";var HealthResponseError=class extends EveError{static errorName=`HealthResponseError`;issues;constructor(e=[]){let t=e.length===0?``:` (${e.join(`; `)})`;super(`invalid_health_response`,`The server returned an unrecognized eve health response.${t}`),this.issues=e}};export{HealthResponseError};

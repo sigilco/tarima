@@ -1,0 +1,1 @@
+function decide(e,t,n){return t.reduce((t,r)=>e.meet(t,r(n)),e.open)}export{decide};

@@ -1,0 +1,203 @@
+/**
+ * Inbound Slack event → harness shaping.
+ *
+ * The channel calls these helpers on inbound Slack message events before
+ * handing them to the runtime:
+ *
+ * 1. {@link slackMessageFromWebhookPayload} converts the shared Chat SDK
+ *    webhook payload into a channel-owned {@link SlackMessage}. The legacy
+ *    {@link parseAppMentionEvent} and {@link parseDirectMessageEvent}
+ *    helpers keep their raw-envelope behavior for direct unit coverage.
+ * 2. The channel renders the actor, message, channel, and thread as one
+ *    attributed model message so speaker identity cannot drift away from
+ *    the content it describes.
+ */
+import type { SlackAppMentionPayload, SlackDirectMessagePayload } from "#compiled/@chat-adapter/slack/webhook.js";
+/**
+ * Author metadata for an inbound Slack message. Channel-owned shape;
+ * does not depend on the chat SDK's `Author` interface.
+ */
+export interface SlackAuthor {
+    readonly userId: string;
+    readonly userName: string | undefined;
+    /** Slack real name; set by `messageContext.users`. */
+    readonly fullName: string | undefined;
+    /** Slack display name; set by `messageContext.users`. */
+    readonly displayName?: string;
+    /** Slack email; set by `messageContext.users` with `email: true`. */
+    readonly email?: string;
+    readonly isBot: boolean;
+    readonly isMe: boolean;
+}
+/**
+ * Inbound Slack file attachment. The channel reads only `type`, `url`,
+ * `name`, `mimeType`, and `size`. The full Slack file object stays
+ * available on {@link SlackMessage.raw}.
+ */
+export interface SlackAttachment {
+    readonly id: string;
+    readonly type: "image" | "file" | "video" | "audio";
+    readonly url: string | undefined;
+    readonly name: string | undefined;
+    readonly mimeType: string | undefined;
+    readonly size: number | undefined;
+}
+/**
+ * Channel-owned representation of one inbound Slack message.
+ *
+ * Returned for the triggering Slack event. Replaces the chat SDK
+ * `Message` type in the public callback surface (e.g.
+ * `onAppMention(ctx, message)`).
+ */
+export interface SlackMessage {
+    /**
+     * The message body (mrkdwn). Usually the top-level Slack `text`; when
+     * that is empty or a short fallback, derived from Block Kit blocks and
+     * legacy attachments on the raw event.
+     */
+    readonly text: string;
+    /** {@link text} re-rendered as GFM markdown for the agent. */
+    readonly markdown: string;
+    /** Slack message ts. */
+    readonly ts: string;
+    /** Thread parent ts (root). Equals {@link ts} for non-thread events. */
+    readonly threadTs: string;
+    /** Slack channel id. */
+    readonly channelId: string;
+    /** Slack team id, when the envelope carried one. */
+    readonly teamId: string | undefined;
+    /**
+     * Workspace whose app installation received the message, when Slack reported
+     * one. eve pairs it with the author's user id to identify the author.
+     */
+    readonly installationTeamId?: string;
+    /** Author of the message. May be `undefined` for system events. */
+    readonly author: SlackAuthor | undefined;
+    /** File / image attachments on the inbound message. */
+    readonly attachments: readonly SlackAttachment[];
+    /** Raw inbound event payload from Slack. */
+    readonly raw: Record<string, unknown>;
+}
+/**
+ * Open-ended Slack Events API payload handed to `slackChannel({ onEvent })`.
+ * `type` is the Slack event discriminator; all event-specific fields pass
+ * through unchanged from the signed webhook body.
+ */
+export interface SlackEvent {
+    readonly type: string;
+    readonly [key: string]: unknown;
+}
+/**
+ * Slack webhook envelope for an `event_callback`. The channel cares
+ * only about `team_id` (for ergonomic auth derivation) and the inner
+ * `event` payload.
+ */
+interface SlackEventCallback {
+    readonly type: "event_callback";
+    readonly team_id?: string;
+    readonly authorizations?: readonly {
+        readonly is_bot?: boolean;
+        readonly team_id?: string;
+        readonly user_id?: string;
+    }[];
+    readonly event?: {
+        readonly type?: string;
+    } & Record<string, unknown>;
+    readonly event_id?: string;
+    readonly event_time?: number;
+    readonly [key: string]: unknown;
+}
+/**
+ * Validated Slack Events API callback envelope handed to `onEvent` through
+ * {@link SlackInboundEventContext}. Unlike the permissive parser input type,
+ * this shape always carries an event with a non-empty `type` discriminator.
+ */
+export interface SlackEventEnvelope extends SlackEventCallback {
+    readonly event: SlackEvent;
+}
+/**
+ * Parses a raw JSON webhook body into an open-ended Slack Events API envelope.
+ * Returns `null` for URL verification, interactivity, and malformed callback
+ * payloads. Invalid JSON is allowed to throw so the route can log it once.
+ */
+export declare function parseSlackEventEnvelope(body: string): SlackEventEnvelope | null;
+/**
+ * Parses a Slack `app_mention` event into a {@link SlackMessage}.
+ *
+ * Returns `null` when the envelope is not an `app_mention` event or
+ * when required fields (channel id, ts) are missing.
+ */
+export declare function parseAppMentionEvent(envelope: SlackEventCallback): SlackMessage | null;
+/**
+ * Parses a Slack `message` event with `channel_type: "im"` into a
+ * {@link SlackMessage}.
+ *
+ * Returns `null` when:
+ * - the envelope is not an IM `message` event,
+ * - required fields (channel id, ts) are missing,
+ * - the message carries a subtype that does not post a new message
+ *   (edits, deletes, joins, etc.), or
+ * - the message was posted by a bot (`bot_id` set) — this prevents the
+ *   bot's own DM replies from re-triggering the handler.
+ */
+/** Returns the bot user id attached to a Slack event authorization. */
+export declare function slackEventBotUserId(envelope: SlackEventCallback): string | undefined;
+/**
+ * Returns the receiving bot user id that is safe to expose in model context.
+ * Authorizations explicitly marked as non-bot identify an installer, not the
+ * receiving bot. When Slack omits `is_bot`, an `app_mention` can still prove
+ * the identity by mentioning the same authorization user id in its text.
+ */
+export declare function slackEventReceivingBotUserId(envelope: SlackEventCallback): string | undefined;
+/** Returns the workspace whose app installation authorized this event. */
+export declare function slackEventInstallationTeamId(envelope: SlackEventCallback): string | undefined;
+/**
+ * Parses a Slack message event that posts a new message. Bot-authored messages
+ * remain; edits, deletions, joins, and other system events return `null`.
+ */
+export declare function parseMessageEvent(envelope: SlackEventCallback): SlackMessage | null;
+/**
+ * A person's edit to one of their Slack messages, handed to
+ * `slackChannel({ onMessageEdited })`.
+ */
+export interface SlackMessageEdit {
+    /** The message as edited: the edited `text`, with the original message's `ts` and thread. */
+    readonly message: SlackMessage;
+    /** The message's text before the edit (mrkdwn), or `undefined` when Slack didn't include it. */
+    readonly previousText: string | undefined;
+    /** Slack ts of the edit. */
+    readonly editedTs: string;
+}
+/**
+ * Parses a Slack `message_changed` event in which a person edited their message's
+ * text. Returns `null` for other events and for changes that aren't a person's
+ * text edit, such as link unfurls and bot or app updates (including `chat.update`).
+ */
+export declare function parseMessageEditEvent(envelope: SlackEventCallback): SlackMessageEdit | null;
+export declare function parseDirectMessageEvent(envelope: SlackEventCallback): SlackMessage | null;
+export declare function slackMessageFromWebhookPayload(payload: SlackAppMentionPayload | SlackDirectMessagePayload, installationTeamId?: string): SlackMessage | null;
+/**
+ * Parses the `files` of a raw Slack message. A remote file, such as a Google
+ * Drive link, carries `mode: "external"` and a URL on the third party's host
+ * that the bot token can't open; its link stays in the message text.
+ */
+export declare function parseAttachments(files: readonly Record<string, unknown>[] | undefined): SlackAttachment[];
+/**
+ * Verified inbound identity used to attribute a model-visible Slack message.
+ *
+ * Channel-owned shape so the helper does not depend on the inbound
+ * `SlackMessage` and is therefore trivially testable in isolation.
+ */
+export interface SlackInboundContext {
+    readonly botUserId?: string;
+    readonly userId: string;
+    readonly userName?: string;
+    readonly fullName?: string;
+    readonly displayName?: string;
+    readonly email?: string;
+    readonly channelId: string;
+    readonly isMentioned?: boolean;
+    readonly threadTs: string;
+    readonly teamId?: string;
+}
+export {};

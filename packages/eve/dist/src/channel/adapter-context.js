@@ -1,0 +1,1 @@
+import{buildChannelContext}from"#channel/session.js";function buildAdapterContext(e,t){let n=buildChannelContext(t),r={ctx:t,state:e.state??{},session:n.session,get continuation(){return n.continuation}};return e.createAdapterContext?e.createAdapterContext(r):r}export{buildAdapterContext};

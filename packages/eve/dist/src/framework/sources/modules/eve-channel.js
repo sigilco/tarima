@@ -1,0 +1,1 @@
+import{localDev,placeholderAuth,vercelOidc}from"#public/channels/auth.js";import{eveChannel}from"#eve-channel/index.js";function createDefaultEveChannel(){return eveChannel({auth:[vercelOidc(),localDev(),placeholderAuth()]})}export{createDefaultEveChannel as default};

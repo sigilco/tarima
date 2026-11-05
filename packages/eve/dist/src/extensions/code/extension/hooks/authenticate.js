@@ -1,0 +1,1 @@
+import extension_default from"../extension.js";import{authenticateTurn}from"../lib/connect-authentication.js";import{defineHook}from"eve/hooks";var authenticate_default=defineHook({events:{async"turn.started"(e,t){await authenticateTurn(extension_default.config,()=>t.getSandbox())}}});export{authenticate_default as default};
