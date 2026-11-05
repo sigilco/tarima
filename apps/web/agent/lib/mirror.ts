@@ -37,7 +37,7 @@ export function safeJson(value: unknown): string {
 }
 
 /** safeJson parsed back: for drizzle columns declared `{ mode: "json" }`. */
-export function safeJsonRecord(value: unknown): Record<string, unknown> {
+function safeJsonRecord(value: unknown): Record<string, unknown> {
   try {
     return JSON.parse(safeJson(value)) as Record<string, unknown>;
   } catch {
