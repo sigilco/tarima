@@ -9,7 +9,7 @@
  * Covers (would have caught both preview bugs):
  *   1. /assets/* resolve (the eve mount must not break the asset base)
  *   2. dev-login mints a session
- *   3. a session is created through /api/eve (the /eve/eve double prefix)
+ *   3. a session is created through /api/eve/eve (the double prefix eve's client emits)
  *   4. one chat turn streams a reply (stub LLM)
  *   5. telegram/whatsapp mocks answer a send round-trip
  */
@@ -151,7 +151,7 @@ try {
   const headers = { cookie };
 
   // 3. Eve session through the proxy (the /eve/eve double-prefix bug).
-  const sessionRes = await fetch(`${BASE}/api/eve/v1/session`, {
+  const sessionRes = await fetch(`${BASE}/api/eve/eve/v1/session`, {
     method: "POST",
     headers: { ...headers, "content-type": "application/json" },
     body: JSON.stringify({ message: "Say hello from the smoke gate." }),
@@ -162,7 +162,9 @@ try {
 
   // 4. One chat turn streams (stub LLM answers deterministically).
   if (sessionId) {
-    const streamRes = await fetch(`${BASE}/api/eve/v1/session/${sessionId}/stream`, { headers });
+    const streamRes = await fetch(`${BASE}/api/eve/eve/v1/session/${sessionId}/stream`, {
+      headers,
+    });
     ok =
       step(
         "session stream opens",

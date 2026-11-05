@@ -7,7 +7,7 @@
       "outputs": []
     },
     "compile-messages": {
-      "outputs": ["apps/web/src/paraglide/**"]
+      "outputs": ["src/paraglide/**"]
     },
     "lint": {
       "dependsOn": ["compile-messages"],
@@ -19,10 +19,10 @@
     },
     "build": {
       "dependsOn": ["compile-messages"],
-      "outputs": ["apps/web/dist/**", "apps/web/.output/**"]
+      "outputs": ["dist/**", ".output/**"]
     },
     "build:eve": {
-      "outputs": ["apps/web/.output/**"]
+      "outputs": [".output/**"]
     }
   }
 }
