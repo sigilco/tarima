@@ -1,0 +1,130 @@
+screen: chat-1
+name: Chat panel — eve agent in the workspace shell
+route: /app and /app/w/$projectId (mounted inside ChatPanelSlot)
+file: apps/web/src/components/chat/ChatPanel.tsx (launcher: ChatBubble.tsx, slot: apps/web/src/components/workspace/ChatPanelSlot.tsx)
+theme: light
+components: AI Elements (conversation, message, prompt-input, confirmation, tool) under apps/web/src/components/ai-elements/, shadcn button/scroll-area/dropdown-menu under apps/web/src/components/ui/
+
+The eve agent panel inside the workspace shell. Closed, it is a floating
+clay bubble in the bottom-right of the content column. Open, it is a
+fixed-height card docked bottom-right inside the ChatPanelSlot area:
+header (session title, a compact session switcher dropdown with recent
+session ids and a "new session" action, and a close button), a message
+list (AI Elements Conversation + Message), tool-call chips (AI Elements
+Tool) inline in the assistant turn that made them, an approval block (AI
+Elements Confirmation) when the turn asks the person, and the composer
+(AI Elements PromptInput) pinned at the bottom.
+
+Transport: useEveAgent from "eve/react" against the same-origin nitro
+proxy at /eve/*, which forwards to the in-process eve runtime loopback
+origin with the caller's tarima_session cookie. Streaming is live. The
+project id from /app/w/$projectId reaches the agent as clientContext on
+every send so the tools scope to that project; on /app (no project) the
+panel sends no project scope and the empty state says so.
+
+State: chat-closed — the floating launcher, bottom-right of the content
+column, above the slot
+
+┌──────────────────────────────────────────────────────────────┐
+│  …project view above…                                        │
+│                                                              │
+│                                                    ┌──────┐  │
+│                                                    │  💬  │  │
+│                                                    └──────┘  │
+└──────────────────────────────────────────────────────────────┘
+
+State: chat-open-empty — panel open, no messages yet; on /app the hint
+notes there is no project scope
+
+┌──────────────────────────────────────────────────────────────┐
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │ eve  · session a1b2…            (sessions ▾)  (new) (×)│  │
+│  │ ────────────────────────────────────────────────────── │  │
+│  │                                                        │  │
+│  │        Ask the agent about this project.               │  │
+│  │                                                        │  │
+│  │ ────────────────────────────────────────────────────── │  │
+│  │ [ Message eve…                                   (↵) ] │  │
+│  └────────────────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────────┘
+
+State: chat-streaming — a user message plus a streaming assistant reply;
+the composer is disabled while status is busy
+
+┌──────────────────────────────────────────────────────────────┐
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │ eve  · session a1b2…            (sessions ▾)  (new) (×)│  │
+│  │ ────────────────────────────────────────────────────── │  │
+│  │                              ┌──────────────────────┐  │  │
+│  │                              │ Which sponsors are   │  │  │
+│  │                              │ missing a logo?      │  │  │
+│  │                              └──────────────────────┘  │  │
+│  │  ┌──────────────────────────────────────────────────┐  │  │
+│  │  │ Two sponsors are still missing a logo: Acme…  ▌  │  │  │
+│  │  └──────────────────────────────────────────────────┘  │  │
+│  │ ────────────────────────────────────────────────────── │  │
+│  │ [ Message eve…                                   (↵) ] │  │
+│  └────────────────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────────┘
+
+State: chat-with-tools — an assistant turn that called tools; each call
+renders as a Tool chip (name + state) above the reply text
+
+┌──────────────────────────────────────────────────────────────┐
+│  │  ┌──────────────────────────────────────────────────┐  │  │
+│  │  │ [⚙ list_entities · completed] [⚙ get_project · …]│  │  │
+│  │  │ Acme Corp and Lumen Studio are missing a logo.   │  │  │
+│  │  └──────────────────────────────────────────────────┘  │  │
+└──────────────────────────────────────────────────────────────┘
+
+State: chat-error — the send failed (network or agent unavailable); the
+failed message stays with a retry affordance
+
+┌──────────────────────────────────────────────────────────────┐
+│  │                              ┌──────────────────────┐  │  │
+│  │                              │ Which sponsors…  (!) │  │  │
+│  │                              └──────────────────────┘  │  │
+│  │  ┌──────────────────────────────────────────────────┐  │  │
+│  │  │ The agent is unavailable.            ( Retry )   │  │  │
+│  │  └──────────────────────────────────────────────────┘  │  │
+└──────────────────────────────────────────────────────────────┘
+
+State: chat-approval — an approval request rendered in-panel (HITL);
+options come from the interaction request and answer via respond()
+
+┌──────────────────────────────────────────────────────────────┐
+│  │  ┌──────────────────────────────────────────────────┐  │  │
+│  │  │ Approval required                                │  │  │
+│  │  │ Send the sponsorship email to ops@acme.test?     │  │  │
+│  │  │                          ( Approve )  ( Deny )   │  │  │
+│  │  └──────────────────────────────────────────────────┘  │  │
+└──────────────────────────────────────────────────────────────┘
+
+States: chat-closed | chat-open-empty | chat-streaming | chat-with-tools
+| chat-error | chat-approval
+Transitions: bubble click opens the panel; (×) closes to the bubble; the
+composer send → chat-streaming; a turn that calls tools → chat-with-tools;
+a failed send → chat-error, Retry re-sends the same text; an open
+interaction with kind approval → chat-approval, answering settles it; the
+session switcher swaps the session id (remounts the hook), "new session"
+calls newSession().
+Copy:
+  copy.title: chat.title — eve
+  copy.emptyProject: chat.emptyProject — Ask the agent about this project.
+  copy.emptyNoProject: chat.emptyNoProject — Ask the agent anything. No project is selected, so answers are not scoped to one.
+  copy.composer: chat.composerPlaceholder — Message eve…
+  copy.send: chat.send — Send
+  copy.newSession: chat.newSession — New session
+  copy.sessions: chat.sessions — Sessions
+  copy.close: chat.close — Close chat
+  copy.open: chat.open — Open chat
+  copy.retry: chat.retry — Retry
+  copy.unavailable: chat.unavailable — The agent is unavailable.
+  copy.approvalTitle: chat.approvalTitle — Approval required
+  copy.approve: chat.approve — Approve
+  copy.deny: chat.deny — Deny
+  copy.streaming: chat.streaming — Replying…
+Tokens: panel on the off-white #FAFAFA surface with the shell's rounded-xl
+border and shadow language; the launcher is clay #b8491f with white glyph;
+amber #FDE047 marks the streaming caret; user bubbles use the muted
+#f4f4f5 chip surface; no new colors.

@@ -4,7 +4,7 @@ screen          name                    route       file                        
 ------          ----                    -----       ----                                    ------
 auth-1          Login — email step      /login      apps/web/src/routes/login.tsx           done (SP2-B)
 auth-2          Login — code step       /login      apps/web/src/routes/login.tsx           done (SP2-B)
-chat-1          Chat panel              /p/$id      apps/web/src/routes/p/$projectId.tsx    planned (SP4)
+chat-1          Chat panel              /app/w/$id   apps/web/src/components/chat/ChatPanel.tsx   done (SP4)
 shell-1         Workspace shell         /p/$id      apps/web/src/routes/p/$projectId.tsx    planned (SP5)
 
 Existing prose specs pending migration: .agents/docs/screens/{board,login,row-modal,settings}.md
