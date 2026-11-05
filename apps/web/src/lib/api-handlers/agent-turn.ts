@@ -59,7 +59,7 @@ export async function handleAgentTurn(request: Request): Promise<Response> {
   const message = body.message?.trim();
   if (!message) return Response.json({ error: "message_required" }, { status: 400 });
 
-  const origin = getEveOrigin();
+  const origin = await getEveOrigin();
   if (!origin) {
     return Response.json({ error: "agent_unavailable" }, { status: 503 });
   }
