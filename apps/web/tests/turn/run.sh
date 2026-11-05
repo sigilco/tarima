@@ -38,7 +38,7 @@ export BIFROST_VK BIFROST_BASE_URL
 export TARIMA_AGENT_MODEL="${TARIMA_AGENT_MODEL:-zai-coding-plan/glm-5}"
 export EMAIL_LOOPBACK_DOMAINS=tarima.test
 export TELEGRAM_BOT_TOKEN=""
-export TARIMA_EVE_PORT="${TARIMA_EVE_PORT:-4311}"
+export TARIMA_EVE_PORT="${TARIMA_EVE_PORT:-4310}"
 
 # The app must run from its web root so cwd-relative paths (tarima.db
 # default, .eve/ world, .output/ import) resolve.
