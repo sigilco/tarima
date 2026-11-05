@@ -54,7 +54,8 @@
     "apps/api/src/db/index.test.ts",
     "apps/api/src/server.ts",
     "apps/web/tests/turn/agent-turn.mjs",
-    "apps/web/tests/turn/turn-seed-venues.mjs"
+    "apps/web/tests/turn/turn-seed-venues.mjs",
+    "apps/web/tests/chat/chat-turn.mjs"
   ],
   "ignoreBinaries": ["validate"],
   "ignoreDependencies": [
