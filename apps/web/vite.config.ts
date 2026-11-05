@@ -57,7 +57,9 @@ const config = defineConfig({
     routeRules: {
       "/api/**": { proxy: { to: `${process.env.API_ORIGIN ?? "http://localhost:3001"}/api/**` } },
       "/auth/**": { proxy: { to: `${process.env.API_ORIGIN ?? "http://localhost:3001"}/auth/**` } },
-      "/webhooks/**": { proxy: { to: `${process.env.API_ORIGIN ?? "http://localhost:3001"}/webhooks/**` } },
+      "/webhooks/**": {
+        proxy: { to: `${process.env.API_ORIGIN ?? "http://localhost:3001"}/webhooks/**` },
+      },
     },
     // Keep the prerendered landing (TanStack Start emits it into the nitro
     // public dir) and serve the node-server build from dist/server.
