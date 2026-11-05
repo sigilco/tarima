@@ -34,8 +34,11 @@ await build({
 
 // Keep the native sqlite binding external (packages: external already does);
 // copy the web SSR + client builds next to it so the artifact is standalone.
+// The sp1 nitro migration moved the web build to dist/server (nitro
+// node-server output; server/ holds the SSR entry, client/ the browser
+// assets), so the artifact mirrors that layout.
 mkdirSync(outDir, { recursive: true });
-cpSync(join(apiRoot, "../web/dist/ssr"), join(outDir, "web/ssr"), { recursive: true });
+cpSync(join(apiRoot, "../web/dist/server"), join(outDir, "web/ssr"), { recursive: true });
 cpSync(join(apiRoot, "../web/dist/client"), join(outDir, "web/client"), { recursive: true });
 
 // The artifact ships without node_modules: every "@tarima/*" import left in

@@ -4,7 +4,7 @@ pnpm = "12.16.1"
 
 [env]
 # Local-only overrides live in .env.local (gitignored); see .env.example.
-"_.file" = ".env.local"
+_.file = ".env.local"
 
 [tasks.setup]
 description = "Install deps, seed .env.local from .env.example, install git hooks"

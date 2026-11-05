@@ -21,7 +21,6 @@
  */
 import { spawn, spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
-import { createRequire } from "node:module";
 import { join, resolve } from "node:path";
 
 const ROOT = resolve(import.meta.dirname, "..");
@@ -156,8 +155,8 @@ if (PREVIEW) {
   // vite dev mounts the in-process eve runtime itself: the server entry
   // (src/server.ts) calls mountEveRuntime(), which builds .output/ on
   // demand via ensureEveBuild(); only build processes skip the mount.
-  const viteBin = createRequire(join(WEB, "package.json")).resolve("vite/bin/vite.js");
-  startChild("web", process.execPath, [viteBin, "dev", "--port", String(WEB_PORT)], {
+  const viteBin = join(WEB, "node_modules", "vite", "bin", "vite.js");
+  startChild("web", process.execPath, [viteBin, "dev", "--host", "--port", String(WEB_PORT)], {
     cwd: WEB,
   });
 }
