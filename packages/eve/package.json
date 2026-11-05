@@ -1,5 +1,5 @@
 {
-  "name": "@tarima/eve-vendored",
+  "name": "eve",
   "version": "1.0.0-rc.5",
   "private": true,
   "description": "Vendored eve 1.0.0-rc.5 (Apache-2.0). Extracted from the npm tarball; see README.md.",
@@ -31,41 +31,525 @@
       "import": "./dist/src/client/index.js",
       "default": "./dist/src/client/index.js"
     },
-    "./channels": {
-      "types": "./dist/src/public/channels/index.d.ts",
-      "import": "./dist/src/public/channels/index.js",
-      "default": "./dist/src/public/channels/index.js"
+    "./sessions": {
+      "types": "./dist/src/public/sessions/index.d.ts",
+      "import": "./dist/src/public/sessions/index.js",
+      "default": "./dist/src/public/sessions/index.js"
     },
-    "./channels/auth": {
-      "types": "./dist/src/public/channels/auth.d.ts",
-      "import": "./dist/src/public/channels/auth.js",
-      "default": "./dist/src/public/channels/auth.js"
+    "./react": {
+      "types": "./dist/src/react/index.d.ts",
+      "import": "./dist/src/react/index.js",
+      "default": "./dist/src/react/index.js"
     },
-    "./context": {
-      "types": "./dist/src/public/context/index.d.ts",
-      "import": "./dist/src/public/context/index.js",
-      "default": "./dist/src/public/context/index.js"
+    "./vue": {
+      "types": "./dist/src/vue/index.d.ts",
+      "import": "./dist/src/vue/index.js",
+      "default": "./dist/src/vue/index.js"
     },
-    "./models/openai": {
-      "types": "./dist/src/public/models/openai.d.ts",
-      "import": "./dist/src/public/models/openai.js",
-      "default": "./dist/src/public/models/openai.js"
+    "./svelte": {
+      "types": "./dist/src/svelte/index.d.ts",
+      "import": "./dist/src/svelte/index.js",
+      "default": "./dist/src/svelte/index.js"
+    },
+    "./next": {
+      "types": "./dist/src/public/next/index.d.ts",
+      "import": "./dist/src/public/next/index.js",
+      "default": "./dist/src/public/next/index.js"
+    },
+    "./vercel": {
+      "eve-source": "./src/public/vercel/index.ts",
+      "types": "./dist/src/public/vercel/index.d.ts",
+      "import": "./dist/src/public/vercel/index.js",
+      "default": "./dist/src/public/vercel/index.js"
+    },
+    "./nuxt": {
+      "types": "./dist/src/public/nuxt/index.d.ts",
+      "import": "./dist/src/public/nuxt/index.js",
+      "default": "./dist/src/public/nuxt/index.js"
+    },
+    "./sveltekit": {
+      "types": "./dist/src/public/sveltekit/index.d.ts",
+      "import": "./dist/src/public/sveltekit/index.js",
+      "default": "./dist/src/public/sveltekit/index.js"
+    },
+    "./tanstack": {
+      "types": "./dist/src/public/tanstack/index.d.ts",
+      "import": "./dist/src/public/tanstack/index.js",
+      "default": "./dist/src/public/tanstack/index.js"
+    },
+    "./tools/approval": {
+      "types": "./dist/src/public/tools/approval/index.d.ts",
+      "import": "./dist/src/public/tools/approval/index.js",
+      "default": "./dist/src/public/tools/approval/index.js"
+    },
+    "./memory": {
+      "types": "./dist/src/public/memory/index.d.ts",
+      "import": "./dist/src/public/memory/index.js",
+      "default": "./dist/src/public/memory/index.js"
+    },
+    "./memory/scope": {
+      "types": "./dist/src/public/memory/scope.d.ts",
+      "import": "./dist/src/public/memory/scope.js",
+      "default": "./dist/src/public/memory/scope.js"
+    },
+    "./memory/file": {
+      "types": "./dist/src/public/memory/file/index.d.ts",
+      "import": "./dist/src/public/memory/file/index.js",
+      "default": "./dist/src/public/memory/file/index.js"
+    },
+    "./memory/file/vercel": {
+      "types": "./dist/src/public/memory/file/vercel.d.ts",
+      "import": "./dist/src/public/memory/file/vercel.js",
+      "default": "./dist/src/public/memory/file/vercel.js"
+    },
+    "./tools/sleep": {
+      "types": "./dist/src/public/tools/sleep.d.ts",
+      "import": "./dist/src/public/tools/sleep.js",
+      "default": "./dist/src/public/tools/sleep.js"
+    },
+    "./tools/no_reply": {
+      "types": "./dist/src/public/tools/no-reply.d.ts",
+      "import": "./dist/src/public/tools/no-reply.js",
+      "default": "./dist/src/public/tools/no-reply.js"
     },
     "./tools": {
       "types": "./dist/src/public/tools/index.d.ts",
       "import": "./dist/src/public/tools/index.js",
       "default": "./dist/src/public/tools/index.js"
     },
-    "./tools/approval": {
-      "types": "./dist/src/public/tools/approval/index.d.ts",
-      "import": "./dist/src/public/tools/approval/index.js",
-      "default": "./dist/src/public/tools/approval/index.js"
+    "./tools/agent": {
+      "types": "./dist/src/public/tools/agent.d.ts",
+      "import": "./dist/src/public/tools/agent.js",
+      "default": "./dist/src/public/tools/agent.js"
+    },
+    "./tools/ask_question": {
+      "types": "./dist/src/public/tools/ask-question.d.ts",
+      "import": "./dist/src/public/tools/ask-question.js",
+      "default": "./dist/src/public/tools/ask-question.js"
+    },
+    "./tools/bash": {
+      "types": "./dist/src/public/tools/bash.d.ts",
+      "import": "./dist/src/public/tools/bash.js",
+      "default": "./dist/src/public/tools/bash.js"
+    },
+    "./tools/read_file": {
+      "types": "./dist/src/public/tools/read-file.d.ts",
+      "import": "./dist/src/public/tools/read-file.js",
+      "default": "./dist/src/public/tools/read-file.js"
+    },
+    "./tools/write_file": {
+      "types": "./dist/src/public/tools/write-file.d.ts",
+      "import": "./dist/src/public/tools/write-file.js",
+      "default": "./dist/src/public/tools/write-file.js"
+    },
+    "./tools/edit_file": {
+      "types": "./dist/src/public/tools/edit-file.d.ts",
+      "import": "./dist/src/public/tools/edit-file.js",
+      "default": "./dist/src/public/tools/edit-file.js"
+    },
+    "./tools/web_fetch": {
+      "types": "./dist/src/public/tools/web-fetch.d.ts",
+      "import": "./dist/src/public/tools/web-fetch.js",
+      "default": "./dist/src/public/tools/web-fetch.js"
+    },
+    "./tools/web_search": {
+      "types": "./dist/src/public/tools/web-search.d.ts",
+      "import": "./dist/src/public/tools/web-search.js",
+      "default": "./dist/src/public/tools/web-search.js"
+    },
+    "./tools/glob": {
+      "types": "./dist/src/public/tools/glob.d.ts",
+      "import": "./dist/src/public/tools/glob.js",
+      "default": "./dist/src/public/tools/glob.js"
+    },
+    "./tools/grep": {
+      "types": "./dist/src/public/tools/grep.d.ts",
+      "import": "./dist/src/public/tools/grep.js",
+      "default": "./dist/src/public/tools/grep.js"
+    },
+    "./tools/workflow": {
+      "types": "./dist/src/public/tools/workflow.d.ts",
+      "import": "./dist/src/public/tools/workflow.js",
+      "default": "./dist/src/public/tools/workflow.js"
+    },
+    "./workflow": {
+      "eve-source": "./src/public/workflow/index.ts",
+      "types": "./dist/src/public/workflow/index.d.ts",
+      "import": "./dist/src/public/workflow/index.js",
+      "default": "./dist/src/public/workflow/index.js"
+    },
+    "./workflow/api": {
+      "eve-source": "./src/public/workflow/api.ts",
+      "types": "./dist/src/public/workflow/api.d.ts",
+      "import": "./dist/src/public/workflow/api.js",
+      "default": "./dist/src/public/workflow/api.js"
+    },
+    "./workflow-modules": {
+      "eve-source": "./dist/src/public/workflow-modules.d.ts",
+      "types": "./dist/src/public/workflow-modules.d.ts"
+    },
+    "./ai": {
+      "types": "./dist/src/public/ai/index.d.ts",
+      "import": "./dist/src/public/ai/index.js",
+      "default": "./dist/src/public/ai/index.js"
+    },
+    "./models": {
+      "types": "./dist/src/public/models/index.d.ts",
+      "import": "./dist/src/public/models/index.js",
+      "default": "./dist/src/public/models/index.js"
+    },
+    "./models/anthropic": {
+      "types": "./dist/src/public/models/anthropic/index.d.ts",
+      "import": "./dist/src/public/models/anthropic/index.js",
+      "default": "./dist/src/public/models/anthropic/index.js"
+    },
+    "./models/openai": {
+      "types": "./dist/src/public/models/openai/index.d.ts",
+      "import": "./dist/src/public/models/openai/index.js",
+      "default": "./dist/src/public/models/openai/index.js"
+    },
+    "./connections": {
+      "types": "./dist/src/public/connections/index.d.ts",
+      "import": "./dist/src/public/connections/index.js",
+      "default": "./dist/src/public/connections/index.js"
+    },
+    "./agents/auth": {
+      "types": "./dist/src/public/agents/auth.d.ts",
+      "import": "./dist/src/public/agents/auth.js",
+      "default": "./dist/src/public/agents/auth.js"
+    },
+    "./hooks": {
+      "types": "./dist/src/public/hooks/index.d.ts",
+      "import": "./dist/src/public/hooks/index.js",
+      "default": "./dist/src/public/hooks/index.js"
+    },
+    "./events": {
+      "types": "./dist/src/public/events/index.d.ts",
+      "import": "./dist/src/public/events/index.js",
+      "default": "./dist/src/public/events/index.js"
+    },
+    "./sandbox": {
+      "types": "./dist/src/public/sandbox/index.d.ts",
+      "import": "./dist/src/public/sandbox/index.js",
+      "default": "./dist/src/public/sandbox/index.js"
+    },
+    "./sandbox/provider": {
+      "types": "./dist/src/public/sandbox/provider.d.ts",
+      "import": "./dist/src/public/sandbox/provider.js",
+      "default": "./dist/src/public/sandbox/provider.js"
+    },
+    "./sandbox/docker": {
+      "types": "./dist/src/public/sandbox/docker.d.ts",
+      "import": "./dist/src/public/sandbox/docker.js",
+      "default": "./dist/src/public/sandbox/docker.js"
+    },
+    "./sandbox/just-bash": {
+      "types": "./dist/src/public/sandbox/just-bash.d.ts",
+      "import": "./dist/src/public/sandbox/just-bash.js",
+      "default": "./dist/src/public/sandbox/just-bash.js"
+    },
+    "./sandbox/vercel": {
+      "types": "./dist/src/public/sandbox/vercel.d.ts",
+      "import": "./dist/src/public/sandbox/vercel.js",
+      "default": "./dist/src/public/sandbox/vercel.js"
+    },
+    "./evals": {
+      "types": "./dist/src/evals/index.d.ts",
+      "import": "./dist/src/evals/index.js",
+      "default": "./dist/src/evals/index.js"
+    },
+    "./evals/expect": {
+      "types": "./dist/src/evals/expect/index.d.ts",
+      "import": "./dist/src/evals/expect/index.js",
+      "default": "./dist/src/evals/expect/index.js"
+    },
+    "./evals/loaders": {
+      "types": "./dist/src/evals/loaders/index.d.ts",
+      "import": "./dist/src/evals/loaders/index.js",
+      "default": "./dist/src/evals/loaders/index.js"
+    },
+    "./evals/reporters": {
+      "types": "./dist/src/evals/reporters/index.d.ts",
+      "import": "./dist/src/evals/reporters/index.js",
+      "default": "./dist/src/evals/reporters/index.js"
+    },
+    "./skills": {
+      "types": "./dist/src/public/skills/index.d.ts",
+      "import": "./dist/src/public/skills/index.js",
+      "default": "./dist/src/public/skills/index.js"
+    },
+    "./instructions": {
+      "types": "./dist/src/public/instructions/index.d.ts",
+      "import": "./dist/src/public/instructions/index.js",
+      "default": "./dist/src/public/instructions/index.js"
+    },
+    "./context": {
+      "types": "./dist/src/public/context/index.d.ts",
+      "import": "./dist/src/public/context/index.js",
+      "default": "./dist/src/public/context/index.js"
+    },
+    "./internal/workflow-step-execution": {
+      "types": "./dist/src/execution/tools/workflow/step-execution.d.ts",
+      "import": "./dist/src/execution/tools/workflow/step-execution.js",
+      "default": "./dist/src/execution/tools/workflow/step-execution.js"
+    },
+    "./internal/programmatic-source-loader": {
+      "types": "./dist/src/internal/programmatic-source-loader.d.ts",
+      "import": "./dist/src/internal/programmatic-source-loader.js",
+      "default": "./dist/src/internal/programmatic-source-loader.js"
+    },
+    "./internal/mount-state": {
+      "eve-source": "./src/internal/mount-state.ts",
+      "types": "./dist/src/internal/mount-state.d.ts",
+      "import": "./dist/src/internal/mount-state.js",
+      "default": "./dist/src/internal/mount-state.js"
+    },
+    "./local-dev": {
+      "types": "./dist/src/public/local-dev.d.ts",
+      "import": "./dist/src/public/local-dev.js",
+      "default": "./dist/src/public/local-dev.js"
+    },
+    "./extensions/code": {
+      "eve-source": "./dist/src/extensions/code/extension/extension.js",
+      "types": "./dist/src/extensions/code/extension/extension.d.ts",
+      "import": "./dist/src/extensions/code/extension/extension.js",
+      "default": "./dist/src/extensions/code/extension/extension.js"
+    },
+    "./extensions/code/sandbox": {
+      "eve-source": "./dist/src/extensions/code/sandbox.js",
+      "types": "./dist/src/extensions/code/sandbox.d.ts",
+      "import": "./dist/src/extensions/code/sandbox.js",
+      "default": "./dist/src/extensions/code/sandbox.js"
+    },
+    "./extensions/git": {
+      "eve-source": "./dist/src/extensions/git/extension/extension.js",
+      "types": "./dist/src/extensions/git/extension/extension.d.ts",
+      "import": "./dist/src/extensions/git/extension/extension.js",
+      "default": "./dist/src/extensions/git/extension/extension.js"
+    },
+    "./extensions/git/tools": {
+      "eve-source": "./dist/src/extensions/git/tools.js",
+      "types": "./dist/src/extensions/git/tools.d.ts",
+      "import": "./dist/src/extensions/git/tools.js",
+      "default": "./dist/src/extensions/git/tools.js"
+    },
+    "./extensions/git/sandbox": {
+      "eve-source": "./dist/src/extensions/git/extension/lib/sandbox.js",
+      "types": "./dist/src/extensions/git/extension/lib/sandbox.d.ts",
+      "import": "./dist/src/extensions/git/extension/lib/sandbox.js",
+      "default": "./dist/src/extensions/git/extension/lib/sandbox.js"
+    },
+    "./extension": {
+      "types": "./dist/src/public/extension/index.d.ts",
+      "import": "./dist/src/public/extension/index.js",
+      "default": "./dist/src/public/extension/index.js"
+    },
+    "./instrumentation": {
+      "types": "./dist/src/public/instrumentation/index.d.ts",
+      "import": "./dist/src/public/instrumentation/index.js",
+      "default": "./dist/src/public/instrumentation/index.js"
+    },
+    "./instrumentation/otel": {
+      "types": "./dist/src/public/instrumentation/otel.d.ts",
+      "import": "./dist/src/public/instrumentation/otel.js",
+      "default": "./dist/src/public/instrumentation/otel.js"
+    },
+    "./schedules": {
+      "types": "./dist/src/public/schedules/index.d.ts",
+      "import": "./dist/src/public/schedules/index.js",
+      "default": "./dist/src/public/schedules/index.js"
+    },
+    "./server": {
+      "types": "./dist/src/public/server/index.d.ts",
+      "import": "./dist/src/public/server/index.js",
+      "default": "./dist/src/public/server/index.js"
+    },
+    "./experimental/workspace": {
+      "eve-source": "./src/public/experimental/workspace/index.ts",
+      "types": "./dist/src/public/experimental/workspace/index.d.ts",
+      "import": "./dist/src/public/experimental/workspace/index.js",
+      "default": "./dist/src/public/experimental/workspace/index.js"
+    },
+    "./experimental/sandbox/just-bash": {
+      "eve-source": "./src/public/experimental/sandbox/just-bash.ts",
+      "types": "./dist/src/public/experimental/sandbox/just-bash.d.ts",
+      "import": "./dist/src/public/experimental/sandbox/just-bash.js",
+      "default": "./dist/src/public/experimental/sandbox/just-bash.js"
+    },
+    "./experimental/channels/discord/gateway": {
+      "eve-source": "./src/public/experimental/channels/discord/gateway.ts",
+      "types": "./dist/src/public/experimental/channels/discord/gateway.d.ts",
+      "import": "./dist/src/public/experimental/channels/discord/gateway.js",
+      "default": "./dist/src/public/experimental/channels/discord/gateway.js"
+    },
+    "./experimental/schedules/testing": {
+      "eve-source": "./src/public/experimental/schedules/testing.ts",
+      "types": "./dist/src/public/experimental/schedules/testing.d.ts",
+      "import": "./dist/src/public/experimental/schedules/testing.js",
+      "default": "./dist/src/public/experimental/schedules/testing.js"
+    },
+    "./experimental/schedules": {
+      "eve-source": "./src/public/experimental/schedules/index.ts",
+      "types": "./dist/src/public/experimental/schedules/index.d.ts",
+      "import": "./dist/src/public/experimental/schedules/index.js",
+      "default": "./dist/src/public/experimental/schedules/index.js"
+    },
+    "./experimental/schedules/vercel": {
+      "eve-source": "./src/public/experimental/schedules/vercel.ts",
+      "types": "./dist/src/public/experimental/schedules/vercel.d.ts",
+      "import": "./dist/src/public/experimental/schedules/vercel.js",
+      "default": "./dist/src/public/experimental/schedules/vercel.js"
+    },
+    "./channels": {
+      "types": "./dist/src/public/channels/index.d.ts",
+      "import": "./dist/src/public/channels/index.js",
+      "default": "./dist/src/public/channels/index.js"
+    },
+    "./channels/eve": {
+      "types": "./dist/src/public/channels/eve.d.ts",
+      "import": "./dist/src/public/channels/eve.js",
+      "default": "./dist/src/public/channels/eve.js"
+    },
+    "./channels/auth": {
+      "types": "./dist/src/public/channels/auth.d.ts",
+      "import": "./dist/src/public/channels/auth.js",
+      "default": "./dist/src/public/channels/auth.js"
+    },
+    "./channels/mcp": {
+      "types": "./dist/src/public/channels/mcp.d.ts",
+      "import": "./dist/src/public/channels/mcp.js",
+      "default": "./dist/src/public/channels/mcp.js"
+    },
+    "./channels/slack": {
+      "types": "./dist/src/public/channels/slack/index.d.ts",
+      "import": "./dist/src/public/channels/slack/index.js",
+      "default": "./dist/src/public/channels/slack/index.js"
+    },
+    "./channels/chat-sdk": {
+      "types": "./dist/src/public/channels/chat-sdk/index.d.ts",
+      "import": "./dist/src/public/channels/chat-sdk/index.js",
+      "default": "./dist/src/public/channels/chat-sdk/index.js"
+    },
+    "./channels/photon": {
+      "types": "./dist/src/public/channels/photon/index.d.ts",
+      "import": "./dist/src/public/channels/photon/index.js",
+      "default": "./dist/src/public/channels/photon/index.js"
+    },
+    "./channels/linq": {
+      "types": "./dist/src/public/channels/linq/index.d.ts",
+      "import": "./dist/src/public/channels/linq/index.js",
+      "default": "./dist/src/public/channels/linq/index.js"
+    },
+    "./channels/github": {
+      "types": "./dist/src/public/channels/github/index.d.ts",
+      "import": "./dist/src/public/channels/github/index.js",
+      "default": "./dist/src/public/channels/github/index.js"
+    },
+    "./channels/discord": {
+      "types": "./dist/src/public/channels/discord/index.d.ts",
+      "import": "./dist/src/public/channels/discord/index.js",
+      "default": "./dist/src/public/channels/discord/index.js"
+    },
+    "./channels/twilio": {
+      "types": "./dist/src/public/channels/twilio/index.d.ts",
+      "import": "./dist/src/public/channels/twilio/index.js",
+      "default": "./dist/src/public/channels/twilio/index.js"
+    },
+    "./channels/telegram": {
+      "types": "./dist/src/public/channels/telegram/index.d.ts",
+      "import": "./dist/src/public/channels/telegram/index.js",
+      "default": "./dist/src/public/channels/telegram/index.js"
+    },
+    "./channels/teams": {
+      "types": "./dist/src/public/channels/teams/index.d.ts",
+      "import": "./dist/src/public/channels/teams/index.js",
+      "default": "./dist/src/public/channels/teams/index.js"
+    },
+    "./channels/linear": {
+      "types": "./dist/src/public/channels/linear/index.d.ts",
+      "import": "./dist/src/public/channels/linear/index.js",
+      "default": "./dist/src/public/channels/linear/index.js"
+    },
+    "./package.json": "./package.json",
+    "./internal/self-modification/sandbox": {
+      "eve-source": "./dist/src/self-modification/sandbox.js",
+      "types": "./dist/src/self-modification/sandbox.d.ts",
+      "import": "./dist/src/self-modification/sandbox.js",
+      "default": "./dist/src/self-modification/sandbox.js"
+    },
+    "./internal/legacy-events": {
+      "eve-source": "./src/internal/legacy-events.ts",
+      "types": "./dist/src/internal/legacy-events.d.ts",
+      "import": "./dist/src/internal/legacy-events.js",
+      "default": "./dist/src/internal/legacy-events.js"
+    },
+    "./internal/scaffold": {
+      "eve-source": "./src/internal/scaffold.ts",
+      "types": "./dist/src/internal/scaffold.d.ts",
+      "import": "./dist/src/internal/scaffold.js",
+      "default": "./dist/src/internal/scaffold.js"
+    },
+    "./internal/git": {
+      "eve-source": "./dist/src/internal/git.js",
+      "types": "./dist/src/internal/git.d.ts",
+      "import": "./dist/src/internal/git.js",
+      "default": "./dist/src/internal/git.js"
+    },
+    "./tools/agent_router": {
+      "types": "./dist/src/public/tools/agent-router.d.ts",
+      "import": "./dist/src/public/tools/agent-router.js",
+      "default": "./dist/src/public/tools/agent-router.js"
+    },
+    "./extensions/self-modification/local": {
+      "eve-source": "./dist/src/self-modification/extension/extension.js",
+      "types": "./dist/src/self-modification/extension/extension.d.ts",
+      "import": "./dist/src/self-modification/extension/extension.js",
+      "default": "./dist/src/self-modification/extension/extension.js"
+    },
+    "./extensions/self-modification/remote": {
+      "eve-source": "./dist/src/self-modification/remote/extension.js",
+      "types": "./dist/src/self-modification/remote/extension.d.ts",
+      "import": "./dist/src/self-modification/remote/extension.js",
+      "default": "./dist/src/self-modification/remote/extension.js"
+    },
+    "./extensions/computer-use": {
+      "eve-source": "./dist/src/computer-use/extension/extension.js",
+      "types": "./dist/src/computer-use/extension/extension.d.ts",
+      "import": "./dist/src/computer-use/extension/extension.js",
+      "default": "./dist/src/computer-use/extension/extension.js"
+    },
+    "./extensions/computer-use/tools": {
+      "eve-source": "./dist/src/computer-use/tools.js",
+      "types": "./dist/src/computer-use/tools.d.ts",
+      "import": "./dist/src/computer-use/tools.js",
+      "default": "./dist/src/computer-use/tools.js"
+    },
+    "./extensions/computer-use/sandbox": {
+      "eve-source": "./dist/src/computer-use/extension/lib/sandbox.js",
+      "types": "./dist/src/computer-use/extension/lib/sandbox.d.ts",
+      "import": "./dist/src/computer-use/extension/lib/sandbox.js",
+      "default": "./dist/src/computer-use/extension/lib/sandbox.js"
+    },
+    "./experimental/connections": {
+      "eve-source": "./dist/src/public/experimental/connections/index.js",
+      "types": "./dist/src/public/experimental/connections/index.d.ts",
+      "import": "./dist/src/public/experimental/connections/index.js",
+      "default": "./dist/src/public/experimental/connections/index.js"
+    },
+    "./compiled/openai": {
+      "types": "./dist/src/compiled/@ai-sdk/openai/index.d.ts",
+      "import": "./dist/src/compiled/@ai-sdk/openai/index.js",
+      "default": "./dist/src/compiled/@ai-sdk/openai/index.js"
     }
   },
   "dependencies": {
-    "nitro": "^3.0.260311-beta",
+    "nitro": "3.0.261103-rc",
     "rolldown": "1.2.16",
     "undici": "8.12.3"
+  },
+  "peerDependencies": {
+    "@opentelemetry/api": "^1.0.0",
+    "ai": "^7.0.137"
   },
   "engines": {
     "node": ">=24"
