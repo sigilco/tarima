@@ -1,0 +1,73 @@
+{
+  "name": "@tarima/eve-vendored",
+  "version": "1.0.0-rc.5",
+  "private": true,
+  "description": "Vendored eve 1.0.0-rc.5 (Apache-2.0). Extracted from the npm tarball; see README.md.",
+  "bin": {
+    "eve": "./bin/eve.js"
+  },
+  "type": "module",
+  "sideEffects": true,
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "imports": {
+    "#compiled/*": {
+      "eve-source": "./.generated/compiled/*",
+      "default": "./dist/src/compiled/*"
+    },
+    "#*.js": {
+      "eve-source": "./src/*.ts",
+      "default": "./dist/src/*.js"
+    }
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js",
+      "default": "./dist/src/index.js"
+    },
+    "./client": {
+      "types": "./dist/src/client/index.d.ts",
+      "import": "./dist/src/client/index.js",
+      "default": "./dist/src/client/index.js"
+    },
+    "./channels": {
+      "types": "./dist/src/public/channels/index.d.ts",
+      "import": "./dist/src/public/channels/index.js",
+      "default": "./dist/src/public/channels/index.js"
+    },
+    "./channels/auth": {
+      "types": "./dist/src/public/channels/auth.d.ts",
+      "import": "./dist/src/public/channels/auth.js",
+      "default": "./dist/src/public/channels/auth.js"
+    },
+    "./context": {
+      "types": "./dist/src/public/context/index.d.ts",
+      "import": "./dist/src/public/context/index.js",
+      "default": "./dist/src/public/context/index.js"
+    },
+    "./models/openai": {
+      "types": "./dist/src/public/models/openai.d.ts",
+      "import": "./dist/src/public/models/openai.js",
+      "default": "./dist/src/public/models/openai.js"
+    },
+    "./tools": {
+      "types": "./dist/src/public/tools/index.d.ts",
+      "import": "./dist/src/public/tools/index.js",
+      "default": "./dist/src/public/tools/index.js"
+    },
+    "./tools/approval": {
+      "types": "./dist/src/public/tools/approval/index.d.ts",
+      "import": "./dist/src/public/tools/approval/index.js",
+      "default": "./dist/src/public/tools/approval/index.js"
+    }
+  },
+  "dependencies": {
+    "nitro": "^3.0.260311-beta",
+    "rolldown": "1.2.16",
+    "undici": "8.12.3"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

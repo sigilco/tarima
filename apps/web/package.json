@@ -27,6 +27,7 @@
     "@tarima/api-keys": "workspace:*",
     "@tarima/auth-core": "workspace:*",
     "@tarima/contract": "workspace:*",
+    "@tarima/eve-vendored": "workspace:*",
     "@tarima/obs": "workspace:*",
     "@tarima/venuesearch": "workspace:*",
     "bcryptjs": "^3.0.3",
@@ -37,7 +38,8 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "tailwindcss": "^4.3.3",
-    "valibot": "catalog:"
+    "valibot": "catalog:",
+    "zod": "^4.1.13"
   },
   "devDependencies": {
     "@inlang/paraglide-js": "^2.29.0",

@@ -1,0 +1,420 @@
+---
+title: "Next.js"
+description: "Add an eve chat to a Next.js app, from setup and authentication to saved conversations and deployment."
+---
+
+Your Next.js app and your eve agent run side by side on the same domain. Pages go to Next.js, and requests to `/eve/v1/*` go to the agent. The agent runs as its own service, never inside the Next.js server. Your React code is the same whichever setup you pick below.
+
+## Choose a setup
+
+There are two ways to connect the app and the agent. Both deploy as one Vercel project.
+
+|              | Vercel services (recommended)  | Next.js hosts the agent       |
+| ------------ | ------------------------------ | ----------------------------- |
+| What you add | A root `vercel.ts`             | A wrapper in `next.config.ts` |
+| Run locally  | `vercel dev --local`           | `next dev`                    |
+| Self-host    | Run the app and agent yourself | `next start` runs both        |
+
+Start with **Vercel services**. Choose Next.js hosting when Next.js should run everything, for example when you add an agent to an existing Next.js app that deploys from the project root.
+
+## Create a chat app
+
+From your agent project, run the Web Chat installer:
+
+```bash
+eve add channel/web
+```
+
+It asks three questions:
+
+1. **Framework:** choose **Next.js**.
+2. **Hosting:** choose **Vercel services**, or **Next.js** to have Next.js host the agent.
+3. **Authentication:** choose **Sign in with Vercel**, or set it up yourself. See [Authenticate users](#authenticate-users).
+
+In a project with several agents, add `--agent <name>` to pick the one the chat talks to.
+
+The installer creates a Next.js app in `apps/web/`:
+
+```text
+project/
+├── agent/
+│   └── channels/eve.ts       # who can call the agent from a browser
+├── apps/web/
+│   ├── app/
+│   │   ├── _components/      # the chat UI
+│   │   ├── page.tsx          # landing page
+│   │   └── s/                # conversation pages
+│   └── next.config.ts
+├── package.json              # dependencies and scripts
+└── vercel.ts                 # Vercel services only
+```
+
+Start it with the command the installer prints:
+
+| Command           | Starts                                                 |
+| ----------------- | ------------------------------------------------------ |
+| `npm run dev:all` | The app and the agent together (Vercel services)       |
+| `npm run dev:web` | The app. With Next.js hosting, it starts the agent too |
+| `npm run dev`     | The agent alone, in the eve terminal UI                |
+
+`dev:all` needs Vercel CLI 59.16.0 or newer, but not a linked project.
+
+Before you deploy, replace the placeholder auth the installer generates. Until then, production browser requests get `401`. See [Authenticate users](#authenticate-users).
+
+## Add eve to an existing app
+
+### With Vercel services
+
+Leave `next.config.ts` alone. Add a `vercel.ts` at the project root that tells Vercel where your app lives:
+
+```ts title="vercel.ts"
+import { withEve } from "eve/vercel";
+
+export default await withEve({
+  services: {
+    web: {
+      framework: "nextjs",
+      root: "apps/web",
+      buildCommand: "node ../../node_modules/next/dist/bin/next build",
+    },
+  },
+  routes: [{ src: "^(.*)$", destination: { type: "service", service: "web" } }],
+});
+```
+
+`withEve` adds your agents and their routes for you: `/eve/v1/*` for one agent, or `/eve/<name>/v1/*` for each agent in a workspace.
+
+- Install `eve` in the root `package.json`.
+- Remove any `vercel.json`.
+
+See [Compose agents with other Vercel services](../deployment/vercel#compose-agents-with-other-vercel-services) for more options.
+
+### With Next.js hosting
+
+Wrap your Next.js config:
+
+```ts title="next.config.ts"
+import type { NextConfig } from "next";
+import { withEve } from "eve/next";
+
+const nextConfig: NextConfig = {};
+
+export default withEve(nextConfig);
+```
+
+`withEve` looks for your agent next to `next.config.ts`. If the agent lives somewhere else, point to it:
+
+```ts title="apps/web/next.config.ts"
+export default withEve(nextConfig, { eveRoot: "../.." });
+```
+
+This setup needs Next.js 16 and React 19. See [`withEve` options](#witheve-options) for the rest.
+
+## Build the chat UI
+
+Call `useEveAgent` from a Client Component:
+
+```tsx title="apps/web/app/_components/chat.tsx"
+"use client";
+
+import { useEveAgent } from "eve/react";
+
+export function Chat() {
+  const agent = useEveAgent();
+  const isResuming = agent.status === "resuming";
+
+  return (
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        const message = String(new FormData(event.currentTarget).get("message") ?? "").trim();
+        if (message.length > 0 && !isResuming) {
+          void agent.send(message);
+        }
+      }}
+    >
+      {agent.messages.map((message) => (
+        <article key={message.id}>
+          <header>{message.role}</header>
+          {message.parts.map((part, index) =>
+            part.type === "text" ? <p key={part.id ?? index}>{part.text}</p> : null,
+          )}
+        </article>
+      ))}
+      <input disabled={isResuming} name="message" />
+      <button disabled={isResuming} type="submit">
+        Send
+      </button>
+    </form>
+  );
+}
+```
+
+A real chat also needs to show tool calls, approvals, questions, and sign-ins. Without them, a turn that waits on the user can't continue. The generated chat handles all of these. To build your own, see [Human-in-the-loop prompts](/docs/guides/frontend#human-in-the-loop-prompts) and [Sign-ins](/docs/guides/frontend#sign-ins-and-other-interactions).
+
+## Give each conversation a URL
+
+The generated chat gives every conversation its own address:
+
+| URL              | Shows                                                       |
+| ---------------- | ----------------------------------------------------------- |
+| `/`              | The landing page                                            |
+| `/s`             | A new, empty conversation                                   |
+| `/s/[sessionId]` | A saved conversation, including any reply still in progress |
+
+The conversation page passes its session ID to the hook:
+
+```tsx title="apps/web/app/s/[sessionId]/page.tsx"
+import { SessionChat } from "@/app/_components/session-chat";
+
+export default async function SessionPage({
+  params,
+}: {
+  readonly params: Promise<{ readonly sessionId: string }>;
+}) {
+  const { sessionId } = await params;
+  return <SessionChat key={sessionId} sessionId={sessionId} />;
+}
+```
+
+```tsx title="apps/web/app/_components/session-chat.tsx"
+"use client";
+
+import { useEveAgent } from "eve/react";
+
+export function SessionChat({ sessionId }: { readonly sessionId: string }) {
+  const agent = useEveAgent({
+    initialSession: { sessionId, streamIndex: 0 },
+    resume: true,
+  });
+  // Render agent.messages as in the basic chat.
+}
+```
+
+Three things to get right:
+
+- **Change the URL without the router.** Once `/s` creates a session, switch the address to `/s/{sessionId}` with the browser's own `replaceState`. Next.js patches `window.history`, and going through its router would remount the page and cut off the reply:
+
+  ```ts
+  History.prototype.replaceState.call(
+    window.history,
+    window.history.state,
+    "",
+    `/s/${encodeURIComponent(sessionId)}`,
+  );
+  ```
+
+- **Use a `key` to switch conversations.** Keying the chat on the session ID gives each conversation a fresh hook.
+- **Disable input while loading.** While `status` is `"resuming"`, show the messages but don't accept new ones.
+
+## Authenticate users
+
+The browser calls the agent on your own domain, so it sends your app's cookies along. The agent checks them in `agent/channels/eve.ts`.
+
+Replace the generated `placeholderAuth()` with a function that reads your app's session:
+
+```ts title="agent/channels/eve.ts"
+import { type AuthFn, localDev, vercelOidc } from "eve/channels/auth";
+import { eveChannel } from "eve/channels/eve";
+import { getSession } from "@/lib/auth";
+
+const appSession: AuthFn<Request> = async (request) => {
+  const session = await getSession(request);
+  if (!session) return null;
+  return {
+    authenticator: "app",
+    principalId: session.userId,
+    principalType: "user",
+    attributes: {},
+  };
+};
+
+export default eveChannel({
+  auth: [appSession, vercelOidc(), localDev()],
+});
+```
+
+eve tries each entry in order:
+
+- `appSession` accepts your signed-in users.
+- `vercelOidc()` accepts your own server code and the eve terminal UI.
+- `localDev()` accepts requests during local development only.
+
+For a public demo, `none()` from `eve/channels/auth` lets anyone in. Don't use it for private data. See [Authentication](../auth-and-route-protection) for more.
+
+If your app uses tokens instead of cookies, pass them to the hook:
+
+```tsx
+const agent = useEveAgent({
+  auth: { bearer: async () => await getAccessToken() },
+});
+```
+
+### Sign in with Vercel
+
+Choose **Sign in with Vercel** in the installer to let members of your Vercel team sign in, with nothing to build. It needs a linked Vercel project. Local development skips sign-in. See [Web Chat with Sign in with Vercel](../../channels/eve#web-chat-with-sign-in-with-vercel) for details.
+
+## Save conversations
+
+eve already keeps every conversation, so a URL with a session ID is enough to reopen one. Add your own database when you want a chat list, titles, or faster page loads.
+
+Keep your chat record separate from the eve session. Your record holds the title and owner; eve holds the messages. Store the session and its events alongside your record:
+
+```ts
+type SavedChat = {
+  id: string;
+  ownerId: string;
+  session: ClientSessionState | null; // from onSessionChange
+  events: SessionStreamEvent[]; // from onEvent
+};
+```
+
+Then:
+
+1. **Create the chat record before the first message.** If the user reloads mid-reply, the page can still find the conversation.
+2. **Save as things happen.** Save `session` in `onSessionChange` and each event in `onEvent`. Don't wait for the reply to finish: a turn waiting on the user hasn't finished.
+3. **Load on the server.** Read the saved chat in a Server Component, and pass `events` and `session` to the Client Component as `initialEvents` and `initialSession`, with `resume: true`. Saved messages show at once, and the live reply picks up from there.
+4. **Store `session` as eve gives it to you.** Don't compute the cursor from the number of events.
+
+See [Resume a saved session](./use-eve-agent#resume-a-saved-session) for how saved events and catch-up fit together.
+
+## Call the agent from server code
+
+Route Handlers, Server Actions, and cron jobs can call the agent with `Client` from `eve/client`. Point it at your own domain, and sign requests with your project's Vercel OIDC token:
+
+```ts title="apps/web/app/api/summarize/route.ts"
+import { getVercelOidcToken } from "@vercel/oidc";
+import { Client } from "eve/client";
+import { getSession } from "@/lib/auth";
+
+export async function POST(request: Request) {
+  const session = await getSession(request);
+  if (!session) return new Response("Unauthorized", { status: 401 });
+
+  const client = new Client({
+    baseUrl: new URL(request.url).origin,
+    auth: { vercelOidc: { token: async () => await getVercelOidcToken() } },
+    redirect: "manual",
+  });
+
+  const { delivery } = await client.sessions.create({ message: "Summarize today's tickets." });
+  const result = await delivery.result();
+  return Response.json({ status: result.status });
+}
+```
+
+- Check who's calling before you call the agent, as above. The OIDC token gives your code the app's own access, so an unchecked route would let anyone use it.
+- Install `@vercel/oidc`, and run `eve link` once so the token works locally.
+- The token identifies your app, not a user. To act as the signed-in user, forward their cookie in `headers` instead.
+- Without an incoming request, as in a cron job, use `https://${process.env.VERCEL_URL}` as the domain.
+
+See [Client SDK](/docs/guides/client) for more.
+
+## Use multiple agents
+
+With several agents, each one gets its own path, such as `/eve/support/v1/*`. Pick one in the hook:
+
+```tsx
+const support = useEveAgent({ agent: "support" });
+```
+
+- Give each chat page one agent, and include the agent name in its URLs.
+- Remount the chat when switching agents.
+- Set up authentication for each agent.
+
+Both setups find the agents in your project automatically. With Next.js hosting, you can also list agents that live elsewhere:
+
+```ts title="next.config.ts"
+export default withEve(nextConfig, {
+  agents: {
+    support: "./apps/support-agent",
+    billing: { root: "./apps/billing-agent", buildCommand: "pnpm build:billing-agent" },
+  },
+});
+```
+
+Use either `eveRoot` or `agents`, not both.
+
+## Run, build, and deploy
+
+### Run locally
+
+- **Vercel services:** `npm run dev:all`.
+- **Next.js hosting:** `npm run dev:web`. Next.js starts the agent for you. To use an agent you already started, set `EVE_BASE_URL` to its address.
+
+### Deploy to Vercel
+
+From the project root:
+
+```bash
+eve link
+eve deploy
+```
+
+The app and each agent deploy together as one Vercel project. See [Deploy to Vercel](../deployment/vercel) for credentials and sandboxes.
+
+<Callout type="warning" title="Next.js hosting from apps/web">
+  When the installer puts a Next.js-hosted app in `apps/web/`, Vercel doesn't build it by default.
+  In your Vercel project settings, set the Build Command to `npm run build:web` and the Output
+  Directory to `apps/web/.next`.
+</Callout>
+
+### Run a production build locally
+
+With Next.js hosting, `next start` runs the built agent too. Build both first:
+
+```bash
+eve build
+npm run build:web
+next start apps/web
+```
+
+The agent listens on port `4274`. Set `EVE_NEXT_PRODUCTION_PORT` to change it.
+
+With several agents, a root `eve build` doesn't build them for `next start`. Run `eve build` in each `agents/<name>/` directory instead.
+
+### Self-host
+
+- **Vercel services:** run the app and each agent with your own process manager and proxy. See [Self-host eve](../deployment/self-hosted-operations#run-workspace-members).
+- **Next.js hosting:** `next start` runs the agent for you. To run the agent yourself instead, put it behind a proxy that serves it under the private path `/_eve_internal/eve` (the `servicePrefix` option), then set `EVE_NEXT_PRODUCTION_ORIGIN` to that proxy's address when you build and start Next.js.
+
+## Troubleshooting
+
+| You see                                                        | Fix                                                                                                                        |
+| -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `401` "Production auth is not configured"                      | Replace `placeholderAuth()`. See [Authenticate users](#authenticate-users)                                                 |
+| "The Next.js output directory `.next` was not found" on deploy | Set the Build Command and Output Directory. See [Deploy to Vercel](#deploy-to-vercel)                                      |
+| The reply stops after the first message                        | Change the URL with `History.prototype.replaceState`. See [Give each conversation a URL](#give-each-conversation-a-url)    |
+| Messages repeat or vanish after a reload                       | Save `session` from `onSessionChange` as is                                                                                |
+| `next dev` times out waiting for the agent                     | Raise `devServerTimeoutMs`                                                                                                 |
+| A custom channel route returns `404` with Vercel services      | Route it to the agent in `vercel.ts`. See [Compose agents](../deployment/vercel#compose-agents-with-other-vercel-services) |
+
+## Reference
+
+### `withEve` options
+
+Options for `withEve` from `eve/next`. All are optional.
+
+| Option               | Default                  | Purpose                                                                                            |
+| -------------------- | ------------------------ | -------------------------------------------------------------------------------------------------- |
+| `eveRoot`            | The Next.js app root     | Where your agent project lives                                                                     |
+| `agents`             | Found automatically      | Agents to mount at `/eve/<name>/v1/*`. Each is a path or `{ root, buildCommand?, servicePrefix? }` |
+| `eveBuildCommand`    | Runs the installed `eve` | Command that builds each agent                                                                     |
+| `devServerTimeoutMs` | `180000`                 | How long `next dev` waits for each agent to start                                                  |
+| `servicePrefix`      | `"/_eve_internal/eve"`   | Private route path for self-hosted proxying and hand-written Vercel services                       |
+
+### Environment variables
+
+| Variable                     | Purpose                                                                                                    |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `EVE_BASE_URL`               | Next.js hosting, development: use an agent you already started                                             |
+| `EVE_NEXT_PRODUCTION_PORT`   | Next.js hosting: first port for agents that `next start` runs. Defaults to `4274`                          |
+| `EVE_NEXT_PRODUCTION_ORIGIN` | Next.js hosting: address of a proxy serving your agents under `servicePrefix`. Turns off automatic startup |
+| `EVE_PUBLIC_ROUTE_PREFIX`    | Self-hosting: an agent's public path, such as `/eve/support`, so callback links work                       |
+
+## What to read next
+
+- [Frontend overview](/docs/guides/frontend): everything the chat hook can do
+- [Authentication](../auth-and-route-protection): checking who's calling
+- [Deploy to Vercel](../deployment/vercel): services, credentials, and sandboxes
+- [Client SDK](/docs/guides/client): calling the agent from server code

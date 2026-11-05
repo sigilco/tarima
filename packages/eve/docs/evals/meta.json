@@ -1,0 +1,5 @@
+{
+  "title": "Evals",
+  "defaultOpen": false,
+  "pages": ["cases", "assertions", "tool-stubs", "judge", "targets", "reporters", "running"]
+}

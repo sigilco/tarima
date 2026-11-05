@@ -1,0 +1,5 @@
+{
+  "title": "Sandbox",
+  "defaultOpen": false,
+  "pages": ["default", "vercel", "docker", "just-bash", "custom-providers", "troubleshooting"]
+}
