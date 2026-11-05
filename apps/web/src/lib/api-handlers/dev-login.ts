@@ -42,9 +42,7 @@ export async function handleDevLogin(request: Request): Promise<Response> {
   const notFound = () => new Response("not found", { status: 404 });
   if (!devLoginEnabled()) return notFound();
 
-  const email = (new URL(request.url).searchParams.get("email") ?? "")
-    .trim()
-    .toLowerCase();
+  const email = (new URL(request.url).searchParams.get("email") ?? "").trim().toLowerCase();
   if (!email.endsWith(DEV_DOMAIN)) return notFound();
 
   const user =
