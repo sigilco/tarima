@@ -65,11 +65,11 @@ describe("send_email", () => {
       status: string;
     };
     expect(out.staged).toBe(true);
-    expect(out.status).toBe("pending");
+    expect(out.status).toBe("staged");
     const rows = db.select().from(outbox).where(eq(outbox.id, out.outboxId)).all();
     expect(rows).toHaveLength(1);
-    expect(rows[0].type).toBe("email.outreach");
-    expect(rows[0].status).toBe("pending");
+    expect(rows[0].type).toBe("agent.email");
+    expect(rows[0].status).toBe("staged");
     const payload = rows[0].payload as { to?: string; stagedBy?: string };
     expect(payload.to).toBe(INPUT.to);
     expect(payload.stagedBy).toBe(OWNER);

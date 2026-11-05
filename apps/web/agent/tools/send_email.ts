@@ -66,7 +66,7 @@ export default defineTool({
       .values({
         id,
         idempotencyKey,
-        type: "email.outreach",
+        type: "agent.email",
         payload: {
           projectId: input.projectId,
           to: input.to,
@@ -74,13 +74,13 @@ export default defineTool({
           body: input.body,
           stagedBy: userId,
         },
-        status: "pending",
+        status: "staged",
       })
       .run();
     return {
       staged: true,
       outboxId: id,
-      status: "pending",
+      status: "staged",
       idempotencyKey,
       to: input.to,
       subject: input.subject,
