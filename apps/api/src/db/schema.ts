@@ -1,5 +1,13 @@
 import { sql } from "drizzle-orm";
-import { index, integer, real, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
+import {
+  index,
+  integer,
+  primaryKey,
+  real,
+  sqliteTable,
+  text,
+  uniqueIndex,
+} from "drizzle-orm/sqlite-core";
 
 // Timestamps are unix epoch milliseconds (integer). Ids are TEXT (uuid/nanoid)
 // except access_requests, which keeps its legacy autoincrement id.
@@ -503,3 +511,65 @@ export const dealComparison = sqliteTable(
 
 export type DealComparison = typeof dealComparison.$inferSelect;
 export type NewDealComparison = typeof dealComparison.$inferInsert;
+
+/**
+ * Mirror of the eve session facts (audit). Keyed by the fact's position on
+ * the session stream (`session_id`, `line`, `idx`) so a retried hook step
+ * re-inserting the same fact is a no-op.
+ */
+export const agentEvents = sqliteTable(
+  "agent_events",
+  {
+    sessionId: text("session_id").notNull(),
+    line: integer("line").notNull(),
+    idx: integer("idx").notNull(),
+    type: text("type").notNull(),
+    principalId: text("principal_id"),
+    payload: text("payload", { mode: "json" })
+      .notNull()
+      .default(sql`'{}'`)
+      .$type<Record<string, unknown>>(),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [
+    primaryKey({ columns: [t.sessionId, t.line, t.idx] }),
+    index("idx_agent_events_session").on(t.sessionId, t.createdAt),
+    index("idx_agent_events_type").on(t.type, t.createdAt),
+  ],
+);
+
+export type AgentEvent = typeof agentEvents.$inferSelect;
+export type NewAgentEvent = typeof agentEvents.$inferInsert;
+
+/**
+ * Mirror of eve's approval interactions (plan D8): eve owns the gate, we
+ * record every request and its outcome for the audit tab.
+ */
+export const approvals = sqliteTable(
+  "approvals",
+  {
+    id: text("id").primaryKey(),
+    sessionId: text("session_id").notNull(),
+    interactionId: text("interaction_id").notNull(),
+    toolName: text("tool_name").notNull(),
+    callId: text("call_id"),
+    projectId: text("project_id"),
+    principalId: text("principal_id"),
+    status: text("status").notNull(),
+    requestPayload: text("request_payload", { mode: "json" })
+      .notNull()
+      .default(sql`'{}'`)
+      .$type<Record<string, unknown>>(),
+    decidedBy: text("decided_by"),
+    decidedAt: integer("decided_at"),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [
+    uniqueIndex("idx_approvals_interaction").on(t.interactionId),
+    index("idx_approvals_session").on(t.sessionId, t.createdAt),
+    index("idx_approvals_status").on(t.status, t.createdAt),
+  ],
+);
+
+export type Approval = typeof approvals.$inferSelect;
+export type NewApproval = typeof approvals.$inferInsert;

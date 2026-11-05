@@ -62,6 +62,13 @@ const BOOTSTRAP_DDL = [
   "CREATE INDEX IF NOT EXISTS `idx_deals_winning_negotiation` ON `deals` (`winning_negotiation_id`);",
   "CREATE TABLE IF NOT EXISTS `deal_comparison` ( `id` text PRIMARY KEY NOT NULL, `project_id` text NOT NULL, `grid` text DEFAULT '{}' NOT NULL, `created_at` integer NOT NULL, `updated_at` integer NOT NULL, FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON UPDATE no action ON DELETE cascade );",
   "CREATE INDEX IF NOT EXISTS `idx_deal_comparison_project` ON `deal_comparison` (`project_id`);",
+  "CREATE TABLE IF NOT EXISTS `agent_events` ( `session_id` text NOT NULL, `line` integer NOT NULL, `idx` integer NOT NULL, `type` text NOT NULL, `principal_id` text, `payload` text DEFAULT '{}' NOT NULL, `created_at` integer NOT NULL, PRIMARY KEY(`session_id`, `line`, `idx`) );",
+  "CREATE INDEX IF NOT EXISTS `idx_agent_events_session` ON `agent_events` (`session_id`,`created_at`);",
+  "CREATE INDEX IF NOT EXISTS `idx_agent_events_type` ON `agent_events` (`type`,`created_at`);",
+  "CREATE TABLE IF NOT EXISTS `approvals` ( `id` text PRIMARY KEY NOT NULL, `session_id` text NOT NULL, `interaction_id` text NOT NULL, `tool_name` text NOT NULL, `call_id` text, `project_id` text, `principal_id` text, `status` text NOT NULL, `request_payload` text DEFAULT '{}' NOT NULL, `decided_by` text, `decided_at` integer, `created_at` integer NOT NULL );",
+  "CREATE UNIQUE INDEX IF NOT EXISTS `idx_approvals_interaction` ON `approvals` (`interaction_id`);",
+  "CREATE INDEX IF NOT EXISTS `idx_approvals_session` ON `approvals` (`session_id`,`created_at`);",
+  "CREATE INDEX IF NOT EXISTS `idx_approvals_status` ON `approvals` (`status`,`created_at`);",
 ];
 
 for (const statement of BOOTSTRAP_DDL) {
