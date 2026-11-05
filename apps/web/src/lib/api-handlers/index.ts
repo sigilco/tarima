@@ -13,6 +13,7 @@ import { handleCreateApiKey, handleListApiKeys, handleRevokeApiKey } from "./api
 import { handleAdminInbox, handleRequestOtp, handleVerifyOtp } from "./auth";
 import { handleCapabilities } from "./capabilities";
 import { handleDevLogin } from "./dev-login";
+import { handleEveProxy } from "./eve-proxy";
 import { segments } from "./helpers";
 import {
   handleBulkIntakeCsv,
@@ -155,6 +156,10 @@ export function buildApiHandlers(): (request: Request) => Promise<Response> {
     const url = new URL(request.url);
     const path = url.pathname;
     if (path === "/api/health") return Response.json({ ok: true });
+    // The eve HTTP channel proxy: /api/eve/* streams to the in-process
+    // eve runtime (see eve-proxy.ts). Checked before the route table
+    // because it matches a whole prefix, any method.
+    if (path.startsWith("/api/eve/")) return handleEveProxy(request);
     const found = match(request.method, segments(path));
     if (!found) return Response.json({ error: "not_found" }, { status: 404 });
     return found.handle(request, ...found.params);

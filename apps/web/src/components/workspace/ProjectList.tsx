@@ -1,7 +1,8 @@
 import { cva } from "class-variance-authority";
 import { useState, type FormEvent } from "react";
-
 import * as m from "#/paraglide/messages.js";
+
+import { ChatPanelSlot } from "./ChatPanelSlot";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Skeleton } from "../ui/skeleton";
@@ -155,6 +156,7 @@ export function ProjectList({ state, projects, onRetry, onOpen, onCreate }: Proj
           </ul>
         )}
       </div>
+      <ChatPanelSlot />
     </div>
   );
 }

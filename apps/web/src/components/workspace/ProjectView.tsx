@@ -120,7 +120,7 @@ export function ProjectView({ state, project, entities, onRetry, onBack }: Proje
             )}
           </div>
 
-          <ChatPanelSlot />
+          <ChatPanelSlot projectId={project?.id} />
         </>
       )}
     </div>
