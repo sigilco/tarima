@@ -14,8 +14,6 @@
 
 import Database from "better-sqlite3";
 
-const repoRoot = process.argv[2];
-const port = Number(process.env.TURN_PORT ?? 3210);
 const evePort = Number(process.env.TARIMA_EVE_PORT ?? 4310);
 const tgPort = Number(process.env.TG_FAKE_PORT ?? 3410);
 const tmp = process.env.TG_E2E_TMP;
@@ -70,12 +68,11 @@ const update = (text, chatId = 777001) =>
 // Poll `probe` until it is truthy (or `tries` elapses).
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 async function waitFor(probe, tries = 240, delayMs = 500) {
-  for (let i = 0; i < tries; i++) {
-    const value = probe();
-    if (value) return value;
-    await wait(delayMs);
-  }
-  return probe();
+  const value = probe();
+  if (value) return value;
+  if (tries <= 0) return probe();
+  await wait(delayMs);
+  return waitFor(probe, tries - 1, delayMs);
 }
 
 const fail = (msg) => {
@@ -92,7 +89,7 @@ const code = appDb
 if (!code) fail("no connect code staged by run.sh");
 let res = await update(`/start ${code}`);
 if (res.status !== 200) fail(`webhook /start status ${res.status}`);
-for (let i = 0; i < 40 && sent.length === 0; i++) await new Promise((r) => setTimeout(r, 250));
+await waitFor(() => (sent.length > 0 ? sent.length : undefined), 40, 250);
 if (sent.length === 0 || !/Connected/i.test(sent[0]?.text ?? ""))
   fail(`binding confirmation not received: ${JSON.stringify(sent)}`);
 console.log(`[tg-e2e] binding confirmed for chat 777001 via code ${code}`);
@@ -100,7 +97,7 @@ console.log(`[tg-e2e] binding confirmed for chat 777001 via code ${code}`);
 // 2. Unbound chat refused.
 const before = sent.length;
 await update("who am I?", 999002);
-for (let i = 0; i < 40 && sent.length === before; i++) await new Promise((r) => setTimeout(r, 250));
+await waitFor(() => (sent.length > before ? sent.length : undefined), 40, 250);
 const refusal = sent.at(-1)?.text ?? "";
 if (!/isn't connected/i.test(refusal)) fail(`unbound chat not refused: ${refusal}`);
 console.log(`[tg-e2e] unbound chat refused: "${refusal}"`);
@@ -110,7 +107,7 @@ sent.length = 0;
 res = await update("What is my name according to tarima? Answer in one short sentence.");
 if (res.status !== 200) fail(`webhook message status ${res.status}`);
 console.log("[tg-e2e] waiting for the agent turn to deliver a reply...");
-for (let i = 0; i < 240 && sent.length === 0; i++) await new Promise((r) => setTimeout(r, 500));
+await waitFor(() => (sent.length > 0 ? sent.length : undefined), 240, 500);
 const reply = sent[0]?.text;
 if (!reply) fail("no sendMessage received for the bound chat — turn never delivered");
 console.log(`[tg-e2e] agent reply delivered: "${String(reply).slice(0, 200)}"`);
