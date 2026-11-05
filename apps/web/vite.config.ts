@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import { paraglideVitePlugin } from "@inlang/paraglide-js";
+import { nitro } from "nitro/vite";
 
 import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
@@ -27,6 +28,10 @@ const config = defineConfig({
       pages: [{ path: "/" }],
     }),
     viteReact(),
+    // Preset pinned: nitro auto-detects the build-time runtime; deploy
+    // runtime is node, so pin node-server for a deterministic artifact
+    // served by `node .output/server/index.mjs`.
+    nitro({ preset: "node-server" }),
   ],
   server: {
     proxy: {
@@ -44,20 +49,12 @@ const config = defineConfig({
       },
     },
   },
-  // Node SSR build consumed by apps/api/src/server.ts. No Cloudflare/wrangler.
-  environments: {
-    ssr: {
-      build: {
-        outDir: "dist/ssr",
-        rollupOptions: {
-          external: [/^node:/],
-        },
-      },
-    },
-    client: {
-      build: {
-        outDir: "dist/client",
-      },
+  nitro: {
+    // Keep the prerendered landing (TanStack Start emits it into the nitro
+    // public dir) and serve the node-server build from dist/server.
+    output: {
+      dir: "dist/server",
+      publicDir: "dist/client",
     },
   },
 });
