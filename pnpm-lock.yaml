@@ -362,9 +362,33 @@ importers:
       '@tanstack/react-start':
         specifier: 1.169.3
         version: 1.169.3(esbuild@0.28.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rolldown@1.2.14)(rollup@4.64.10)(supports-color@10.2.2)(vite@8.3.4(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+      '@tarima/api':
+        specifier: workspace:*
+        version: link:../api
+      '@tarima/api-keys':
+        specifier: workspace:*
+        version: link:../../packages/api-keys
+      '@tarima/auth-core':
+        specifier: workspace:*
+        version: link:../../packages/auth-core
       '@tarima/contract':
         specifier: workspace:*
         version: link:../../packages/contract
+      '@tarima/obs':
+        specifier: workspace:*
+        version: link:../../packages/obs
+      '@tarima/venuesearch':
+        specifier: workspace:*
+        version: link:../../packages/venuesearch
+      bcryptjs:
+        specifier: ^3.0.3
+        version: 3.0.3
+      better-sqlite3:
+        specifier: ^13.0.3
+        version: 13.0.3
+      drizzle-orm:
+        specifier: ^0.45.4
+        version: 0.45.4(@cloudflare/workers-types@4.20260702.1)(@types/better-sqlite3@9.6.0)(better-sqlite3@13.0.3)(kysely@0.28.18)
       nanostores:
         specifier: ^1.5.5
         version: 1.5.5
@@ -393,6 +417,9 @@ importers:
       '@tanstack/router-cli':
         specifier: ^1.132.0
         version: 1.167.45(supports-color@10.2.2)
+      '@types/better-sqlite3':
+        specifier: ^9.6.0
+        version: 9.6.0
       '@types/node':
         specifier: ^24.19.2
         version: 24.19.2

@@ -50,17 +50,10 @@ const config = defineConfig({
     },
   },
   nitro: {
-    // The web server functions call the API on the same origin (see
-    // src/lib/api-server.ts apiOrigin). In production the API was the same
-    // process; with nitro standalone the API lives on its own port, so
-    // proxy the API prefixes there (same set as the dev proxy below).
-    routeRules: {
-      "/api/**": { proxy: { to: `${process.env.API_ORIGIN ?? "http://localhost:3001"}/api/**` } },
-      "/auth/**": { proxy: { to: `${process.env.API_ORIGIN ?? "http://localhost:3001"}/auth/**` } },
-      "/webhooks/**": {
-        proxy: { to: `${process.env.API_ORIGIN ?? "http://localhost:3001"}/webhooks/**` },
-      },
-    },
+    // The api handlers are mounted in-process (see src/server.ts), so the
+    // nitro server owns /api/**, /auth/** and /webhooks/** itself: no
+    // routeRules proxy may shadow them. Server functions reach the same
+    // handlers through the request's own origin (src/lib/api-server.ts).
     // Keep the prerendered landing (TanStack Start emits it into the nitro
     // public dir) and serve the node-server build from dist/server.
     output: {

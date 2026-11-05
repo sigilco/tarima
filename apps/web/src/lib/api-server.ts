@@ -43,18 +43,17 @@ const projectIdSchema = v.pipe(v.string(), v.minLength(1));
 /**
  * The origin of the api when the server function runs on the server.
  *
- * In production the web app and the api are the same process, so a
- * relative url is right, but node's fetch has no notion of the current
- * origin: it needs an absolute one. The request that triggered this
- * server function carries it, so we read it from there. In dev the vite
- * proxy answers on the same origin the browser used, which also works.
+ * The api handlers are mounted in-process (see src/server.ts), so the
+ * api lives on the very origin the request came in on: we read it from
+ * the triggering request. Outside a request (build, prerender) we fall
+ * back to the same-process loopback on the server's own port.
  */
 function apiOrigin(): string {
   try {
     const url = getRequest().url;
     return new URL(url).origin;
   } catch {
-    return process.env.VITE_API_ORIGIN ?? "";
+    return process.env.VITE_API_ORIGIN ?? `http://localhost:${process.env.PORT ?? 3000}`;
   }
 }
 

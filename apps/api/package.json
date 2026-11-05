@@ -3,7 +3,17 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./db/schema": "./src/db/schema.ts"
+    "./db/schema": "./src/db/schema.ts",
+    "./db": "./src/db/index.ts",
+    "./engine": "./src/engine.ts",
+    "./server": "./src/server.ts",
+    "./routes/*": "./src/routes/*.ts",
+    "./middleware/*": "./src/middleware/*.ts",
+    "./services/*": "./src/services/*.ts",
+    "./lib/*": "./src/lib/*.ts",
+    "./mail": "./src/mail.ts",
+    "./channels": "./src/channels.ts",
+    "./telegram": "./src/telegram.ts"
   },
   "scripts": {
     "dev": "tsx watch src/index.ts",
