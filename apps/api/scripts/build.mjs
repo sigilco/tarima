@@ -25,38 +25,7 @@ await build({
     "@tarima/auth-core/rate-limit": join(apiRoot, "../../packages/auth-core/src/rate-limit.ts"),
     "@tarima/auth-core/session": join(apiRoot, "../../packages/auth-core/src/session.ts"),
     "@tarima/contract": join(apiRoot, "../../packages/contract/src/index.ts"),
-    "@tarima/api-keys": join(apiRoot, "../../packages/api-keys/src/index.ts"),
-    // engine and chase expose subpath exports only, so alias each one
-    // separately; a bare "@tarima/engine" alias would point at a file that
-    // does not exist and break the artifact build.
-    "@tarima/engine/types": join(apiRoot, "../../packages/engine/src/types.ts"),
-    "@tarima/engine/journal": join(apiRoot, "../../packages/engine/src/journal.ts"),
-    "@tarima/engine/runner": join(apiRoot, "../../packages/engine/src/runner.ts"),
-    "@tarima/engine/store": join(apiRoot, "../../packages/engine/src/store.ts"),
-    "@tarima/engine/db": join(apiRoot, "../../packages/engine/src/db.ts"),
-    // The journal tables moved into the engine (pnpm 12 dropped the
-    // apps/api -> packages/engine cycle). Without this alias the artifact
-    // imports "@tarima/engine/schema" at runtime, and the package is not
-    // installed on the VPS: the service crash-loops on boot.
-    "@tarima/engine/schema": join(apiRoot, "../../packages/engine/src/schema.ts"),
-    "@tarima/chase/sfm": join(apiRoot, "../../packages/chase/src/sfm.ts"),
-    "@tarima/chase/template": join(apiRoot, "../../packages/chase/src/template.ts"),
-    "@tarima/chase/handlers": join(apiRoot, "../../packages/chase/src/handlers.ts"),
-    "@tarima/chase/llm": join(apiRoot, "../../packages/chase/src/llm.ts"),
-    "@tarima/chase/register": join(apiRoot, "../../packages/chase/src/register.ts"),
-    // The room package (the negotiation state machine) is bundled the
-    // same way: without these aliases the artifact imports
-    // "@tarima/room/sfm" at runtime and the service crash-loops on boot.
-    "@tarima/room/sfm": join(apiRoot, "../../packages/room/src/sfm.ts"),
-    "@tarima/room/template": join(apiRoot, "../../packages/room/src/template.ts"),
-    "@tarima/venuesearch/types": join(apiRoot, "../../packages/venuesearch/src/types.ts"),
-    "@tarima/venuesearch/photon": join(apiRoot, "../../packages/venuesearch/src/photon.ts"),
-    "@tarima/venuesearch/overpass": join(apiRoot, "../../packages/venuesearch/src/overpass.ts"),
-    "@tarima/venuesearch/cities": join(apiRoot, "../../packages/venuesearch/src/cities.ts"),
-    "@tarima/venuesearch/providers": join(apiRoot, "../../packages/venuesearch/src/providers.ts"),
-    "@tarima/telegram": join(apiRoot, "../../packages/telegram/src/index.ts"),
     "@tarima/channels": join(apiRoot, "../../packages/channels/src/index.ts"),
-    "@tarima/llm": join(apiRoot, "../../packages/llm/src/index.ts"),
   },
   nodePaths: [join(process.cwd(), "apps/web/node_modules")],
   outfile: join(outDir, "index.mjs"),

@@ -1,7 +1,6 @@
 packages:
   - apps/*
   - packages/*
-  - tests/*
 
 catalog:
   typescript: ^5.9.3
@@ -12,8 +11,6 @@ catalog:
   "@logtape/file": ^1.2.0
   "node-html-parser": ^9.0.5
   "postal-mime": ^4.0.11
-  grammy: ^1.46.0
-  papaparse: ^5.7.0
 
 allowBuilds:
   lefthook: true
@@ -27,9 +24,6 @@ onlyBuiltDependencies:
   - lightningcss
 dangerouslyAllowAllBuilds: true
 
-# One node type version everywhere. @types/papaparse declares
-# "@types/node: *", which resolved to 22 while vitest and the catalog sit on
-# 24: both copies then loaded into one program (venuesearch typecheck) and
-# each declared a different global Response out of its own undici-types.
+# One node type version everywhere so undici-types global Responses agree.
 overrides:
   "@types/node": ^24.19.2
