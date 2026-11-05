@@ -24,6 +24,7 @@ scripts/og-preview/*.woff2
 # committing it would shadow TanStack Start's prerendered landing.
 apps/web/index.html
 apps/web/cosmos.imports.ts
+apps/web/cosmos-export/
 
 # eve agent local world (workflow data, sessions).
 .eve/
