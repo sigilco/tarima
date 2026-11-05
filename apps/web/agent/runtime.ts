@@ -37,6 +37,23 @@ function ensureEveBuild(): boolean {
 }
 
 /**
+ * True when this process is a build (vite/nitro), not a serving server.
+ *
+ * The nitro build imports the server entry to prerender pages. Booting
+ * the eve runtime there would start a listener inside the build process
+ * (it never exits, so the build hangs for tens of minutes) and would
+ * load the model provider without its API key. Only mount when a
+ * server is actually serving.
+ */
+function isBuildProcess(): boolean {
+  const argv = process.argv.join(" ");
+  if (/\bvite\b[^\n]*\bbuild\b/.test(argv)) return true;
+  if (/\bnitro\b[^\n]*\bbuild\b/.test(argv)) return true;
+  if (process.env.NITRO_PRERENDER) return true;
+  return false;
+}
+
+/**
  * The loopback origin the compiled eve runtime serves, or undefined when
  * the runtime is not mounted (no build, or mount disabled).
  *
@@ -46,6 +63,15 @@ function ensureEveBuild(): boolean {
  * queued-turn deliveries reach the runtime in this process.
  */
 export async function mountEveRuntime(): Promise<string | undefined> {
+  // The nitro build imports this server entry to prerender pages. Booting
+  // the eve runtime there would start a listener inside the build process
+  // (it never exits, so the build hangs for tens of minutes) and would
+  // load the model provider without its API key. Only mount when a
+  // server is actually serving.
+  if (isBuildProcess()) {
+    console.log("[eve-runtime] build process detected; skipping the agent mount");
+    return undefined;
+  }
   const external = process.env[EVE_ORIGIN_ENV];
   if (external) {
     // An eve runtime already serving elsewhere (dev convenience); no
