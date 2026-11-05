@@ -65,7 +65,8 @@ export const memorySqliteBackend: MemoryDocumentBackend = {
       if (expectedVersion === null) {
         // Create-only: an existing row means a concurrent writer got there
         // first between our read and this write.
-        if (!insertRow(key, content)) throw new MemoryDocumentConflictError(key);
+        // insertRow is async: await it, a bare Promise is always truthy.
+        if (!(await insertRow(key, content))) throw new MemoryDocumentConflictError(key);
       } else {
         // The WHERE carries the version: a stale expectedVersion updates
         // nothing (changes 0), which is the conflict the provider's retry
@@ -77,7 +78,7 @@ export const memorySqliteBackend: MemoryDocumentBackend = {
           .run();
         // A row deleted between read and write behaves like a conflict too:
         // create-only against a (re)appeared row also conflicts.
-        if (updated.changes === 0 && !insertRow(key, content)) {
+        if (updated.changes === 0 && !(await insertRow(key, content))) {
           throw new MemoryDocumentConflictError(key);
         }
       }
