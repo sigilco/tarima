@@ -1,0 +1,8 @@
+{
+  "plugins": ["react-cosmos-plugin-vite"],
+  "exportPath": "cosmos-export",
+  "fixtureFileSuffix": "fixture",
+  "vite": {
+    "configPath": "vite.cosmos.config.ts"
+  }
+}
