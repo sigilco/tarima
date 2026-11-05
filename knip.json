@@ -56,6 +56,8 @@
     "apps/web/tests/turn/agent-turn.mjs",
     "apps/web/tests/turn/turn-seed-venues.mjs",
     "apps/web/tests/chat/chat-turn.mjs",
+    "apps/web/tests/chat/approval-turn.mjs",
+    "apps/web/tests/chat/approval-seed-sponsor.mjs",
     "apps/web/tests/turn/telegram-e2e.mjs"
   ],
   "ignoreBinaries": ["validate"],
