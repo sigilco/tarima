@@ -43,15 +43,10 @@
  */
 import { createWhatsAppAdapter } from "@chat-adapter/whatsapp";
 import { chatSdkChannel } from "eve/channels/chat-sdk";
-import type { Chat, Message, Thread } from "chat";
+import type { Message, Thread } from "chat";
 import { rawDatabase } from "@tarima/api/db";
 import { createSqliteState } from "../lib/chat-state-sqlite";
 import { handleMessageText } from "../lib/whatsapp-bind";
-
-async function postToAuthor(botInstance: Chat, message: Message, text: string): Promise<unknown> {
-  const thread = await botInstance.openDM(message.author.userId);
-  return thread.post(text);
-}
 
 /** The session-auth fields a bound sender's turn carries. */
 interface TarimaSessionAuth {
@@ -66,12 +61,14 @@ interface TarimaSessionAuth {
  * confirmations are answered in-thread and open no turn (`null`);
  * bound senders get the tarima session auth for the turn.
  */
-async function tarimaAuth(message: Message): Promise<TarimaSessionAuth | null> {
+async function tarimaAuth(thread: Thread, message: Message): Promise<TarimaSessionAuth | null> {
   const result = await handleMessageText({
     channel: "whatsapp",
     externalId: message.author.userId,
     text: message.text ?? "",
-    reply: (text) => replyInThread(message, text),
+    // Answer on the inbound thread itself: `bot.openDM` cannot infer the
+    // whatsapp adapter from a phone-number userId.
+    reply: (text) => thread.post(text),
   });
   if (result.kind === "reply") return null;
   return {
@@ -80,11 +77,6 @@ async function tarimaAuth(message: Message): Promise<TarimaSessionAuth | null> {
     principalType: result.auth.principalType,
     attributes: result.auth.attributes,
   };
-}
-
-/** Posts `text` back to the message's thread through the adapter. */
-async function replyInThread(message: Message, text: string): Promise<unknown> {
-  return postToAuthor(bot, message, text);
 }
 
 // The repo-wide seam name (scripts/dev.ts, .env.example) maps onto the
@@ -119,7 +111,7 @@ const { bot, channel, send } = bridge;
  * turn — no session, no model spend, no memory.
  */
 bot.onDirectMessage(async (thread: Thread, message: Message) => {
-  const auth = await tarimaAuth(message);
+  const auth = await tarimaAuth(thread, message);
   if (!auth) return; // the bind helper already answered in-thread
   await send(message.text ?? "", { thread, auth });
 });
