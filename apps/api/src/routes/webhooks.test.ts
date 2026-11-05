@@ -15,10 +15,8 @@ process.env.WHATSAPP_APP_SECRET = "s3cret-wa";
 process.env.WHATSAPP_VERIFY_TOKEN = "verify-token";
 
 const { Hono } = await import("hono");
-const { eq } = await import("drizzle-orm");
 const { db } = await import("../db");
-const { entities, outreachMessages, projects, steps, users, workflows } =
-  await import("../db/schema");
+const { projects, users } = await import("../db/schema");
 const { webhookRoutes } = await import("./webhooks");
 
 afterAll(() => rmSync(dir, { recursive: true, force: true }));
@@ -68,8 +66,6 @@ function waSignature(body: string): string {
 }
 
 let projectId: string;
-let entityId: string;
-let runId: string;
 
 beforeAll(() => {
   db.insert(users)
@@ -80,34 +76,6 @@ beforeAll(() => {
   projectId = randomUUID();
   db.insert(projects)
     .values({ id: projectId, name: "Webhook project", createdAt: Date.now() })
-    .run();
-
-  entityId = randomUUID();
-  db.insert(entities)
-    .values({
-      id: entityId,
-      projectId,
-      name: "Acme",
-      contactEmail: "contact@acme.test",
-      createdAt: Date.now(),
-    })
-    .run();
-
-  runId = randomUUID();
-  db.insert(workflows)
-    .values({
-      id: runId,
-      type: "chase-deliverables",
-      status: "running",
-      state: "await_reply",
-      context: {
-        entityId,
-        entityName: "Acme",
-        contactEmail: "outreach@tarima.illo.fyi",
-        contactPhone: "34600111222",
-      },
-      createdAt: Date.now(),
-    })
     .run();
 });
 
@@ -121,7 +89,7 @@ describe("POST /webhooks/email", () => {
     expect(res.status).toBe(401);
   });
 
-  it("stores the inbound message and enqueues the parse step", async () => {
+  it("acknowledges the inbound message without persisting it", async () => {
     const res = await app.request("/webhooks/email", {
       method: "POST",
       headers: { "X-Webhook-Secret": EMAIL_SECRET, "content-type": "application/json" },
@@ -133,26 +101,6 @@ describe("POST /webhooks/email", () => {
     });
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ ok: true });
-
-    const messages = db
-      .select()
-      .from(outreachMessages)
-      .where(eq(outreachMessages.direction, "inbound"))
-      .all();
-    expect(messages.length).toBeGreaterThanOrEqual(1);
-    const row = messages[messages.length - 1]!;
-    expect(row.entityId).toBe(entityId);
-    expect(row.direction).toBe("inbound");
-    expect(row.body).toContain("everything is attached");
-    expect(row.receivedAt).toBeTruthy();
-
-    const parseSteps = db
-      .select()
-      .from(steps)
-      .all()
-      .filter((step) => step.runId === runId && step.stepKey.startsWith("chase.parse"));
-    expect(parseSteps.length).toBeGreaterThanOrEqual(1);
-    expect(parseSteps[0]!.status).toBe("pending");
   });
 
   it("accepts a raw mime body without the json envelope", async () => {
@@ -192,7 +140,7 @@ describe("POST /webhooks/whatsapp", () => {
     expect(res.status).toBe(401);
   });
 
-  it("stores the inbound message for a valid payload", async () => {
+  it("acknowledges a valid payload without persisting it", async () => {
     const body = JSON.stringify(WA_PAYLOAD);
     const res = await app.request("/webhooks/whatsapp", {
       method: "POST",
@@ -201,21 +149,6 @@ describe("POST /webhooks/whatsapp", () => {
     });
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ ok: true });
-
-    const waMessages = db
-      .select()
-      .from(outreachMessages)
-      .all()
-      .filter((row) => row.direction === "inbound" && row.body.includes("deck is ready"));
-    expect(waMessages.length).toBeGreaterThanOrEqual(1);
-    expect(waMessages[0]!.entityId).toBe(entityId);
-
-    const parseSteps = db
-      .select()
-      .from(steps)
-      .all()
-      .filter((step) => step.runId === runId && step.stepKey.startsWith("chase.parse"));
-    expect(parseSteps.length).toBeGreaterThanOrEqual(1);
   });
 });
 

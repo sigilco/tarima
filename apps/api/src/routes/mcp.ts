@@ -21,13 +21,10 @@
 import { Hono } from "hono";
 import * as v from "valibot";
 import { mcpToolNames, mcpToolSchemas, type McpToolName } from "@tarima/contract";
-import { db } from "../db";
-import { createDbApiKeyStore } from "../services/api-key-store";
-import { bearerToken } from "../middleware/require-api-key";
 import { toJsonSchema } from "../lib/valibot-json-schema";
+import { bearerToken, verifyApiKey } from "../services/api-key-auth";
 import { hasScope } from "../services/scopes";
 import { runTool, TOOL_DESCRIPTIONS, TOOL_SCOPES } from "../services/tools";
-import { verifyApiKey } from "@tarima/api-keys";
 
 /** The MCP protocol revision this server implements. */
 const PROTOCOL_VERSION = "2024-11-05";
@@ -74,7 +71,7 @@ export const mcpRoutes = new Hono()
     // checked per call, so a key only needs to be valid to reach
     // tools/list.
     const token = bearerToken(c.req.raw);
-    const verified = token ? verifyApiKey(createDbApiKeyStore(db), token) : null;
+    const verified = token ? verifyApiKey(token) : null;
     if (!verified) return c.json({ error: "unauthorized" }, 401);
 
     const body = (await c.req.json().catch(() => null)) as JsonRpcRequest | null;

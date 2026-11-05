@@ -6,6 +6,10 @@
  * a POST /api/projects would have created. This module is the single
  * place where a tool name maps to an operation; the MCP route owns the
  * JSON-RPC envelope, this module owns the behaviour.
+ *
+ * SP7 teardown: the workflow trigger tool is deferred with the rest of
+ * the workflow engine (the mcp.ts route stays mounted but its tools
+ * shrink to the project/entity operations that survive).
  */
 import type { McpToolName } from "@tarima/contract";
 import { db } from "../db";
@@ -17,7 +21,6 @@ import {
   type UpdateEntityInput,
 } from "./entities";
 import { createProject, getProject, listProjects } from "./projects";
-import { triggerWorkflow, WORKFLOW_TEMPLATES } from "./workflows";
 
 /** The scope each tool needs. */
 export const TOOL_SCOPES: Record<McpToolName, string> = {
@@ -68,13 +71,12 @@ export function runTool(name: McpToolName, args: Record<string, unknown>): unkno
       if (!entity) return { error: "not_found" };
       return { entity };
     }
-    case "workflow.trigger": {
-      const input = args as { projectId: string; template: string };
-      if (!getProject(db, input.projectId)) return { error: "not_found" };
-      const template = input.template as (typeof WORKFLOW_TEMPLATES)[number];
-      if (!WORKFLOW_TEMPLATES.includes(template)) return { error: "invalid_request" };
-      return { runs: triggerWorkflow(db, input.projectId, template) };
-    }
+    // SP7: the workflow engine is removed; the tool stays in the
+    // contract's name list (mcp.ts is deferred, not rewritten), so this
+    // arm answers the stable "no engine" error instead of importing the
+    // deleted service.
+    case "workflow.trigger":
+      return { error: "engine_removed" };
     default: {
       const exhaustive: never = name;
       throw new Error(`unknown tool: ${String(exhaustive)}`);

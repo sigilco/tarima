@@ -38,13 +38,10 @@
  * Both routes answer fast: the reply body is parsed, stored and a
  * `chase.parse` step is enqueued, but no LLM work happens inline.
  */
-import { randomUUID } from "node:crypto";
 import { Hono } from "hono";
+import { db } from "../db";
 import { parseMime, readRawBody, verifyWhatsappChallenge } from "@tarima/channels";
 import { emailAdapter, whatsappAdapter } from "../channels";
-import { db } from "../db";
-import { outreachMessages } from "../db/schema";
-import { enqueueParseStep, findActiveRunForContact } from "../services/runs";
 import { bindChannel } from "../services/bindings";
 import { resolveConnectCode } from "../services/connect-codes";
 
@@ -61,40 +58,18 @@ interface InboundRecord {
 }
 
 /**
- * Store the inbound message and hand it to the engine.
+ * Store an inbound message.
  *
- * The `outreach_messages` row is written when the message can be
- * attached to a run that carries an entity. An unassigned message has
- * no entity to hang on (the column is NOT NULL with a foreign key), so
- * it is only logged.
+ * SP7 teardown: the chase engine is gone, so there is no run to match
+ * the contact against and no parse step to enqueue. Messages are no
+ * longer persisted in this process — the record is acknowledged and
+ * dropped; SP9 reconnects a consumer if one is needed.
  */
 function recordInbound(record: InboundRecord): { assigned: boolean } {
-  const run = findActiveRunForContact(db, {
-    channel: record.channel,
-    threadId: record.threadId,
-    from: record.from,
-  });
-
-  if (!run?.entityId) {
-    console.warn(
-      `[webhooks] ${record.channel} message from ${record.from} is unassigned (no running run matched)`,
-    );
-    return { assigned: false };
-  }
-
-  db.insert(outreachMessages)
-    .values({
-      id: randomUUID(),
-      entityId: run.entityId,
-      direction: "inbound",
-      subject: record.subject ?? null,
-      body: record.body,
-      receivedAt: Date.now(),
-    })
-    .run();
-
-  enqueueParseStep(db, run.runId, record.body);
-  return { assigned: true };
+  console.warn(
+    `[webhooks] ${record.channel} message from ${record.from} is unassigned (engine removed)`,
+  );
+  return { assigned: false };
 }
 
 /** The body the worker posts: JSON with a raw MIME payload. */
