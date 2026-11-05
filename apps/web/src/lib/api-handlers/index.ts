@@ -8,6 +8,7 @@
  * from apps/api/src/routes/* unchanged in logic.
  */
 import { handleAccessRequest } from "./access-requests";
+import { handleAgentTurn } from "./agent-turn";
 import { handleCreateApiKey, handleListApiKeys, handleRevokeApiKey } from "./api-keys";
 import { handleAdminInbox, handleRequestOtp, handleVerifyOtp } from "./auth";
 import { handleCapabilities } from "./capabilities";
@@ -88,6 +89,7 @@ const routes: Route[] = [
   route("POST", "/api/api-keys", handleCreateApiKey),
   route("DELETE", "/api/api-keys/:id", handleRevokeApiKey),
   route("POST", "/api/access-requests", handleAccessRequest),
+  route("POST", "/api/agent/turn", handleAgentTurn),
 
   // Session surface (/api/ui/*): same paths the browser uses.
   route("GET", "/api/ui/projects", handleUiListProjects),
