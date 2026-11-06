@@ -12,6 +12,11 @@ interface MailMessage {
 
 const DEFAULT_LOOPBACK_DOMAINS = "tarima.test";
 
+/** Brevo provider origin; MAIL_API_BASE_URL overrides it (mocks/tests). */
+function mailApiBaseUrl(): string {
+  return (process.env.MAIL_API_BASE_URL ?? "https://api.brevo.com").replace(/\/$/, "");
+}
+
 /**
  * Domains whose mail never leaves the box. Anything addressed to one of
  * these is written to the `loopback_inbox` table so tests and agents can
@@ -37,6 +42,11 @@ function isLoopbackRecipient(to: string): boolean {
  * Transactional mail seam. Loopback domains are captured in the database,
  * Brevo HTTP API is used when BREVO_API_KEY is set, and everything else
  * logs to stdout. Callers never see the provider.
+ *
+ * The provider host is overridable with MAIL_API_BASE_URL so dev and CI
+ * can point the exact Brevo-shaped request at a local mock (the default
+ * stays the real endpoint). MAIL_API_BASE_URL only replaces the origin;
+ * the /v3/smtp/email path and request/response shape are identical.
  */
 export async function sendMail(message: MailMessage): Promise<void> {
   if (isLoopbackRecipient(message.to)) {
@@ -59,7 +69,7 @@ export async function sendMail(message: MailMessage): Promise<void> {
     console.info("[mail:noop]", message.subject, "->", message.to);
     return;
   }
-  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+  const res = await fetch(`${mailApiBaseUrl()}/v3/smtp/email`, {
     method: "POST",
     headers: {
       "api-key": apiKey,

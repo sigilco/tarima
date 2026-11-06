@@ -148,3 +148,8 @@ sqlite.exec(
 );
 
 export const db = drizzle(sqlite, { schema });
+
+/** The raw better-sqlite3 connection under the drizzle instance (own-table adapters). */
+export function rawDatabase(): Database.Database {
+  return sqlite;
+}
