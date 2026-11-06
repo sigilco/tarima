@@ -48,13 +48,6 @@ export DEV_LOGIN=1
 export SESSION_SECRET=w3-session-secret
 export PORT="$port"
 export TARIMA_AGENT_STUB=1
-# Isolate eve's local workflow world (runs, queue events, locks) per
-# test: the default .eve/.workflow-data is shared with dev sessions, so
-# stale runs from other boots resume here and post old turns to the mock.
-export EVE_DEV=1
-export EVE_DEV_STATE_DIR="$tmp/eve-state"
-rm -rf "$EVE_DEV_STATE_DIR"
-mkdir -p "$EVE_DEV_STATE_DIR"
 export EMAIL_LOOPBACK_DOMAINS=tarima.test
 export TARIMA_EVE_PORT="$eve_port"
 # Credential-free WhatsApp seam: mock Graph API + throwaway secrets.
@@ -78,6 +71,12 @@ done
 echo "[wa] mock Graph API on :$wa_port"
 
 cd "$web_root"
+# Eve persists workflow runs and queue messages under
+# apps/web/.eve/.workflow-data across restarts; stale runs from earlier
+# harness invocations resume and post old turns to the mock. Start the
+# runtime from a clean workflow state (queue messages included, or the
+# stale deliveries wedge the fresh run).
+rm -rf "$web_root/.eve/.workflow-data"
 node dist/server/server/index.mjs >"$tmp/server.log" 2>&1 &
 server_pid=$!
 
@@ -92,12 +91,6 @@ for _ in $(seq 1 60); do
   sleep 0.5
 done
 echo "[wa] eve health: $(curl -s -m 5 "http://127.0.0.1:$eve_port/eve/v1/health" || echo FAILED)"
-# Eve persists workflow runs and queue messages under
-# apps/web/.eve/.workflow-data across restarts; stale runs from earlier
-# harness invocations resume and post old turns to the mock. Start the
-# runtime from a clean workflow state (queue messages included, or the
-# stale deliveries wedge the fresh run).
-rm -rf "$web_root/.eve/.workflow-data"
 # Eve's local workflow queue transport retries its first deliveries right
 # after boot; webhooks posted into that window are dropped. Let it settle.
 sleep 8

@@ -40,6 +40,29 @@ const fail = (msg) => {
 };
 
 /** Signed inbound webhook post to eve's whatsapp route. */
+import { execFileSync } from "node:child_process";
+
+// Post via a short-lived child process: a fresh undici stack per webhook
+// (a long-lived keep-alive agent here was observed to leave the eve
+// queue transport with a wedged first delivery; the spawned-child
+// pattern is proven in tests/turn/telegram-e2e.mjs and diag runs).
+function postSigned(payloadJson) {
+  const script = `
+    const { createHmac } = require("node:crypto");
+    const payload = ${payloadJson};
+    const raw = JSON.stringify(payload);
+    const hex = createHmac("sha256", ${JSON.stringify(secret)}).update(raw, "utf8").digest("hex");
+    fetch(${JSON.stringify(`http://127.0.0.1:${evePort}/eve/v1/whatsapp`)}, {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-hub-signature-256": "sha256=" + hex },
+      body: raw,
+    }).then((r) => { console.log(r.status); }).catch((e) => { console.log("FETCH_FAIL " + e.message); });
+  `;
+  const out = execFileSync(process.execPath, ["-e", script], { encoding: "utf8" });
+  const status = Number.parseInt(out.trim().split("\n").at(-1), 10);
+  return { status: Number.isFinite(status) ? status : 0, text: () => "" };
+}
+
 async function inbound({ text, id }) {
   const payload = {
     object: "whatsapp_business_account",
@@ -68,13 +91,7 @@ async function inbound({ text, id }) {
       },
     ],
   };
-  const raw = JSON.stringify(payload);
-  const hex = createHmac("sha256", secret).update(raw, "utf8").digest("hex");
-  return fetch(`http://127.0.0.1:${evePort}/eve/v1/whatsapp`, {
-    method: "POST",
-    headers: { "content-type": "application/json", "x-hub-signature-256": `sha256=${hex}` },
-    body: raw,
-  });
+  return postSigned(JSON.stringify(payload));
 }
 
 const appDb = new Database(dbPath);
