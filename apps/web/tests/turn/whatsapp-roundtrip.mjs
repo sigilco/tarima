@@ -17,7 +17,7 @@ const SENDER = "15550007777";
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 async function waitFor(probe, tries = 240, delayMs = 500) {
-  const value = probe();
+  const value = await probe();
   if (value) return value;
   if (tries <= 0) return probe();
   await wait(delayMs);
