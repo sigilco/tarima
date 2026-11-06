@@ -172,9 +172,15 @@ const principal = appDb
   .prepare("SELECT user_id FROM channel_bindings WHERE external_id=? AND channel='whatsapp'")
   .get(SENDER)?.user_id;
 if (principal !== "u-wa-e2e") fail(`binding row wrong: ${JSON.stringify(principal)}`);
-const turnRows = appDb
-  .prepare("SELECT COUNT(*) n FROM agent_events WHERE type='turn.settled' AND principal_id=?")
-  .get(principal)?.n;
+// turn.settled is written after the reply reaches the mock, so poll for
+// it instead of reading the table once (a single read raced the writer
+// in ~2 of 20 runs).
+const turnRows = await waitFor(() => {
+  const n = appDb
+    .prepare("SELECT COUNT(*) n FROM agent_events WHERE type='turn.settled' AND principal_id=?")
+    .get(principal)?.n;
+  return n ? n : undefined;
+});
 if (!turnRows) fail(`no turn.settled agent_events for principal ${principal}`);
 console.log(`[wa-e2e] agent_events turn.settled rows for ${principal}: ${turnRows}`);
 

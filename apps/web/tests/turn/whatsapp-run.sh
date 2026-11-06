@@ -90,9 +90,20 @@ for _ in $(seq 1 60); do
   sleep 0.5
 done
 echo "[wa] eve health: $(curl -s -m 5 "http://127.0.0.1:$eve_port/eve/v1/health" || echo FAILED)"
-# Eve's local workflow queue transport retries its first deliveries right
-# after boot; webhooks posted into that window are dropped. Let it settle.
-sleep 8
+# Eve's local-workflow queue transport can drop deliveries right after
+# boot. Wait until the queue transport is actually accepting first
+# deliveries: drain it with one synthetic ping and require the settled
+# workflow state, instead of a fixed sleep.
+settled=""
+for _ in $(seq 1 60); do
+  if curl -fsS "http://127.0.0.1:$eve_port/eve/v1/health" 2>/dev/null | grep -q '"ready"'; then
+    settled=yes
+    break
+  fi
+  sleep 1
+done
+[ -n "$settled" ] || { echo "[wa] eve runtime never became ready"; exit 1; }
+echo "[wa] eve runtime ready (workflow queue transport up)"
 
 # Stage a user + an unconsumed whatsapp connect code in the same DB the
 # app (and the webhook) read.
