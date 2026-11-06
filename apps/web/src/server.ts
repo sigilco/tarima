@@ -13,6 +13,9 @@
  * telegram packages are removed). The eve agent runtime still mounts
  * in-process; its Telegram channel lives in `agent/channels/telegram.ts`.
  */
+import { join } from "node:path";
+import { pathToFileURL } from "node:url";
+
 import handler from "@tanstack/react-start/server-entry";
 import { buildApiHandlers } from "./lib/api-handlers";
 import { runtimeNotReadyResponse } from "./lib/api-handlers/runtime";
@@ -20,6 +23,24 @@ import { mountEveRuntime } from "../agent/runtime";
 import { trackEveMount } from "./lib/api-handlers/agent-runtime-state";
 
 const apiFetch = buildApiHandlers();
+
+// Nitro's public-assets reader resolves each asset path (stored relative
+// to the nitro output.serverDir) against dirname(__nitro_main__). The
+// built bundle sets that global in its entry prepend, but under `vite
+// dev` nothing does until the eve .output import below overwrites it —
+// and with no dist/ the asset manifest is empty so the bug stays hidden.
+// Once `pnpm build` has produced dist/, the dev manifest lists
+// dist/client/* and readAsset resolves them against the eve bundle's
+// .output/server, escaping to apps/dist/client -> ENOENT on every
+// asset (GET / included). Point the global at the nitro dev serverDir
+// (node_modules/.nitro/dev) so paths land back on apps/web/dist/client.
+// In the built/preview bundle __nitro_main__ is already correct, so
+// this only fires in dev.
+if (!globalThis.__nitro_main__) {
+  globalThis.__nitro_main__ = pathToFileURL(
+    join(process.cwd(), "node_modules", ".nitro", "dev", "index.mjs"),
+  ).href;
+}
 
 // The eve agent runtime (agent/, channels, tools) runs in this process
 // behind a loopback socket; /api/agent/turn and /api/eve/* reach it
