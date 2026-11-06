@@ -107,12 +107,21 @@ export interface CreateEntityInput {
    * leave the order to the random uuid.
    */
   createdAt?: number;
+  /**
+   * Extra keys merged into the `entities.goal` JSON bag (e.g. a
+   * sponsor candidate's website/kind/source). The wire surface only
+   * reads `missing` and `channel`; extras are stored, not projected.
+   */
+  goalExtras?: Record<string, unknown>;
 }
 
 /** Create an entity under a project. */
 export function createEntity(db: ApiDb, input: CreateEntityInput): EntityWire {
   const now = input.createdAt ?? Date.now();
-  const goal: Record<string, unknown> = { missing: input.missing ?? [] };
+  const goal: Record<string, unknown> = {
+    missing: input.missing ?? [],
+    ...(input.goalExtras ?? {}),
+  };
   if (input.channel) goal.channel = input.channel;
 
   const row: typeof entities.$inferSelect = {

@@ -84,6 +84,7 @@ const BOOTSTRAP_DDL = [
   "CREATE INDEX IF NOT EXISTS `idx_memory_documents_namespace` ON `memory_documents` (`namespace`,`updated_at`);",
   "CREATE TABLE IF NOT EXISTS `memory_journal` ( `session_id` text NOT NULL, `line` integer NOT NULL, `idx` integer NOT NULL, `call_id` text NOT NULL, `principal_id` text, `action` text NOT NULL, `payload` text DEFAULT '{}' NOT NULL, `created_at` integer NOT NULL, PRIMARY KEY(`session_id`, `line`, `idx`) );",
   "CREATE INDEX IF NOT EXISTS `idx_memory_journal_principal` ON `memory_journal` (`principal_id`,`created_at`);",
+  "CREATE TABLE IF NOT EXISTS `provider_ledger` ( `day` text NOT NULL, `provider` text NOT NULL, `bucket` text NOT NULL, `used` integer DEFAULT 0 NOT NULL, PRIMARY KEY(`day`,`provider`,`bucket`) );",
 ];
 
 for (const statement of BOOTSTRAP_DDL) {
