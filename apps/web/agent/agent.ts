@@ -17,6 +17,36 @@ import { agentApprovalPolicy } from "./approval";
  */
 const useStub = process.env.TARIMA_AGENT_STUB === "1";
 
+/**
+ * The stub responder (batch dev-memory-e2e): deterministic, stub-mode
+ * only, and tool-capable. `remember: <fact>` emits a real
+ * `memory__save_memory` tool call with the fact as `text`; a recall
+ * question (`what do you remember`) answers from the recalled memory
+ * block eve injected at turn start, or says nothing is saved. Anything
+ * else keeps the old echo reply. Tool availability is checked so the
+ * responder degrades to plain text when the memory slot is off (no
+ * authenticated principal).
+ */
+export const stubResponder: Parameters<typeof mockModel>[0] = (request) => {
+  const last = request.lastUserMessage ?? "";
+  const remember = /^remember:\s*(.+)$/i.exec(last.trim());
+  if (remember && request.tools.some((t) => t.name === "memory__save_memory")) {
+    return {
+      text: `Saved to memory: ${remember[1]!.trim()}`,
+      toolCalls: [{ name: "memory__save_memory", input: { text: remember[1]!.trim() } }],
+    };
+  }
+  if (/what do you remember/i.test(last)) {
+    const recalled = request.messages
+      .filter((m) => m.role === "user" && m.text.startsWith("# Persistent memories"))
+      .flatMap((m) => m.text.split("\n").filter((line) => /^\d+: /.test(line)));
+    return recalled.length > 0
+      ? `From memory: ${recalled.map((line) => line.replace(/^\d+: /, "")).join("; ")}`
+      : "Nothing is saved in memory yet. Tell me with: remember: <fact>";
+  }
+  return `Stub reply: ${last}`;
+};
+
 const provider = createOpenAI({
   apiKey: process.env.BIFROST_VK,
   baseURL: process.env.BIFROST_BASE_URL ?? "http://127.0.0.1:8317/v1",
@@ -32,7 +62,7 @@ export default defineAgent({
   // stream reasoning there without the summary-delta events that break
   // the compiled responses provider's schema on this gateway.
   model: useStub
-    ? mockModel(({ lastUserMessage }) => `Stub reply: ${lastUserMessage ?? ""}`)
+    ? mockModel(stubResponder)
     : provider.chat(process.env.TARIMA_AGENT_MODEL ?? "zai-coding-plan/glm-5"),
   modelContextWindowTokens: AGENT_CONTEXT_WINDOW_TOKENS,
   // Agent-wide approval gate (see approval.ts): read-only tools never
