@@ -21,7 +21,7 @@
     },
     "apps/web": {
       "entry": ["src/**/*.{ts,tsx}", "vite.cosmos.config.ts"],
-      "ignore": ["public/_worker.js"],
+      "ignore": ["public/_worker.js", "src/paraglide/**"],
       "ignoreDependencies": ["shadcn"]
     },
     "apps/api": {},
