@@ -219,6 +219,20 @@ export function defaultLlmExtractor(env: NodeJS.ProcessEnv = process.env): LlmEx
 
 const EMAIL_SHAPE = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
+/**
+ * Map an extraction provenance onto the contract's contact_source
+ * enum: mailto:/tel:/bare-text are all page-derived ("page_text");
+ * jsonld and llm_verified (verbatim-verified on the page) keep their
+ * own labels.
+ */
+function catalogContactSource(
+  source: ContactSource | "llm_verified",
+): "jsonld" | "page_text" | "llm_verified" {
+  if (source === "jsonld") return "jsonld";
+  if (source === "llm_verified") return "llm_verified";
+  return "page_text";
+}
+
 function digits(s: string): string {
   return s.replace(/\D/g, "");
 }
@@ -271,6 +285,16 @@ export function llmDailyCents(env: NodeJS.ProcessEnv = process.env): number {
   const raw = env.TARIMA_LLM_EXTRACT_DAILY_CENTS;
   const n = raw === undefined || raw === "" ? 100 : Number.parseInt(raw, 10);
   return Number.isFinite(n) && n >= 0 ? n : 100;
+}
+
+/**
+ * Tier-3 LLM fallback is OFF by default: it only runs when
+ * `TARIMA_LLM_EXTRACT_ENABLED=1` (or a test injects `llmExtract`
+ * explicitly) AND the daily cents ledger has headroom. The "token
+ * budget" is the cents cap — each call books LLM_EXTRACT_ESTIMATED_CENTS.
+ */
+function llmExtractEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
+  return env.TARIMA_LLM_EXTRACT_ENABLED === "1" || env.TARIMA_LLM_EXTRACT_ENABLED === "true";
 }
 
 export interface EnrichDeps {
@@ -381,7 +405,12 @@ export async function enrichVenueContact(
     // Tier 3: LLM fallback, propose-only + verbatim verification.
     const spent = ledgerGet(db, LLM_PROVIDER, LLM_BUCKET);
     if (spent >= llmDailyCents(env)) return skip("llm_budget");
-    const extractor = deps.llmExtract === undefined ? defaultLlmExtractor(env) : deps.llmExtract;
+    const extractor =
+      deps.llmExtract !== undefined
+        ? deps.llmExtract
+        : llmExtractEnabled(env)
+          ? defaultLlmExtractor(env)
+          : null;
     if (!extractor) return skip("no_contact_found");
     ledgerAdd(db, LLM_PROVIDER, LLM_BUCKET, LLM_EXTRACT_ESTIMATED_CENTS);
     const proposal = await extractor({ venueName: venue.name, pageText: page.markdown });
@@ -401,11 +430,23 @@ export async function enrichVenueContact(
     if (!fields.contactEmail && !fields.contactPhone) return skip("no_contact_found");
   }
 
-  // Persist: fill only the null columns; stamp enriched_at.
+  // Persist: fill only the null columns; stamp enriched_at and the
+  // contact_source provenance of the primary contact written.
+  // `contact_source` is a single column, so it records the email's
+  // provenance when an email was written, else the phone's when the
+  // phone is the venue's only contact; an existing email keeps its
+  // earlier provenance untouched.
+  const rawSource = fields.contactEmail
+    ? sources.email
+    : fields.contactPhone && !venue.contactEmail
+      ? sources.phone
+      : undefined;
+  const contactSource = rawSource ? catalogContactSource(rawSource) : undefined;
   db.update(venueCatalog)
     .set({
       ...(fields.contactEmail ? { contactEmail: fields.contactEmail } : {}),
       ...(fields.contactPhone ? { contactPhone: fields.contactPhone } : {}),
+      ...(contactSource ? { contactSource } : {}),
       enrichedAt: Date.now(),
     })
     .where(eq(venueCatalog.id, venue.id))

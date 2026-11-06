@@ -7,6 +7,8 @@ const ctxFor = (userId: string | null) => ({
   session: { auth: { current: userId ? { principalId: userId } : null } },
 });
 
+const noSleep = () => Promise.resolve();
+
 describe("search_venues tool", () => {
   it("rejects an unauthenticated caller", async () => {
     const out = (await searchVenues.execute({ city: "Berkeley" }, ctxFor(null) as never)) as {
@@ -17,7 +19,12 @@ describe("search_venues tool", () => {
 
   it("looks for venues near UC Berkeley and hits the cache on repeat", async () => {
     const first = fixtureFetch();
-    setVenueSearchDeps({ fetch: first.fetch, geoapifyKey: "test-fixture-key" });
+    setVenueSearchDeps({
+      fetch: first.fetch,
+      geoapifyKey: "test-fixture-key",
+      env: {},
+      sleep: noSleep,
+    });
     const miss = (await searchVenues.execute(
       { city: "Berkeley", query: "look for venues near UC Berkeley", category: "food" },
       ctxFor("u-search") as never,
@@ -27,7 +34,12 @@ describe("search_venues tool", () => {
     expect(miss.venues[0].distanceM).toBeGreaterThanOrEqual(0);
 
     const second = fixtureFetch();
-    setVenueSearchDeps({ fetch: second.fetch, geoapifyKey: "test-fixture-key" });
+    setVenueSearchDeps({
+      fetch: second.fetch,
+      geoapifyKey: "test-fixture-key",
+      env: {},
+      sleep: noSleep,
+    });
     const hit = (await searchVenues.execute(
       { city: "Berkeley", query: "look for venues near UC Berkeley", category: "food" },
       ctxFor("u-search") as never,

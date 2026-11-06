@@ -13,9 +13,11 @@ const { fixtureFetch } = await import("./place-fixtures");
 const { searchVenues, setVenueSearchDeps, upsertHits, dedupHits } = await import("./venue-search");
 const { haversineM } = await import("./geo");
 
+const noSleep = () => Promise.resolve();
+
 describe("searchVenues", () => {
   beforeAll(() => {
-    setVenueSearchDeps({ geoapifyKey: "test-fixture-key" });
+    setVenueSearchDeps({ geoapifyKey: "test-fixture-key", env: {}, sleep: noSleep });
   });
 
   beforeEach(() => {
@@ -24,7 +26,12 @@ describe("searchVenues", () => {
 
   it("returns Berkeley venues with distance and caches the second call", async () => {
     const first = fixtureFetch();
-    setVenueSearchDeps({ fetch: first.fetch, geoapifyKey: "test-fixture-key" });
+    setVenueSearchDeps({
+      fetch: first.fetch,
+      geoapifyKey: "test-fixture-key",
+      env: {},
+      sleep: noSleep,
+    });
     const miss = await searchVenues({
       city: "Berkeley",
       query: "UC Berkeley",
@@ -48,7 +55,12 @@ describe("searchVenues", () => {
     expect(providerCalls).toBeGreaterThan(0);
 
     const second = fixtureFetch();
-    setVenueSearchDeps({ fetch: second.fetch, geoapifyKey: "test-fixture-key" });
+    setVenueSearchDeps({
+      fetch: second.fetch,
+      geoapifyKey: "test-fixture-key",
+      env: {},
+      sleep: noSleep,
+    });
     const hit = await searchVenues({
       city: "Berkeley",
       query: "UC Berkeley",
@@ -62,7 +74,7 @@ describe("searchVenues", () => {
 
   it("never fabricates contacts", async () => {
     const { fetch } = fixtureFetch();
-    setVenueSearchDeps({ fetch, geoapifyKey: "test-fixture-key" });
+    setVenueSearchDeps({ fetch, geoapifyKey: "test-fixture-key", env: {}, sleep: noSleep });
     const out = await searchVenues({
       city: "Berkeley",
       query: "venues near UC Berkeley",

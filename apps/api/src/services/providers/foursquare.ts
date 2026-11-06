@@ -70,6 +70,14 @@ export type FsqResult =
       status?: number;
     };
 
+export type FsqSearchResult =
+  | { ok: true; places: FsqPlaceDetails[] }
+  | {
+      ok: false;
+      reason: "disabled" | "no_key" | "over_budget" | "http_error" | "bad_response";
+      status?: number;
+    };
+
 function envInt(env: NodeJS.ProcessEnv, key: string, fallback: number): number {
   const raw = env[key];
   if (raw === undefined || raw === "") return fallback;
@@ -136,7 +144,9 @@ export async function placeDetails(
   if (!apiKey) return { ok: false, reason: env.FSQ_API_KEY === undefined ? "disabled" : "no_key" };
 
   const now = deps.now ?? new Date();
-  const used = ledgerGet(db, PROVIDER, "details", now);
+  // Search and details share ONE daily cap (the 500/mo Pro budget):
+  // the check sums both ledger buckets so the arms cannot double-spend.
+  const used = ledgerGet(db, PROVIDER, "details", now) + ledgerGet(db, PROVIDER, "search", now);
   const cap = fsqDailyBudget(env);
   if (used >= cap) return { ok: false, reason: "over_budget" };
   // Increment before send: a crashed call still counts against the cap.
@@ -170,6 +180,68 @@ export async function placeDetails(
   const place = parseDetails(body);
   if (!place) return { ok: false, reason: "bad_response" };
   return { ok: true, place };
+}
+
+/**
+ * GET /places/search?ll=…&radius=…&query=… — the paid discovery arm of
+ * the escalation tier (tarima-search-plan tier ladder: FSQ is a
+ * shortlist/metadata source, but its search also backfills thin
+ * Geoapify/Overpass result sets). One billed Pro call per request;
+ * ledger bucket `search`, same daily cap env as details.
+ */
+export async function searchPlaces(
+  db: ApiDb,
+  input: {
+    latitude: number;
+    longitude: number;
+    radiusM: number;
+    query?: string;
+    limit?: number;
+  },
+  deps: { fetch?: InjectedFetch; env?: NodeJS.ProcessEnv; now?: Date } = {},
+): Promise<FsqSearchResult> {
+  const env = deps.env ?? process.env;
+  const apiKey = env.FSQ_API_KEY;
+  if (!apiKey) return { ok: false, reason: env.FSQ_API_KEY === undefined ? "disabled" : "no_key" };
+
+  const now = deps.now ?? new Date();
+  const used = ledgerGet(db, PROVIDER, "details", now) + ledgerGet(db, PROVIDER, "search", now);
+  const cap = fsqDailyBudget(env);
+  if (used >= cap) return { ok: false, reason: "over_budget" };
+  ledgerAdd(db, PROVIDER, "search", 1, now);
+
+  const url = new URL(`${BASE}/places/search`);
+  url.searchParams.set("ll", `${input.latitude},${input.longitude}`);
+  url.searchParams.set("radius", String(Math.min(Math.max(input.radiusM, 0), 100_000)));
+  url.searchParams.set("limit", String(Math.min(Math.max(input.limit ?? 10, 1), 50)));
+  url.searchParams.set("fields", DETAIL_FIELDS);
+  if (input.query?.trim()) url.searchParams.set("query", input.query.trim());
+
+  let res: Response;
+  try {
+    res = await (deps.fetch ?? fetch)(url.toString(), {
+      headers: {
+        Accept: "application/json",
+        "User-Agent": UA,
+        Authorization: `Bearer ${apiKey}`,
+        "X-Places-Api-Version": API_VERSION,
+      },
+    });
+  } catch {
+    return { ok: false, reason: "http_error" };
+  }
+  if (!res.ok) return { ok: false, reason: "http_error", status: res.status };
+
+  let body: { results?: Record<string, unknown>[] };
+  try {
+    body = (await res.json()) as typeof body;
+  } catch {
+    return { ok: false, reason: "bad_response" };
+  }
+  const places = (Array.isArray(body.results) ? body.results : [])
+    .map(parseDetails)
+    .filter((p): p is FsqPlaceDetails => p !== null);
+  return { ok: true, places };
 }
 
 /**
