@@ -24,6 +24,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 
 import { pickFreePort } from "./dev-ports.ts";
+import { probeUntilReady } from "./dev-probe.ts";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const WEB = join(ROOT, "apps", "web");
@@ -150,16 +151,11 @@ function startChild(name, cmd, args, opts = {}) {
   return child;
 }
 
-async function waitHealthy(url, tries = 180, delayMs = 500) {
-  for (let i = 0; i < tries; i++) {
-    try {
-      const res = await fetch(url);
-      if (res.ok) return true;
-    } catch {}
-    await new Promise((r) => setTimeout(r, delayMs));
-  }
-  return false;
-}
+// Readiness probes are bounded per request (AbortSignal.timeout inside
+// probeUntilReady) and retried until the deadline, so one hung request
+// can never stall the ready banner (batch dev-probe).
+const PROBE_TIMEOUT_MS = 3000;
+const PROBE_DEADLINE_MS = 90_000;
 
 resolveLlm();
 
@@ -193,7 +189,12 @@ if (PREVIEW) {
 }
 
 const base = `http://127.0.0.1:${WEB_PORT}`;
-const healthy = await waitHealthy(`${base}/api/health`);
+const healthy = await probeUntilReady({
+  url: `${base}/api/health`,
+  requestTimeoutMs: PROBE_TIMEOUT_MS,
+  deadlineMs: PROBE_DEADLINE_MS,
+  ready: (res) => res.ok,
+});
 if (!healthy) {
   console.error(`[dev] ${base}/api/health never became healthy`);
   killAll();
@@ -203,19 +204,12 @@ if (!healthy) {
 // for a window after boot while dev-only routes register, so poll it
 // and only print the URL once it stops 404ing.
 const loginUrl = `${base}/api/dev/login?email=you%40tarima.test`;
-let loginReady = false;
-for (let i = 0; i < 180; i++) {
-  try {
-    const res = await fetch(`${base}/api/dev/login?email=probe%40tarima.test`, {
-      redirect: "manual",
-    });
-    if (res.status !== 404) {
-      loginReady = true;
-      break;
-    }
-  } catch {}
-  await new Promise((r) => setTimeout(r, 500));
-}
+const loginReady = await probeUntilReady({
+  url: `${base}/api/dev/login?email=probe%40tarima.test`,
+  requestTimeoutMs: PROBE_TIMEOUT_MS,
+  deadlineMs: PROBE_DEADLINE_MS,
+  ready: (res) => res.status !== 404,
+});
 if (!loginReady) console.error("[dev] /api/dev/login still 404 after 90s; printing URL anyway");
 console.log(`\n  tarima:    ${base}`);
 console.log(`  api:       in-process on :${WEB_PORT} (same server; no :3001 dependency)`);

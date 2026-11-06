@@ -20,7 +20,7 @@
       "entry": ["src/index.ts", "src/*.ts"]
     },
     "apps/web": {
-      "entry": ["src/**/*.{ts,tsx}", "vite.cosmos.config.ts"],
+      "entry": ["src/**/*.{ts,tsx}", "vite.cosmos.config.ts", "nitro-dev-main.ts"],
       "ignore": ["public/_worker.js", "src/paraglide/**"],
       "ignoreDependencies": ["shadcn"]
     },

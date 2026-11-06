@@ -48,6 +48,10 @@ const config = defineConfig({
       dir: "dist/server",
       publicDir: "dist/client",
     },
+    // Anchors __nitro_main__ at the nitro dev serverDir so dev-mode
+    // public-asset reads resolve dist/client correctly once a build
+    // exists (see nitro-dev-main.ts). No-op in the built bundle.
+    plugins: ["./nitro-dev-main.ts"],
   },
 });
 
