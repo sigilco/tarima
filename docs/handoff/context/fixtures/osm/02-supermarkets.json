@@ -1,0 +1,398 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-05T21:45:36Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 286081303,
+  "lat": 37.8650305,
+  "lon": -122.2671120,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2441",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "name": "Shattuck Market",
+    "opening_hours": "Mo-Su 09:00-21:00",
+    "phone": "+1 510-703-0314",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 318886219,
+  "lat": 37.8759462,
+  "lon": -122.2601951,
+  "tags": {
+    "addr:street": "Euclid Avenue",
+    "name": "7Palms",
+    "opening_hours": "Mo-Su 07:00-23:00",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 366352409,
+  "lat": 37.8669533,
+  "lon": -122.2563906,
+  "tags": {
+    "check_date": "2024-07-31",
+    "name": "The Den",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 775881481,
+  "lat": 37.8718020,
+  "lon": -122.2733012,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1885",
+    "addr:postcode": "94703",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "branch": "Berkeley",
+    "brand": "Trader Joe's",
+    "brand:wikidata": "Q688825",
+    "name": "Trader Joe's",
+    "opening_hours": "Mo-Su 08:00-21:00",
+    "phone": "+1 510-204-9074",
+    "ref": "186",
+    "shop": "supermarket",
+    "website": "https://locations.traderjoes.com/ca/berkeley/186/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1349552622,
+  "lat": 37.8630178,
+  "lon": -122.2584230,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2601",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Telegraph Avenue",
+    "atm": "yes",
+    "brand": "7-Eleven",
+    "brand:wikidata": "Q259340",
+    "delivery": "yes",
+    "fast_food": "yes",
+    "fuel:propane": "yes",
+    "name": "7-Eleven",
+    "opening_hours": "Mo-Su 06:00-22:00",
+    "phone": "+1 510-841-8248",
+    "ref": "17582",
+    "shop": "convenience",
+    "website": "https://www.7-eleven.com/locations/ca/berkeley/2601-telegraph-ave-17582",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2215236857,
+  "lat": 37.8752250,
+  "lon": -122.2689372,
+  "tags": {
+    "addr:country": "US",
+    "addr:housenumber": "1778",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "name": "Shattuck Convenience",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 2235910278,
+  "lat": 37.8687560,
+  "lon": -122.2676070,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2233",
+    "addr:postcode": "94704",
+    "addr:street": "Shattuck Avenue",
+    "check_date": "2024-04-07",
+    "fax": "+1 510 5489578",
+    "name": "E-Z Stop Deli",
+    "opening_hours": "Mo 08:00-21:45; Tu-Fr 07:30-22:45; Sa 08:30-22:45; Su 08:30-21:45",
+    "phone": "+1 510 5489544",
+    "shop": "convenience",
+    "website": "http://www.ezstopdeli.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2557860419,
+  "lat": 37.8618000,
+  "lon": -122.2534040,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2707",
+    "addr:street": "College Avenue",
+    "name": "Derby Food Center",
+    "opening_hours": "Mo-Sa 09:00-23:00; Su 09:00-22:00",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 3516376983,
+  "lat": 37.8699971,
+  "lon": -122.2660080,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2140",
+    "addr:postcode": "94704",
+    "addr:street": "Oxford Street",
+    "electronics_repair": "phone;computer",
+    "name": "Mighty bear Mini Mart",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 5832926980,
+  "lat": 37.8802059,
+  "lon": -122.2686764,
+  "tags": {
+    "addr:housenumber": "2112",
+    "addr:street": "Vine Street",
+    "addr:unit": "B",
+    "check_date": "2023-08-19",
+    "name": "The Filling Station",
+    "shop": "convenience",
+    "wheelchair": "yes",
+    "zero_waste": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7926234506,
+  "lat": 37.8642913,
+  "lon": -122.2587970,
+  "tags": {
+    "name": "Crafts & Grapes",
+    "shop": "convenience",
+    "website": "https://www.craftsgrapesstore.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 8197278077,
+  "lat": 37.8646830,
+  "lon": -122.2583019,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2521",
+    "addr:street": "Telegraph Avenue",
+    "name": "Kathmandu Market",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 10679966671,
+  "lat": 37.8684413,
+  "lon": -122.2604378,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2440",
+    "addr:street": "Bancroft Way",
+    "addr:unit": "102",
+    "name": "Berkeley Student Food Collective",
+    "shop": "convenience",
+    "website": "https://www.foodcollective.org/"
+  }
+},
+{
+  "type": "node",
+  "id": 10914608546,
+  "lat": 37.8708368,
+  "lon": -122.2680442,
+  "tags": {
+    "addr:housenumber": "128",
+    "addr:street": "Berkeley Square",
+    "check_date": "2023-05-20",
+    "level": "0",
+    "name": "Wireless & Mini Mart",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 10969667014,
+  "lat": 37.8680148,
+  "lon": -122.2584253,
+  "tags": {
+    "addr:housenumber": "2515",
+    "addr:street": "Durant Avenue",
+    "check_date": "2025-02-16",
+    "name": "Johnston's Market",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 12135368551,
+  "lat": 37.8714390,
+  "lon": -122.2727655,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1902",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "name": "Stop and Save Market",
+    "old_name": "Rick and Morty Market",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 12717366198,
+  "lat": 37.8673388,
+  "lon": -122.2600848,
+  "tags": {
+    "name": "Bear Market",
+    "operator:wikidata": "Q168756",
+    "shop": "convenience",
+    "website": "https://dining.berkeley.edu/locations/convenience-stores/bear-market/"
+  }
+},
+{
+  "type": "node",
+  "id": 14262761592,
+  "lat": 37.8679260,
+  "lon": -122.2598208,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2433",
+    "addr:street": "Sather Lane",
+    "addr:unit": "D",
+    "name": "Vendizone",
+    "shop": "convenience",
+    "website": "https://www.instagram.com/p/CzmjhaUyx4z/"
+  }
+},
+{
+  "type": "way",
+  "id": 24221445,
+  "center": {
+    "lat": 37.8807728,
+    "lon": -122.2700148
+  },
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1444",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "brand": "Safeway",
+    "brand:wikidata": "Q1508234",
+    "building": "retail",
+    "building:levels": "1",
+    "check_date:opening_hours": "2022-12-19",
+    "name": "Safeway",
+    "opening_hours": "Mo-Su 05:00-23:00",
+    "phone": "+1 510-526-3086",
+    "shop": "supermarket",
+    "website": "https://local.safeway.com/safeway/ca/berkeley/1444-shattuck-place.html",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 33620585,
+  "center": {
+    "lat": 37.8730752,
+    "lon": -122.2735805
+  },
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1900",
+    "addr:state": "CA",
+    "addr:street": "Martin Luther King Junior Way",
+    "building": "retail",
+    "name": "Mizuki",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "way",
+  "id": 310635103,
+  "center": {
+    "lat": 37.8787957,
+    "lon": -122.2699679
+  },
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1550",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "branch": "Shattuck Ave",
+    "brand": "Andronico's",
+    "brand:wikidata": "Q4759491",
+    "building": "retail",
+    "building:levels": "2",
+    "check_date:opening_hours": "2026-06-28",
+    "name": "Andronico's",
+    "old_name": "Safeway Community Markets;Co-op",
+    "opening_hours": "06:00-23:00",
+    "organic": "yes",
+    "phone": "+1 510 841 7942",
+    "shop": "supermarket",
+    "website": "https://local.andronicos.com/ca/berkeley/1550-shattuck-ave.html",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 409423013,
+  "center": {
+    "lat": 37.8712041,
+    "lon": -122.2733338
+  },
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1894",
+    "addr:postcode": "94703",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "alt_name": "Food Mart",
+    "building": "retail",
+    "building:levels": "1",
+    "name": "UC Gas & Food",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "way",
+  "id": 515314953,
+  "center": {
+    "lat": 37.8666723,
+    "lon": -122.2654275
+  },
+  "tags": {
+    "addr:housenumber": "2200",
+    "addr:street": "Durant Avenue",
+    "building": "retail",
+    "shop": "convenience"
+  }
+}
+
+  ]
+}

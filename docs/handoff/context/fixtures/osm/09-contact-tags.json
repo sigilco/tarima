@@ -1,0 +1,99 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-05T21:54:48Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 3637571028,
+  "lat": 37.8656685,
+  "lon": -122.2587045,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2468",
+    "addr:postcode": "94704",
+    "addr:street": "Telegraph Avenue",
+    "check_date": "2026-10-14",
+    "contact:website": "http://places.singleplatform.com/sliver/menu?ref=openstreetmap",
+    "cuisine": "pizza",
+    "disused:amenity": "restaurant",
+    "name": "Sliver Pizzeria",
+    "outdoor_seating": "no",
+    "payment:cash": "no",
+    "payment:credit_cards": "yes",
+    "phone": "+1-510-356-4044",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "https://www.sliverpizzeria.com/pizza-telegraph/"
+  }
+},
+{
+  "type": "node",
+  "id": 3793692373,
+  "lat": 37.8688101,
+  "lon": -122.2664360,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2177",
+    "addr:postcode": "94703",
+    "addr:street": "Kittredge Street",
+    "amenity": "fast_food",
+    "check_date": "2026-01-29",
+    "contact:website": "https://dosa.company/menu/idcafeberkeley?item=buttermilk-VhSx",
+    "cuisine": "indian",
+    "diet:vegetarian": "yes",
+    "name": "Id Cafe",
+    "smoking": "no",
+    "wheelchair": "limited"
+  }
+},
+{
+  "type": "node",
+  "id": 9143478645,
+  "lat": 37.8822502,
+  "lon": -122.2693789,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1385",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "addr:unit": "A",
+    "contact:email": "info@grovestreetkids.com",
+    "contact:facebook": "https://www.facebook.com/grovestreetkids",
+    "contact:instagram": "https://www.instagram.com/grovestreetkids/",
+    "contact:twitter": "https://twitter.com/grovestreetkids",
+    "disused:shop": "clothes",
+    "name": "Grove Street kids",
+    "note": "Kid's clothing store",
+    "opening_hours": "We-Sa 12:00-17:00",
+    "phone": "+1 510-843-5437",
+    "website": "https://www.grovestreetkids.com/"
+  }
+},
+{
+  "type": "way",
+  "id": 1194190957,
+  "center": {
+    "lat": 37.8784707,
+    "lon": -122.2661935
+  },
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2220",
+    "addr:postcode": "94709-1586",
+    "addr:state": "CA",
+    "addr:street": "Cedar Street",
+    "amenity": "kindergarten",
+    "contact:website": "https://www.heartsleap.org/",
+    "name": "Hearts Leap North"
+  }
+}
+
+  ]
+}
