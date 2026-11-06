@@ -155,6 +155,23 @@ export const outreachMessages = sqliteTable(
   (t) => [index("idx_messages_entity").on(t.entityId)],
 );
 
+/**
+ * Opt-out list (T4): recipients who asked not to be contacted. The outbox
+ * drain checks every staged send against this table before calling the
+ * provider; an inbound "stop" (and later an opt-out endpoint) writes here.
+ */
+export const outreachSuppressions = sqliteTable(
+  "outreach_suppressions",
+  {
+    id: text("id").primaryKey(),
+    email: text("email").notNull(),
+    reason: text("reason"),
+    source: text("source").notNull().default("manual"),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [uniqueIndex("idx_suppressions_email").on(t.email)],
+);
+
 export const events = sqliteTable(
   "events",
   {

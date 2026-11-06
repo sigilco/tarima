@@ -9,11 +9,11 @@
  *   // mocks.telegram.baseUrl, mocks.whatsapp.baseUrl, mocks.mail.baseUrl
  *   await mocks.stop();
  */
-import { startMockMail } from "./mail-mock.mjs";
+import { startMailDev as startMockMail } from "./maildev-mock.mjs";
 import { startMockTelegram } from "./telegram-mock.mjs";
 import { startMockWhatsapp } from "./whatsapp-mock.mjs";
 
-export { startMockMail } from "./mail-mock.mjs";
+export { startMailDev } from "./maildev-mock.mjs";
 export { startMockTelegram } from "./telegram-mock.mjs";
 export { startMockWhatsapp } from "./whatsapp-mock.mjs";
 

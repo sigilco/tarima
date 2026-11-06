@@ -33,6 +33,12 @@ export interface EmailAdapterConfig {
   loopback?: LoopbackSink;
   /** Where messages go when no provider is configured. */
   outbox?: FileOutbox;
+  /**
+   * Override of the provider endpoint (`MAIL_API_BASE_URL`). When set the
+   * Brevo-shaped POST goes to `<base>/v3/smtp/email` — the mock seam the
+   * dev harness and tests use — regardless of whether a key is set.
+   */
+  mailApiBaseUrl?: string;
   /** Injectable for tests. Defaults to global fetch. */
   fetchImpl?: typeof fetch;
 }
@@ -40,6 +46,16 @@ export interface EmailAdapterConfig {
 const DEFAULT_LOOPBACK_DOMAINS = "tarima.test";
 const DEFAULT_MAIL_FROM = "notifications@tarima.illo.fyi";
 const BREVO_ENDPOINT = "https://api.brevo.com/v3/smtp/email";
+
+/** The send endpoint: the env override, else Brevo. */
+function sendEndpoint(baseOverride: string | undefined): { endpoint: string; overridden: boolean } {
+  const base = baseOverride?.replace(/\/+$/, "");
+  if (!base) return { endpoint: BREVO_ENDPOINT, overridden: false };
+  return {
+    endpoint: base.endsWith("/v3/smtp/email") ? base : `${base}/v3/smtp/email`,
+    overridden: true,
+  };
+}
 
 /** Domains whose mail never leaves the box. */
 export function parseLoopbackDomains(raw: string | undefined): string[] {
@@ -76,6 +92,9 @@ export function createEmailAdapter(config: EmailAdapterConfig = {}): ChannelAdap
   const from = config.mailFrom ?? process.env.MAIL_FROM ?? DEFAULT_MAIL_FROM;
   const brevoApiKey = config.brevoApiKey ?? process.env.BREVO_API_KEY;
   const inboundWebhookSecret = config.inboundWebhookSecret ?? process.env.INBOUND_WEBHOOK_SECRET;
+  const { endpoint, overridden } = sendEndpoint(
+    config.mailApiBaseUrl ?? process.env.MAIL_API_BASE_URL,
+  );
   const doFetch = config.fetchImpl ?? fetch;
 
   return {
@@ -98,7 +117,7 @@ export function createEmailAdapter(config: EmailAdapterConfig = {}): ChannelAdap
         return { externalId: `loopback:${msg.to}`, provider: "loopback", accepted: true };
       }
 
-      if (!brevoApiKey) {
+      if (!brevoApiKey && !overridden) {
         if (!config.outbox) {
           return {
             externalId: "",
@@ -111,22 +130,32 @@ export function createEmailAdapter(config: EmailAdapterConfig = {}): ChannelAdap
         return { externalId: `file:${msg.to}`, provider: "file", accepted: true };
       }
 
-      const res = await doFetch(BREVO_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "api-key": brevoApiKey,
-          "content-type": "application/json",
-          accept: "application/json",
-        },
-        body: JSON.stringify({
-          sender: { email: from, name: "Tarima" },
-          to: [{ email: msg.to }],
-          subject,
-          textContent: body,
-          ...(msg.html ? { htmlContent: msg.html } : {}),
-          ...(msg.replyTo ? { replyTo: { email: msg.replyTo } } : {}),
-        }),
-      });
+      let res: Response;
+      try {
+        res = await doFetch(endpoint, {
+          method: "POST",
+          headers: {
+            ...(brevoApiKey ? { "api-key": brevoApiKey } : {}),
+            "content-type": "application/json",
+            accept: "application/json",
+          },
+          body: JSON.stringify({
+            sender: { email: from, name: "Tarima" },
+            to: [{ email: msg.to }],
+            subject,
+            textContent: body,
+            ...(msg.html ? { htmlContent: msg.html } : {}),
+            ...(msg.replyTo ? { replyTo: { email: msg.replyTo } } : {}),
+          }),
+        });
+      } catch (err) {
+        return {
+          externalId: "",
+          provider: "brevo",
+          accepted: false,
+          reason: `brevo send failed: ${err instanceof Error ? err.message : String(err)}`,
+        };
+      }
 
       if (!res.ok) {
         const detail = await res.text().catch(() => "");
