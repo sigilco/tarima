@@ -387,6 +387,31 @@ export type SearchCache = typeof searchCache.$inferSelect;
 export type VenueCatalogRow = typeof venueCatalog.$inferSelect;
 
 /**
+ * Per-provider daily spend/usage counters (search-providers batch).
+ * One row per (day, provider, bucket); `day` is the calendar date in
+ * America/Los_Angeles — Google quotas and the plan's spend ledgers both
+ * reset on Pacific midnight, so the ledger must too.
+ *
+ * Buckets are provider-defined strings, e.g. for google-places:
+ * `live` (all calls), `enterprise` (Enterprise-mask calls), `warm`
+ * (cache-warming calls, default cap 0 = never). For the enrichment
+ * ladder: `llm_extract_cents` counts cents, not calls.
+ */
+export const providerLedger = sqliteTable(
+  "provider_ledger",
+  {
+    /** YYYY-MM-DD in America/Los_Angeles. */
+    day: text("day").notNull(),
+    provider: text("provider").notNull(),
+    bucket: text("bucket").notNull(),
+    used: integer("used").notNull().default(0),
+  },
+  (t) => [primaryKey({ columns: [t.day, t.provider, t.bucket] })],
+);
+
+export type ProviderLedgerRow = typeof providerLedger.$inferSelect;
+
+/**
  * In-app inbox (Stage B, channels stream).
  *
  * The notify fanout writes one row per user per notification: the
