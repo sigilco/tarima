@@ -49,10 +49,14 @@ const BOOTSTRAP_DDL = [
   "CREATE INDEX IF NOT EXISTS `idx_channel_bindings_user` ON `channel_bindings` (`user_id`);",
   "CREATE TABLE IF NOT EXISTS `connect_codes` ( `id` text PRIMARY KEY NOT NULL, `user_id` text NOT NULL, `channel` text NOT NULL, `code_hash` text NOT NULL, `expires_at` integer NOT NULL, `consumed_at` integer, `created_at` integer NOT NULL, FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade );",
   "CREATE UNIQUE INDEX IF NOT EXISTS `idx_connect_codes_hash` ON `connect_codes` (`code_hash`);",
-  "CREATE TABLE IF NOT EXISTS `venue_catalog` ( `id` text PRIMARY KEY NOT NULL, `city` text NOT NULL, `name` text NOT NULL, `area` text, `capacity` integer, `price_band` text, `source` text NOT NULL, `url` text, `external_id` text, `contact_email` text, `contact_phone` text, `website` text, `enriched_at` integer, `created_at` integer NOT NULL );",
+  "CREATE TABLE IF NOT EXISTS `venue_catalog` ( `id` text PRIMARY KEY NOT NULL, `city` text NOT NULL, `name` text NOT NULL, `area` text, `capacity` integer, `price_band` text, `source` text NOT NULL, `url` text, `external_id` text, `contact_email` text, `contact_phone` text, `website` text, `enriched_at` integer, `latitude` real, `longitude` real, `provider` text, `opening_hours` text, `contact_source` text, `rating` real, `last_verified_at` integer, `created_at` integer NOT NULL );",
   "CREATE INDEX IF NOT EXISTS `idx_venue_catalog_city` ON `venue_catalog` (`city`);",
   "CREATE UNIQUE INDEX IF NOT EXISTS `idx_venue_catalog_city_name` ON `venue_catalog` (`city`,`name`);",
-  "CREATE TABLE IF NOT EXISTS `search_cache` ( `query_hash` text PRIMARY KEY NOT NULL, `query` text NOT NULL, `venue_ids` text DEFAULT '[]' NOT NULL, `created_at` integer NOT NULL, `refreshed_at` integer NOT NULL );",
+  "CREATE INDEX IF NOT EXISTS `idx_venue_catalog_geo` ON `venue_catalog` (`city`,`latitude`,`longitude`);",
+  "CREATE TABLE IF NOT EXISTS `search_cache` ( `query_hash` text PRIMARY KEY NOT NULL, `query` text NOT NULL, `venue_ids` text DEFAULT '[]' NOT NULL, `payload` text, `kind` text, `expires_at` integer, `degraded` integer DEFAULT 0 NOT NULL, `created_at` integer NOT NULL, `refreshed_at` integer NOT NULL );",
+  "CREATE TABLE IF NOT EXISTS `place_cache` ( `cell` text NOT NULL, `category` text NOT NULL, `radius_m` integer NOT NULL, `payload` text NOT NULL, `source` text NOT NULL, `provider_run_at` integer NOT NULL, `expires_at` integer NOT NULL, `stale` integer DEFAULT 0 NOT NULL, PRIMARY KEY(`cell`, `category`) );",
+  "CREATE TABLE IF NOT EXISTS `provider_budget` ( `provider` text NOT NULL, `day` text NOT NULL, `count` integer DEFAULT 0 NOT NULL, PRIMARY KEY(`provider`, `day`) );",
+  "CREATE TABLE IF NOT EXISTS `provider_circuit` ( `provider` text PRIMARY KEY NOT NULL, `failures` integer DEFAULT 0 NOT NULL, `opened_at` integer, `state` text DEFAULT 'closed' NOT NULL );",
   "CREATE TABLE IF NOT EXISTS `user_messages` ( `id` text PRIMARY KEY NOT NULL, `user_id` text NOT NULL, `project_id` text, `kind` text NOT NULL, `summary` text NOT NULL, `read_at` integer, `created_at` integer NOT NULL, FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade, FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON UPDATE no action ON DELETE cascade );",
   "CREATE INDEX IF NOT EXISTS `idx_user_messages_user` ON `user_messages` (`user_id`,`created_at`);",
   "CREATE INDEX IF NOT EXISTS `idx_user_messages_unread` ON `user_messages` (`user_id`,`read_at`);",
@@ -146,10 +150,48 @@ addColumnIfMissing(
   "enriched_at",
   "ALTER TABLE `venue_catalog` ADD `enriched_at` integer;",
 );
+addColumnIfMissing("venue_catalog", "latitude", "ALTER TABLE `venue_catalog` ADD `latitude` real;");
+addColumnIfMissing(
+  "venue_catalog",
+  "longitude",
+  "ALTER TABLE `venue_catalog` ADD `longitude` real;",
+);
+addColumnIfMissing("venue_catalog", "provider", "ALTER TABLE `venue_catalog` ADD `provider` text;");
+addColumnIfMissing(
+  "venue_catalog",
+  "opening_hours",
+  "ALTER TABLE `venue_catalog` ADD `opening_hours` text;",
+);
+addColumnIfMissing(
+  "venue_catalog",
+  "contact_source",
+  "ALTER TABLE `venue_catalog` ADD `contact_source` text;",
+);
+addColumnIfMissing("venue_catalog", "rating", "ALTER TABLE `venue_catalog` ADD `rating` real;");
+addColumnIfMissing(
+  "venue_catalog",
+  "last_verified_at",
+  "ALTER TABLE `venue_catalog` ADD `last_verified_at` integer;",
+);
+addColumnIfMissing("search_cache", "payload", "ALTER TABLE `search_cache` ADD `payload` text;");
+addColumnIfMissing("search_cache", "kind", "ALTER TABLE `search_cache` ADD `kind` text;");
+addColumnIfMissing(
+  "search_cache",
+  "expires_at",
+  "ALTER TABLE `search_cache` ADD `expires_at` integer;",
+);
+addColumnIfMissing(
+  "search_cache",
+  "degraded",
+  "ALTER TABLE `search_cache` ADD `degraded` integer DEFAULT 0 NOT NULL;",
+);
 // The provider index lands once the column exists (also when the column
 // was just added above).
 sqlite.exec(
   "CREATE UNIQUE INDEX IF NOT EXISTS `idx_venue_catalog_external` ON `venue_catalog` (`external_id`);",
+);
+sqlite.exec(
+  "CREATE INDEX IF NOT EXISTS `idx_venue_catalog_geo` ON `venue_catalog` (`city`,`latitude`,`longitude`);",
 );
 
 export const db = drizzle(sqlite, { schema });
