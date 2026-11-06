@@ -74,8 +74,10 @@ export {
 } from "./notify.js";
 export type { BindingChannel, ChannelBinding, NotifyKind, NotifyPayload } from "./notify.js";
 export {
+  CONTACT_SOURCES,
   PRICE_BANDS,
   catalogVenueSchema,
+  contactSourceSchema,
   priceBandSchema,
   venueContactRequestSchema,
   venueContactResponseSchema,
@@ -85,6 +87,7 @@ export {
 } from "./venue.js";
 export type {
   CatalogVenue,
+  ContactSource,
   PriceBand,
   Venue,
   VenueContactRequest,

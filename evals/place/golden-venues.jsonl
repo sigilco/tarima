@@ -1,0 +1,25 @@
+{"id":"g01","q":"look for venues near UC Berkeley","city":"Berkeley","category":"food","must":{"radius_m":1500,"category_any":["restaurant","cafe","bar"]},"expect":{"min_results":5}}
+{"id":"g02","q":"food near UC Berkeley","city":"Berkeley","category":"food","must":{"radius_m":1500},"expect":{"min_results":5}}
+{"id":"g03","q":"cafes near UC Berkeley","city":"Berkeley","category":"cafe","must":{"radius_m":1500},"expect":{"min_results":5}}
+{"id":"g04","q":"restaurants in Berkeley","city":"Berkeley","category":"restaurant","must":{"radius_m":1500},"expect":{"min_results":5}}
+{"id":"g05","q":"bars near campus Berkeley","city":"Berkeley","category":"bar","must":{"radius_m":1500},"expect":{"min_results":5}}
+{"id":"g06","q":"pubs near UC Berkeley","city":"Berkeley","category":"pub","must":{"radius_m":1500},"expect":{"min_results":5}}
+{"id":"g07","q":"breweries near Berkeley","city":"Berkeley","category":"brewery","must":{"radius_m":2500},"expect":{"min_results":1}}
+{"id":"g08","q":"coffee shops Berkeley campus","city":"Berkeley","category":"cafe","must":{"radius_m":1500},"expect":{"min_results":5}}
+{"id":"g09","q":"evening venue near UC Berkeley for a decision-models meetup","city":"Berkeley","category":"event","must":{"radius_m":1500,"category_any":["event","bar","restaurant"]},"expect":{"min_results":1}}
+{"id":"g10","q":"event venues near UC Berkeley","city":"Berkeley","category":"event","must":{"radius_m":2000},"expect":{"min_results":1}}
+{"id":"g11","q":"community centre Berkeley","city":"Berkeley","category":"event","must":{"radius_m":2000},"expect":{"min_results":1}}
+{"id":"g12","q":"rooftop venue 40 people Berkeley","city":"Berkeley","category":"bar","must":{"radius_m":1500,"category_any":["bar","restaurant","event"]},"expect":{"min_results":1}}
+{"id":"g13","q":"supermarkets near UC Berkeley","city":"Berkeley","category":"shop","must":{"radius_m":1500},"expect":{"min_results":1}}
+{"id":"g14","q":"grocery Berkeley campus","city":"Berkeley","category":"shop","must":{"radius_m":1500},"expect":{"min_results":1}}
+{"id":"g15","q":"places to eat Southside Berkeley","city":"Berkeley","category":"food","must":{"radius_m":1500},"expect":{"min_results":5}}
+{"id":"g16","q":"Northside Berkeley cafes","city":"Berkeley","category":"cafe","must":{"radius_m":1500},"expect":{"min_results":5}}
+{"id":"g17","q":"Downtown Berkeley restaurants","city":"Berkeley","category":"restaurant","must":{"radius_m":2000},"expect":{"min_results":5}}
+{"id":"g18","q":"late night food Berkeley","city":"Berkeley","category":"food","must":{"radius_m":1500},"expect":{"min_results":5}}
+{"id":"g19","q":"meetup space near UC Berkeley","city":"Berkeley","category":"event","must":{"radius_m":2000},"expect":{"min_results":1}}
+{"id":"g20","q":"brewpub near campus Berkeley","city":"Berkeley","category":"brewery","must":{"radius_m":2500},"expect":{"min_results":1}}
+{"id":"g21","q":"Thai food near UC Berkeley","city":"Berkeley","category":"restaurant","must":{"radius_m":1500},"expect":{"min_results":5}}
+{"id":"g22","q":"Japanese restaurants Berkeley","city":"Berkeley","category":"restaurant","must":{"radius_m":1500},"expect":{"min_results":5}}
+{"id":"g23","q":"venues with outdoor seating Berkeley","city":"Berkeley","category":"food","must":{"radius_m":1500},"expect":{"min_results":5}}
+{"id":"g24","q":"Faculty Club Berkeley","city":"Berkeley","category":"food","must":{"radius_m":1500},"expect":{"min_results":1}}
+{"id":"g25","q":"look for venues in Berkeley for an evening event","city":"Berkeley","category":"food","must":{"radius_m":1500},"expect":{"min_results":5}}

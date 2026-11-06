@@ -24,7 +24,9 @@
       "ignore": ["public/_worker.js"],
       "ignoreDependencies": ["shadcn"]
     },
-    "apps/api": {},
+    "apps/api": {
+      "entry": ["src/**/*.ts", "scripts/*.ts"]
+    },
     "apps/inbound-worker": {
       "entry": ["src/**/*.ts"]
     },

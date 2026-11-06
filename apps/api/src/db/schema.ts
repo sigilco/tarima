@@ -351,6 +351,13 @@ export const venueCatalog = sqliteTable(
     website: text("website"),
     // Epoch ms of the last Overpass enrichment pass (null = never).
     enrichedAt: integer("enriched_at"),
+    latitude: real("latitude"),
+    longitude: real("longitude"),
+    provider: text("provider"),
+    openingHours: text("opening_hours"),
+    contactSource: text("contact_source"),
+    rating: real("rating"),
+    lastVerifiedAt: integer("last_verified_at"),
     createdAt: integer("created_at").notNull().$defaultFn(nowMs),
   },
   (t) => [
@@ -359,6 +366,7 @@ export const venueCatalog = sqliteTable(
     // The provider idempotency key: a venue found twice by a search is
     // upserted once (`onConflictDoNothing` on this column).
     uniqueIndex("idx_venue_catalog_external").on(t.externalId),
+    index("idx_venue_catalog_geo").on(t.city, t.latitude, t.longitude),
   ],
 );
 
@@ -379,8 +387,45 @@ export const searchCache = sqliteTable("search_cache", {
     .notNull()
     .default(sql`'[]'`)
     .$type<string[]>(),
+  payload: text("payload"),
+  kind: text("kind"),
+  expiresAt: integer("expires_at"),
+  degraded: integer("degraded").notNull().default(0),
   createdAt: integer("created_at").notNull().$defaultFn(nowMs),
   refreshedAt: integer("refreshed_at").notNull().$defaultFn(nowMs),
+});
+
+/** Materialized mini-catalog per H3-ish cell × category (phase 2). */
+export const placeCache = sqliteTable(
+  "place_cache",
+  {
+    cell: text("cell").notNull(),
+    category: text("category").notNull(),
+    radiusM: integer("radius_m").notNull(),
+    payload: text("payload").notNull(),
+    source: text("source").notNull(),
+    providerRunAt: integer("provider_run_at").notNull(),
+    expiresAt: integer("expires_at").notNull(),
+    stale: integer("stale").notNull().default(0),
+  },
+  (t) => [primaryKey({ columns: [t.cell, t.category] })],
+);
+
+export const providerBudget = sqliteTable(
+  "provider_budget",
+  {
+    provider: text("provider").notNull(),
+    day: text("day").notNull(),
+    count: integer("count").notNull().default(0),
+  },
+  (t) => [primaryKey({ columns: [t.provider, t.day] })],
+);
+
+export const providerCircuit = sqliteTable("provider_circuit", {
+  provider: text("provider").primaryKey(),
+  failures: integer("failures").notNull().default(0),
+  openedAt: integer("opened_at"),
+  state: text("state").notNull().default("closed"),
 });
 
 export type SearchCache = typeof searchCache.$inferSelect;

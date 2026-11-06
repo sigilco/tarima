@@ -28,6 +28,20 @@ export type Venue = v.InferOutput<typeof venueSchema>;
  * fabricated.
  */
 
+/** Provenance for a stored contact. LLM-derived values are forbidden. */
+export const CONTACT_SOURCES = [
+  "osm",
+  "overture",
+  "fsq",
+  "geoapify",
+  "photon",
+  "jsonld",
+  "page_text",
+  "human",
+] as const;
+export const contactSourceSchema = v.picklist(CONTACT_SOURCES);
+export type ContactSource = v.InferOutput<typeof contactSourceSchema>;
+
 /** A catalog venue as the search surface returns it. */
 export const catalogVenueSchema = v.object({
   id: v.pipe(v.string(), v.uuid()),
@@ -46,15 +60,30 @@ export const catalogVenueSchema = v.object({
   website: v.optional(v.pipe(v.string(), v.url())),
   /** True when the row still needs a contact the user has to fill. */
   needsContact: v.boolean(),
+  latitude: v.optional(v.number()),
+  longitude: v.optional(v.number()),
+  /** Metres from the search anchor, when both points are known. */
+  distanceM: v.optional(v.pipe(v.number(), v.minValue(0))),
+  provider: v.optional(v.string()),
+  openingHours: v.optional(v.string()),
+  contactSource: v.optional(contactSourceSchema),
+  rating: v.optional(v.number()),
 });
 export type CatalogVenue = v.InferOutput<typeof catalogVenueSchema>;
 
 /** The request of a venue search. */
 export const venueSearchRequestSchema = v.object({
   city: v.pipe(v.string(), v.trim(), v.minLength(1), v.maxLength(100)),
+  /** Free-text query used to geocode the anchor when lat/lng are absent. */
+  query: v.optional(v.pipe(v.string(), v.trim(), v.minLength(1), v.maxLength(200))),
   /** Category keyword: bar, cafe, restaurant, ... */
   category: v.optional(v.pipe(v.string(), v.trim(), v.minLength(1), v.maxLength(100))),
   limit: v.optional(v.pipe(v.number(), v.integer(), v.minValue(1), v.maxValue(25))),
+  radiusM: v.optional(v.pipe(v.number(), v.integer(), v.minValue(50), v.maxValue(10000))),
+  latitude: v.optional(v.number()),
+  longitude: v.optional(v.number()),
+  /** Bypass the query cache (agent "search again"). */
+  ignoreCache: v.optional(v.boolean()),
 });
 export type VenueSearchRequest = v.InferInput<typeof venueSearchRequestSchema>;
 

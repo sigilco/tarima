@@ -11,6 +11,7 @@ describe("agentApprovalPolicy", () => {
     expect(decide("get_project_context")).toBe("not-applicable");
     expect(decide("list_venues")).toBe("not-applicable");
     expect(decide("list_sponsors")).toBe("not-applicable");
+    expect(decide("search_venues")).toBe("not-applicable");
   });
 
   it("gates the outbound family", () => {

@@ -8,8 +8,8 @@
  *
  * The rule (deliberate, documented):
  * - READ-ONLY tools never prompt. `get_project_context`, `list_venues`,
- *   `list_sponsors` must return instantly — the chat panel would stall
- *   on a human gate for a pure read.
+ *   `list_sponsors`, `search_venues` must return instantly — the chat
+ *   panel would stall on a human gate for a pure read.
  * - OUTBOUND tools always need a person: any name starting with
  *   `send_`, `outbound_`, `post_`, `email_`, `whatsapp_`, `telegram_`.
  *   These reach the outside world (SP8's family), so eve must suspend
@@ -23,7 +23,12 @@
  */
 import type { ApprovalPolicy } from "eve";
 
-const READ_ONLY_TOOLS = new Set(["get_project_context", "list_venues", "list_sponsors"]);
+const READ_ONLY_TOOLS = new Set([
+  "get_project_context",
+  "list_venues",
+  "list_sponsors",
+  "search_venues",
+]);
 
 const OUTBOUND_PREFIXES = ["send_", "outbound_", "post_", "email_", "whatsapp_", "telegram_"];
 
