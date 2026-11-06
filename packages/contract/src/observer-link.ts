@@ -9,6 +9,7 @@
  * - Token revocation
  */
 import * as v from "valibot";
+import { entitySchema } from "./project.js";
 
 /**
  * 24 random bytes hex = 48 characters string.
@@ -109,4 +110,39 @@ export type RevokeRoomLinkResponse = v.InferOutput<typeof revokeRoomLinkResponse
 export function roomObserverUrl(origin: string, projectId: string, token: string): string {
   const cleanOrigin = origin.replace(/\/+$/, "");
   return `${cleanOrigin}/app/p/${encodeURIComponent(projectId)}/room?share_token=${encodeURIComponent(token)}`;
+}
+
+/**
+ * The post-teardown observer surface (SP7 removed the negotiation room;
+ * the link now opens a read-only project view at /app/o/:projectId).
+ *
+ * Additive to the frozen room payloads above: `resolveRoomResponseSchema`
+ * keeps its room shape for the dormant deal tables, while this schema is
+ * what the live observer endpoint actually returns — the project, its
+ * board entities, and the observer access block.
+ */
+export const observerViewResponseSchema = v.object({
+  project: v.object({
+    id: v.string(),
+    name: v.string(),
+    stage: v.string(),
+    goal: v.record(v.string(), v.unknown()),
+  }),
+  entities: v.array(entitySchema),
+  access: v.object({
+    role: v.literal("observer"),
+    readOnly: v.literal(true),
+    expiresAt: v.nullable(v.number()),
+    sharedByName: v.optional(v.nullable(v.string())),
+  }),
+});
+
+export type ObserverViewResponse = v.InferOutput<typeof observerViewResponseSchema>;
+
+/**
+ * Canonical URL helper for the observer link on the new workspace.
+ */
+export function projectObserverUrl(origin: string, projectId: string, token: string): string {
+  const cleanOrigin = origin.replace(/\/+$/, "");
+  return `${cleanOrigin}/app/o/${encodeURIComponent(projectId)}?share_token=${encodeURIComponent(token)}`;
 }

@@ -3,6 +3,7 @@ import * as m from "#/paraglide/messages.js";
 import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
 import { ChatPanelSlot } from "./ChatPanelSlot";
+import { ObserverShare } from "./ObserverShare";
 
 /** One entity row of the read-only table (contract entitySchema). */
 export interface WorkspaceEntity {
@@ -26,9 +27,10 @@ export interface ProjectViewProps {
  * One project inside the workspace shell (screens workspace-3).
  *
  * Header (name + stage badge), the read-only entities table from
- * GET /api/ui/projects/:projectId/entities, and the <ChatPanelSlot/>
- * reserved for the eve chat panel (SP4). Editing rows stays on the old
- * board at /app/p/$projectId until SP7 — the header links there.
+ * GET /api/ui/projects/:projectId/entities, the observer share control
+ * and the <ChatPanelSlot/> reserved for the eve chat panel (SP4).
+ * SP7 removed the old board at /app/p/$projectId — rows are staged by
+ * the agent (create_entity) or added through the api.
  */
 export function ProjectView({ state, project, entities, onRetry, onBack }: ProjectViewProps) {
   return (
@@ -70,12 +72,7 @@ export function ProjectView({ state, project, entities, onRetry, onBack }: Proje
                 </span>
               </p>
             </div>
-            <a
-              href={`/app/p/${project?.id}`}
-              className="text-[13px] font-medium text-primary underline-offset-4 transition-colors hover:text-primary/80 hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-            >
-              {m["workspace.oldBoard"]()} →
-            </a>
+            {project?.id ? <ObserverShare projectId={project.id} /> : null}
           </div>
 
           <div className="mt-5 overflow-hidden rounded-lg border border-border bg-card">

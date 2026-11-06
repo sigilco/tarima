@@ -14,6 +14,10 @@ const databasePath = isAbsolute(databaseUrl) ? databaseUrl : resolve(APP_ROOT, d
 mkdirSync(dirname(databasePath), { recursive: true });
 
 const sqlite = new Database(databasePath);
+// Parallel vitest workers share one DATABASE_URL file: without a busy
+// timeout the journal_mode pragma and bootstrap DDL race into
+// SQLITE_BUSY ("database is locked") at import time.
+sqlite.pragma("busy_timeout = 5000");
 sqlite.pragma("journal_mode = WAL");
 
 // Bootstrap DDL so a fresh `pnpm dev` or test run lands on a working
@@ -91,6 +95,9 @@ const BOOTSTRAP_DDL = [
   "CREATE TABLE IF NOT EXISTS `memory_journal` ( `session_id` text NOT NULL, `line` integer NOT NULL, `idx` integer NOT NULL, `call_id` text NOT NULL, `principal_id` text, `action` text NOT NULL, `payload` text DEFAULT '{}' NOT NULL, `created_at` integer NOT NULL, PRIMARY KEY(`session_id`, `line`, `idx`) );",
   "CREATE INDEX IF NOT EXISTS `idx_memory_journal_principal` ON `memory_journal` (`principal_id`,`created_at`);",
   "CREATE TABLE IF NOT EXISTS `provider_ledger` ( `day` text NOT NULL, `provider` text NOT NULL, `bucket` text NOT NULL, `used` integer DEFAULT 0 NOT NULL, PRIMARY KEY(`day`,`provider`,`bucket`) );",
+  "CREATE TABLE IF NOT EXISTS `gtm_contacts` ( `id` text PRIMARY KEY NOT NULL, `email` text NOT NULL, `name` text, `source` text DEFAULT 'manual' NOT NULL, `consent` integer DEFAULT false NOT NULL, `do_not_contact` integer DEFAULT false NOT NULL, `do_not_contact_reason` text, `project_id` text, `notes` text, `created_at` integer NOT NULL, `updated_at` integer NOT NULL, FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON UPDATE no action ON DELETE set null );",
+  "CREATE UNIQUE INDEX IF NOT EXISTS `idx_gtm_contacts_email` ON `gtm_contacts` (`email`);",
+  "CREATE INDEX IF NOT EXISTS `idx_gtm_contacts_dnc` ON `gtm_contacts` (`do_not_contact`);",
 ];
 
 for (const statement of BOOTSTRAP_DDL) {

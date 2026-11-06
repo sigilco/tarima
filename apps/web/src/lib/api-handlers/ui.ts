@@ -10,6 +10,7 @@ import { channelSchema, chaseRowStateSchema, createProjectSchema } from "@tarima
 import { db } from "@tarima/api/db";
 import { createProject, getProject, listProjects } from "@tarima/api/services/projects";
 import { createEntity, listEntities } from "@tarima/api/services/entities";
+import { listAuditApprovals, listAuditEvents } from "@tarima/api/services/audit";
 import { readJson, sessionUserId } from "./helpers";
 
 /** The caller's session user id, or the 401 response. */
@@ -85,4 +86,19 @@ export async function handleUiCreateEntity(request: Request, projectId: string):
     status: parsed.output.status ?? "intake",
   });
   return Response.json({ entity }, { status: 201 });
+}
+
+/**
+ * GET /api/ui/audit — the caller's agent audit feed: mirrored approval
+ * decisions and session facts, newest first, scoped to the session
+ * principal (services/audit.ts).
+ */
+export function handleUiAudit(request: Request): Response {
+  const session = requireSessionOr401(request);
+  if (session.response) return session.response;
+  const userId = session.userId ?? "";
+  return Response.json({
+    approvals: listAuditApprovals(db, userId),
+    events: listAuditEvents(db, userId),
+  });
 }
