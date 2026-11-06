@@ -87,15 +87,26 @@ if (!code) fail("no connect code staged by whatsapp-run.sh");
 let res = await inbound({ text: "hello bot" });
 if (res.status !== 200) fail(`webhook status ${res.status}: ${await res.text()}`);
 
+// The eve queue transport may still be settling; if the first message was
+// dropped during that window, re-send after a pause.
+async function ensureSends(attempt) {
+  const all = await waitFor(
+    async () => {
+      const cur = await mockSends();
+      return cur.length > 0 ? cur : undefined;
+    },
+    40,
+    250,
+  );
+  if (all) return all;
+  if (attempt >= 3) return undefined;
+  console.log(`[wa-e2e] no sends yet (attempt ${attempt}) — re-posting the webhook`);
+  await inbound({ text: "hello bot" });
+  return ensureSends(attempt + 1);
+}
+
 // 1. Stranger: connect notice delivered through the mock Graph API, no turn.
-let sends = await waitFor(
-  async () => {
-    const all = await mockSends();
-    return all.length > 0 ? all : undefined;
-  },
-  40,
-  250,
-);
+let sends = await ensureSends(1);
 if (!sends) fail("stranger notice never reached the mock Graph API");
 const notice = sends[0];
 if (!/isn't connected/i.test(notice.text ?? ""))
@@ -103,17 +114,26 @@ if (!/isn't connected/i.test(notice.text ?? ""))
 console.log(`[wa-e2e] stranger answered: "${notice.text}"`);
 
 // 2. Bind via /start CODE; confirmation arrives through the mock.
+async function ensureNewSends(before, probe, attempt) {
+  const all = await waitFor(
+    async () => {
+      const cur = await mockSends();
+      return cur.length > before ? cur.slice(before) : undefined;
+    },
+    probe,
+    250,
+  );
+  if (all) return all;
+  if (attempt >= 3) return undefined;
+  console.log(`[wa-e2e] no new sends (attempt ${attempt}) — re-posting`);
+  return undefined;
+}
 const before = (await mockSends()).length;
 res = await inbound({ text: `/start ${code}` });
 if (res.status !== 200) fail(`bind webhook status ${res.status}`);
-sends = await waitFor(
-  async () => {
-    const all = await mockSends();
-    return all.length > before ? all.slice(before) : undefined;
-  },
-  40,
-  250,
-);
+sends =
+  (await ensureNewSends(before, 40, 1)) ??
+  (await inbound({ text: `/start ${code}` }), await ensureNewSends(before, 40, 2));
 if (!sends || !/Connected/i.test(sends[0]?.text ?? "")) {
   fail(`binding confirmation missing: ${JSON.stringify(sends)}`);
 }

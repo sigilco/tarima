@@ -81,6 +81,9 @@ for _ in $(seq 1 60); do
   sleep 0.5
 done
 echo "[wa] eve health: $(curl -s -m 5 "http://127.0.0.1:$eve_port/eve/v1/health" || echo FAILED)"
+# Eve's local workflow queue transport retries its first deliveries right
+# after boot; webhooks posted into that window are dropped. Let it settle.
+sleep 8
 
 # Stage a user + an unconsumed whatsapp connect code in the same DB the
 # app (and the webhook) read.

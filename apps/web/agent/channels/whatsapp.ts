@@ -101,6 +101,10 @@ const bridge = chatSdkChannel({
   // complete, chunked by the adapter.
   streaming: false,
   turnPolicy: "queue",
+  // Locks live in our SQLite state adapter; a leaked lock row (e.g. a
+  // crashed turn) must not wedge the thread forever — force-release and
+  // reprocess instead of dropping the webhook.
+  onLockConflict: "force",
 });
 
 const { bot, channel, send } = bridge;
