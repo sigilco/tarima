@@ -71,13 +71,12 @@ done
 echo "[wa] mock Graph API on :$wa_port"
 
 cd "$web_root"
-# Eve persists workflow runs and queue messages under
-# apps/web/.eve/.workflow-data across restarts; stale runs from earlier
-# harness invocations resume and post old turns to the mock. Start the
-# runtime from a clean workflow state (queue messages included, or the
-# stale deliveries wedge the fresh run).
+# Clean workflow state before boot: stale queue deliveries from earlier
+# runs would resume and wedge fresh turns.
 rm -rf "$web_root/.eve/.workflow-data"
-node dist/server/server/index.mjs >"$tmp/server.log" 2>&1 &
+# Own session/process group so tool teardown cannot signal the server
+# mid-test.
+setsid node dist/server/server/index.mjs >"$tmp/server.log" 2>&1 &
 server_pid=$!
 
 for _ in $(seq 1 120); do
