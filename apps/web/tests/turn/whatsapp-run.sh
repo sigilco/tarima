@@ -48,6 +48,13 @@ export DEV_LOGIN=1
 export SESSION_SECRET=w3-session-secret
 export PORT="$port"
 export TARIMA_AGENT_STUB=1
+# Isolate eve's local workflow world (runs, queue events, locks) per
+# test: the default .eve/.workflow-data is shared with dev sessions, so
+# stale runs from other boots resume here and post old turns to the mock.
+export EVE_DEV=1
+export EVE_DEV_STATE_DIR="$tmp/eve-state"
+rm -rf "$EVE_DEV_STATE_DIR"
+mkdir -p "$EVE_DEV_STATE_DIR"
 export EMAIL_LOOPBACK_DOMAINS=tarima.test
 export TARIMA_EVE_PORT="$eve_port"
 # Credential-free WhatsApp seam: mock Graph API + throwaway secrets.
@@ -56,6 +63,10 @@ export WHATSAPP_APP_SECRET="$APP_SECRET"
 export WHATSAPP_PHONE_NUMBER_ID=123456789
 export WHATSAPP_VERIFY_TOKEN=w3-fake-verify-token
 export WHATSAPP_API_BASE_URL="http://127.0.0.1:$wa_port"
+# Pin the eve local-workflow queue transport to an explicit IPv4 URL:
+# its default (http://localhost:$PORT) fails intermittently on this host
+# and the retry loop then leaves the run stuck in `pending`.
+export WORKFLOW_LOCAL_BASE_URL="http://127.0.0.1:$port"
 
 # The mock Graph API in its own process; its stdout is the assertion log.
 node "$web_root/tests/mocks/whatsapp-mock.mjs" "$wa_port" "$APP_SECRET" >"$tmp/mock.log" 2>&1 &
