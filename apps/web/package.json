@@ -81,6 +81,7 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^6.0.1",
+    "maildev": "^3.0.0",
     "react-cosmos": "^7.4.1",
     "react-cosmos-core": "^7.4.0",
     "react-cosmos-plugin-vite": "^7.4.0",
