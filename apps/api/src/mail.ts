@@ -12,11 +12,6 @@ interface MailMessage {
 
 const DEFAULT_LOOPBACK_DOMAINS = "tarima.test";
 
-/** Brevo provider origin; MAIL_API_BASE_URL overrides it (mocks/tests). */
-function mailApiBaseUrl(): string {
-  return (process.env.MAIL_API_BASE_URL ?? "https://api.brevo.com").replace(/\/$/, "");
-}
-
 /**
  * Domains whose mail never leaves the box. Anything addressed to one of
  * these is written to the `loopback_inbox` table so tests and agents can
@@ -65,14 +60,22 @@ export async function sendMail(message: MailMessage): Promise<void> {
   }
 
   const apiKey = process.env.BREVO_API_KEY;
-  if (!apiKey) {
+  // MAIL_API_BASE_URL overrides the Brevo endpoint (dev mock / tests);
+  // when set it is used even without a key, since the mock needs none.
+  const baseOverride = process.env.MAIL_API_BASE_URL?.replace(/\/+$/, "");
+  if (!apiKey && !baseOverride) {
     console.info("[mail:noop]", message.subject, "->", message.to);
     return;
   }
-  const res = await fetch(`${mailApiBaseUrl()}/v3/smtp/email`, {
+  const endpoint = baseOverride
+    ? baseOverride.endsWith("/v3/smtp/email")
+      ? baseOverride
+      : `${baseOverride}/v3/smtp/email`
+    : "https://api.brevo.com/v3/smtp/email";
+  const res = await fetch(endpoint, {
     method: "POST",
     headers: {
-      "api-key": apiKey,
+      ...(apiKey ? { "api-key": apiKey } : {}),
       "content-type": "application/json",
       accept: "application/json",
     },

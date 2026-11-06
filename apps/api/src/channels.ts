@@ -63,6 +63,7 @@ const fileOutbox: FileOutbox = {
 };
 
 let email: ChannelAdapter | undefined;
+let outreachEmail: ChannelAdapter | undefined;
 let whatsapp: WhatsappAdapter | undefined;
 let router: ReturnType<typeof createChannelRouter> | undefined;
 
@@ -72,6 +73,22 @@ export function emailAdapter(): ChannelAdapter {
     email = createEmailAdapter({ loopback: loopbackSink, outbox: fileOutbox });
   }
   return email;
+}
+
+/**
+ * The outreach identity adapter (T5): agent-sent mail goes out under the
+ * quarantined `MAIL_FROM_OUTREACH` sender (the outreach subdomain), not the
+ * transactional `MAIL_FROM`, so reputation damage cannot reach OTP mail.
+ */
+export function outreachEmailAdapter(): ChannelAdapter {
+  if (!outreachEmail) {
+    outreachEmail = createEmailAdapter({
+      loopback: loopbackSink,
+      outbox: fileOutbox,
+      mailFrom: process.env.MAIL_FROM_OUTREACH ?? process.env.MAIL_FROM,
+    });
+  }
+  return outreachEmail;
 }
 
 /** The WhatsApp Cloud API adapter. */

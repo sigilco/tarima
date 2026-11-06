@@ -25,25 +25,25 @@
  * These routes are secret-authed, not bearer-authed: Cloudflare and
  * Meta cannot present an api key.
  *
- * Entity resolution (pragmatic, first cut): the message is attached to
- * the newest `running` chase-deliverables run whose context matches the
- * inbound contact:
- *   - email: `context.contactEmail` equals the address the mail was
- *     sent to (`to`)
- *   - WhatsApp: `context.contactPhone` equals the sender's number
- * When no run matches, the message is not stored (an `outreach_messages`
- * row needs an entity) and the route answers 200; the message is
- * logged as unassigned.
+ * Entity resolution: an inbound email is attached to the entity the
+ * `rfq+<entityId>` to address names (the Reply-To the drain writes), or
+ * to the entity whose `contactEmail` is the sender. With no match the
+ * message is not stored (an `outreach_messages` row needs an entity) and
+ * the route answers 200 after logging it as unassigned.
  *
  * Both routes answer fast: the reply body is parsed, stored and a
  * `chase.parse` step is enqueued, but no LLM work happens inline.
  */
+import { randomUUID } from "node:crypto";
 import { Hono } from "hono";
+import { eq } from "drizzle-orm";
 import { db } from "../db";
+import { entities, events, outreachMessages } from "../db/schema";
 import { parseMime, readRawBody, verifyWhatsappChallenge } from "@tarima/channels";
 import { emailAdapter, whatsappAdapter } from "../channels";
 import { bindChannel } from "../services/bindings";
 import { resolveConnectCode } from "../services/connect-codes";
+import { decodeRfqEntity } from "../services/outreach-mail";
 
 export const webhookRoutes = new Hono();
 
@@ -57,15 +57,82 @@ interface InboundRecord {
   threadId: string;
 }
 
+/** Pull the bare address out of a `Name <a@b>` or plain address. */
+function bareAddress(raw: string): string {
+  const match = /<([^>]+)>/.exec(raw);
+  return (match?.[1] ?? raw).trim().toLowerCase();
+}
+
+/**
+ * Resolve the entity an inbound email belongs to (T6): first the
+ * `rfq+<entityId>` tag on the to address (the Reply-To the drain set),
+ * then the entity whose contact address is the sender.
+ */
+function resolveInboundEntity(record: InboundRecord): string | null {
+  const tagged = decodeRfqEntity(record.to);
+  if (tagged) {
+    const rows = db
+      .select({ id: entities.id })
+      .from(entities)
+      .where(eq(entities.id, tagged))
+      .limit(1)
+      .all();
+    if (rows.length > 0) return rows[0].id;
+  }
+  const from = bareAddress(record.from);
+  const rows = db
+    .select({ id: entities.id })
+    .from(entities)
+    .where(eq(entities.contactEmail, from))
+    .limit(1)
+    .all();
+  return rows[0]?.id ?? null;
+}
+
 /**
  * Store an inbound message.
  *
- * SP7 teardown: the chase engine is gone, so there is no run to match
- * the contact against and no parse step to enqueue. Messages are no
- * longer persisted in this process — the record is acknowledged and
- * dropped; SP9 reconnects a consumer if one is needed.
+ * Email replies are persisted (T6): the entity is resolved from the
+ * `rfq+<entityId>` to address, falling back to `entities.contactEmail`;
+ * the reply lands in `outreach_messages`, the entity's status bumps to
+ * `parsed`, and an `outreach.reply` event goes on the board. WhatsApp
+ * stays an acknowledged drop until its batch wires a consumer.
  */
-function recordInbound(record: InboundRecord): { assigned: boolean } {
+function recordInbound(record: InboundRecord): { assigned: boolean; entityId?: string } {
+  if (record.channel === "email") {
+    const entityId = resolveInboundEntity(record);
+    if (!entityId) {
+      console.warn(`[webhooks] email reply from ${record.from} matched no entity`);
+      return { assigned: false };
+    }
+    db.insert(outreachMessages)
+      .values({
+        id: randomUUID(),
+        entityId,
+        direction: "inbound",
+        subject: record.subject ?? null,
+        body: record.body,
+        receivedAt: Date.now(),
+        createdAt: Date.now(),
+      })
+      .run();
+    db.update(entities)
+      .set({ status: "parsed", updatedAt: Date.now() })
+      .where(eq(entities.id, entityId))
+      .run();
+    db.insert(events)
+      .values({
+        id: randomUUID(),
+        actor: "system",
+        type: "outreach.reply",
+        subjectType: "entity",
+        subjectId: entityId,
+        data: { from: record.from, subject: record.subject ?? null, threadId: record.threadId },
+        createdAt: Date.now(),
+      })
+      .run();
+    return { assigned: true, entityId };
+  }
   console.warn(
     `[webhooks] ${record.channel} message from ${record.from} is unassigned (engine removed)`,
   );

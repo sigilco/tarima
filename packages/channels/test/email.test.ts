@@ -8,6 +8,7 @@ const ENV_KEYS = [
   "BREVO_API_KEY",
   "MAIL_FROM",
   "INBOUND_WEBHOOK_SECRET",
+  "MAIL_API_BASE_URL",
 ] as const;
 const saved: Record<string, string | undefined> = {};
 for (const key of ENV_KEYS) saved[key] = process.env[key];
@@ -144,6 +145,39 @@ describe("email adapter send: transport selection", () => {
     expect(res.provider).toBe("brevo");
     const headers = calls[0]!.init.headers as Record<string, string>;
     expect(headers["api-key"]).toBe("env-key");
+  });
+
+  it("honours MAIL_API_BASE_URL as the send endpoint without a brevo key", async () => {
+    process.env.MAIL_API_BASE_URL = "http://127.0.0.1:1080/";
+    const calls: Array<{ url: string; init: RequestInit }> = [];
+    const fetchImpl = (async (url: string | URL, init: RequestInit) => {
+      calls.push({ url: String(url), init });
+      return new Response(JSON.stringify({ messageId: "dev-1" }), { status: 201 });
+    }) as typeof fetch;
+    const adapter = createEmailAdapter({ fetchImpl });
+    const res = await adapter.send(msg({ to: "venue@example.com" }));
+    expect(res).toEqual({ externalId: "dev-1", provider: "brevo", accepted: true });
+    // Trailing slash is stripped before the endpoint path is appended.
+    expect(calls[0]!.url).toBe("http://127.0.0.1:1080/v3/smtp/email");
+    // No BREVO_API_KEY: no api-key header is sent at all.
+    const headers = calls[0]!.init.headers as Record<string, string>;
+    expect(headers["api-key"]).toBeUndefined();
+  });
+
+  it("still prefers an explicit mailApiBaseUrl over the env", async () => {
+    process.env.MAIL_API_BASE_URL = "http://env-base.test";
+    const calls: Array<{ url: string }> = [];
+    const fetchImpl = (async (url: string | URL) => {
+      calls.push({ url: String(url) });
+      return new Response(JSON.stringify({ messageId: "cfg-1" }), { status: 200 });
+    }) as typeof fetch;
+    const adapter = createEmailAdapter({
+      mailApiBaseUrl: "http://config-base.test/v3/smtp/email",
+      fetchImpl,
+    });
+    await adapter.send(msg({ to: "venue@example.com" }));
+    // An already-suffixed base is used verbatim.
+    expect(calls[0]!.url).toBe("http://config-base.test/v3/smtp/email");
   });
 });
 
