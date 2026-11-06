@@ -17,7 +17,14 @@ port="${E2E_PORT:-3100}"
 server_pid=""
 cleanup() {
   if [ -n "$server_pid" ]; then
+    # The server can ignore SIGTERM: escalate to SIGKILL after 5s so the
+    # runner never hangs on `wait` and never leaves the server behind.
     kill "$server_pid" 2>/dev/null || true
+    for _ in 1 2 3 4 5 6 7 8 9 10; do
+      kill -0 "$server_pid" 2>/dev/null || break
+      sleep 0.5
+    done
+    kill -9 "$server_pid" 2>/dev/null || true
     wait "$server_pid" 2>/dev/null || true
   fi
   rm -rf "$tmp"
