@@ -57,12 +57,20 @@ describe("beta contract freeze", () => {
     expect(isAllowlisted("a@x.io", "b@x.io")).toBe(false);
   });
 
-  it("bootstraps the new tables and projects.stage", async () => {
-    const { db } = await import("../db");
-    const { channelBindings, connectCodes, projects, venueCatalog } = await import("../db/schema");
-    expect(db.select().from(channelBindings).all()).toEqual([]);
-    expect(db.select().from(connectCodes).all()).toEqual([]);
-    expect(db.select().from(venueCatalog).all()).toEqual([]);
-    expect(db.select().from(projects).all()).toEqual([]);
-  });
+  it(
+    "bootstraps the new tables and projects.stage",
+    // The db module compiles its bootstrap DDL at first import; on a
+    // loaded host that can exceed vitest's 5s default (observed ~5.5s),
+    // so this test gets a wider budget instead of flaking.
+    { timeout: 30_000 },
+    async () => {
+      const { db } = await import("../db");
+      const { channelBindings, connectCodes, projects, venueCatalog } =
+        await import("../db/schema");
+      expect(db.select().from(channelBindings).all()).toEqual([]);
+      expect(db.select().from(connectCodes).all()).toEqual([]);
+      expect(db.select().from(venueCatalog).all()).toEqual([]);
+      expect(db.select().from(projects).all()).toEqual([]);
+    },
+  );
 });
