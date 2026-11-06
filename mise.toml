@@ -27,6 +27,10 @@ run = "pnpm preview"
 description = "Channel mocks only (telegram :3511, whatsapp :3512, mail :3513)"
 run = "node apps/web/tests/channels/mock-boot.mjs 3511 3512 3513"
 
+[tasks.doctor]
+description = "Env/tooling check: vars present (never values), node/pnpm, ports, DB, provider live-vs-replay"
+run = "node scripts/doctor.ts"
+
 [tasks."db:reset"]
 description = "Wipe the local dev database (.data/)"
 run = "rm -rf apps/web/.data .data"
