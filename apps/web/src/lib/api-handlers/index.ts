@@ -17,12 +17,19 @@ import { handleEveProxy } from "./eve-proxy";
 import { segments } from "./helpers";
 import { handleUiConnectCode } from "./settings";
 import {
+  handleUiAudit,
   handleUiCreateEntity,
   handleUiCreateProject,
   handleUiGetProject,
   handleUiListEntities,
   handleUiListProjects,
 } from "./ui";
+import {
+  handleObserverView,
+  handleUiCreateObserverLink,
+  handleUiGetObserverLink,
+  handleUiRevokeObserverLink,
+} from "./observer";
 
 type Handler = (request: Request, ...params: string[]) => Response | Promise<Response>;
 
@@ -49,7 +56,14 @@ const routes: Route[] = [
   route("GET", "/api/ui/projects/:projectId", handleUiGetProject),
   route("GET", "/api/ui/projects/:projectId/entities", handleUiListEntities),
   route("POST", "/api/ui/projects/:projectId/entities", handleUiCreateEntity),
+  route("GET", "/api/ui/projects/:projectId/observer-link", handleUiGetObserverLink),
+  route("POST", "/api/ui/projects/:projectId/observer-link", handleUiCreateObserverLink),
+  route("DELETE", "/api/ui/projects/:projectId/observer-link", handleUiRevokeObserverLink),
+  route("GET", "/api/ui/audit", handleUiAudit),
   route("POST", "/api/ui/settings/connect-code", handleUiConnectCode),
+
+  // Public observer surface: the share token is the credential.
+  route("GET", "/api/observer/:projectId", handleObserverView),
 
   // Auth (OTP) and the loopback admin inbox.
   route("POST", "/auth/request-otp", handleRequestOtp),

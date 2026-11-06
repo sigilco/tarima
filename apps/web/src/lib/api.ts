@@ -83,3 +83,34 @@ export function createProject(
     body: JSON.stringify(goal ? { name, goal } : { name }),
   });
 }
+
+/** The observer link wire shape (contract `observerLinkSchema`). */
+export interface ObserverLinkWire {
+  id: string;
+  projectId: string;
+  roomId: string | null;
+  token: string;
+  shareUrl: string;
+  createdBy: string | null;
+  createdAt: number;
+  expiresAt: number | null;
+  revokedAt: number | null;
+  viewCount: number;
+  lastViewedAt: number | null;
+}
+
+/** Mint (or fetch the live) observer link for a project. */
+export function createObserverLink(projectId: string): Promise<{ link: ObserverLinkWire }> {
+  return call<{ link: ObserverLinkWire }>(
+    `/api/ui/projects/${encodeURIComponent(projectId)}/observer-link`,
+    { method: "POST", body: JSON.stringify({}) },
+  );
+}
+
+/** Revoke every live observer link for a project. */
+export function revokeObserverLink(projectId: string): Promise<{ ok: boolean; revokedAt: number }> {
+  return call<{ ok: boolean; revokedAt: number }>(
+    `/api/ui/projects/${encodeURIComponent(projectId)}/observer-link`,
+    { method: "DELETE" },
+  );
+}
