@@ -13,6 +13,9 @@ Before reporting any work as done:
   the runtime, agent, or UI. Paste the summary lines into your report.
 - Never commit with `--no-verify`. If a hook fails, fix the problem.
 - Never run two heavy gates (typecheck/test/build) at once.
+- `mise run test:whatsapp-roundtrip` is an opt-in check (slow: builds web
+  + eve, boots a throwaway stack). Run it when the work touches the
+  WhatsApp channel, the eve runtime, or webhook ingress; skip it otherwise.
 
 ## Commands
 
@@ -26,3 +29,6 @@ Before reporting any work as done:
 - `mise run verify:smoke` — boot the preview build on a temp DB and assert
   the wire paths (assets 200, dev-login, session, streaming turn, mock
   round-trips).
+- `mise run test:whatsapp-roundtrip` — opt-in WhatsApp channel proof: stub
+  LLM, mock Graph API, throwaway DB; builds web + eve first if missing.
+  Run it when touching the WhatsApp channel, eve runtime, or webhook path.
