@@ -1,0 +1,94 @@
+{
+  "query": "AI companies that sponsor Berkeley tech meetups",
+  "results": [
+    {
+      "url": "https://www.anthropic.com/",
+      "title": "Anthropic — AI safety and research",
+      "snippet": "Anthropic is an AI safety and research company. We build reliable, interpretable, and steerable AI systems.",
+      "engine": "brave",
+      "published": null,
+      "score": 0.03278688524590164
+    },
+    {
+      "url": "https://www.anthropic.com/careers",
+      "title": "Careers at Anthropic",
+      "snippet": "Join Anthropic and help build AI systems that are safe and beneficial.",
+      "engine": "bing",
+      "published": null,
+      "score": 0.03076923076923077
+    },
+    {
+      "url": "https://openai.com/",
+      "title": "OpenAI | Research & Deployment",
+      "snippet": "OpenAI is an AI research and deployment company. Our mission is to ensure that artificial general intelligence benefits all of humanity.",
+      "engine": "brave",
+      "published": null,
+      "score": 0.029850746268656716
+    },
+    {
+      "url": "https://techcrunch.com/tag/ai-startups/",
+      "title": "AI startups - TechCrunch",
+      "snippet": "The latest AI startup news, funding rounds and product launches.",
+      "engine": "bing",
+      "published": "2026-10-28T00:00:00Z",
+      "score": 0.02857142857142857
+    },
+    {
+      "url": "https://www.cohere.com/",
+      "title": "Cohere | Enterprise AI",
+      "snippet": "Cohere builds enterprise AI systems for business. North platform for retrieval and generation.",
+      "engine": "brave",
+      "published": null,
+      "score": 0.027472527472527472
+    },
+    {
+      "url": "https://www.mistral.ai/",
+      "title": "Mistral AI — Frontier AI, open weights",
+      "snippet": "Mistral AI builds frontier models with open weights for enterprise and research.",
+      "engine": "ddgs",
+      "published": null,
+      "score": 0.02631578947368421
+    },
+    {
+      "url": "https://www.perplexity.ai/",
+      "title": "Perplexity — Where knowledge begins",
+      "snippet": "Perplexity is an answer engine that combines search and large language models.",
+      "engine": "brave",
+      "published": null,
+      "score": 0.02564102564102564
+    },
+    {
+      "url": "https://huggingface.co/",
+      "title": "Hugging Face — The AI community",
+      "snippet": "Hugging Face is the world's largest community and platform for open-source machine learning.",
+      "engine": "bing",
+      "published": null,
+      "score": 0.024390243902439025
+    },
+    {
+      "url": "https://www.anthropic.com/news",
+      "title": "Newsroom — Anthropic",
+      "snippet": "Latest announcements from Anthropic.",
+      "engine": "brave",
+      "published": "2026-10-30T00:00:00Z",
+      "score": 0.023255813953488372
+    },
+    {
+      "url": "https://openai.com/index/introducing-gpt-6/",
+      "title": "Introducing GPT-6 — OpenAI",
+      "snippet": "Our newest model with improved reasoning and tool use.",
+      "engine": "ddgs",
+      "published": "2026-11-01T00:00:00Z",
+      "score": 0.022222222222222223
+    }
+  ],
+  "meta": {
+    "request_id": "019a1b2c-3d4e-7f00-8000-000000000001",
+    "source": "network",
+    "engines_used": [
+      { "engine": "brave", "status": "ok", "latency_ms": 412, "result_count": 4 },
+      { "engine": "bing", "status": "ok", "latency_ms": 388, "result_count": 3 },
+      { "engine": "ddgs", "status": "ok", "latency_ms": 1204, "result_count": 2 }
+    ]
+  }
+}

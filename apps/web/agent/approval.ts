@@ -23,7 +23,12 @@
  */
 import type { ApprovalPolicy } from "eve";
 
-const READ_ONLY_TOOLS = new Set(["get_project_context", "list_venues", "list_sponsors"]);
+const READ_ONLY_TOOLS = new Set([
+  "get_project_context",
+  "list_venues",
+  "list_sponsors",
+  "search_sponsors",
+]);
 
 const OUTBOUND_PREFIXES = ["send_", "outbound_", "post_", "email_", "whatsapp_", "telegram_"];
 
