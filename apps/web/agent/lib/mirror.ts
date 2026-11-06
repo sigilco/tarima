@@ -4,10 +4,12 @@
  * runtime. Every function is total: it never throws, because a throwing
  * hook handler fails the turn.
  */
+import { createHash } from "node:crypto";
 import { nanoid } from "nanoid";
 import { and, eq, like } from "drizzle-orm";
 import { db } from "@tarima/api/db";
 import { agentEvents, approvals } from "@tarima/api/db/schema";
+import { drainOutbox } from "@tarima/api/services/outreach-mail";
 
 /**
  * JSON.stringify that survives eve payloads: undefined, bigint, Date,
@@ -188,5 +190,39 @@ export function mirrorInteractionSettled(data: InteractionSettledData, ctx: Mirr
       .run();
   } catch (err) {
     console.error("[eve-mirror] approvals update failed", err);
+  }
+}
+
+/**
+ * The idempotency key send_email computes from its input — the drain needs
+ * the same derivation to find the row the approved call staged.
+ */
+function sendEmailKey(input: unknown): string | null {
+  const i = input as { projectId?: string; to?: string; subject?: string; body?: string } | null;
+  if (!i?.projectId || !i.to || !i.subject || !i.body) return null;
+  return createHash("sha256")
+    .update([i.projectId, i.to, i.subject, i.body].join("\n"))
+    .digest("hex")
+    .slice(0, 32);
+}
+
+/**
+ * Outbox drain trigger (T3): a settled `send_email` call means its approval
+ * was accepted and the tool staged its outbox row (`interaction.settled`
+ * alone fires BEFORE the tool executes, so draining there would race the
+ * stage — the drain hooks `call.settled` instead, which is the settle that
+ * matters). Fire and forget: a throwing hook handler fails the turn, and a
+ * slow provider must never hold the turn open.
+ */
+export function drainAfterSettledCall(data: { callId?: string; outcome?: string }): void {
+  try {
+    if (data.outcome !== "completed" || !data.callId) return;
+    if (seenCalls.get(data.callId)?.name !== "send_email") return;
+    const key = sendEmailKey(seenCalls.get(data.callId)?.input);
+    void drainOutbox(key ? { idempotencyKey: key } : undefined).catch((err) =>
+      console.error("[eve-mirror] outbox drain failed", err),
+    );
+  } catch (err) {
+    console.error("[eve-mirror] outbox drain trigger failed", err);
   }
 }

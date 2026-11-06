@@ -28,6 +28,12 @@ export default defineTool({
   inputSchema: z.object({
     projectId: z.string().describe("The project the email belongs to."),
     to: z.string().email().describe("Recipient email address."),
+    entityId: z
+      .string()
+      .optional()
+      .describe(
+        "The board entity the email is for (venue or sponsor row). When set, replies thread back to it via the rfq+ Reply-To address.",
+      ),
     subject: z.string().min(1).describe("Email subject line."),
     body: z.string().min(1).describe("Email body text."),
   }),
@@ -73,6 +79,7 @@ export default defineTool({
           subject: input.subject,
           body: input.body,
           stagedBy: userId,
+          ...(input.entityId ? { entityId: input.entityId } : {}),
         },
         status: "staged",
       })

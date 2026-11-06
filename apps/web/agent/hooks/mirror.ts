@@ -15,6 +15,7 @@
  */
 import { defineHook } from "eve/hooks";
 import {
+  drainAfterSettledCall,
   mirrorFact,
   mirrorInteractionOpened,
   mirrorInteractionSettled,
@@ -52,6 +53,10 @@ export default defineHook({
     "interaction.settled": (event, ctx) => {
       mirrorFact(event, ctx);
       mirrorInteractionSettled(event.data, ctx);
+    },
+    "call.settled": (event, ctx) => {
+      mirrorFact(event, ctx);
+      drainAfterSettledCall(event.data);
     },
     "*": (event, ctx) => {
       if (!MIRRORED_FACTS.has(event.type)) return;

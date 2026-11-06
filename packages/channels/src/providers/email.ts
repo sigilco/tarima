@@ -130,22 +130,32 @@ export function createEmailAdapter(config: EmailAdapterConfig = {}): ChannelAdap
         return { externalId: `file:${msg.to}`, provider: "file", accepted: true };
       }
 
-      const res = await doFetch(endpoint, {
-        method: "POST",
-        headers: {
-          ...(brevoApiKey ? { "api-key": brevoApiKey } : {}),
-          "content-type": "application/json",
-          accept: "application/json",
-        },
-        body: JSON.stringify({
-          sender: { email: from, name: "Tarima" },
-          to: [{ email: msg.to }],
-          subject,
-          textContent: body,
-          ...(msg.html ? { htmlContent: msg.html } : {}),
-          ...(msg.replyTo ? { replyTo: { email: msg.replyTo } } : {}),
-        }),
-      });
+      let res: Response;
+      try {
+        res = await doFetch(endpoint, {
+          method: "POST",
+          headers: {
+            ...(brevoApiKey ? { "api-key": brevoApiKey } : {}),
+            "content-type": "application/json",
+            accept: "application/json",
+          },
+          body: JSON.stringify({
+            sender: { email: from, name: "Tarima" },
+            to: [{ email: msg.to }],
+            subject,
+            textContent: body,
+            ...(msg.html ? { htmlContent: msg.html } : {}),
+            ...(msg.replyTo ? { replyTo: { email: msg.replyTo } } : {}),
+          }),
+        });
+      } catch (err) {
+        return {
+          externalId: "",
+          provider: "brevo",
+          accepted: false,
+          reason: `brevo send failed: ${err instanceof Error ? err.message : String(err)}`,
+        };
+      }
 
       if (!res.ok) {
         const detail = await res.text().catch(() => "");
