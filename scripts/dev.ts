@@ -92,10 +92,19 @@ function resolveLlm() {
   console.log("[llm] no BIFROST_VK (env or Keychain): deterministic stub LLM");
 }
 
+// Per-child ring buffer of the last 20 log lines, for the failure
+// report when a child exits nonzero (batch dev-memory-e2e).
+const lastLines = new Map();
+
 function prefixed(name) {
+  const buf = lastLines.get(name) ?? [];
+  lastLines.set(name, buf);
   return (data) => {
     for (const line of data.toString().split("\n")) {
-      if (line) console.log(`[${name}] ${line}`);
+      if (!line) continue;
+      buf.push(line);
+      if (buf.length > 20) buf.shift();
+      console.log(`[${name}] ${line}`);
     }
   };
 }
@@ -110,6 +119,8 @@ function startChild(name, cmd, args, opts = {}) {
   child.stderr.on("data", prefixed(name));
   child.on("exit", (code) => {
     if (!exiting && code !== 0 && code !== null) {
+      console.error(`[dev] child ${name} exited with code ${code}; last output:`);
+      for (const line of lastLines.get(name) ?? []) console.error(`  ${line}`);
       console.error(`[${name}] exited with ${code}; shutting down`);
       killAll();
       process.exitCode = code;
@@ -168,7 +179,25 @@ if (!healthy) {
   killAll();
   process.exit(1);
 }
+// Readiness probe (batch dev-memory-e2e): /api/dev/login answers 404
+// for a window after boot while dev-only routes register, so poll it
+// and only print the URL once it stops 404ing.
+const loginUrl = `${base}/api/dev/login?email=you%40tarima.test`;
+let loginReady = false;
+for (let i = 0; i < 180; i++) {
+  try {
+    const res = await fetch(`${base}/api/dev/login?email=probe%40tarima.test`, {
+      redirect: "manual",
+    });
+    if (res.status !== 404) {
+      loginReady = true;
+      break;
+    }
+  } catch {}
+  await new Promise((r) => setTimeout(r, 500));
+}
+if (!loginReady) console.error("[dev] /api/dev/login still 404 after 90s; printing URL anyway");
 console.log(`\n  tarima:    ${base}`);
 console.log(`  eve:       http://127.0.0.1:${EVE_PORT}/eve/v1/health`);
-console.log(`  dev-login: ${base}/api/dev/login?email=you%40tarima.test\n`);
+console.log(`  dev-login: ${loginUrl}\n`);
 console.log("ctrl-c stops everything.");
