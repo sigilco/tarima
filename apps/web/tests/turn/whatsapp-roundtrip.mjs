@@ -87,73 +87,66 @@ if (!code) fail("no connect code staged by whatsapp-run.sh");
 let res = await inbound({ text: "hello bot" });
 if (res.status !== 200) fail(`webhook status ${res.status}: ${await res.text()}`);
 
-// The eve queue transport may still be settling; if the first message was
-// dropped during that window, re-send after a pause.
-async function ensureSends(attempt) {
-  const all = await waitFor(
+/**
+ * The eve queue transport may drop, reorder or retry early deliveries
+ * during warm-up, so assertions match by TEXT SIGNATURE over the whole
+ * mock log, never by position or count. `has(re, from)` waits until some
+ * send at or after index `from` matches the regex.
+ */
+async function has(re, from = 0, tries = 60, delayMs = 500) {
+  return waitFor(
     async () => {
       const cur = await mockSends();
-      return cur.length > 0 ? cur : undefined;
+      const hit = cur.slice(from).find((s) => re.test(s.text ?? ""));
+      return hit ? cur : undefined;
     },
-    40,
-    250,
+    tries,
+    delayMs,
   );
-  if (all) return all;
-  if (attempt >= 3) return undefined;
-  console.log(`[wa-e2e] no sends yet (attempt ${attempt}) — re-posting the webhook`);
-  await inbound({ text: "hello bot" });
-  return ensureSends(attempt + 1);
 }
 
 // 1. Stranger: connect notice delivered through the mock Graph API, no turn.
-let sends = await ensureSends(1);
-if (!sends) fail("stranger notice never reached the mock Graph API");
-const notice = sends[0];
-if (!/isn't connected/i.test(notice.text ?? ""))
-  fail(`stranger reply wrong: ${JSON.stringify(notice)}`);
+let res2 = await inbound({ text: "hello bot" });
+if (res2.status !== 200) fail(`stranger webhook status ${res2.status}`);
+let all = await has(/isn't connected/i);
+if (!all) {
+  console.log("[wa-e2e] stranger notice missing — re-posting the webhook");
+  await inbound({ text: "hello bot" });
+  all = await has(/isn't connected/i);
+}
+if (!all) fail("stranger notice never reached the mock Graph API");
+const notice = all.find((s) => /isn't connected/i.test(s.text ?? ""));
 console.log(`[wa-e2e] stranger answered: "${notice.text}"`);
+// No agent turn for a stranger: no stub reply may arrive at all.
+await wait(3000);
+if ((await mockSends()).some((s) => /Stub reply/i.test(s.text ?? "")))
+  fail("stranger message opened an agent turn (stub reply reached the mock)");
+const afterStranger = (await mockSends()).length;
 
 // 2. Bind via /start CODE; confirmation arrives through the mock.
-async function ensureNewSends(before, probe, attempt) {
-  const all = await waitFor(
-    async () => {
-      const cur = await mockSends();
-      return cur.length > before ? cur.slice(before) : undefined;
-    },
-    probe,
-    250,
-  );
-  if (all) return all;
-  if (attempt >= 3) return undefined;
-  console.log(`[wa-e2e] no new sends (attempt ${attempt}) — re-posting`);
-  return undefined;
-}
-const before = (await mockSends()).length;
 res = await inbound({ text: `/start ${code}` });
 if (res.status !== 200) fail(`bind webhook status ${res.status}`);
-sends =
-  (await ensureNewSends(before, 40, 1)) ??
-  (await inbound({ text: `/start ${code}` }), await ensureNewSends(before, 40, 2));
-if (!sends || !/Connected/i.test(sends[0]?.text ?? "")) {
-  fail(`binding confirmation missing: ${JSON.stringify(sends)}`);
+let bindAll = await has(/Connected!/i, afterStranger);
+if (!bindAll) {
+  console.log("[wa-e2e] bind confirmation missing — re-posting the webhook");
+  await inbound({ text: `/start ${code}` });
+  bindAll = await has(/Connected!/i, afterStranger);
 }
+if (!bindAll) fail("binding confirmation never reached the mock Graph API");
 console.log(`[wa-e2e] binding confirmed for ${SENDER} via code ${code}`);
+const afterBind = (await mockSends()).length;
 
 // 3. Bound message: stub agent turn, reply lands at the mock.
-const boundBefore = (await mockSends()).length;
 res = await inbound({ text: "Say hi in one short sentence." });
 if (res.status !== 200) fail(`bound webhook status ${res.status}`);
 console.log("[wa-e2e] waiting for the agent reply...");
-const bound = await waitFor(
-  async () => {
-    const all = await mockSends();
-    return all.length > boundBefore ? all.slice(boundBefore) : undefined;
-  },
-  240,
-  500,
-);
+const bound = await has(/Stub reply/i, afterBind, 120);
 if (!bound) fail("no agent reply reached the mock for the bound number");
-const replyText = bound.map((s) => s.text ?? "").join(" ");
+const replyText = bound
+  .slice(afterBind)
+  .filter((s) => /Stub reply/i.test(s.text ?? ""))
+  .map((s) => s.text ?? "")
+  .join(" ");
 if (!replyText.trim()) fail(`empty reply: ${JSON.stringify(bound)}`);
 console.log(`[wa-e2e] agent reply delivered: "${replyText.slice(0, 160)}"`);
 
@@ -169,22 +162,18 @@ if (!turnRows) fail(`no turn.settled agent_events for principal ${principal}`);
 console.log(`[wa-e2e] agent_events turn.settled rows for ${principal}: ${turnRows}`);
 
 // 4. Duplicate wamid: replay the SAME message id; no second reply.
+// The first reply for the dup text must land, then the replay must add
+// exactly nothing new.
 const dupId = `wamid.dup-${Math.random().toString(36).slice(2)}`;
 const dupBefore = (await mockSends()).length;
 res = await inbound({ text: "Exactly-once check", id: dupId });
 if (res.status !== 200) fail(`dup webhook status ${res.status}`);
-await waitFor(
-  async () => {
-    const all = await mockSends();
-    return all.length > dupBefore ? all : undefined;
-  },
-  240,
-  500,
-);
+const dupReply = await has(/Exactly-once check/i, dupBefore, 120);
+if (!dupReply) fail("first exactly-once reply never reached the mock");
 const afterFirst = (await mockSends()).length;
 res = await inbound({ text: "Exactly-once check", id: dupId });
 if (res.status !== 200) fail(`dup replay status ${res.status}`);
-await wait(4000);
+await wait(8000);
 const afterReplay = (await mockSends()).length;
 if (afterReplay !== afterFirst) {
   fail(`duplicate wamid produced another reply (${afterFirst} -> ${afterReplay})`);

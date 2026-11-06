@@ -81,6 +81,12 @@ for _ in $(seq 1 60); do
   sleep 0.5
 done
 echo "[wa] eve health: $(curl -s -m 5 "http://127.0.0.1:$eve_port/eve/v1/health" || echo FAILED)"
+# Eve persists workflow runs and queue messages under
+# apps/web/.eve/.workflow-data across restarts; stale runs from earlier
+# harness invocations resume and post old turns to the mock. Start the
+# runtime from a clean workflow state (queue messages included, or the
+# stale deliveries wedge the fresh run).
+rm -rf "$web_root/.eve/.workflow-data"
 # Eve's local workflow queue transport retries its first deliveries right
 # after boot; webhooks posted into that window are dropped. Let it settle.
 sleep 8
