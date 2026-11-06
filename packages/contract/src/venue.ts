@@ -28,7 +28,11 @@ export type Venue = v.InferOutput<typeof venueSchema>;
  * fabricated.
  */
 
-/** Provenance for a stored contact. LLM-derived values are forbidden. */
+/**
+ * Provenance for a stored contact. LLM-derived values are forbidden;
+ * `llm_verified` means the LLM only pointed at text that was verified
+ * verbatim on the venue's own page (tier-3 fallback).
+ */
 export const CONTACT_SOURCES = [
   "osm",
   "overture",
@@ -37,6 +41,7 @@ export const CONTACT_SOURCES = [
   "photon",
   "jsonld",
   "page_text",
+  "llm_verified",
   "human",
 ] as const;
 export const contactSourceSchema = v.picklist(CONTACT_SOURCES);
@@ -87,6 +92,23 @@ export const venueSearchRequestSchema = v.object({
 });
 export type VenueSearchRequest = v.InferInput<typeof venueSearchRequestSchema>;
 
+/**
+ * A Google Places result as the search surface may show it IN-SESSION.
+ * Places ToS §3.2.3: display fields may be returned to the caller but
+ * never persisted — this shape exists only inside a search response.
+ */
+export const googlePlaceSessionSchema = v.object({
+  placeId: v.pipe(v.string(), v.minLength(1)),
+  displayName: v.optional(v.string()),
+  formattedAddress: v.optional(v.string()),
+  location: v.optional(v.object({ lat: v.number(), lon: v.number() })),
+  phone: v.optional(v.string()),
+  website: v.optional(v.string()),
+  rating: v.optional(v.number()),
+  types: v.optional(v.array(v.string())),
+});
+export type GooglePlaceSession = v.InferOutput<typeof googlePlaceSessionSchema>;
+
 /** The answer of a venue search: the rows and where they came from. */
 export const venueSearchResponseSchema = v.object({
   city: v.string(),
@@ -96,6 +118,21 @@ export const venueSearchResponseSchema = v.object({
   /** A stale hit answered from the cache and refreshes in the background. */
   refreshing: v.boolean(),
   venues: v.array(catalogVenueSchema),
+  /**
+   * Why the paid-escalation tier (Google Places / Foursquare) did or
+   * did not run on this call, e.g. "cache_hit", "hits=20>=5",
+   * "thin_results google_text=ok:4 fsq_search=ok:2". A reason string,
+   * never an error.
+   */
+  escalation: v.optional(v.string()),
+  /**
+   * Session-only Google Places results when the escalation tier ran.
+   * Never persisted (Places ToS); absent when Google is disabled or
+   * the tier did not run.
+   */
+  googlePlaces: v.optional(v.array(googlePlaceSessionSchema)),
+  /** How many shortlisted venues the tier-2 crawl enriched this call. */
+  enriched: v.optional(v.number()),
 });
 export type VenueSearchResponse = v.InferOutput<typeof venueSearchResponseSchema>;
 

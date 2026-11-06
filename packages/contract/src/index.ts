@@ -78,6 +78,7 @@ export {
   PRICE_BANDS,
   catalogVenueSchema,
   contactSourceSchema,
+  googlePlaceSessionSchema,
   priceBandSchema,
   venueContactRequestSchema,
   venueContactResponseSchema,
@@ -88,6 +89,7 @@ export {
 export type {
   CatalogVenue,
   ContactSource,
+  GooglePlaceSession,
   PriceBand,
   Venue,
   VenueContactRequest,
