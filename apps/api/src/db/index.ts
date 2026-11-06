@@ -24,7 +24,7 @@ sqlite.pragma("journal_mode = WAL");
 // schema without waiting for `drizzle-kit push`. Statements mirror
 // apps/api/drizzle/*.sql exactly; migrations remain the source of
 // truth and are applied on deploy.
-const BOOTSTRAP_DDL = [
+export const BOOTSTRAP_DDL = [
   "CREATE TABLE IF NOT EXISTS `access_requests` ( `id` integer PRIMARY KEY AUTOINCREMENT NOT NULL, `email` text NOT NULL, `intent` text, `created_at` integer NOT NULL );",
   "CREATE TABLE IF NOT EXISTS `api_keys` ( `id` text PRIMARY KEY NOT NULL, `user_id` text NOT NULL, `name` text DEFAULT '' NOT NULL, `prefix` text NOT NULL, `key_hash` text NOT NULL, `scopes` text DEFAULT '[]' NOT NULL, `created_at` integer NOT NULL, `revoked_at` integer, FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade );",
   "CREATE TABLE IF NOT EXISTS `entities` ( `id` text PRIMARY KEY NOT NULL, `project_id` text NOT NULL, `name` text NOT NULL, `contact_email` text, `goal` text DEFAULT '{}' NOT NULL, `result` text DEFAULT '{}' NOT NULL, `status` text DEFAULT 'pending' NOT NULL, `created_at` integer NOT NULL, `updated_at` integer NOT NULL, FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON UPDATE no action ON DELETE cascade );",
