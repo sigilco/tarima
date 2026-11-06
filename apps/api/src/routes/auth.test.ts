@@ -39,7 +39,11 @@ async function issueCode(email: string = EMAIL): Promise<string> {
 afterAll(() => rmSync(dir, { recursive: true, force: true }));
 
 describe("otp auth", () => {
-  it("signs in end to end and sets a session cookie", async () => {
+  // Every test here opens the sqlite db (cold first open) and walks the
+  // loopback inbox over in-process requests; on a loaded host individual
+  // tests have been observed over vitest's 5s default, so widen the
+  // budget for the whole file instead of chasing per-test flakes.
+  it("signs in end to end and sets a session cookie", { timeout: 30_000 }, async () => {
     _resetRateLimitsForTests();
     const code = await issueCode();
 
@@ -50,7 +54,7 @@ describe("otp auth", () => {
     expect(setCookie).toContain("HttpOnly");
   });
 
-  it("rejects a wrong code", async () => {
+  it("rejects a wrong code", { timeout: 30_000 }, async () => {
     _resetRateLimitsForTests();
     await issueCode();
     const res = await authRoutes.request(
@@ -60,7 +64,7 @@ describe("otp auth", () => {
     expect(res.status).toBe(401);
   });
 
-  it("rejects reuse of a consumed code", async () => {
+  it("rejects reuse of a consumed code", { timeout: 30_000 }, async () => {
     _resetRateLimitsForTests();
     const code = await issueCode();
     await authRoutes.request("/auth/verify-otp", json({ email: EMAIL, code }));
@@ -68,7 +72,7 @@ describe("otp auth", () => {
     expect(again.status).toBe(401);
   });
 
-  it("burns the previous code when a new one is issued", async () => {
+  it("burns the previous code when a new one is issued", { timeout: 30_000 }, async () => {
     _resetRateLimitsForTests();
     // A fresh address each time so the burn-on-reissue assertion does not
     // race the per-address request rate limiter.

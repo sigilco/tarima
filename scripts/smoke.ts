@@ -26,7 +26,7 @@ const TG_PORT = 3911;
 const WA_PORT = 3912;
 const MAIL_PORT = 3913;
 const BASE = `http://127.0.0.1:${PORT}`;
-const deadline = Date.now() + 55_000;
+const deadline = Date.now() + Number(process.env.SMOKE_DEADLINE_MS ?? 55_000);
 
 const steps = [];
 const step = (name, ok, detail = "") => {
@@ -38,20 +38,48 @@ const step = (name, ok, detail = "") => {
 const tmp = mkdtempSync(join(tmpdir(), "tarima-smoke-"));
 const children = [];
 let exiting = false;
-function killAll() {
+function signalGroup(child, sig) {
+  // Children are spawned detached so each is its own process-group leader;
+  // the negative pid signals the whole group, not just the direct child.
+  if (child.pid === undefined) return;
+  try {
+    process.kill(-child.pid, sig);
+  } catch {}
+  try {
+    child.kill(sig);
+  } catch {}
+}
+function waitForExit(child, ms) {
+  return new Promise((resolveExit) => {
+    if (child.exitCode !== null || child.signalCode !== null) return resolveExit();
+    const t = setTimeout(() => resolveExit(false), ms);
+    child.once("exit", () => {
+      clearTimeout(t);
+      resolveExit(true);
+    });
+  });
+}
+async function killAll() {
   if (exiting) return;
   exiting = true;
-  for (const child of children) {
-    try {
-      child.kill("SIGTERM");
-    } catch {}
-  }
+  for (const child of children) signalGroup(child, "SIGTERM");
+  await Promise.all(children.map((c) => waitForExit(c, 5000)));
+  for (const child of children) signalGroup(child, "SIGKILL");
+  await Promise.all(children.map((c) => waitForExit(c, 2000)));
 }
-process.on("exit", killAll);
-process.on("SIGINT", () => process.exit(130));
+// Best-effort synchronous group kill for paths that bypass the awaited
+// cleanup (an uncaught error inside an exit-only path).
+process.on("exit", () => {
+  for (const child of children) signalGroup(child, "SIGTERM");
+});
+for (const sig of ["SIGINT", "SIGTERM"]) {
+  process.on(sig, () => {
+    killAll().then(() => process.exit(sig === "SIGINT" ? 130 : 143));
+  });
+}
 
 function startChild(name, cmd, args, cwd) {
-  const child = spawn(cmd, args, { cwd, stdio: ["ignore", "pipe", "pipe"] });
+  const child = spawn(cmd, args, { cwd, stdio: ["ignore", "pipe", "pipe"], detached: true });
   child.on("exit", (code) => {
     if (!exiting && code !== 0 && code !== null) {
       console.error(`[smoke] ${name} exited ${code}`);
@@ -206,7 +234,7 @@ try {
   ok = false;
   step("smoke run", false, String(err));
 } finally {
-  killAll();
+  await killAll();
   try {
     rmSync(tmp, { recursive: true, force: true });
   } catch {}
