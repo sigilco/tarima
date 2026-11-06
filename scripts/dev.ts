@@ -23,7 +23,7 @@ import { spawn, spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 
-import { pickFreePort } from "./dev-ports";
+import { pickFreePort } from "./dev-ports.ts";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const WEB = join(ROOT, "apps", "web");
