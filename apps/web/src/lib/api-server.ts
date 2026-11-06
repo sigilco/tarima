@@ -63,3 +63,28 @@ export const fetchProjectsFn = createServerFn({ method: "GET", strict: false }).
     };
   },
 );
+
+/** The audit feed payload (approvals + agent events for the caller). */
+export interface AuditPayload {
+  approvals: {
+    id: string;
+    toolName: string;
+    status: string;
+    projectId: string | null;
+    decidedBy: string | null;
+    decidedAt: number | null;
+    createdAt: number;
+  }[];
+  events: { sessionId: string; type: string; createdAt: number }[];
+}
+
+/** GET /api/ui/audit — the caller's agent audit feed. */
+export const fetchAuditFn = createServerFn({ method: "GET", strict: false }).handler(
+  async (): Promise<Served<AuditPayload>> => {
+    const res = await apiGet("/api/ui/audit");
+    return {
+      status: res.status,
+      body: (await res.json().catch(() => null)) as AuditPayload | null,
+    };
+  },
+);

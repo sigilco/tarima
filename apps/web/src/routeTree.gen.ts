@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as AppAuditRouteImport } from './routes/app/audit'
+import { Route as AppOProjectIdRouteImport } from './routes/app/o/$projectId'
 import { Route as AppWProjectIdRouteImport } from './routes/app/w/$projectId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -29,6 +31,16 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/app/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppAuditRoute = AppAuditRouteImport.update({
+  id: '/app/audit',
+  path: '/app/audit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppOProjectIdRoute = AppOProjectIdRouteImport.update({
+  id: '/app/o/$projectId',
+  path: '/app/o/$projectId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppWProjectIdRoute = AppWProjectIdRouteImport.update({
   id: '/app/w/$projectId',
   path: '/app/w/$projectId',
@@ -38,34 +50,61 @@ const AppWProjectIdRoute = AppWProjectIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/app/audit': typeof AppAuditRoute
   '/app/': typeof AppIndexRoute
+  '/app/o/$projectId': typeof AppOProjectIdRoute
   '/app/w/$projectId': typeof AppWProjectIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/app/audit': typeof AppAuditRoute
   '/app': typeof AppIndexRoute
+  '/app/o/$projectId': typeof AppOProjectIdRoute
   '/app/w/$projectId': typeof AppWProjectIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/app/audit': typeof AppAuditRoute
   '/app/': typeof AppIndexRoute
+  '/app/o/$projectId': typeof AppOProjectIdRoute
   '/app/w/$projectId': typeof AppWProjectIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/app/' | '/app/w/$projectId'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/app/audit'
+    | '/app/'
+    | '/app/o/$projectId'
+    | '/app/w/$projectId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/app' | '/app/w/$projectId'
-  id: '__root__' | '/' | '/login' | '/app/' | '/app/w/$projectId'
+  to:
+    | '/'
+    | '/login'
+    | '/app/audit'
+    | '/app'
+    | '/app/o/$projectId'
+    | '/app/w/$projectId'
+  id:
+    | '__root__'
+    | '/'
+    | '/login'
+    | '/app/audit'
+    | '/app/'
+    | '/app/o/$projectId'
+    | '/app/w/$projectId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
+  AppAuditRoute: typeof AppAuditRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppOProjectIdRoute: typeof AppOProjectIdRoute
   AppWProjectIdRoute: typeof AppWProjectIdRoute
 }
 
@@ -92,6 +131,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/audit': {
+      id: '/app/audit'
+      path: '/app/audit'
+      fullPath: '/app/audit'
+      preLoaderRoute: typeof AppAuditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/o/$projectId': {
+      id: '/app/o/$projectId'
+      path: '/app/o/$projectId'
+      fullPath: '/app/o/$projectId'
+      preLoaderRoute: typeof AppOProjectIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app/w/$projectId': {
       id: '/app/w/$projectId'
       path: '/app/w/$projectId'
@@ -105,19 +158,11 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
+  AppAuditRoute: AppAuditRoute,
   AppIndexRoute: AppIndexRoute,
+  AppOProjectIdRoute: AppOProjectIdRoute,
   AppWProjectIdRoute: AppWProjectIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

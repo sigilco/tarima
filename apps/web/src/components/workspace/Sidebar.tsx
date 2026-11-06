@@ -17,8 +17,8 @@ import { Separator } from "../ui/separator";
  */
 
 export interface SidebarProps {
-  /** Which chip is active: projects only until Documents/Audit land. */
-  active: "projects";
+  /** Which chip is active: projects and audit are live; Documents is a stub. */
+  active: "projects" | "audit";
   /** The signed-in identifier shown in the user block (email today). */
   userEmail?: string;
   collapsed?: boolean;
@@ -38,9 +38,27 @@ export function Sidebar({
   children,
 }: SidebarProps) {
   const tabs = [
-    { id: "projects" as const, label: m["workspace.tabProjects"](), icon: "▦", disabled: false },
-    { id: "documents" as const, label: m["workspace.tabDocuments"](), icon: "▤", disabled: true },
-    { id: "audit" as const, label: m["workspace.tabAudit"](), icon: "◻", disabled: true },
+    {
+      id: "projects" as const,
+      label: m["workspace.tabProjects"](),
+      icon: "▦",
+      href: "/app",
+      disabled: false,
+    },
+    {
+      id: "documents" as const,
+      label: m["workspace.tabDocuments"](),
+      icon: "▤",
+      href: "/app",
+      disabled: true,
+    },
+    {
+      id: "audit" as const,
+      label: m["workspace.tabAudit"](),
+      icon: "◻",
+      href: "/app/audit",
+      disabled: false,
+    },
   ];
 
   return (
@@ -96,7 +114,7 @@ export function Sidebar({
           ) : (
             <a
               key={tab.id}
-              href="/app"
+              href={tab.href}
               aria-current={active === tab.id ? "page" : undefined}
               className={cn(
                 chipClasses,
