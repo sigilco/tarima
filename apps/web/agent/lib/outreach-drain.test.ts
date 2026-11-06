@@ -31,6 +31,13 @@ function stage(payload: Record<string, unknown>, key = randomUUID()): string {
   return id;
 }
 
+// The suite shares one db file; drain by key so sibling tests' rows are not
+// drained into this mock.
+const drainById = (id: string) =>
+  drainOutbox({
+    idempotencyKey: db.select().from(outbox).where(eq(outbox.id, id)).all()[0]?.idempotencyKey,
+  });
+
 beforeAll(async () => {
   const handle = startMailDev();
   const { baseUrl } = await handle.start();
@@ -71,7 +78,7 @@ describe("drainOutbox", () => {
       body: "Hi, do you have space for 30 people on Nov 20?",
     });
 
-    const result = await drainOutbox();
+    const result = await drainById(id);
     expect(result.sent).toBe(1);
 
     const row = db.select().from(outbox).where(eq(outbox.id, id)).all()[0];
@@ -98,7 +105,12 @@ describe("drainOutbox", () => {
       .all();
     expect(msgs).toHaveLength(1);
     expect(msgs[0]?.direction).toBe("outbound");
-    const ev = db.select().from(events).where(eq(events.type, "outreach.email_sent")).all();
+    const ev = db
+      .select()
+      .from(events)
+      .where(eq(events.type, "outreach.email_sent"))
+      .all()
+      .filter((e) => e.subjectId === ENTITY);
     expect(ev).toHaveLength(1);
   });
 
@@ -107,7 +119,7 @@ describe("drainOutbox", () => {
     const id = stage({ projectId: PROJECT, to: "blocked@acme.test", subject: "x", body: "y" });
 
     const before = mail.sent.length;
-    const result = await drainOutbox();
+    const result = await drainById(id);
     expect(result.suppressed).toBe(1);
     expect(mail.sent.length).toBe(before);
 
@@ -119,7 +131,7 @@ describe("drainOutbox", () => {
   it("marks provider refusals as failed instead of throwing", async () => {
     await mail.stop();
     const id = stage({ projectId: PROJECT, to: "x@acme.test", subject: "x", body: "y" });
-    const result = await drainOutbox();
+    const result = await drainById(id);
     expect(result.failed).toBe(1);
     const row = db.select().from(outbox).where(eq(outbox.id, id)).all()[0];
     expect(row?.status).toBe("failed");
