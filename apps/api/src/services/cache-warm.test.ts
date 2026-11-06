@@ -21,7 +21,12 @@ describe("cache warm", () => {
   it("seeds the grid when the flag is on", async () => {
     process.env.TARIMA_PLACE_CACHE_WARM = "1";
     const { fetch } = fixtureFetch();
-    setVenueSearchDeps({ fetch, geoapifyKey: "test-fixture-key" });
+    setVenueSearchDeps({
+      fetch,
+      geoapifyKey: "test-fixture-key",
+      env: {},
+      sleep: () => Promise.resolve(),
+    });
     const out = await warmPlaceCache([
       {
         city: "Berkeley",
