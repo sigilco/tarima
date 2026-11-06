@@ -51,6 +51,14 @@ run = "node scripts/smoke.ts"
 description = "Playwright browser suite (on demand / nightly)"
 run = "pnpm --filter web test:e2e"
 
+[tasks."test:memory-e2e"]
+description = "Memory e2e: stub LLM, build web+eve, three-context Playwright spec"
+run = """
+set -euo pipefail
+pnpm turbo run build build:eve --filter=web
+bash apps/web/tests/e2e/run-memory.sh
+"""
+
 [tasks."eval:offline"]
 description = "Replay golden Berkeley venue queries against recorded fixtures (no network)"
 run = "pnpm --filter @tarima/api exec tsx scripts/eval-offline.ts"
