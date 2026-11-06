@@ -1,0 +1,8703 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-05T21:49:36Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 234653692,
+  "lat": 37.8735022,
+  "lon": -122.2652101,
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "capacity": "321",
+    "layer": "-1",
+    "name": "Genetics Underground Garage",
+    "operator": "U C Berkeley",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 354052334,
+  "lat": 37.8717140,
+  "lon": -122.2706590,
+  "tags": {
+    "bicycle_parking": "stands",
+    "capacity": "10",
+    "covered": "no",
+    "disused:amenity": "bicycle_parking",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 354703130,
+  "lat": 37.8703222,
+  "lon": -122.2669174,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2132",
+    "addr:postcode": "94704",
+    "addr:street": "Center Street",
+    "capacity": "60",
+    "check_date": "2024-07-04",
+    "cuisine": "chinese",
+    "disused:amenity": "restaurant",
+    "name": "Yin Ji Chang Fen",
+    "phone": "+1 510-570-2115",
+    "smoking": "no",
+    "website": "https://www.yinjichangfenusa.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 462694082,
+  "lat": 37.8702597,
+  "lon": -122.2591745,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "capacity": "81"
+  }
+},
+{
+  "type": "node",
+  "id": 540716561,
+  "lat": 37.8683088,
+  "lon": -122.2689036,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "40",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 833292360,
+  "lat": 37.8688322,
+  "lon": -122.2606309,
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "capacity": "47",
+    "capacity:disabled": "1",
+    "fee": "yes",
+    "name": "Lower Sproul Garage",
+    "operator": "U C Berkeley",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 1419797122,
+  "lat": 37.8726202,
+  "lon": -122.2639356,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "34",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 1419797123,
+  "lat": 37.8717001,
+  "lon": -122.2631457,
+  "tags": {
+    "access": "permissive",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "100",
+    "colour": "grey",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "lit": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 1723440739,
+  "lat": 37.8716523,
+  "lon": -122.2732013,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 1762460797,
+  "lat": 37.8690379,
+  "lon": -122.2699212,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "wave",
+    "capacity": "12",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 1777322161,
+  "lat": 37.8693591,
+  "lon": -122.2731209,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "20",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 1777327150,
+  "lat": 37.8682328,
+  "lon": -122.2688635,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "12",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 1794677379,
+  "lat": 37.8718578,
+  "lon": -122.2714134,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "3",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 1928228111,
+  "lat": 37.8693467,
+  "lon": -122.2706226,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "wave",
+    "capacity": "8",
+    "covered": "no",
+    "supervised": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 1928228226,
+  "lat": 37.8697125,
+  "lon": -122.2711433,
+  "tags": {
+    "access": "private",
+    "amenity": "bicycle_parking",
+    "capacity": "20"
+  }
+},
+{
+  "type": "node",
+  "id": 1929837332,
+  "lat": 37.8691058,
+  "lon": -122.2730844,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "14",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 1931358426,
+  "lat": 37.8715760,
+  "lon": -122.2682140,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "20",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 1941701109,
+  "lat": 37.8779107,
+  "lon": -122.2688076,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2059069844,
+  "lat": 37.8723470,
+  "lon": -122.2735670,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2059088960,
+  "lat": 37.8717240,
+  "lon": -122.2725480,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "check_date:capacity": "2021-01-09",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2095572837,
+  "lat": 37.8682310,
+  "lon": -122.2676870,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "10",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2095584713,
+  "lat": 37.8685890,
+  "lon": -122.2680790,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "12",
+    "check_date:capacity": "2020-11-28",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2095614549,
+  "lat": 37.8677933,
+  "lon": -122.2675960,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "6",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2095615189,
+  "lat": 37.8674960,
+  "lon": -122.2675910,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "10",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2095616400,
+  "lat": 37.8677110,
+  "lon": -122.2679770,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "5",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2095618213,
+  "lat": 37.8674216,
+  "lon": -122.2679633,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "8",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2095623575,
+  "lat": 37.8670660,
+  "lon": -122.2659160,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2095627299,
+  "lat": 37.8668860,
+  "lon": -122.2675170,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "6",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2186243930,
+  "lat": 37.8711270,
+  "lon": -122.2678010,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "check_date:capacity": "2020-09-14",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2186246951,
+  "lat": 37.8713640,
+  "lon": -122.2676340,
+  "tags": {
+    "access": "yes",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "wave",
+    "capacity": "6",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "lit": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2186248746,
+  "lat": 37.8710930,
+  "lon": -122.2676240,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2195103537,
+  "lat": 37.8804900,
+  "lon": -122.2681490,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "check_date:capacity": "2022-02-23",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2195103876,
+  "lat": 37.8802710,
+  "lon": -122.2682650,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "check_date:capacity": "2022-02-23",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2195108792,
+  "lat": 37.8743591,
+  "lon": -122.2665325,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "wave",
+    "capacity": "6",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2195115194,
+  "lat": 37.8745830,
+  "lon": -122.2599580,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "18",
+    "check_date": "2024-02-18",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2195115330,
+  "lat": 37.8743980,
+  "lon": -122.2600050,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "10",
+    "check_date": "2024-02-18",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2195119891,
+  "lat": 37.8708670,
+  "lon": -122.2593930,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "20",
+    "check_date": "2025-09-21"
+  }
+},
+{
+  "type": "node",
+  "id": 2235920299,
+  "lat": 37.8691661,
+  "lon": -122.2681735,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "3",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2235944383,
+  "lat": 37.8695873,
+  "lon": -122.2677864,
+  "tags": {
+    "access": "yes",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "bike_ride": "yes",
+    "capacity": "20",
+    "colour": "silver",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "level": "0",
+    "lit": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2247187639,
+  "lat": 37.8716379,
+  "lon": -122.2717122,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "8",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2247198094,
+  "lat": 37.8704550,
+  "lon": -122.2706887,
+  "tags": {
+    "amenity": "motorcycle_parking",
+    "capacity": "4",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2252101730,
+  "lat": 37.8727560,
+  "lon": -122.2686020,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "6",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2322527268,
+  "lat": 37.8681250,
+  "lon": -122.2680740,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "12",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2339809907,
+  "lat": 37.8712910,
+  "lon": -122.2684120,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "check_date:capacity": "2021-05-02",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2342888585,
+  "lat": 37.8708462,
+  "lon": -122.2683554,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "6",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2343897918,
+  "lat": 37.8658761,
+  "lon": -122.2677401,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "8",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2379688412,
+  "lat": 37.8659300,
+  "lon": -122.2674000,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "6",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2379688445,
+  "lat": 37.8657042,
+  "lon": -122.2674134,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "7",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2491783545,
+  "lat": 37.8705080,
+  "lon": -122.2683170,
+  "tags": {
+    "access": "yes",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "bike_ride": "yes",
+    "capacity": "7",
+    "colour": "silver",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "lit": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2491783598,
+  "lat": 37.8707260,
+  "lon": -122.2683600,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "check_date:capacity": "2022-01-17",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2491783749,
+  "lat": 37.8706500,
+  "lon": -122.2683480,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2491784424,
+  "lat": 37.8693940,
+  "lon": -122.2683000,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "6",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2493918929,
+  "lat": 37.8795620,
+  "lon": -122.2694370,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2522792737,
+  "lat": 37.8717720,
+  "lon": -122.2722330,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "check_date:capacity": "2021-05-02",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2567415319,
+  "lat": 37.8622119,
+  "lon": -122.2589857,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 2637690062,
+  "lat": 37.8698212,
+  "lon": -122.2606944,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "56",
+    "covered": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2637690085,
+  "lat": 37.8739550,
+  "lon": -122.2612488,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "14",
+    "colour": "grey",
+    "covered": "no",
+    "indoor": "no",
+    "lit": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2932064606,
+  "lat": 37.8807066,
+  "lon": -122.2592163,
+  "tags": {
+    "access": "yes",
+    "amenity": "drinking_water",
+    "bottle": "yes",
+    "capacity": "3",
+    "covered": "no",
+    "dog": "yes",
+    "fee": "no",
+    "fountain": "bubbler",
+    "indoor": "no",
+    "seasonal": "no",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3064295838,
+  "lat": 37.8687436,
+  "lon": -122.2667371,
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "capacity": "99",
+    "fee": "yes",
+    "layer": "-1",
+    "name": "Oxford Garage",
+    "operator": "City of Berkeley",
+    "parking": "underground",
+    "website": "https://www.cityofberkeley.info/Public_Works/Transportation/Off_Street_Parking_%28Garages_and_Lots%29.aspx"
+  }
+},
+{
+  "type": "node",
+  "id": 3346950495,
+  "lat": 37.8737210,
+  "lon": -122.2666100,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "36",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 3510892440,
+  "lat": 37.8589391,
+  "lon": -122.2594358,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 3784991145,
+  "lat": 37.8705359,
+  "lon": -122.2661288,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "12",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 4027079988,
+  "lat": 37.8712220,
+  "lon": -122.2666090,
+  "tags": {
+    "access": "yes",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "44",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 4070522012,
+  "lat": 37.8718055,
+  "lon": -122.2698143,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2036",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "theatre",
+    "capacity": "1250",
+    "name": "The UC Theatre",
+    "phone": "+1 510 3564000",
+    "source": "survey",
+    "was:amenity": "cinema",
+    "website": "https://www.theuctheatre.org/",
+    "wheelchair": "yes",
+    "wikidata": "Q7864197"
+  }
+},
+{
+  "type": "node",
+  "id": 5853263373,
+  "lat": 37.8753783,
+  "lon": -122.2601589,
+  "tags": {
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "Bay Wheels",
+    "brand:wikidata": "Q16971391",
+    "capacity": "15",
+    "fee": "yes",
+    "name": "Bay Wheels",
+    "network": "Bay Wheels",
+    "network:wikidata": "Q16971391",
+    "network:wikipedia": "en:Bay Wheels",
+    "operator": "Lyft",
+    "operator:type": "private",
+    "operator:website": "https://lyftbikes.com/",
+    "operator:wikidata": "Q17077936",
+    "operator:wikipedia": "en:Lyft_Bike"
+  }
+},
+{
+  "type": "node",
+  "id": 5994838200,
+  "lat": 37.8699995,
+  "lon": -122.2681499,
+  "tags": {
+    "access": "yes",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "bike_ride": "yes",
+    "capacity": "14",
+    "colour": "silver",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "level": "1",
+    "lit": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6068745030,
+  "lat": 37.8711240,
+  "lon": -122.2728592,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "6",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 6298566914,
+  "lat": 37.8606557,
+  "lon": -122.2668040,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 6298567005,
+  "lat": 37.8629739,
+  "lon": -122.2670902,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "8",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 6298567007,
+  "lat": 37.8631687,
+  "lon": -122.2675083,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 6298567027,
+  "lat": 37.8638630,
+  "lon": -122.2675596,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 6298567031,
+  "lat": 37.8640758,
+  "lon": -122.2675372,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "wave",
+    "capacity": "5",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 6298567057,
+  "lat": 37.8647881,
+  "lon": -122.2672995,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 6298567062,
+  "lat": 37.8650144,
+  "lon": -122.2672814,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 6298567077,
+  "lat": 37.8656383,
+  "lon": -122.2677688,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "5",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 6298567116,
+  "lat": 37.8665603,
+  "lon": -122.2674533,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "wave",
+    "capacity": "4",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 6298567130,
+  "lat": 37.8668082,
+  "lon": -122.2678510,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "6",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 6298567292,
+  "lat": 37.8686580,
+  "lon": -122.2677498,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "6",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 7030035169,
+  "lat": 37.8717473,
+  "lon": -122.2731490,
+  "tags": {
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "Bay Wheels",
+    "brand:wikidata": "Q16971391",
+    "capacity": "22",
+    "fee": "yes",
+    "name": "Bay Wheels",
+    "network": "Bay Wheels",
+    "network:wikidata": "Q16971391",
+    "network:wikipedia": "en:Bay Wheels",
+    "operator": "Lyft",
+    "operator:type": "private",
+    "operator:website": "https://motivateco.com/",
+    "operator:wikidata": "Q17077936",
+    "operator:wikipedia": "en:Motivate (company)"
+  }
+},
+{
+  "type": "node",
+  "id": 7030035170,
+  "lat": 37.8802147,
+  "lon": -122.2698260,
+  "tags": {
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "Bay Wheels",
+    "brand:wikidata": "Q16971391",
+    "capacity": "15",
+    "fee": "yes",
+    "name": "Vine St at Shattuck Ave",
+    "network": "Bay Wheels",
+    "network:wikidata": "Q16971391",
+    "network:wikipedia": "en:Bay Wheels",
+    "operator": "Lyft",
+    "operator:type": "private",
+    "operator:website": "https://motivateco.com/",
+    "operator:wikidata": "Q17077936",
+    "operator:wikipedia": "en:Motivate (company)",
+    "ref": "BK-A7"
+  }
+},
+{
+  "type": "node",
+  "id": 7030035172,
+  "lat": 37.8722801,
+  "lon": -122.2665843,
+  "tags": {
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "Bay Wheels",
+    "brand:wikidata": "Q16971391",
+    "capacity": "22",
+    "fee": "yes",
+    "name": "Bay Wheels",
+    "network": "Bay Wheels",
+    "network:wikidata": "Q16971391",
+    "operator": "Lyft",
+    "operator:type": "private",
+    "operator:wikidata": "Q17077936"
+  }
+},
+{
+  "type": "node",
+  "id": 7030035176,
+  "lat": 37.8765725,
+  "lon": -122.2695270,
+  "tags": {
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "Bay Wheels",
+    "brand:wikidata": "Q16971391",
+    "capacity": "23",
+    "fee": "yes",
+    "name": "Virginia St at Shattuck Ave",
+    "network": "Bay Wheels",
+    "network:wikidata": "Q16971391",
+    "network:wikipedia": "en:Bay Wheels",
+    "operator": "Motivate",
+    "operator:type": "private",
+    "operator:website": "https://motivateco.com/",
+    "operator:wikidata": "Q4735954",
+    "operator:wikipedia": "en:Motivate (company)",
+    "ref": "BK-B7"
+  }
+},
+{
+  "type": "node",
+  "id": 7030035177,
+  "lat": 37.8689105,
+  "lon": -122.2587573,
+  "tags": {
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "Bay Wheels",
+    "brand:wikidata": "Q16971391",
+    "capacity": "23",
+    "fee": "yes",
+    "network": "Bay Wheels",
+    "network:wikidata": "Q16971391",
+    "network:wikipedia": "en:Bay Wheels",
+    "operator": "Motivate",
+    "operator:website": "https://motivateco.com/",
+    "operator:wikidata": "Q4735954",
+    "operator:wikipedia": "en:Motivate (company)"
+  }
+},
+{
+  "type": "node",
+  "id": 7030035179,
+  "lat": 37.8658840,
+  "lon": -122.2671766,
+  "tags": {
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "Bay Wheels",
+    "brand:wikidata": "Q16971391",
+    "capacity": "21",
+    "fee": "yes",
+    "name": "Bay Wheels",
+    "network": "Bay Wheels",
+    "network:wikidata": "Q16971391",
+    "operator": "Lyft",
+    "operator:type": "private",
+    "operator:wikidata": "Q17077936"
+  }
+},
+{
+  "type": "node",
+  "id": 7065572207,
+  "lat": 37.8737831,
+  "lon": -122.2683576,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "28",
+    "covered": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7065572208,
+  "lat": 37.8738153,
+  "lon": -122.2681134,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "8",
+    "covered": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7071604259,
+  "lat": 37.8708811,
+  "lon": -122.2681299,
+  "tags": {
+    "access": "yes",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "24",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "level": "0",
+    "lit": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7885840085,
+  "lat": 37.8785195,
+  "lon": -122.2657840,
+  "tags": {
+    "access": "yes",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 7917980957,
+  "lat": 37.8753067,
+  "lon": -122.2594536,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "wave",
+    "capacity": "11"
+  }
+},
+{
+  "type": "node",
+  "id": 7926253307,
+  "lat": 37.8613524,
+  "lon": -122.2586850,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "10",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 9336411713,
+  "lat": 37.8723672,
+  "lon": -122.2603501,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "50",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 9336411714,
+  "lat": 37.8735221,
+  "lon": -122.2607823,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "8",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 9393416669,
+  "lat": 37.8734764,
+  "lon": -122.2730798,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "6",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 9393416678,
+  "lat": 37.8734980,
+  "lon": -122.2730023,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "6",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 9393432734,
+  "lat": 37.8736927,
+  "lon": -122.2731492,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "8",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 9428645324,
+  "lat": 37.8699405,
+  "lon": -122.2677568,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 9428645329,
+  "lat": 37.8700120,
+  "lon": -122.2677515,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 9428645337,
+  "lat": 37.8700824,
+  "lon": -122.2677448,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 9509603412,
+  "lat": 37.8738577,
+  "lon": -122.2522577,
+  "tags": {
+    "amenity": "charging_station",
+    "capacity": "3",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 9509603413,
+  "lat": 37.8738200,
+  "lon": -122.2521821,
+  "tags": {
+    "amenity": "charging_station",
+    "capacity": "3",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 9610217189,
+  "lat": 37.8617430,
+  "lon": -122.2537847,
+  "tags": {
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "capacity": "19",
+    "network": "Bay Wheels",
+    "operator": "Lyft"
+  }
+},
+{
+  "type": "node",
+  "id": 9691098552,
+  "lat": 37.8749783,
+  "lon": -122.2686079,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 9691098553,
+  "lat": 37.8749434,
+  "lon": -122.2686012,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 9691098554,
+  "lat": 37.8746793,
+  "lon": -122.2685556,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 9906740984,
+  "lat": 37.8654017,
+  "lon": -122.2584517,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 9906740985,
+  "lat": 37.8654754,
+  "lon": -122.2584701,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 9906740986,
+  "lat": 37.8655431,
+  "lon": -122.2584809,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 9906740987,
+  "lat": 37.8657485,
+  "lon": -122.2585208,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 9906740988,
+  "lat": 37.8658449,
+  "lon": -122.2585459,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "12",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 9906740991,
+  "lat": 37.8658541,
+  "lon": -122.2586906,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "novelty",
+    "capacity": "4",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 9906740993,
+  "lat": 37.8661855,
+  "lon": -122.2587287,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "12",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 9906740995,
+  "lat": 37.8667328,
+  "lon": -122.2588571,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "note": "approximate location"
+  }
+},
+{
+  "type": "node",
+  "id": 9906740996,
+  "lat": 37.8667585,
+  "lon": -122.2587428,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 9906740997,
+  "lat": 37.8667969,
+  "lon": -122.2588671,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "note": "approximate location"
+  }
+},
+{
+  "type": "node",
+  "id": 9916647323,
+  "lat": 37.8737773,
+  "lon": -122.2674851,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "32"
+  }
+},
+{
+  "type": "node",
+  "id": 9951841143,
+  "lat": 37.8722950,
+  "lon": -122.2680738,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "note": "approximate location"
+  }
+},
+{
+  "type": "node",
+  "id": 10015152699,
+  "lat": 37.8621578,
+  "lon": -122.2589912,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10060379526,
+  "lat": 37.8730518,
+  "lon": -122.2580740,
+  "tags": {
+    "access": "private",
+    "amenity": "parking_space",
+    "capacity": "2",
+    "description": "Lil Tiny Blue Car"
+  }
+},
+{
+  "type": "node",
+  "id": 10573759422,
+  "lat": 37.8653951,
+  "lon": -122.2701729,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10573763526,
+  "lat": 37.8628398,
+  "lon": -122.2696352,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10573767591,
+  "lat": 37.8696902,
+  "lon": -122.2704486,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10573767592,
+  "lat": 37.8691425,
+  "lon": -122.2702681,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10573767593,
+  "lat": 37.8693960,
+  "lon": -122.2704181,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10573771756,
+  "lat": 37.8678757,
+  "lon": -122.2702462,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "bollard",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10573771757,
+  "lat": 37.8673772,
+  "lon": -122.2699485,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10573771758,
+  "lat": 37.8678403,
+  "lon": -122.2702344,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10573771760,
+  "lat": 37.8691374,
+  "lon": -122.2703084,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10573773718,
+  "lat": 37.8707482,
+  "lon": -122.2720041,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10573773719,
+  "lat": 37.8706410,
+  "lon": -122.2719704,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10573773720,
+  "lat": 37.8706619,
+  "lon": -122.2717698,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10573783947,
+  "lat": 37.8700464,
+  "lon": -122.2707224,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10573783948,
+  "lat": 37.8700017,
+  "lon": -122.2710648,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10573783949,
+  "lat": 37.8699224,
+  "lon": -122.2704076,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 10573783974,
+  "lat": 37.8705960,
+  "lon": -122.2707704,
+  "tags": {
+    "access": "private",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "wave",
+    "capacity": "6"
+  }
+},
+{
+  "type": "node",
+  "id": 10573783975,
+  "lat": 37.8701664,
+  "lon": -122.2706538,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10573783976,
+  "lat": 37.8702865,
+  "lon": -122.2706730,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10573783977,
+  "lat": 37.8707647,
+  "lon": -122.2705875,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10573783978,
+  "lat": 37.8701073,
+  "lon": -122.2706462,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10573789334,
+  "lat": 37.8709257,
+  "lon": -122.2707637,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10573799811,
+  "lat": 37.8705628,
+  "lon": -122.2726764,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10585600864,
+  "lat": 37.8720949,
+  "lon": -122.2696905,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10585600865,
+  "lat": 37.8719105,
+  "lon": -122.2695843,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "6",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10585600866,
+  "lat": 37.8719648,
+  "lon": -122.2690229,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10585600867,
+  "lat": 37.8719796,
+  "lon": -122.2688934,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10585600868,
+  "lat": 37.8719259,
+  "lon": -122.2695137,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10585600869,
+  "lat": 37.8724317,
+  "lon": -122.2685703,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10585600870,
+  "lat": 37.8719170,
+  "lon": -122.2694525,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10585600871,
+  "lat": 37.8722472,
+  "lon": -122.2687129,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10585600872,
+  "lat": 37.8719737,
+  "lon": -122.2689411,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10585600873,
+  "lat": 37.8726119,
+  "lon": -122.2685866,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10585606815,
+  "lat": 37.8708721,
+  "lon": -122.2711547,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 10585681118,
+  "lat": 37.8728680,
+  "lon": -122.2689610,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10585691135,
+  "lat": 37.8727681,
+  "lon": -122.2695705,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "8"
+  }
+},
+{
+  "type": "node",
+  "id": 10585691136,
+  "lat": 37.8727426,
+  "lon": -122.2697542,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "8"
+  }
+},
+{
+  "type": "node",
+  "id": 10585693058,
+  "lat": 37.8710436,
+  "lon": -122.2707297,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10585693060,
+  "lat": 37.8720554,
+  "lon": -122.2705663,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10585693061,
+  "lat": 37.8712423,
+  "lon": -122.2707595,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10585693062,
+  "lat": 37.8716895,
+  "lon": -122.2708106,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10679966661,
+  "lat": 37.8683983,
+  "lon": -122.2611517,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "bollard",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10679966662,
+  "lat": 37.8683932,
+  "lon": -122.2611913,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "bollard",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10679966663,
+  "lat": 37.8684247,
+  "lon": -122.2609405,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10679966664,
+  "lat": 37.8684194,
+  "lon": -122.2609861,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10679966665,
+  "lat": 37.8684655,
+  "lon": -122.2606421,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "bollard",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10679966666,
+  "lat": 37.8684774,
+  "lon": -122.2605418,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "bollard",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10694021302,
+  "lat": 37.8707968,
+  "lon": -122.2723500,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "wave",
+    "capacity": "3"
+  }
+},
+{
+  "type": "node",
+  "id": 10694054647,
+  "lat": 37.8709654,
+  "lon": -122.2694565,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10694054648,
+  "lat": 37.8711278,
+  "lon": -122.2691158,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10694054649,
+  "lat": 37.8710907,
+  "lon": -122.2694181,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 10694054650,
+  "lat": 37.8710948,
+  "lon": -122.2684711,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10694054651,
+  "lat": 37.8708038,
+  "lon": -122.2698474,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "10",
+    "covered": "yes",
+    "indoor": "yes",
+    "level": "0"
+  }
+},
+{
+  "type": "node",
+  "id": 10694054652,
+  "lat": 37.8711914,
+  "lon": -122.2684702,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10694054653,
+  "lat": 37.8709738,
+  "lon": -122.2693782,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10694174738,
+  "lat": 37.8702129,
+  "lon": -122.2698916,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "building",
+    "capacity": "2",
+    "covered": "yes",
+    "fee": "yes",
+    "indoor": "yes",
+    "level": "0",
+    "operator": "BikeLink"
+  }
+},
+{
+  "type": "node",
+  "id": 10696066060,
+  "lat": 37.8713475,
+  "lon": -122.2737654,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10696082922,
+  "lat": 37.8716753,
+  "lon": -122.2712588,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10696083033,
+  "lat": 37.8716138,
+  "lon": -122.2718710,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10696083034,
+  "lat": 37.8715300,
+  "lon": -122.2723766,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10696083035,
+  "lat": 37.8715823,
+  "lon": -122.2721061,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10696083036,
+  "lat": 37.8716051,
+  "lon": -122.2719313,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10696083037,
+  "lat": 37.8715198,
+  "lon": -122.2725329,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10696093485,
+  "lat": 37.8712490,
+  "lon": -122.2746234,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 10696093486,
+  "lat": 37.8711794,
+  "lon": -122.2749666,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10696093487,
+  "lat": 37.8712351,
+  "lon": -122.2748123,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10711340150,
+  "lat": 37.8700057,
+  "lon": -122.2697957,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "6"
+  }
+},
+{
+  "type": "node",
+  "id": 10711340151,
+  "lat": 37.8699353,
+  "lon": -122.2701285,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "wall_loops",
+    "capacity": "8",
+    "covered": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 10711340152,
+  "lat": 37.8699414,
+  "lon": -122.2701089,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "6",
+    "covered": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 10711340153,
+  "lat": 37.8700962,
+  "lon": -122.2691397,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "6",
+    "covered": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 10711340154,
+  "lat": 37.8699310,
+  "lon": -122.2703151,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10711340155,
+  "lat": 37.8699829,
+  "lon": -122.2700280,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "6"
+  }
+},
+{
+  "type": "node",
+  "id": 10711340156,
+  "lat": 37.8700390,
+  "lon": -122.2696442,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "6"
+  }
+},
+{
+  "type": "node",
+  "id": 10711345781,
+  "lat": 37.8699146,
+  "lon": -122.2729542,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 10711420944,
+  "lat": 37.8752022,
+  "lon": -122.2597694,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "bollard",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10711420949,
+  "lat": 37.8752686,
+  "lon": -122.2592621,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "bollard",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10711420950,
+  "lat": 37.8752774,
+  "lon": -122.2591873,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "bollard",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10711420951,
+  "lat": 37.8753165,
+  "lon": -122.2588933,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "bollard",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10711420952,
+  "lat": 37.8753062,
+  "lon": -122.2589640,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "bollard",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10711420963,
+  "lat": 37.8754661,
+  "lon": -122.2577356,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "bollard",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10711420964,
+  "lat": 37.8754549,
+  "lon": -122.2578174,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "bollard",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10711463032,
+  "lat": 37.8709854,
+  "lon": -122.2701523,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10713062468,
+  "lat": 37.8709118,
+  "lon": -122.2707894,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10713114750,
+  "lat": 37.8711808,
+  "lon": -122.2707522,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10713116877,
+  "lat": 37.8715525,
+  "lon": -122.2708280,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10727025303,
+  "lat": 37.8701107,
+  "lon": -122.2701516,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10727044405,
+  "lat": 37.8702288,
+  "lon": -122.2691350,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "covered": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 10727044406,
+  "lat": 37.8702101,
+  "lon": -122.2693536,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10743266148,
+  "lat": 37.8723709,
+  "lon": -122.2733853,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10743266149,
+  "lat": 37.8723752,
+  "lon": -122.2733380,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10743266150,
+  "lat": 37.8720404,
+  "lon": -122.2731807,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10790984268,
+  "lat": 37.8699910,
+  "lon": -122.2712071,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 10790984269,
+  "lat": 37.8699782,
+  "lon": -122.2712814,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10790984270,
+  "lat": 37.8699616,
+  "lon": -122.2713765,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 10790992001,
+  "lat": 37.8699579,
+  "lon": -122.2727391,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 10791001995,
+  "lat": 37.8698171,
+  "lon": -122.2725835,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 10791001996,
+  "lat": 37.8698383,
+  "lon": -122.2723578,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10791001997,
+  "lat": 37.8698969,
+  "lon": -122.2724913,
+  "tags": {
+    "access": "private",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "16",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10791006569,
+  "lat": 37.8700942,
+  "lon": -122.2727604,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10833348326,
+  "lat": 37.8642253,
+  "lon": -122.2628586,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10913189064,
+  "lat": 37.8720384,
+  "lon": -122.2678829,
+  "tags": {
+    "access": "yes",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "wave",
+    "capacity": "3",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "lit": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 10913189065,
+  "lat": 37.8716679,
+  "lon": -122.2678581,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10913189066,
+  "lat": 37.8719897,
+  "lon": -122.2678954,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 10913189067,
+  "lat": 37.8717375,
+  "lon": -122.2678642,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 10914608543,
+  "lat": 37.8704880,
+  "lon": -122.2678776,
+  "tags": {
+    "access": "yes",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "colour": "silver",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "level": "0",
+    "lit": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 10914608544,
+  "lat": 37.8705706,
+  "lon": -122.2680893,
+  "tags": {
+    "access": "yes",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "colour": "silver",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "level": "0",
+    "lit": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10914712190,
+  "lat": 37.8782511,
+  "lon": -122.2689040,
+  "tags": {
+    "access": "yes",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "6",
+    "colour": "silver",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "level": "0",
+    "lit": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 10935537272,
+  "lat": 37.8695783,
+  "lon": -122.2731456,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "wall_loops",
+    "capacity": "8"
+  }
+},
+{
+  "type": "node",
+  "id": 11008170803,
+  "lat": 37.8763912,
+  "lon": -122.2519866,
+  "tags": {
+    "access": "private",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "rack",
+    "capacity": "7",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 11008170804,
+  "lat": 37.8765164,
+  "lon": -122.2517850,
+  "tags": {
+    "access": "private",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "rack",
+    "capacity": "13",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 11008353805,
+  "lat": 37.8765320,
+  "lon": -122.2438487,
+  "tags": {
+    "access": "private",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "6",
+    "covered": "no",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 11085224676,
+  "lat": 37.8704643,
+  "lon": -122.2675015,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "10"
+  }
+},
+{
+  "type": "node",
+  "id": 11085224677,
+  "lat": 37.8705310,
+  "lon": -122.2668283,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "10"
+  }
+},
+{
+  "type": "node",
+  "id": 11085224678,
+  "lat": 37.8705246,
+  "lon": -122.2670375,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "8"
+  }
+},
+{
+  "type": "node",
+  "id": 11147627799,
+  "lat": 37.8777423,
+  "lon": -122.2736293,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 11147627800,
+  "lat": 37.8779482,
+  "lon": -122.2732797,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 11180665432,
+  "lat": 37.8609772,
+  "lon": -122.2588433,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "8",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 11180665433,
+  "lat": 37.8613414,
+  "lon": -122.2587612,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "wave",
+    "capacity": "4",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 11247451399,
+  "lat": 37.8637973,
+  "lon": -122.2562869,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 11386883048,
+  "lat": 37.8787021,
+  "lon": -122.2694520,
+  "tags": {
+    "access": "customers",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "ground_slots",
+    "capacity": "4",
+    "covered": "no",
+    "fee": "no",
+    "operator": "Andronico's",
+    "operator:type": "private"
+  }
+},
+{
+  "type": "node",
+  "id": 11662309931,
+  "lat": 37.8717445,
+  "lon": -122.2706358,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "note": "approximate location"
+  }
+},
+{
+  "type": "node",
+  "id": 11662309934,
+  "lat": 37.8717009,
+  "lon": -122.2710740,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 11861770271,
+  "lat": 37.8642245,
+  "lon": -122.2550152,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 11861912963,
+  "lat": 37.8763000,
+  "lon": -122.2736324,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 11861912964,
+  "lat": 37.8761420,
+  "lon": -122.2736129,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 11861912967,
+  "lat": 37.8758490,
+  "lon": -122.2734292,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 11861913569,
+  "lat": 37.8741044,
+  "lon": -122.2732341,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "bollard",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 11891171535,
+  "lat": 37.8643608,
+  "lon": -122.2586757,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 11891171538,
+  "lat": 37.8647150,
+  "lon": -122.2586402,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 11891171539,
+  "lat": 37.8648081,
+  "lon": -122.2586328,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 11891171540,
+  "lat": 37.8648526,
+  "lon": -122.2586495,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 11891171543,
+  "lat": 37.8648907,
+  "lon": -122.2586811,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 11891171546,
+  "lat": 37.8649839,
+  "lon": -122.2587964,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 11891171547,
+  "lat": 37.8651189,
+  "lon": -122.2590183,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 11891171559,
+  "lat": 37.8638425,
+  "lon": -122.2691524,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "wave",
+    "capacity": "3"
+  }
+},
+{
+  "type": "node",
+  "id": 11891171564,
+  "lat": 37.8641131,
+  "lon": -122.2668249,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 11891171565,
+  "lat": 37.8641030,
+  "lon": -122.2668933,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 11891171566,
+  "lat": 37.8640797,
+  "lon": -122.2670724,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 12035126945,
+  "lat": 37.8735592,
+  "lon": -122.2707839,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 12152802630,
+  "lat": 37.8715337,
+  "lon": -122.2663315,
+  "tags": {
+    "bicycle_parking": "stands",
+    "capacity": "12",
+    "colour": "silver",
+    "covered": "no",
+    "demolished:amenity": "bicycle_parking",
+    "fee": "no",
+    "indoor": "no",
+    "level": "0",
+    "lit": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 12167167951,
+  "lat": 37.8700027,
+  "lon": -122.2519206,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "12",
+    "covered": "no",
+    "indoor": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 12313157279,
+  "lat": 37.8713539,
+  "lon": -122.2622891,
+  "tags": {
+    "capacity": "4",
+    "level:ref": "2",
+    "note": "In middle of six person table",
+    "power": "outlet",
+    "socket:domestic": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12313157297,
+  "lat": 37.8709715,
+  "lon": -122.2630940,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "18",
+    "colour": "silver",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "lit": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 12392797416,
+  "lat": 37.8669997,
+  "lon": -122.2543201,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "8",
+    "colour": "gray",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "lit": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12408419632,
+  "lat": 37.8691456,
+  "lon": -122.2545048,
+  "tags": {
+    "access": "yes",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "colour": "silver",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 12408476316,
+  "lat": 37.8712136,
+  "lon": -122.2539834,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "bike_ride": "no",
+    "capacity": "24",
+    "colour": "grey",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "level": "0"
+  }
+},
+{
+  "type": "node",
+  "id": 12634724179,
+  "lat": 37.8710826,
+  "lon": -122.2578661,
+  "tags": {
+    "access": "permissive",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "12",
+    "colour": "gray",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "lit": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12697659240,
+  "lat": 37.8724404,
+  "lon": -122.2558553,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "8",
+    "covered": "yes",
+    "indoor": "no",
+    "lit": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12710857435,
+  "lat": 37.8729816,
+  "lon": -122.2626479,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "20",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "lit": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 12717366134,
+  "lat": 37.8676858,
+  "lon": -122.2612428,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "colour": "silver",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "lit": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 12717366137,
+  "lat": 37.8673375,
+  "lon": -122.2600004,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "16",
+    "covered": "no",
+    "indoor": "no",
+    "lit": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 12717366141,
+  "lat": 37.8675686,
+  "lon": -122.2619880,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "12",
+    "covered": "no",
+    "indoor": "no",
+    "lit": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 12717366171,
+  "lat": 37.8670844,
+  "lon": -122.2599539,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "8",
+    "covered": "no",
+    "indoor": "no",
+    "lit": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 12717366183,
+  "lat": 37.8672284,
+  "lon": -122.2644182,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "wall_loops",
+    "capacity": "10",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "lit": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12717366184,
+  "lat": 37.8672742,
+  "lon": -122.2644225,
+  "tags": {
+    "access": "private",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "20",
+    "covered": "no",
+    "lit": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12717366187,
+  "lat": 37.8676190,
+  "lon": -122.2611580,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "colour": "silver",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "lit": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 12720520981,
+  "lat": 37.8669676,
+  "lon": -122.2661957,
+  "tags": {
+    "access": "yes",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "lit": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 12737847175,
+  "lat": 37.8727247,
+  "lon": -122.2654806,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "10",
+    "covered": "no",
+    "indoor": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 12737847179,
+  "lat": 37.8727623,
+  "lon": -122.2656070,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "24",
+    "covered": "no",
+    "indoor": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 12755710225,
+  "lat": 37.8716332,
+  "lon": -122.2591413,
+  "tags": {
+    "access": "permissive",
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "10",
+    "colour": "silver",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 12796385876,
+  "lat": 37.8719868,
+  "lon": -122.2618978,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "12",
+    "colour": "gray",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "lit": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 12796525839,
+  "lat": 37.8721402,
+  "lon": -122.2607922,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "12",
+    "colour": "silver",
+    "covered": "no",
+    "indoor": "no",
+    "lit": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12796525863,
+  "lat": 37.8720312,
+  "lon": -122.2617834,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "14",
+    "colour": "gray",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "lit": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 12846577894,
+  "lat": 37.8666346,
+  "lon": -122.2540250,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 12846581112,
+  "lat": 37.8682924,
+  "lon": -122.2542412,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 12846581113,
+  "lat": 37.8682863,
+  "lon": -122.2542816,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 12846581124,
+  "lat": 37.8681606,
+  "lon": -122.2543402,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 12846581125,
+  "lat": 37.8681890,
+  "lon": -122.2543430,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 12846581217,
+  "lat": 37.8692741,
+  "lon": -122.2543799,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "4"
+  }
+},
+{
+  "type": "node",
+  "id": 12846581218,
+  "lat": 37.8692841,
+  "lon": -122.2543014,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2"
+  }
+},
+{
+  "type": "node",
+  "id": 12916036957,
+  "lat": 37.8614755,
+  "lon": -122.2593703,
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "20",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12918329930,
+  "lat": 37.8680871,
+  "lon": -122.2697938,
+  "tags": {
+    "access": "yes",
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2020",
+    "addr:state": "CA",
+    "addr:street": "Kittredge Street",
+    "amenity": "parking",
+    "capacity": "252",
+    "name": "Kittredge St Garage"
+  }
+},
+{
+  "type": "node",
+  "id": 12918360037,
+  "lat": 37.8708555,
+  "lon": -122.2720966,
+  "tags": {
+    "access": "yes",
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1915",
+    "addr:street": "Addison Street",
+    "amenity": "parking",
+    "capacity": "150",
+    "layer": "-1",
+    "name": "The Promenade Garage",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12918374581,
+  "lat": 37.8722905,
+  "lon": -122.2715409,
+  "tags": {
+    "access": "yes",
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1995",
+    "addr:street": "University Avenue",
+    "amenity": "parking",
+    "capacity": "60",
+    "layer": "-1",
+    "name": "UC Golden Bear Garage",
+    "operator": "U C Berkeley",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12918571280,
+  "lat": 37.8675760,
+  "lon": -122.2634762,
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "capacity": "59",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12947787397,
+  "lat": 37.8709248,
+  "lon": -122.2674532,
+  "tags": {
+    "amenity": "parking",
+    "capacity": "113",
+    "operator": "Marriott Residence Inn",
+    "parking": "multi-storey"
+  }
+},
+{
+  "type": "node",
+  "id": 12986925389,
+  "lat": 37.8664137,
+  "lon": -122.2683991,
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "60",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12986925397,
+  "lat": 37.8727673,
+  "lon": -122.2678036,
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "30",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12986925398,
+  "lat": 37.8729932,
+  "lon": -122.2679538,
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "81",
+    "capacity:disabled": "2",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12986930869,
+  "lat": 37.8684886,
+  "lon": -122.2666848,
+  "tags": {
+    "amenity": "parking",
+    "capacity": "53",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12988954025,
+  "lat": 37.8730865,
+  "lon": -122.2674218,
+  "tags": {
+    "amenity": "parking",
+    "capacity": "50",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12990666152,
+  "lat": 37.8693903,
+  "lon": -122.2672432,
+  "tags": {
+    "amenity": "parking",
+    "capacity": "42",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12990679657,
+  "lat": 37.8641271,
+  "lon": -122.2583885,
+  "tags": {
+    "amenity": "parking",
+    "capacity": "9",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12990697698,
+  "lat": 37.8734227,
+  "lon": -122.2666472,
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "39",
+    "layer": "-1",
+    "operator": "The Berkleyan Apartments",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12990760409,
+  "lat": 37.8707880,
+  "lon": -122.2703491,
+  "tags": {
+    "amenity": "parking",
+    "capacity": "17",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12990766744,
+  "lat": 37.8717223,
+  "lon": -122.2703314,
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "8",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12990773380,
+  "lat": 37.8648064,
+  "lon": -122.2668587,
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "55",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12990798302,
+  "lat": 37.8717071,
+  "lon": -122.2751405,
+  "tags": {
+    "amenity": "parking",
+    "capacity": "29",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12990822001,
+  "lat": 37.8742485,
+  "lon": -122.2684110,
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "24",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12990938823,
+  "lat": 37.8642482,
+  "lon": -122.2666365,
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "45",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12990950121,
+  "lat": 37.8631405,
+  "lon": -122.2607703,
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "31",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12990956712,
+  "lat": 37.8709029,
+  "lon": -122.2712949,
+  "tags": {
+    "amenity": "parking",
+    "capacity": "9",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12990986910,
+  "lat": 37.8631039,
+  "lon": -122.2685781,
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "68",
+    "layer": "-1",
+    "operator": "the Blake",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12996539633,
+  "lat": 37.8703310,
+  "lon": -122.2695373,
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "160",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12996612030,
+  "lat": 37.8711645,
+  "lon": -122.2745028,
+  "tags": {
+    "amenity": "parking",
+    "capacity": "19",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12996616047,
+  "lat": 37.8609699,
+  "lon": -122.2676747,
+  "tags": {
+    "amenity": "parking",
+    "capacity": "25",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12996645593,
+  "lat": 37.8784992,
+  "lon": -122.2666122,
+  "tags": {
+    "amenity": "parking",
+    "capacity": "20",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12996667176,
+  "lat": 37.8713493,
+  "lon": -122.2709179,
+  "tags": {
+    "amenity": "parking",
+    "capacity": "76",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12996675737,
+  "lat": 37.8662967,
+  "lon": -122.2689063,
+  "tags": {
+    "amenity": "parking",
+    "capacity": "34",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 12996689713,
+  "lat": 37.8635538,
+  "lon": -122.2717686,
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "23",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 13016363537,
+  "lat": 37.8721082,
+  "lon": -122.2585125,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "10",
+    "colour": "grey",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "lit": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 13069965822,
+  "lat": 37.8687420,
+  "lon": -122.2578221,
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "37",
+    "layer": "-1",
+    "operator": "The Standard Apartments",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 13070046172,
+  "lat": 37.8669280,
+  "lon": -122.2523363,
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "8",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "node",
+  "id": 14185947948,
+  "lat": 37.8693834,
+  "lon": -122.2559441,
+  "tags": {
+    "access": "permissive",
+    "amenity": "charging_station",
+    "brand": "ChargePoint",
+    "brand:wikidata": "Q5176149",
+    "capacity": "66",
+    "charge": "0.45USD / kWh",
+    "covered": "yes",
+    "fee": "yes",
+    "name": "ChargePoint",
+    "operator": "ChargePoint",
+    "operator:wikidata": "Q5176149",
+    "parking:fee": "yes",
+    "socket:type2": "yes",
+    "socket:type2:output": "6.5 kW"
+  }
+},
+{
+  "type": "node",
+  "id": 14306586730,
+  "lat": 37.8678907,
+  "lon": -122.2587246,
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "2",
+    "covered": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 24025044,
+  "center": {
+    "lat": 37.8695874,
+    "lon": -122.2558293
+  },
+  "tags": {
+    "access": "permissive",
+    "access:disabled": "yes",
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2641",
+    "addr:street": "Bancroft Way",
+    "amenity": "parking",
+    "building": "parking",
+    "building:levels": "8",
+    "capacity": "660",
+    "charge": "3 USD per hour, 24 USD max",
+    "fee": "yes",
+    "name": "Bancroft Parking Structure",
+    "opening_hours": "Su-Sa 05:00-24:00",
+    "operator": "UC Berkeley Parking and Transportation",
+    "operator:type": "university",
+    "parking": "multi-storey",
+    "start_date": "2026-09",
+    "surface": "concrete"
+  }
+},
+{
+  "type": "way",
+  "id": 24025050,
+  "center": {
+    "lat": 37.8736919,
+    "lon": -122.2542510
+  },
+  "tags": {
+    "addr:state": "CA",
+    "amenity": "theatre",
+    "building": "theatre",
+    "capacity": "8500",
+    "ele": "127",
+    "gnis:feature_id": "224534",
+    "historic": "building",
+    "loc_name": "Greek Theatre",
+    "name": "Hearst Greek Theatre",
+    "official_name": "William Randolph Hearst Greek Theatre",
+    "operator": "Another Planet Entertainment",
+    "owner": "University of California, Berkeley",
+    "source": "USGS Geonames",
+    "start_date": "1903",
+    "wikidata": "Q671266",
+    "wikipedia": "en:Hearst Greek Theatre"
+  }
+},
+{
+  "type": "way",
+  "id": 24025053,
+  "center": {
+    "lat": 37.8709975,
+    "lon": -122.2507394
+  },
+  "tags": {
+    "capacity": "62467",
+    "ele": "126",
+    "gnis:feature_id": "1656675",
+    "leisure": "stadium",
+    "name": "California Memorial Stadium",
+    "sport": "american_football",
+    "start_date": "1923",
+    "wikidata": "Q1026837",
+    "wikipedia": "en:California Memorial Stadium"
+  }
+},
+{
+  "type": "way",
+  "id": 24025430,
+  "center": {
+    "lat": 37.8691024,
+    "lon": -122.2607982
+  },
+  "tags": {
+    "addr:state": "CA",
+    "amenity": "theatre",
+    "architect": "Vernon DeMars",
+    "building": "theatre",
+    "building:levels": "4",
+    "capacity": "1984",
+    "ele": "77",
+    "gnis:feature_id": "1656782",
+    "name": "Zellerbach Hall",
+    "operator": "Cal Performances",
+    "source": "USGS Geonames",
+    "start_date": "1968",
+    "toilets:wheelchair": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q8068797"
+  }
+},
+{
+  "type": "way",
+  "id": 24025431,
+  "center": {
+    "lat": 37.8690936,
+    "lon": -122.2613047
+  },
+  "tags": {
+    "amenity": "theatre",
+    "architect": "Vernon DeMars",
+    "building": "yes",
+    "building:levels": "4",
+    "capacity": "500",
+    "name": "Zellerbach Playhouse",
+    "start_date": "1968"
+  }
+},
+{
+  "type": "way",
+  "id": 24025440,
+  "center": {
+    "lat": 37.8693622,
+    "lon": -122.2621853
+  },
+  "tags": {
+    "architect": "George W. Kelham",
+    "architect:renovation": "Ellerbe Becket Architects",
+    "building": "yes",
+    "building:levels": "4",
+    "capacity": "11877",
+    "last_renovation": "1999",
+    "leisure": "sports_centre",
+    "name": "Haas Pavilion",
+    "old_name": "Harmon Gymnasium",
+    "sport": "basketball;gymastics;fencing;boxing;wrestling",
+    "start_date": "1933",
+    "wikidata": "Q5636556"
+  }
+},
+{
+  "type": "way",
+  "id": 25450963,
+  "center": {
+    "lat": 37.8705682,
+    "lon": -122.2703599
+  },
+  "tags": {
+    "access": "permissive",
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2109",
+    "addr:street": "Milvia Street",
+    "amenity": "parking",
+    "capacity": "23",
+    "capacity:disabled": "1",
+    "fee": "yes",
+    "name": "Milvia Street Lot",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 27294024,
+  "center": {
+    "lat": 37.8705577,
+    "lon": -122.2535848
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "99",
+    "capacity:disabled": "2",
+    "name": "Boalt Lot",
+    "operator": "UC Berkeley"
+  }
+},
+{
+  "type": "way",
+  "id": 27294061,
+  "center": {
+    "lat": 37.8683791,
+    "lon": -122.2635300
+  },
+  "tags": {
+    "access": "yes",
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2299",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Bancroft Way",
+    "alt_name": "Recreational Sports Facility Garage",
+    "amenity": "parking",
+    "capacity": "142",
+    "capacity:disabled": "1",
+    "fee": "yes",
+    "layer": "-1",
+    "name": "RSF Garage",
+    "operator": "U C Berkeley",
+    "operator:type": "university",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 28997603,
+  "center": {
+    "lat": 37.8752083,
+    "lon": -122.2614276
+  },
+  "tags": {
+    "access": "yes",
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2400;2451",
+    "addr:street": "Hearst Avenue",
+    "amenity": "parking",
+    "building": "yes",
+    "building:levels": "4",
+    "capacity": "694",
+    "name": "Lower Hearst Structure",
+    "parking": "multi-storey"
+  }
+},
+{
+  "type": "way",
+  "id": 31780763,
+  "center": {
+    "lat": 37.8716213,
+    "lon": -122.2669436
+  },
+  "tags": {
+    "access": "no",
+    "capacity": "29",
+    "capacity:disabled": "2",
+    "demolished:amenity": "parking",
+    "operator": "University of California, Berkeley",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 34616204,
+  "center": {
+    "lat": 37.8696528,
+    "lon": -122.2691597
+  },
+  "tags": {
+    "access": "yes",
+    "addr:housenumber": "2061",
+    "addr:street": "Allston Way",
+    "amenity": "parking",
+    "building": "yes",
+    "building:levels": "6",
+    "capacity": "600",
+    "covered": "yes",
+    "fee": "yes",
+    "name": "Allston Way Garage",
+    "parking": "multi-storey",
+    "website": "https://parkingconcepts.com/facilities/allston-way-garage-parking/"
+  }
+},
+{
+  "type": "way",
+  "id": 35894484,
+  "center": {
+    "lat": 37.8741981,
+    "lon": -122.2528556
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "212",
+    "capacity:disabled": "7",
+    "name": "Foothill Lot",
+    "opening_hours": "Mo-Su 05:00-02:00",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 36985263,
+  "center": {
+    "lat": 37.8705269,
+    "lon": -122.2698974
+  },
+  "tags": {
+    "access": "yes",
+    "addr:country": "US",
+    "addr:housenumber": "2025;2033",
+    "addr:state": "CA",
+    "addr:street": "Center Street",
+    "amenity": "parking",
+    "building": "parking",
+    "building:levels": "8",
+    "capacity": "720",
+    "covered": "yes",
+    "fee": "yes",
+    "name": "Center Street Garage",
+    "note": "rebuilt 2018",
+    "opening_hours": "Mo-Fr 05:15-01:00, Sa 07:00-01:00, Su 12:00-24:00",
+    "operator": "City of Berkeley",
+    "parking": "multi-storey",
+    "website": "https://www.ci.berkeley.ca.us/CenterStreetGarage/"
+  }
+},
+{
+  "type": "way",
+  "id": 37060725,
+  "center": {
+    "lat": 37.8672619,
+    "lon": -122.2594073
+  },
+  "tags": {
+    "access": "yes",
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2425;2431;2433;2435;2439",
+    "addr:street": "Channing Way",
+    "amenity": "parking",
+    "building": "yes",
+    "building:levels": "6",
+    "capacity": "420",
+    "name": "Telegraph Channing Garage",
+    "old_name": "Sather Gate Garage",
+    "operator": "City of Berkeley",
+    "parking": "multi-storey"
+  }
+},
+{
+  "type": "way",
+  "id": 38939358,
+  "center": {
+    "lat": 37.8733334,
+    "lon": -122.2536487
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "50",
+    "capacity:disabled": "2",
+    "name": "Bowles Lot",
+    "source": "local_knowledge"
+  }
+},
+{
+  "type": "way",
+  "id": 41745928,
+  "center": {
+    "lat": 37.8676837,
+    "lon": -122.2622839
+  },
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2315",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "amenity": "parking",
+    "capacity": "48",
+    "capacity:disabled": "2",
+    "covered": "no",
+    "operator": "Berkeley City Club",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 41745929,
+  "center": {
+    "lat": 37.8680303,
+    "lon": -122.2623321
+  },
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2362",
+    "addr:state": "CA",
+    "addr:street": "Bancroft Way",
+    "amenity": "parking",
+    "capacity": "46",
+    "covered": "no",
+    "name": "Trinity Lot",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 42904852,
+  "center": {
+    "lat": 37.8630167,
+    "lon": -122.2709079
+  },
+  "tags": {
+    "access": "customers",
+    "amenity": "parking",
+    "capacity": "318",
+    "capacity:disabled": "7",
+    "fee": "no",
+    "operator": "Alta Bates Summit Medical Center - Herrick Campus",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 43155311,
+  "center": {
+    "lat": 37.8707468,
+    "lon": -122.2695281
+  },
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2020",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Addison Street",
+    "amenity": "theatre",
+    "building": "office",
+    "capacity": "490",
+    "check_date": "2025-04-01",
+    "name": "Freight & Salvage",
+    "website": "https://thefreight.org/",
+    "wheelchair": "yes",
+    "wikidata": "Q7735243"
+  }
+},
+{
+  "type": "way",
+  "id": 43223871,
+  "center": {
+    "lat": 37.8668859,
+    "lon": -122.2698490
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "131",
+    "capacity:disabled": "2",
+    "covered": "no",
+    "disused:leisure": "pitch",
+    "disused:sport": "tennis",
+    "fee": "no",
+    "operator": "Berkeley High School",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 43831342,
+  "center": {
+    "lat": 37.8762227,
+    "lon": -122.2572102
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "20",
+    "name": "Ridge Lot",
+    "operator": "UC Berkeley",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 62354236,
+  "center": {
+    "lat": 37.8728167,
+    "lon": -122.2734325
+  },
+  "tags": {
+    "addr:city": "Berkeley",
+    "amenity": "parking",
+    "capacity": "20",
+    "level": "1",
+    "parking": "rooftop"
+  }
+},
+{
+  "type": "way",
+  "id": 109192577,
+  "center": {
+    "lat": 37.8669673,
+    "lon": -122.2549329
+  },
+  "tags": {
+    "access": "yes",
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2645",
+    "addr:street": "Haste Street",
+    "amenity": "parking",
+    "building": "parking",
+    "building:levels": "3",
+    "capacity": "950",
+    "fee": "yes",
+    "name": "Underhill Parking & Field",
+    "operator": "University of California, Berkeley",
+    "parking": "multi-storey",
+    "surface": "concrete"
+  }
+},
+{
+  "type": "way",
+  "id": 109192580,
+  "center": {
+    "lat": 37.8659571,
+    "lon": -122.2555540
+  },
+  "tags": {
+    "addr:city": "Berkeley",
+    "amenity": "parking",
+    "capacity": "20",
+    "capacity:disabled": "1",
+    "name": "Unit 2 Parking Lot",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 109194852,
+  "center": {
+    "lat": 37.8659780,
+    "lon": -122.2624659
+  },
+  "tags": {
+    "addr:housenumber": "2325;2337;2339",
+    "addr:street": "Haste Street",
+    "amenity": "parking",
+    "building": "yes",
+    "capacity": "300",
+    "name": "Ellsworth Parking Structure",
+    "parking": "multi-storey",
+    "wheelchair": "yes",
+    "wheelchair:description": "Parking lot"
+  }
+},
+{
+  "type": "way",
+  "id": 118550142,
+  "center": {
+    "lat": 37.8757565,
+    "lon": -122.2573670
+  },
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "building": "yes",
+    "building:levels": "4",
+    "capacity": "400",
+    "name": "Upper Hearst Parking Structure",
+    "parking": "multi-storey",
+    "sport": "tennis"
+  }
+},
+{
+  "type": "way",
+  "id": 128467239,
+  "center": {
+    "lat": 37.8630813,
+    "lon": -122.2478665
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "25"
+  }
+},
+{
+  "type": "way",
+  "id": 183763884,
+  "center": {
+    "lat": 37.8778272,
+    "lon": -122.2687592
+  },
+  "tags": {
+    "access": "destination",
+    "capacity": "24",
+    "highway": "service",
+    "oneway": "yes",
+    "service": "parking_aisle",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 183763889,
+  "center": {
+    "lat": 37.8783170,
+    "lon": -122.2687390
+  },
+  "tags": {
+    "access": "customers",
+    "amenity": "parking",
+    "capacity": "12",
+    "fee": "no",
+    "operator": "Benchmark Climbing",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 183869379,
+  "center": {
+    "lat": 37.8730139,
+    "lon": -122.2701291
+  },
+  "tags": {
+    "access": "private",
+    "addr:city": "Berkeley",
+    "amenity": "parking",
+    "capacity": "17"
+  }
+},
+{
+  "type": "way",
+  "id": 184879782,
+  "center": {
+    "lat": 37.8766033,
+    "lon": -122.2593434
+  },
+  "tags": {
+    "building": "garages",
+    "capacity": "8",
+    "cooperative": "yes",
+    "layer": "-1"
+  }
+},
+{
+  "type": "way",
+  "id": 204610297,
+  "center": {
+    "lat": 37.8704343,
+    "lon": -122.2720268
+  },
+  "tags": {
+    "access": "private",
+    "addr:city": "Berkeley",
+    "amenity": "parking",
+    "building:part": "yes",
+    "capacity": "68",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 219170376,
+  "center": {
+    "lat": 37.8740492,
+    "lon": -122.2689325
+  },
+  "tags": {
+    "access": "customers",
+    "amenity": "parking",
+    "capacity": "6",
+    "capacity:disabled": "1",
+    "covered": "no",
+    "fee": "no",
+    "maxstay": "15 minutes",
+    "operator": "Sweetgreen",
+    "operator:type": "private",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 219207357,
+  "center": {
+    "lat": 37.8803685,
+    "lon": -122.2691118
+  },
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "building": "roof",
+    "capacity": "6",
+    "covered": "yes",
+    "fee": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 245138841,
+  "center": {
+    "lat": 37.8758291,
+    "lon": -122.2576389
+  },
+  "tags": {
+    "access": "yes",
+    "amenity": "parking_space",
+    "capacity": "1",
+    "covered": "yes",
+    "fee": "yes",
+    "lit": "yes",
+    "maxstay": "30-60",
+    "name": "ps1",
+    "opening_hours": "Mo-Fr 08:30-20:00",
+    "operator": "UCBerkeley",
+    "parking": "multi-storey",
+    "ref": "a",
+    "supervised": "yes",
+    "surface": "concrete"
+  }
+},
+{
+  "type": "way",
+  "id": 258412109,
+  "center": {
+    "lat": 37.8740704,
+    "lon": -122.2611864
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "2",
+    "capacity:disabled": "1",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 263156800,
+  "center": {
+    "lat": 37.8680614,
+    "lon": -122.2527253
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "14",
+    "park_ride": "no",
+    "parking": "surface",
+    "supervised": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 306070902,
+  "center": {
+    "lat": 37.8669469,
+    "lon": -122.2620514
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "51",
+    "capacity:disabled": "3",
+    "covered": "no",
+    "operator": "First Congregational Church of Berkeley",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 309025794,
+  "center": {
+    "lat": 37.8745229,
+    "lon": -122.2660823
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "45",
+    "parking": "surface",
+    "surface": "unpaved"
+  }
+},
+{
+  "type": "way",
+  "id": 319201433,
+  "center": {
+    "lat": 37.8745450,
+    "lon": -122.2524791
+  },
+  "tags": {
+    "access": "permit",
+    "amenity": "parking",
+    "capacity": "24",
+    "name": "F",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 330092155,
+  "center": {
+    "lat": 37.8635809,
+    "lon": -122.2667208
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "145",
+    "capacity:disabled": "2",
+    "fee": "no",
+    "operator": "Alta Bates Summit Medical Center",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 344341041,
+  "center": {
+    "lat": 37.8582184,
+    "lon": -122.2587761
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "131",
+    "capacity:disabled": "4",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 349675684,
+  "center": {
+    "lat": 37.8610463,
+    "lon": -122.2666351
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "35"
+  }
+},
+{
+  "type": "way",
+  "id": 377896520,
+  "center": {
+    "lat": 37.8652470,
+    "lon": -122.2682491
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "70",
+    "operator": "berkeley toyota"
+  }
+},
+{
+  "type": "way",
+  "id": 410353242,
+  "center": {
+    "lat": 37.8689476,
+    "lon": -122.2552967
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "35",
+    "fee": "yes",
+    "name": "Bancroft Hotel Parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 419132110,
+  "center": {
+    "lat": 37.8619506,
+    "lon": -122.2640446
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "16"
+  }
+},
+{
+  "type": "way",
+  "id": 421443237,
+  "center": {
+    "lat": 37.8651668,
+    "lon": -122.2668897
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "20",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 431329066,
+  "center": {
+    "lat": 37.8677503,
+    "lon": -122.2563780
+  },
+  "tags": {
+    "access": "customers",
+    "amenity": "parking",
+    "capacity": "14",
+    "capacity:disabled": "3",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 431329070,
+  "center": {
+    "lat": 37.8675516,
+    "lon": -122.2560680
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "30"
+  }
+},
+{
+  "type": "way",
+  "id": 431329072,
+  "center": {
+    "lat": 37.8677295,
+    "lon": -122.2559174
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "35",
+    "operator": "UCB Unit 1",
+    "operator:type": "university",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 431330569,
+  "center": {
+    "lat": 37.8680251,
+    "lon": -122.2608426
+  },
+  "tags": {
+    "building": "garage",
+    "capacity": "3"
+  }
+},
+{
+  "type": "way",
+  "id": 458587536,
+  "center": {
+    "lat": 37.8635529,
+    "lon": -122.2680405
+  },
+  "tags": {
+    "access": "customers",
+    "amenity": "parking",
+    "capacity": "41",
+    "name": "Alta Bates parking",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 470796169,
+  "center": {
+    "lat": 37.8758467,
+    "lon": -122.2522585
+  },
+  "tags": {
+    "access": "permit",
+    "amenity": "parking",
+    "capacity": "16",
+    "name": "G3",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 473222697,
+  "center": {
+    "lat": 37.8609338,
+    "lon": -122.2539795
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "5"
+  }
+},
+{
+  "type": "way",
+  "id": 473598411,
+  "center": {
+    "lat": 37.8662152,
+    "lon": -122.2534124
+  },
+  "tags": {
+    "building": "garage",
+    "capacity": "14"
+  }
+},
+{
+  "type": "way",
+  "id": 524387211,
+  "center": {
+    "lat": 37.8700280,
+    "lon": -122.2724482
+  },
+  "tags": {
+    "access": "customers",
+    "amenity": "parking",
+    "capacity": "12",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 657097883,
+  "center": {
+    "lat": 37.8724506,
+    "lon": -122.2418527
+  },
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "capacity": "17",
+    "fee": "no",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 761100316,
+  "center": {
+    "lat": 37.8728249,
+    "lon": -122.2581299
+  },
+  "tags": {
+    "access": "permit",
+    "amenity": "parking",
+    "capacity": "7",
+    "capacity:disabled": "7",
+    "parking": "street_side",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 819915224,
+  "center": {
+    "lat": 37.8645646,
+    "lon": -122.2557458
+  },
+  "tags": {
+    "building": "garage",
+    "capacity": "12"
+  }
+},
+{
+  "type": "way",
+  "id": 874453127,
+  "center": {
+    "lat": 37.8686066,
+    "lon": -122.2657935
+  },
+  "tags": {
+    "capacity": "0",
+    "covered": "no",
+    "demolished:amenity": "parking",
+    "fee": "yes",
+    "name": "North Extension Lot",
+    "operator": "U C Berkeley",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 928978804,
+  "center": {
+    "lat": 37.8841508,
+    "lon": -122.2619721
+  },
+  "tags": {
+    "building": "yes",
+    "capacity": "9842.07068",
+    "content": "water",
+    "man_made": "storage_tank",
+    "material": "steel",
+    "name": "Berryman Reservoir",
+    "note": "new 2.6 MG tank installed here since latest imagery was taken",
+    "operator": "EBMUD"
+  }
+},
+{
+  "type": "way",
+  "id": 1000385781,
+  "center": {
+    "lat": 37.8674084,
+    "lon": -122.2655988
+  },
+  "tags": {
+    "access": "no",
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2241",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "capacity": "0",
+    "capacity:disabled": "0",
+    "demolished:amenity": "parking",
+    "layer": "-1",
+    "name": "Bancroft Fulton West",
+    "operator": "University of California, Berkeley",
+    "operator:wikidata": "Q168756",
+    "parking": "underground",
+    "surface": "dirt"
+  }
+},
+{
+  "type": "way",
+  "id": 1013176600,
+  "center": {
+    "lat": 37.8723270,
+    "lon": -122.2528375
+  },
+  "tags": {
+    "access": "yes",
+    "alt_name": "Maxwell Garage",
+    "amenity": "parking",
+    "building": "parking",
+    "building:levels": "1",
+    "capacity": "410",
+    "contact:yelp": "https://www.yelp.com/biz/stadium-parking-garage-berkeley",
+    "name": "Stadium Parking Garage",
+    "operator": "REEF Technology",
+    "operator:type": "private"
+  }
+},
+{
+  "type": "way",
+  "id": 1057865860,
+  "center": {
+    "lat": 37.8785263,
+    "lon": -122.2665337
+  },
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1601",
+    "addr:postcode": "94709-1880",
+    "addr:state": "CA",
+    "addr:street": "Oxford Street",
+    "amenity": "social_facility",
+    "building": "apartments",
+    "building:levels": "5",
+    "capacity": "35",
+    "name": "Jordan Court",
+    "operator": "Satellite Affordable Housing Associates",
+    "social_facility": "housing",
+    "social_facility:for": "senior",
+    "website": "https://www.sahahomes.org/properties/jordan-court"
+  }
+},
+{
+  "type": "way",
+  "id": 1112854713,
+  "center": {
+    "lat": 37.8643200,
+    "lon": -122.2726132
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "22",
+    "capacity:disabled": "1",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1174895728,
+  "center": {
+    "lat": 37.8660201,
+    "lon": -122.2537391
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "30",
+    "capacity:disabled": "1",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1177545022,
+  "center": {
+    "lat": 37.8630943,
+    "lon": -122.2703247
+  },
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "12",
+    "covered": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 1194096812,
+  "center": {
+    "lat": 37.8597059,
+    "lon": -122.2587715
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "4",
+    "capacity:disabled": "1",
+    "fee": "no",
+    "operator": "Willard Middle School",
+    "operator:type": "school",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1247953919,
+  "center": {
+    "lat": 37.8679858,
+    "lon": -122.2669461
+  },
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "capacity": "49",
+    "fee": "yes",
+    "name": "UC Banway Lot",
+    "operator": "UC Berkeley"
+  }
+},
+{
+  "type": "way",
+  "id": 1366567796,
+  "center": {
+    "lat": 37.8684437,
+    "lon": -122.2480473
+  },
+  "tags": {
+    "building": "garage",
+    "capacity": "2"
+  }
+},
+{
+  "type": "way",
+  "id": 1371002794,
+  "center": {
+    "lat": 37.8730176,
+    "lon": -122.2568048
+  },
+  "tags": {
+    "amenity": "bicycle_parking",
+    "area": "yes",
+    "bicycle_parking": "stands",
+    "capacity": "12",
+    "colour": "silver",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 1371002796,
+  "center": {
+    "lat": 37.8729494,
+    "lon": -122.2567789
+  },
+  "tags": {
+    "amenity": "bicycle_parking",
+    "area": "yes",
+    "bicycle_parking": "stands",
+    "capacity": "16",
+    "colour": "silver",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 1371002799,
+  "center": {
+    "lat": 37.8725593,
+    "lon": -122.2566416
+  },
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "34",
+    "colour": "silver",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "lit": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 1371002801,
+  "center": {
+    "lat": 37.8730836,
+    "lon": -122.2568317
+  },
+  "tags": {
+    "amenity": "bicycle_parking",
+    "area": "yes",
+    "bicycle_parking": "stands",
+    "capacity": "16",
+    "colour": "silver",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 1379450167,
+  "center": {
+    "lat": 37.8716024,
+    "lon": -122.2544550
+  },
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "18",
+    "covered": "no",
+    "indoor": "no",
+    "lit": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 1382160067,
+  "center": {
+    "lat": 37.8720605,
+    "lon": -122.2617154
+  },
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "38",
+    "covered": "no",
+    "indoor": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 1387749428,
+  "center": {
+    "lat": 37.8669733,
+    "lon": -122.2523599
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "16",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1387749434,
+  "center": {
+    "lat": 37.8687247,
+    "lon": -122.2532747
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "22",
+    "operator": "ΖΨ",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1387749435,
+  "center": {
+    "lat": 37.8688279,
+    "lon": -122.2527074
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "20",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1387749436,
+  "center": {
+    "lat": 37.8692816,
+    "lon": -122.2526570
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "18",
+    "operator": "ΔΚΕ",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1387749437,
+  "center": {
+    "lat": 37.8688711,
+    "lon": -122.2539187
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "15",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1387749438,
+  "center": {
+    "lat": 37.8688730,
+    "lon": -122.2535723
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "18",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1396484811,
+  "center": {
+    "lat": 37.8794867,
+    "lon": -122.2672351
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1396484936,
+  "center": {
+    "lat": 37.8810604,
+    "lon": -122.2685997
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "24",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1408194030,
+  "center": {
+    "lat": 37.8716958,
+    "lon": -122.2737287
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1408194031,
+  "center": {
+    "lat": 37.8723367,
+    "lon": -122.2702040
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1408464811,
+  "center": {
+    "lat": 37.8707988,
+    "lon": -122.2724024
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "5",
+    "capacity:disabled": "1",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1408464882,
+  "center": {
+    "lat": 37.8708009,
+    "lon": -122.2725581
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "12",
+    "capacity:disabled": "1",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1408677816,
+  "center": {
+    "lat": 37.8715714,
+    "lon": -122.2545701
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "15",
+    "capacity:disabled": "2",
+    "operator": "U C Berkeley",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1408679291,
+  "center": {
+    "lat": 37.8752250,
+    "lon": -122.2556022
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "5",
+    "capacity:disabled": "2",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1408679292,
+  "center": {
+    "lat": 37.8757686,
+    "lon": -122.2559826
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "9",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1408679294,
+  "center": {
+    "lat": 37.8757968,
+    "lon": -122.2552829
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "9",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1408679869,
+  "center": {
+    "lat": 37.8772687,
+    "lon": -122.2536266
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "7",
+    "capacity:disabled": "2",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1408680023,
+  "center": {
+    "lat": 37.8790977,
+    "lon": -122.2503831
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "5",
+    "capacity:disabled": "1",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1408680279,
+  "center": {
+    "lat": 37.8790563,
+    "lon": -122.2494246
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "24",
+    "capacity:disabled": "1",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1408680672,
+  "center": {
+    "lat": 37.8787843,
+    "lon": -122.2492953
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "4",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1408680673,
+  "center": {
+    "lat": 37.8781613,
+    "lon": -122.2489639
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "19",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1408680674,
+  "center": {
+    "lat": 37.8772980,
+    "lon": -122.2479075
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1408680677,
+  "center": {
+    "lat": 37.8766518,
+    "lon": -122.2481556
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "10",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1408681482,
+  "center": {
+    "lat": 37.8656960,
+    "lon": -122.2491882
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "7",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1408681483,
+  "center": {
+    "lat": 37.8656947,
+    "lon": -122.2494481
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "1",
+    "capacity:disabled": "1",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1408681485,
+  "center": {
+    "lat": 37.8655610,
+    "lon": -122.2484192
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "11",
+    "capacity:disabled": "1",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1408681486,
+  "center": {
+    "lat": 37.8657745,
+    "lon": -122.2489484
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "11",
+    "capacity:disabled": "2",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1408681804,
+  "center": {
+    "lat": 37.8641794,
+    "lon": -122.2494477
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "10",
+    "capacity:disabled": "1",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1408681805,
+  "center": {
+    "lat": 37.8635835,
+    "lon": -122.2467075
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "12",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1408681806,
+  "center": {
+    "lat": 37.8634742,
+    "lon": -122.2462322
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "5",
+    "capacity:disabled": "1",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1408991519,
+  "center": {
+    "lat": 37.8588195,
+    "lon": -122.2597801
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "8",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1409031640,
+  "center": {
+    "lat": 37.8605424,
+    "lon": -122.2676843
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "9",
+    "operator": "Berkeley Fire Department",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1409043402,
+  "center": {
+    "lat": 37.8620647,
+    "lon": -122.2658074
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "16",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1409071343,
+  "center": {
+    "lat": 37.8629486,
+    "lon": -122.2664849
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "23",
+    "capacity:disabled": "1",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1409071344,
+  "center": {
+    "lat": 37.8634483,
+    "lon": -122.2662326
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "18",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1409071346,
+  "center": {
+    "lat": 37.8638497,
+    "lon": -122.2657163
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "7",
+    "operator": "Berkeley Plumbing",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1409092030,
+  "center": {
+    "lat": 37.8649041,
+    "lon": -122.2662237
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "10",
+    "capacity:disabled": "1",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1409110341,
+  "center": {
+    "lat": 37.8674897,
+    "lon": -122.2671790
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "7",
+    "capacity:disabled": "1",
+    "operator": "Mechanics Bank",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1409110342,
+  "center": {
+    "lat": 37.8670870,
+    "lon": -122.2670200
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "11",
+    "capacity:disabled": "1",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1409110343,
+  "center": {
+    "lat": 37.8674144,
+    "lon": -122.2670057
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "9",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1409318817,
+  "center": {
+    "lat": 37.8722558,
+    "lon": -122.2735012
+  },
+  "tags": {
+    "access": "customers",
+    "amenity": "parking",
+    "capacity": "48",
+    "capacity:disabled": "2",
+    "fee": "no",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1409318818,
+  "center": {
+    "lat": 37.8718018,
+    "lon": -122.2735546
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "109",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1411037930,
+  "center": {
+    "lat": 37.8735240,
+    "lon": -122.2611395
+  },
+  "tags": {
+    "amenity": "bicycle_parking",
+    "bicycle_parking": "stands",
+    "capacity": "30",
+    "colour": "gray",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 1412925727,
+  "center": {
+    "lat": 37.8807249,
+    "lon": -122.2708901
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "9"
+  }
+},
+{
+  "type": "way",
+  "id": 1412925838,
+  "center": {
+    "lat": 37.8826209,
+    "lon": -122.2688990
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "11"
+  }
+},
+{
+  "type": "way",
+  "id": 1412926063,
+  "center": {
+    "lat": 37.8782963,
+    "lon": -122.2597410
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "10"
+  }
+},
+{
+  "type": "way",
+  "id": 1412926066,
+  "center": {
+    "lat": 37.8782877,
+    "lon": -122.2600056
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "6",
+    "parking": "carports"
+  }
+},
+{
+  "type": "way",
+  "id": 1412926067,
+  "center": {
+    "lat": 37.8782696,
+    "lon": -122.2601870
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "5",
+    "parking": "carports"
+  }
+},
+{
+  "type": "way",
+  "id": 1412926157,
+  "center": {
+    "lat": 37.8747152,
+    "lon": -122.2644588
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "20"
+  }
+},
+{
+  "type": "way",
+  "id": 1412926865,
+  "center": {
+    "lat": 37.8763834,
+    "lon": -122.2600548
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "9"
+  }
+},
+{
+  "type": "way",
+  "id": 1412926866,
+  "center": {
+    "lat": 37.8765885,
+    "lon": -122.2591277
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8"
+  }
+},
+{
+  "type": "way",
+  "id": 1412927012,
+  "center": {
+    "lat": 37.8756614,
+    "lon": -122.2594613
+  },
+  "tags": {
+    "access": "permit",
+    "amenity": "parking",
+    "capacity": "12",
+    "capacity:disabled": "2",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1412928629,
+  "center": {
+    "lat": 37.8766652,
+    "lon": -122.2577624
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "12"
+  }
+},
+{
+  "type": "way",
+  "id": 1412928631,
+  "center": {
+    "lat": 37.8769815,
+    "lon": -122.2573153
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "7"
+  }
+},
+{
+  "type": "way",
+  "id": 1412928740,
+  "center": {
+    "lat": 37.8758494,
+    "lon": -122.2556094
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "4",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1413599920,
+  "center": {
+    "lat": 37.8796485,
+    "lon": -122.2702771
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "3"
+  }
+},
+{
+  "type": "way",
+  "id": 1413599921,
+  "center": {
+    "lat": 37.8795372,
+    "lon": -122.2702539
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "3"
+  }
+},
+{
+  "type": "way",
+  "id": 1413601389,
+  "center": {
+    "lat": 37.8633436,
+    "lon": -122.2611658
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "12"
+  }
+},
+{
+  "type": "way",
+  "id": 1413601390,
+  "center": {
+    "lat": 37.8634510,
+    "lon": -122.2608878
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8"
+  }
+},
+{
+  "type": "way",
+  "id": 1413601391,
+  "center": {
+    "lat": 37.8636192,
+    "lon": -122.2608317
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "10"
+  }
+},
+{
+  "type": "way",
+  "id": 1413601392,
+  "center": {
+    "lat": 37.8635800,
+    "lon": -122.2611244
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "10"
+  }
+},
+{
+  "type": "way",
+  "id": 1413601393,
+  "center": {
+    "lat": 37.8632752,
+    "lon": -122.2614110
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "4"
+  }
+},
+{
+  "type": "way",
+  "id": 1413601396,
+  "center": {
+    "lat": 37.8632635,
+    "lon": -122.2615435
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "4"
+  }
+},
+{
+  "type": "way",
+  "id": 1413601506,
+  "center": {
+    "lat": 37.8647540,
+    "lon": -122.2643109
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "9"
+  }
+},
+{
+  "type": "way",
+  "id": 1413601507,
+  "center": {
+    "lat": 37.8639561,
+    "lon": -122.2648737
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "4"
+  }
+},
+{
+  "type": "way",
+  "id": 1413601740,
+  "center": {
+    "lat": 37.8646191,
+    "lon": -122.2656434
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8"
+  }
+},
+{
+  "type": "way",
+  "id": 1413601741,
+  "center": {
+    "lat": 37.8645590,
+    "lon": -122.2658873
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "6"
+  }
+},
+{
+  "type": "way",
+  "id": 1413601742,
+  "center": {
+    "lat": 37.8647576,
+    "lon": -122.2658476
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "9"
+  }
+},
+{
+  "type": "way",
+  "id": 1413602106,
+  "center": {
+    "lat": 37.8643806,
+    "lon": -122.2694843
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "20"
+  }
+},
+{
+  "type": "way",
+  "id": 1413606110,
+  "center": {
+    "lat": 37.8626200,
+    "lon": -122.2682967
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "10"
+  }
+},
+{
+  "type": "way",
+  "id": 1413607739,
+  "center": {
+    "lat": 37.8764053,
+    "lon": -122.2484736
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "11",
+    "capacity:disabled": "2"
+  }
+},
+{
+  "type": "way",
+  "id": 1413608331,
+  "center": {
+    "lat": 37.8764334,
+    "lon": -122.2496084
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "20",
+    "capacity:disabled": "1"
+  }
+},
+{
+  "type": "way",
+  "id": 1413608501,
+  "center": {
+    "lat": 37.8755828,
+    "lon": -122.2494756
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "24",
+    "capacity:disabled": "1"
+  }
+},
+{
+  "type": "way",
+  "id": 1413990170,
+  "center": {
+    "lat": 37.8757996,
+    "lon": -122.2525424
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "12",
+    "capacity:disabled": "2"
+  }
+},
+{
+  "type": "way",
+  "id": 1413990283,
+  "center": {
+    "lat": 37.8750815,
+    "lon": -122.2495217
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "22"
+  }
+},
+{
+  "type": "way",
+  "id": 1413990284,
+  "center": {
+    "lat": 37.8748437,
+    "lon": -122.2489489
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "9"
+  }
+},
+{
+  "type": "way",
+  "id": 1413990285,
+  "center": {
+    "lat": 37.8747525,
+    "lon": -122.2488872
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "7"
+  }
+},
+{
+  "type": "way",
+  "id": 1413992484,
+  "center": {
+    "lat": 37.8757104,
+    "lon": -122.2748505
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "10"
+  }
+},
+{
+  "type": "way",
+  "id": 1413996107,
+  "center": {
+    "lat": 37.8807307,
+    "lon": -122.2701939
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "43",
+    "capacity:disabled": "2",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1414181804,
+  "center": {
+    "lat": 37.8747010,
+    "lon": -122.2745774
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "12",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1414181824,
+  "center": {
+    "lat": 37.8693320,
+    "lon": -122.2753784
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "9",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1414181920,
+  "center": {
+    "lat": 37.8694252,
+    "lon": -122.2744367
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "10"
+  }
+},
+{
+  "type": "way",
+  "id": 1414182572,
+  "center": {
+    "lat": 37.8657743,
+    "lon": -122.2658996
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "21",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1414182717,
+  "center": {
+    "lat": 37.8655880,
+    "lon": -122.2670048
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "20",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1414182934,
+  "center": {
+    "lat": 37.8665053,
+    "lon": -122.2646661
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "29",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1414182935,
+  "center": {
+    "lat": 37.8666008,
+    "lon": -122.2640502
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "10"
+  }
+},
+{
+  "type": "way",
+  "id": 1414182936,
+  "center": {
+    "lat": 37.8663288,
+    "lon": -122.2643878
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "12"
+  }
+},
+{
+  "type": "way",
+  "id": 1414183789,
+  "center": {
+    "lat": 37.8689158,
+    "lon": -122.2732950
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "8",
+    "capacity:disabled": "1",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1414183791,
+  "center": {
+    "lat": 37.8683145,
+    "lon": -122.2731692
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "6"
+  }
+},
+{
+  "type": "way",
+  "id": 1414183792,
+  "center": {
+    "lat": 37.8673327,
+    "lon": -122.2735310
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "5",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1414183793,
+  "center": {
+    "lat": 37.8670798,
+    "lon": -122.2735114
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "7",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1414184336,
+  "center": {
+    "lat": 37.8669791,
+    "lon": -122.2738936
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "9",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1414186525,
+  "center": {
+    "lat": 37.8772200,
+    "lon": -122.2715290
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "6"
+  }
+},
+{
+  "type": "way",
+  "id": 1414186526,
+  "center": {
+    "lat": 37.8771050,
+    "lon": -122.2715119
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "6"
+  }
+},
+{
+  "type": "way",
+  "id": 1414186595,
+  "center": {
+    "lat": 37.8762299,
+    "lon": -122.2697304
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "10",
+    "capacity:disabled": "2"
+  }
+},
+{
+  "type": "way",
+  "id": 1414351806,
+  "center": {
+    "lat": 37.8614350,
+    "lon": -122.2677650
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "188",
+    "layer": "-1",
+    "operator": "Parker Place",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1414539672,
+  "center": {
+    "lat": 37.8602195,
+    "lon": -122.2666840
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "14",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1414543748,
+  "center": {
+    "lat": 37.8669551,
+    "lon": -122.2638478
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "13"
+  }
+},
+{
+  "type": "way",
+  "id": 1414543751,
+  "center": {
+    "lat": 37.8669935,
+    "lon": -122.2631840
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "21"
+  }
+},
+{
+  "type": "way",
+  "id": 1414543982,
+  "center": {
+    "lat": 37.8702846,
+    "lon": -122.2726587
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "14"
+  }
+},
+{
+  "type": "way",
+  "id": 1414544347,
+  "center": {
+    "lat": 37.8675773,
+    "lon": -122.2700239
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8"
+  }
+},
+{
+  "type": "way",
+  "id": 1414544349,
+  "center": {
+    "lat": 37.8675631,
+    "lon": -122.2689664
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "6"
+  }
+},
+{
+  "type": "way",
+  "id": 1414544491,
+  "center": {
+    "lat": 37.8670341,
+    "lon": -122.2683699
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "15"
+  }
+},
+{
+  "type": "way",
+  "id": 1414545005,
+  "center": {
+    "lat": 37.8691807,
+    "lon": -122.2499351
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "18",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1414545092,
+  "center": {
+    "lat": 37.8677385,
+    "lon": -122.2502224
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "15"
+  }
+},
+{
+  "type": "way",
+  "id": 1414545093,
+  "center": {
+    "lat": 37.8675185,
+    "lon": -122.2501623
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "14"
+  }
+},
+{
+  "type": "way",
+  "id": 1414549381,
+  "center": {
+    "lat": 37.8683772,
+    "lon": -122.2516775
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "13"
+  }
+},
+{
+  "type": "way",
+  "id": 1414549383,
+  "center": {
+    "lat": 37.8691072,
+    "lon": -122.2514203
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "10",
+    "parking": "street_side"
+  }
+},
+{
+  "type": "way",
+  "id": 1414549500,
+  "center": {
+    "lat": 37.8692341,
+    "lon": -122.2507970
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8",
+    "parking": "street_side"
+  }
+},
+{
+  "type": "way",
+  "id": 1414549501,
+  "center": {
+    "lat": 37.8681725,
+    "lon": -122.2494797
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "14"
+  }
+},
+{
+  "type": "way",
+  "id": 1414549625,
+  "center": {
+    "lat": 37.8673357,
+    "lon": -122.2484027
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8"
+  }
+},
+{
+  "type": "way",
+  "id": 1414550581,
+  "center": {
+    "lat": 37.8632985,
+    "lon": -122.2532003
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8"
+  }
+},
+{
+  "type": "way",
+  "id": 1414697989,
+  "center": {
+    "lat": 37.8603348,
+    "lon": -122.2514765
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "8"
+  }
+},
+{
+  "type": "way",
+  "id": 1414750478,
+  "center": {
+    "lat": 37.8799020,
+    "lon": -122.2702840
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "10",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1414795460,
+  "center": {
+    "lat": 37.8744128,
+    "lon": -122.2726760
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "4"
+  }
+},
+{
+  "type": "way",
+  "id": 1414796613,
+  "center": {
+    "lat": 37.8746302,
+    "lon": -122.2720096
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "12",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1414797132,
+  "center": {
+    "lat": 37.8757609,
+    "lon": -122.2723415
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "6"
+  }
+},
+{
+  "type": "way",
+  "id": 1415304095,
+  "center": {
+    "lat": 37.8610664,
+    "lon": -122.2539990
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "4"
+  }
+},
+{
+  "type": "way",
+  "id": 1415304096,
+  "center": {
+    "lat": 37.8611995,
+    "lon": -122.2541916
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "5"
+  }
+},
+{
+  "type": "way",
+  "id": 1415304182,
+  "center": {
+    "lat": 37.8594038,
+    "lon": -122.2538140
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "7"
+  }
+},
+{
+  "type": "way",
+  "id": 1415304429,
+  "center": {
+    "lat": 37.8772583,
+    "lon": -122.2614074
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "16"
+  }
+},
+{
+  "type": "way",
+  "id": 1415304983,
+  "center": {
+    "lat": 37.8766085,
+    "lon": -122.2617930
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "7"
+  }
+},
+{
+  "type": "way",
+  "id": 1415304985,
+  "center": {
+    "lat": 37.8771102,
+    "lon": -122.2610087
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "6"
+  }
+},
+{
+  "type": "way",
+  "id": 1415307050,
+  "center": {
+    "lat": 37.8796448,
+    "lon": -122.2665023
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "10"
+  }
+},
+{
+  "type": "way",
+  "id": 1415307104,
+  "center": {
+    "lat": 37.8797412,
+    "lon": -122.2653532
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "7"
+  }
+},
+{
+  "type": "way",
+  "id": 1415308372,
+  "center": {
+    "lat": 37.8778513,
+    "lon": -122.2623906
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "10"
+  }
+},
+{
+  "type": "way",
+  "id": 1415741129,
+  "center": {
+    "lat": 37.8749011,
+    "lon": -122.2672175
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "10",
+    "capacity:disabled": "1"
+  }
+},
+{
+  "type": "way",
+  "id": 1415747877,
+  "center": {
+    "lat": 37.8761308,
+    "lon": -122.2660946
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "5"
+  }
+},
+{
+  "type": "way",
+  "id": 1415747878,
+  "center": {
+    "lat": 37.8757253,
+    "lon": -122.2660789
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "5"
+  }
+},
+{
+  "type": "way",
+  "id": 1415752581,
+  "center": {
+    "lat": 37.8775214,
+    "lon": -122.2609408
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "8"
+  }
+},
+{
+  "type": "way",
+  "id": 1415765351,
+  "center": {
+    "lat": 37.8774257,
+    "lon": -122.2607604
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "4"
+  }
+},
+{
+  "type": "way",
+  "id": 1415765352,
+  "center": {
+    "lat": 37.8771854,
+    "lon": -122.2603252
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1415765611,
+  "center": {
+    "lat": 37.8777298,
+    "lon": -122.2581127
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8"
+  }
+},
+{
+  "type": "way",
+  "id": 1415784551,
+  "center": {
+    "lat": 37.8778923,
+    "lon": -122.2587423
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "4",
+    "parking": "street_side"
+  }
+},
+{
+  "type": "way",
+  "id": 1416448428,
+  "center": {
+    "lat": 37.8640953,
+    "lon": -122.2681402
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "10",
+    "operator": "Rajkumar"
+  }
+},
+{
+  "type": "way",
+  "id": 1416852477,
+  "center": {
+    "lat": 37.8792017,
+    "lon": -122.2684253
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8"
+  }
+},
+{
+  "type": "way",
+  "id": 1416852479,
+  "center": {
+    "lat": 37.8787239,
+    "lon": -122.2683130
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "12",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1416852640,
+  "center": {
+    "lat": 37.8780389,
+    "lon": -122.2682204
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "4",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1416852865,
+  "center": {
+    "lat": 37.8763278,
+    "lon": -122.2680948
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "12"
+  }
+},
+{
+  "type": "way",
+  "id": 1416852867,
+  "center": {
+    "lat": 37.8762515,
+    "lon": -122.2683753
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "30"
+  }
+},
+{
+  "type": "way",
+  "id": 1416852868,
+  "center": {
+    "lat": 37.8756775,
+    "lon": -122.2679686
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "6",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1416852870,
+  "center": {
+    "lat": 37.8759649,
+    "lon": -122.2681789
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "12"
+  }
+},
+{
+  "type": "way",
+  "id": 1416854347,
+  "center": {
+    "lat": 37.8751147,
+    "lon": -122.2679864
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1416854349,
+  "center": {
+    "lat": 37.8745940,
+    "lon": -122.2683172
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "36",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1416854351,
+  "center": {
+    "lat": 37.8751214,
+    "lon": -122.2684077
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "59",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1416854405,
+  "center": {
+    "lat": 37.8744288,
+    "lon": -122.2690040
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "20",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1416854407,
+  "center": {
+    "lat": 37.8747750,
+    "lon": -122.2702781
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8"
+  }
+},
+{
+  "type": "way",
+  "id": 1416854519,
+  "center": {
+    "lat": 37.8735049,
+    "lon": -122.2706340
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "7"
+  }
+},
+{
+  "type": "way",
+  "id": 1416854520,
+  "center": {
+    "lat": 37.8733595,
+    "lon": -122.2705998
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "22"
+  }
+},
+{
+  "type": "way",
+  "id": 1416854569,
+  "center": {
+    "lat": 37.8734068,
+    "lon": -122.2703761
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "11",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1416854865,
+  "center": {
+    "lat": 37.8725442,
+    "lon": -122.2705089
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "12",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1417129826,
+  "center": {
+    "lat": 37.8658830,
+    "lon": -122.2685901
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "16",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1417129828,
+  "center": {
+    "lat": 37.8653753,
+    "lon": -122.2687869
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "20",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1417132322,
+  "center": {
+    "lat": 37.8653924,
+    "lon": -122.2696743
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "3"
+  }
+},
+{
+  "type": "way",
+  "id": 1417132325,
+  "center": {
+    "lat": 37.8651740,
+    "lon": -122.2696542
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8"
+  }
+},
+{
+  "type": "way",
+  "id": 1417133192,
+  "center": {
+    "lat": 37.8647513,
+    "lon": -122.2712320
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "5"
+  }
+},
+{
+  "type": "way",
+  "id": 1417133193,
+  "center": {
+    "lat": 37.8647054,
+    "lon": -122.2716106
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "12"
+  }
+},
+{
+  "type": "way",
+  "id": 1417133194,
+  "center": {
+    "lat": 37.8648919,
+    "lon": -122.2714002
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "5"
+  }
+},
+{
+  "type": "way",
+  "id": 1417133195,
+  "center": {
+    "lat": 37.8640249,
+    "lon": -122.2709666
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "5"
+  }
+},
+{
+  "type": "way",
+  "id": 1417133755,
+  "center": {
+    "lat": 37.8652372,
+    "lon": -122.2709567
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "4",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1417133757,
+  "center": {
+    "lat": 37.8650735,
+    "lon": -122.2707968
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "20",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1417430244,
+  "center": {
+    "lat": 37.8770886,
+    "lon": -122.2662818
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "8",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1417430246,
+  "center": {
+    "lat": 37.8768198,
+    "lon": -122.2658626
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "10",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1417959848,
+  "center": {
+    "lat": 37.8636937,
+    "lon": -122.2716439
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "8",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1417960010,
+  "center": {
+    "lat": 37.8637216,
+    "lon": -122.2714847
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "11",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1417960012,
+  "center": {
+    "lat": 37.8637732,
+    "lon": -122.2709158
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "30",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1417961664,
+  "center": {
+    "lat": 37.8637442,
+    "lon": -122.2705841
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1417961666,
+  "center": {
+    "lat": 37.8639179,
+    "lon": -122.2701216
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "12",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1417961668,
+  "center": {
+    "lat": 37.8638029,
+    "lon": -122.2700573
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "3",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1417961670,
+  "center": {
+    "lat": 37.8637473,
+    "lon": -122.2701826
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "8",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1417962796,
+  "center": {
+    "lat": 37.8683219,
+    "lon": -122.2742676
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "8",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1417963155,
+  "center": {
+    "lat": 37.8629122,
+    "lon": -122.2645179
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "5"
+  }
+},
+{
+  "type": "way",
+  "id": 1417963617,
+  "center": {
+    "lat": 37.8630271,
+    "lon": -122.2653631
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "10"
+  }
+},
+{
+  "type": "way",
+  "id": 1417963759,
+  "center": {
+    "lat": 37.8636208,
+    "lon": -122.2660241
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "10"
+  }
+},
+{
+  "type": "way",
+  "id": 1418786454,
+  "center": {
+    "lat": 37.8690761,
+    "lon": -122.2507468
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "6"
+  }
+},
+{
+  "type": "way",
+  "id": 1418786456,
+  "center": {
+    "lat": 37.8690259,
+    "lon": -122.2525613
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "12",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1418786757,
+  "center": {
+    "lat": 37.8686235,
+    "lon": -122.2537947
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "6",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1418787070,
+  "center": {
+    "lat": 37.8667835,
+    "lon": -122.2637214
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "7",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1418787574,
+  "center": {
+    "lat": 37.8661002,
+    "lon": -122.2638190
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "12",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1418787575,
+  "center": {
+    "lat": 37.8660165,
+    "lon": -122.2635574
+  },
+  "tags": {
+    "access": "customers",
+    "amenity": "parking",
+    "capacity": "12",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1422190237,
+  "center": {
+    "lat": 37.8679880,
+    "lon": -122.2608378
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "5"
+  }
+},
+{
+  "type": "way",
+  "id": 1422190239,
+  "center": {
+    "lat": 37.8679835,
+    "lon": -122.2606631
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "4"
+  }
+},
+{
+  "type": "way",
+  "id": 1422190243,
+  "center": {
+    "lat": 37.8682064,
+    "lon": -122.2601775
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "4"
+  }
+},
+{
+  "type": "way",
+  "id": 1422190814,
+  "center": {
+    "lat": 37.8683936,
+    "lon": -122.2585191
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "5"
+  }
+},
+{
+  "type": "way",
+  "id": 1422193982,
+  "center": {
+    "lat": 37.8685950,
+    "lon": -122.2551683
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "5"
+  }
+},
+{
+  "type": "way",
+  "id": 1422198752,
+  "center": {
+    "lat": 37.8671293,
+    "lon": -122.2508898
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "11"
+  }
+},
+{
+  "type": "way",
+  "id": 1422198753,
+  "center": {
+    "lat": 37.8668725,
+    "lon": -122.2503866
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "12",
+    "operator": "Delta Upsilon"
+  }
+},
+{
+  "type": "way",
+  "id": 1422199965,
+  "center": {
+    "lat": 37.8662711,
+    "lon": -122.2518841
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "5",
+    "operator": "ΑΣΦ",
+    "operator:type": "private"
+  }
+},
+{
+  "type": "way",
+  "id": 1422201981,
+  "center": {
+    "lat": 37.8652907,
+    "lon": -122.2555301
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8"
+  }
+},
+{
+  "type": "way",
+  "id": 1422201982,
+  "center": {
+    "lat": 37.8649968,
+    "lon": -122.2555273
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "25"
+  }
+},
+{
+  "type": "way",
+  "id": 1422201983,
+  "center": {
+    "lat": 37.8645682,
+    "lon": -122.2556855
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "15"
+  }
+},
+{
+  "type": "way",
+  "id": 1422208405,
+  "center": {
+    "lat": 37.8648374,
+    "lon": -122.2625106
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "21"
+  }
+},
+{
+  "type": "way",
+  "id": 1422208410,
+  "center": {
+    "lat": 37.8642442,
+    "lon": -122.2623897
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "16"
+  }
+},
+{
+  "type": "way",
+  "id": 1422208411,
+  "center": {
+    "lat": 37.8644677,
+    "lon": -122.2621625
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "12"
+  }
+},
+{
+  "type": "way",
+  "id": 1422208412,
+  "center": {
+    "lat": 37.8642369,
+    "lon": -122.2616491
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "18"
+  }
+},
+{
+  "type": "way",
+  "id": 1422399954,
+  "center": {
+    "lat": 37.8649008,
+    "lon": -122.2567613
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "10"
+  }
+},
+{
+  "type": "way",
+  "id": 1422400190,
+  "center": {
+    "lat": 37.8653469,
+    "lon": -122.2546584
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "17",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1422400630,
+  "center": {
+    "lat": 37.8646971,
+    "lon": -122.2718937
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "6"
+  }
+},
+{
+  "type": "way",
+  "id": 1422400632,
+  "center": {
+    "lat": 37.8643106,
+    "lon": -122.2706688
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "10"
+  }
+},
+{
+  "type": "way",
+  "id": 1422400634,
+  "center": {
+    "lat": 37.8646758,
+    "lon": -122.2706679
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "6"
+  }
+},
+{
+  "type": "way",
+  "id": 1422401358,
+  "center": {
+    "lat": 37.8648467,
+    "lon": -122.2696155
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "10",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1422401360,
+  "center": {
+    "lat": 37.8649449,
+    "lon": -122.2692868
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "11",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1422401362,
+  "center": {
+    "lat": 37.8649868,
+    "lon": -122.2686942
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "50",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1422402095,
+  "center": {
+    "lat": 37.8634881,
+    "lon": -122.2580518
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "17",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1422402597,
+  "center": {
+    "lat": 37.8635823,
+    "lon": -122.2571016
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "10",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1422402599,
+  "center": {
+    "lat": 37.8636335,
+    "lon": -122.2568768
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "14",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1422403444,
+  "center": {
+    "lat": 37.8646047,
+    "lon": -122.2568176
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "50",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1422403447,
+  "center": {
+    "lat": 37.8641800,
+    "lon": -122.2567760
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "50",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1422403917,
+  "center": {
+    "lat": 37.8655406,
+    "lon": -122.2658914
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "24",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1422403919,
+  "center": {
+    "lat": 37.8657376,
+    "lon": -122.2652614
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "26",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1422404423,
+  "center": {
+    "lat": 37.8664846,
+    "lon": -122.2600446
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "130",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1422404531,
+  "center": {
+    "lat": 37.8654734,
+    "lon": -122.2580913
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "10"
+  }
+},
+{
+  "type": "way",
+  "id": 1422405117,
+  "center": {
+    "lat": 37.8647312,
+    "lon": -122.2580039
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1422405119,
+  "center": {
+    "lat": 37.8644790,
+    "lon": -122.2579838
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "8",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1422405888,
+  "center": {
+    "lat": 37.8642894,
+    "lon": -122.2573730
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "12",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1422405890,
+  "center": {
+    "lat": 37.8638546,
+    "lon": -122.2573010
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "18",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1422405892,
+  "center": {
+    "lat": 37.8637229,
+    "lon": -122.2572704
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "16"
+  }
+},
+{
+  "type": "way",
+  "id": 1422405894,
+  "center": {
+    "lat": 37.8636392,
+    "lon": -122.2579378
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "8",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1422947127,
+  "center": {
+    "lat": 37.8676964,
+    "lon": -122.2510973
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "14",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1422947440,
+  "center": {
+    "lat": 37.8665033,
+    "lon": -122.2523959
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "30",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1422947505,
+  "center": {
+    "lat": 37.8669098,
+    "lon": -122.2530822
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "36",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1422947529,
+  "center": {
+    "lat": 37.8680040,
+    "lon": -122.2598943
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "32",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1424238018,
+  "center": {
+    "lat": 37.8805768,
+    "lon": -122.2683980
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "9",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1424238644,
+  "center": {
+    "lat": 37.8822898,
+    "lon": -122.2691658
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "15",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1424289962,
+  "center": {
+    "lat": 37.8823780,
+    "lon": -122.2693947
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "22",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1455856247,
+  "center": {
+    "lat": 37.8755990,
+    "lon": -122.2685298
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "25",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 1463012103,
+  "center": {
+    "lat": 37.8675725,
+    "lon": -122.2563246
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "16",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1463012104,
+  "center": {
+    "lat": 37.8674343,
+    "lon": -122.2562949
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "16",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1465211979,
+  "center": {
+    "lat": 37.8669271,
+    "lon": -122.2538567
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "32",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1465211982,
+  "center": {
+    "lat": 37.8667368,
+    "lon": -122.2536123
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8"
+  }
+},
+{
+  "type": "way",
+  "id": 1465212326,
+  "center": {
+    "lat": 37.8687282,
+    "lon": -122.2518966
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "12",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1465213391,
+  "center": {
+    "lat": 37.8688528,
+    "lon": -122.2511876
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "15",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1465213393,
+  "center": {
+    "lat": 37.8684518,
+    "lon": -122.2506427
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "14"
+  }
+},
+{
+  "type": "way",
+  "id": 1465214311,
+  "center": {
+    "lat": 37.8624559,
+    "lon": -122.2505714
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "12"
+  }
+},
+{
+  "type": "way",
+  "id": 1465214388,
+  "center": {
+    "lat": 37.8604567,
+    "lon": -122.2549149
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "8"
+  }
+},
+{
+  "type": "way",
+  "id": 1465214462,
+  "center": {
+    "lat": 37.8599599,
+    "lon": -122.2561769
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "10",
+    "layer": "-1",
+    "parking": "underground"
+  }
+},
+{
+  "type": "way",
+  "id": 1465214607,
+  "center": {
+    "lat": 37.8594594,
+    "lon": -122.2585938
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "6"
+  }
+},
+{
+  "type": "way",
+  "id": 1465214608,
+  "center": {
+    "lat": 37.8593253,
+    "lon": -122.2587392
+  },
+  "tags": {
+    "amenity": "parking",
+    "capacity": "5"
+  }
+},
+{
+  "type": "way",
+  "id": 1497165137,
+  "center": {
+    "lat": 37.8665577,
+    "lon": -122.2568580
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "capacity": "20",
+    "capacity:disabled": "1",
+    "operator": "UC Berkeley"
+  }
+},
+{
+  "type": "way",
+  "id": 1541190232,
+  "center": {
+    "lat": 37.8702670,
+    "lon": -122.2588954
+  },
+  "tags": {
+    "access": "yes",
+    "amenity": "parking_space",
+    "capacity": "9",
+    "parking_space": "normal"
+  }
+},
+{
+  "type": "way",
+  "id": 1541190233,
+  "center": {
+    "lat": 37.8702493,
+    "lon": -122.2590359
+  },
+  "tags": {
+    "access": "yes",
+    "amenity": "parking_space",
+    "capacity": "1",
+    "parking_space": "disabled"
+  }
+},
+{
+  "type": "way",
+  "id": 1541190234,
+  "center": {
+    "lat": 37.8702428,
+    "lon": -122.2590916
+  },
+  "tags": {
+    "access": "yes",
+    "amenity": "parking_space",
+    "capacity": "1",
+    "parking_space": "disabled"
+  }
+}
+
+  ]
+}
