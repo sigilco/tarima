@@ -26,7 +26,7 @@ const TG_PORT = 3911;
 const WA_PORT = 3912;
 const MAIL_PORT = 3913;
 const BASE = `http://127.0.0.1:${PORT}`;
-const deadline = Date.now() + 55_000;
+const deadline = Date.now() + Number(process.env.SMOKE_DEADLINE_MS ?? 55_000);
 
 const steps = [];
 const step = (name, ok, detail = "") => {
