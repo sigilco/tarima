@@ -4,6 +4,11 @@
  * into `approvals` for the audit tab. eve owns the approval gate; this
  * file only records what happened.
  *
+ * Memory writes (plan W4) are mirrored into `memory_journal`: the
+ * `memory__save_memory` / `memory__remove_memory` calls arrive as
+ * ordinary `call.requested` facts, so the delegate keys on the same
+ * (session, line, idx) positions.
+ *
  * Facts are keyed by their stream position (`line`, `index`) and
  * inserted with ON CONFLICT DO NOTHING, so a retried hook step is a
  * no-op. Progress records (`content.delta`, `call.progress`,
@@ -19,6 +24,7 @@ import {
   mirrorInteractionOpened,
   mirrorInteractionSettled,
   rememberCall,
+  rememberMemoryWrite,
 } from "../lib/mirror";
 
 const MIRRORED_FACTS = new Set([
@@ -43,6 +49,13 @@ export default defineHook({
   events: {
     "call.requested": (event, ctx) => {
       rememberCall(event.data);
+      rememberMemoryWrite({
+        ...event.data,
+        sessionId: ctx.session.id,
+        principalId: ctx.session.auth.current?.principalId ?? null,
+        line: ctx.position.line,
+        index: ctx.position.index,
+      });
       if (MIRRORED_FACTS.has(event.type)) mirrorFact(event, ctx);
     },
     "interaction.opened": (event, ctx) => {

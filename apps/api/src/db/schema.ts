@@ -641,3 +641,58 @@ export const approvals = sqliteTable(
 
 export type Approval = typeof approvals.$inferSelect;
 export type NewApproval = typeof approvals.$inferInsert;
+
+/**
+ * Eve agent memory (plan W4): one versioned text document per principal
+ * scope key. eve's `fileMemory` provider reads/writes through the
+ * MemoryDocumentBackend seam in `apps/web/agent/lib/memory-sqlite.ts`;
+ * writes are optimistic on `version` (the read version must match or the
+ * write rejects). One row per scope key, so each principal's memory is
+ * isolated and survives restarts (same sqlite file).
+ */
+export const memoryDocuments = sqliteTable(
+  "memory_documents",
+  {
+    key: text("key").primaryKey(),
+    namespace: text("namespace").notNull(),
+    content: text("content").notNull(),
+    version: text("version").notNull(),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+    updatedAt: integer("updated_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [index("idx_memory_documents_namespace").on(t.namespace, t.updatedAt)],
+);
+
+export type MemoryDocument = typeof memoryDocuments.$inferSelect;
+export type NewMemoryDocument = typeof memoryDocuments.$inferInsert;
+
+/**
+ * Memory change journal (plan W4): mirror of the model's memory writes
+ * through eve's file-memory tools (`memory__save_memory`,
+ * `memory__remove_memory`). Keyed by the call fact's position on the
+ * session stream like `agent_events`, so a retried hook step is a
+ * no-op. First step toward the change journal with undo.
+ */
+export const memoryJournal = sqliteTable(
+  "memory_journal",
+  {
+    sessionId: text("session_id").notNull(),
+    line: integer("line").notNull(),
+    idx: integer("idx").notNull(),
+    callId: text("call_id").notNull(),
+    principalId: text("principal_id"),
+    action: text("action").notNull(),
+    payload: text("payload", { mode: "json" })
+      .notNull()
+      .default(sql`'{}'`)
+      .$type<Record<string, unknown>>(),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [
+    primaryKey({ columns: [t.sessionId, t.line, t.idx] }),
+    index("idx_memory_journal_principal").on(t.principalId, t.createdAt),
+  ],
+);
+
+export type MemoryJournalRow = typeof memoryJournal.$inferSelect;
+export type NewMemoryJournalRow = typeof memoryJournal.$inferInsert;
