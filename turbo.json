@@ -21,6 +21,10 @@
       "dependsOn": ["compile-messages"],
       "outputs": ["dist/**", ".output/**"]
     },
+    "@tarima/api#build": {
+      "dependsOn": ["web#build"],
+      "outputs": ["dist/**"]
+    },
     "build:eve": {
       "outputs": [".output/**"]
     }
