@@ -15,19 +15,24 @@ name: ci
 
 on:
   pull_request:
+    paths-ignore:
+      - "docs/**"
+      - ".agents/**"
+      - "research/**"
+      - "**.md"
   push:
     branches:
       - main
       - "beta/**"
       - "work/**"
+    paths-ignore:
+      - "docs/**"
+      - ".agents/**"
+      - "research/**"
+      - "**.md"
   schedule:
     # Nightly browser e2e (UTC).
     - cron: "0 3 * * *"
-  paths-ignore:
-    - "docs/**"
-    - ".agents/**"
-    - "research/**"
-    - "**.md"
 
 concurrency:
   group: ci-${{ github.ref }}
