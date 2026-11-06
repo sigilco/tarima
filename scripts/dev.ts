@@ -23,11 +23,11 @@ import { spawn, spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 
+import { pickFreePort } from "./dev-ports";
+
 const ROOT = resolve(import.meta.dirname, "..");
 const WEB = join(ROOT, "apps", "web");
 const PREVIEW = process.argv.includes("--preview");
-const WEB_PORT = Number(process.env.WEB_PORT ?? 3000);
-const EVE_PORT = process.env.TARIMA_EVE_PORT ?? "4310";
 
 /** Load .env.local (KEY=VALUE lines) without clobbering the real env. */
 function loadEnvLocal() {
@@ -40,6 +40,26 @@ function loadEnvLocal() {
 }
 
 loadEnvLocal();
+
+// The api is mounted in-process on the web server (apps/web/src/server.ts),
+// so there is no separate api port: the only loopback ports this script
+// owns are the web server and the eve runtime. Probe each configured
+// default upward so a busy port (another checkout, a stale service) never
+// leaves the printed URLs pointing at a stranger; say so in one line.
+const configuredWebPort = Number(process.env.WEB_PORT ?? 3000);
+const configuredEvePort = Number(process.env.TARIMA_EVE_PORT ?? 4310);
+const webPick = await pickFreePort(configuredWebPort);
+const evePick = await pickFreePort(configuredEvePort);
+for (const [label, want, got] of [
+  ["web", configuredWebPort, webPick],
+  ["eve", configuredEvePort, evePick],
+] as const) {
+  if (got.relocated) {
+    console.log(`[dev] ${label} port :${want} already in use; using :${got.port}`);
+  }
+}
+const WEB_PORT = webPick.port;
+const EVE_PORT = String(evePick.port);
 
 const children = [];
 let exiting = false;
@@ -198,6 +218,7 @@ for (let i = 0; i < 180; i++) {
 }
 if (!loginReady) console.error("[dev] /api/dev/login still 404 after 90s; printing URL anyway");
 console.log(`\n  tarima:    ${base}`);
+console.log(`  api:       in-process on :${WEB_PORT} (same server; no :3001 dependency)`);
 console.log(`  eve:       http://127.0.0.1:${EVE_PORT}/eve/v1/health`);
 console.log(`  dev-login: ${loginUrl}\n`);
 console.log("ctrl-c stops everything.");

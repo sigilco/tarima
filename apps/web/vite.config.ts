@@ -33,26 +33,14 @@ const config = defineConfig({
     // served by `node .output/server/index.mjs`.
     nitro({ preset: "node-server" }),
   ],
-  server: {
-    proxy: {
-      "/api": {
-        target: "http://localhost:3001",
-        changeOrigin: true,
-      },
-      "/auth": {
-        target: "http://localhost:3001",
-        changeOrigin: true,
-      },
-      "/webhooks": {
-        target: "http://localhost:3001",
-        changeOrigin: true,
-      },
-    },
-  },
   nitro: {
     // The api handlers are mounted in-process (see src/server.ts), so the
     // nitro server owns /api/**, /auth/** and /webhooks/** itself: no
-    // routeRules proxy may shadow them. Server functions reach the same
+    // routeRules proxy may shadow them, and neither may a vite dev
+    // `server.proxy` — requests the nitro dev middleware skips (e.g.
+    // /api/dev/login?email=...@tarima.test, whose ".test" suffix reads as
+    // a static-asset extension) would otherwise be forwarded to whatever
+    // happens to listen on the proxy port. Server functions reach the same
     // handlers through the request's own origin (src/lib/api-server.ts).
     // Keep the prerendered landing (TanStack Start emits it into the nitro
     // public dir) and serve the node-server build from dist/server.
