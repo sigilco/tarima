@@ -176,9 +176,10 @@ try {
   const html = await landing.text();
   const asset = html.match(/(?:src|href)="(\/assets\/[^"]+)"/)?.[1];
   // The first asset hit after a cold boot can transiently fail while the
-  // eve world warms up; retry once before calling it broken.
+  // eve world warms up (worse on a loaded host); retry for ~5s before
+  // calling it broken. A real regression (the preview bug) fails every try.
   let assetOk = false;
-  for (let i = 0; i < 2 && asset; i++) {
+  for (let i = 0; i < 10 && asset; i++) {
     assetOk = (await fetch(`${BASE}${asset}`)).ok;
     if (assetOk) break;
     await new Promise((r) => setTimeout(r, 500));
