@@ -1,0 +1,66 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-05T21:48:34Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 282601069,
+  "lat": 37.8734190,
+  "lon": -122.2687460,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1920",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "pub",
+    "check_date": "2023-05-20",
+    "contact:instagram": "triplerockbeer",
+    "craft": "brewery",
+    "level": "0",
+    "microbrewery": "yes",
+    "name": "Triple Rock Brewery",
+    "opening_hours": "Tu, Sa 12:00-22:00; We-Fr 12:00-23:00; Su 12:00-21:00",
+    "outdoor_seating": "yes",
+    "phone": "+1 510 8432739",
+    "website": "https://triplerock.com/",
+    "wheelchair": "yes",
+    "wikidata": "Q16901987"
+  }
+},
+{
+  "type": "node",
+  "id": 3191146332,
+  "lat": 37.8697889,
+  "lon": -122.2676799,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2181",
+    "addr:postcode": "94704",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "pub",
+    "beer_garden": "yes",
+    "check_date": "2024-12-23",
+    "craft": "brewery",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "yes",
+    "food": "yes",
+    "indoor_seating": "yes",
+    "level": "0;1",
+    "microbrewery": "yes",
+    "name": "Jupiter",
+    "opening_hours": "Mo-Th,Su 11:30-22:00; Fr-Sa 11:30-24:00",
+    "outdoor_seating": "yes",
+    "website": "http://www.jupiterbeer.com/",
+    "wheelchair": "yes"
+  }
+}
+
+  ]
+}

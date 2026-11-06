@@ -4,7 +4,7 @@
  * mock's port answers, then waits on the mocks. Exits non-zero if any
  * mock dies, so the bash harness fails fast.
  */
-import { startMockMail } from "../mocks/mail-mock.mjs";
+import { startMailDev } from "../mocks/maildev-mock.mjs";
 import { startMockTelegram } from "../mocks/telegram-mock.mjs";
 import { startMockWhatsapp } from "../mocks/whatsapp-mock.mjs";
 
@@ -16,7 +16,7 @@ if (!tgPort || !waPort || !mailPort) {
 
 const tg = startMockTelegram({ port: tgPort });
 const wa = startMockWhatsapp({ port: waPort });
-const mail = startMockMail({ port: mailPort });
+const mail = startMailDev({ port: mailPort });
 await Promise.all([tg.start(), wa.start(), mail.start()]);
 console.log(`[mock-boot] telegram :${tgPort}  whatsapp :${waPort}  mail :${mailPort}`);
 

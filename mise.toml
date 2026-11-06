@@ -47,6 +47,10 @@ run = "node scripts/smoke.ts"
 description = "Playwright browser suite (on demand / nightly)"
 run = "pnpm --filter web test:e2e"
 
+[tasks."eval:offline"]
+description = "Replay golden Berkeley venue queries against recorded fixtures (no network)"
+run = "pnpm --filter @tarima/api exec tsx scripts/eval-offline.ts"
+
 [tasks.build]
 description = "Build the web app (dist/) and the eve runtime (.output/)"
 run = "turbo run build build:eve"

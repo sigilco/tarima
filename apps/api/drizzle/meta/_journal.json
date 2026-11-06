@@ -85,6 +85,27 @@
       "when": 1793932969602,
       "tag": "0011_provider_ledger",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1793937472052,
+      "tag": "0012_place_geo",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "6",
+      "when": 1793937478670,
+      "tag": "0013_email_outreach",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "6",
+      "when": 1793937610974,
+      "tag": "0014_gtm_contacts",
+      "breakpoints": true
     }
   ]
 }

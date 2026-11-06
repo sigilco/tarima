@@ -89,7 +89,9 @@ describe("POST /webhooks/email", () => {
     expect(res.status).toBe(401);
   });
 
-  it("acknowledges the inbound message without persisting it", async () => {
+  it("acknowledges an unmatched reply without persisting it", async () => {
+    const { outreachMessages } = await import("../db/schema");
+    const before = db.select().from(outreachMessages).all().length;
     const res = await app.request("/webhooks/email", {
       method: "POST",
       headers: { "X-Webhook-Secret": EMAIL_SECRET, "content-type": "application/json" },
@@ -101,6 +103,86 @@ describe("POST /webhooks/email", () => {
     });
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ ok: true });
+    expect(db.select().from(outreachMessages).all()).toHaveLength(before);
+  });
+
+  it("persists a reply addressed to rfq+<entityId> and bumps the entity", async () => {
+    const { entities, events, outreachMessages } = await import("../db/schema");
+    const entityId = "ent-reply-1";
+    db.insert(entities)
+      .values({
+        id: entityId,
+        projectId,
+        name: "Reply Venue",
+        contactEmail: "reply@venue.test",
+        status: "await_reply",
+      })
+      .run();
+
+    const res = await app.request("/webhooks/email", {
+      method: "POST",
+      headers: { "X-Webhook-Secret": EMAIL_SECRET, "content-type": "application/json" },
+      body: JSON.stringify({
+        raw: MIME,
+        to: `rfq+${entityId}@outreach.tarima.events`,
+        from: "reply@venue.test",
+      }),
+    });
+    expect(res.status).toBe(200);
+
+    const msgs = db
+      .select()
+      .from(outreachMessages)
+      .all()
+      .filter((r) => r.entityId === entityId);
+    expect(msgs).toHaveLength(1);
+    expect(msgs[0]?.direction).toBe("inbound");
+    expect(msgs[0]?.body).toContain("everything is attached");
+
+    const entity = db
+      .select()
+      .from(entities)
+      .all()
+      .find((e) => e.id === entityId);
+    expect(entity?.status).toBe("parsed");
+
+    const ev = db
+      .select()
+      .from(events)
+      .all()
+      .filter((e) => e.type === "outreach.reply" && e.subjectId === entityId);
+    expect(ev).toHaveLength(1);
+  });
+
+  it("falls back to matching entities.contactEmail when there is no rfq tag", async () => {
+    const { entities, outreachMessages } = await import("../db/schema");
+    const entityId = "ent-reply-2";
+    db.insert(entities)
+      .values({
+        id: entityId,
+        projectId,
+        name: "Contact Venue",
+        contactEmail: "desk@venue.test",
+        status: "await_reply",
+      })
+      .run();
+
+    const res = await app.request("/webhooks/email", {
+      method: "POST",
+      headers: { "X-Webhook-Secret": EMAIL_SECRET, "content-type": "application/json" },
+      body: JSON.stringify({
+        raw: MIME,
+        to: "outreach@tarima.illo.fyi",
+        from: "Desk <desk@venue.test>",
+      }),
+    });
+    expect(res.status).toBe(200);
+    const msgs = db
+      .select()
+      .from(outreachMessages)
+      .all()
+      .filter((r) => r.entityId === entityId);
+    expect(msgs).toHaveLength(1);
   });
 
   it("accepts a raw mime body without the json envelope", async () => {

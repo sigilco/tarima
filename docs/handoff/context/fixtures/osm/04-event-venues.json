@@ -1,0 +1,278 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-05T21:48:34Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 286632638,
+  "lat": 37.8689327,
+  "lon": -122.2566295,
+  "tags": {
+    "amenity": "community_centre",
+    "check_date": "2024-07-31",
+    "name": "University YWCA"
+  }
+},
+{
+  "type": "node",
+  "id": 4622849762,
+  "lat": 37.8702374,
+  "lon": -122.2717906,
+  "tags": {
+    "amenity": "social_facility",
+    "social_facility": "shelter",
+    "social_facility:for": "homeless"
+  }
+},
+{
+  "type": "node",
+  "id": 5231663823,
+  "lat": 37.8662837,
+  "lon": -122.2600270,
+  "tags": {
+    "addr:housenumber": "2407",
+    "addr:postcode": "94704",
+    "addr:street": "Dana Street",
+    "amenity": "community_centre",
+    "name": "McKinley Hall"
+  }
+},
+{
+  "type": "node",
+  "id": 9428643303,
+  "lat": 37.8666586,
+  "lon": -122.2669392,
+  "tags": {
+    "amenity": "events_venue",
+    "name": "Cornerstone Craft Beer & Live Music",
+    "phone": "+1-510-214-8600",
+    "website": "https://cornerstoneberkeley.com/venue/"
+  }
+},
+{
+  "type": "node",
+  "id": 9906770644,
+  "lat": 37.8683550,
+  "lon": -122.2610852,
+  "tags": {
+    "amenity": "social_facility",
+    "name": "Stiles Hall",
+    "social_facility": "outreach",
+    "social_facility:for": "student"
+  }
+},
+{
+  "type": "node",
+  "id": 10769907290,
+  "lat": 37.8727150,
+  "lon": -122.2698002,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2012",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Berkeley Way",
+    "amenity": "social_facility",
+    "name": "The Hope Center",
+    "operator": "Berkeley Food & Housing Project",
+    "social_facility": "shelter",
+    "social_facility:for": "homeless"
+  }
+},
+{
+  "type": "node",
+  "id": 10974935690,
+  "lat": 37.8718231,
+  "lon": -122.2727000,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1909",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "social_facility",
+    "name": "Berkeley Wellness Center",
+    "operator": "Bonita House",
+    "phone": "+1 510 809 3004",
+    "social_facility": "outreach",
+    "website": "https://bonitahouse.org/berkeley-wellness-center/"
+  }
+},
+{
+  "type": "node",
+  "id": 14088374069,
+  "lat": 37.8706333,
+  "lon": -122.2582775,
+  "tags": {
+    "amenity": "community_centre",
+    "community_centre": "community_hall",
+    "name": "Native American Community Center",
+    "operator": "Native American Student Development office",
+    "website": "https://cejce.berkeley.edu/centers/native-american-student-development/indigenous-and-native-coalition-recruitment-and"
+  }
+},
+{
+  "type": "node",
+  "id": 14181985673,
+  "lat": 37.8653412,
+  "lon": -122.2556789,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2614",
+    "addr:postcode": "94720",
+    "addr:state": "CA",
+    "addr:street": "Dwight Way",
+    "amenity": "social_facility",
+    "email": "info@eastbaysanctuary.org",
+    "name": "East Bay Sanctuary Covenant",
+    "phone": "+1-510-540-5296",
+    "social_facility:for": "refugee",
+    "website": "https://eastbaysanctuary.org/"
+  }
+},
+{
+  "type": "way",
+  "id": 62354237,
+  "center": {
+    "lat": 37.8736922,
+    "lon": -122.2728293
+  },
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1901",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Hearst Avenue",
+    "amenity": "social_facility",
+    "building": "public",
+    "building:levels": "2",
+    "ele": "55",
+    "gnis:feature_id": "2086824",
+    "name": "North Berkeley Senior Center",
+    "opening_hours": "Mo 09:00-15:00; We-Fr 09:00-15:00",
+    "operator": "City of Berkeley",
+    "phone": "+1-510-981-5190",
+    "roof:levels": "0",
+    "roof:shape": "flat",
+    "social_facility:for": "senior",
+    "source": "USGS Geonames",
+    "website": "https://berkeleyca.gov/community-recreation/seniors/senior-centers/north-berkeley-senior-center"
+  }
+},
+{
+  "type": "way",
+  "id": 313188875,
+  "center": {
+    "lat": 37.8692338,
+    "lon": -122.2529598
+  },
+  "tags": {
+    "addr:housenumber": "2736",
+    "addr:street": "Bancroft Way",
+    "amenity": "community_centre",
+    "building": "yes",
+    "community_centre:for": "student;religious",
+    "name": "Berkeley Hillel Reutlinger Center",
+    "religion": "jewish"
+  }
+},
+{
+  "type": "way",
+  "id": 467707976,
+  "center": {
+    "lat": 37.8700036,
+    "lon": -122.2725439
+  },
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2111",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Martin Luther King Jr Way",
+    "alt_name": "Berkeley Teen Center",
+    "amenity": "community_centre",
+    "community_centre": "youth_centre",
+    "community_centre:for": "juvenile",
+    "landuse": "institutional",
+    "name": "YMCA PG&E Teen Center",
+    "operator": "YMCA Central Bay Area",
+    "website": "https://ymcacba.org/index.php/locations/teen-center"
+  }
+},
+{
+  "type": "way",
+  "id": 924412854,
+  "center": {
+    "lat": 37.8599121,
+    "lon": -122.2596580
+  },
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2740",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "events_venue",
+    "internet_access": "wlan",
+    "internet_access:fee": "customers",
+    "name": "Lighthaven",
+    "old_name": "Rose Garden Inn",
+    "operator": "Lightcone Rose Garden",
+    "source": "https://www.sfgate.com/tech/article/sbf-berkeley-rose-garden-inn-19520351.php",
+    "was:tourism": "hotel",
+    "website": "https://lighthaven.space",
+    "wheelchair": "limited"
+  }
+},
+{
+  "type": "way",
+  "id": 1057865860,
+  "center": {
+    "lat": 37.8785263,
+    "lon": -122.2665337
+  },
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1601",
+    "addr:postcode": "94709-1880",
+    "addr:state": "CA",
+    "addr:street": "Oxford Street",
+    "amenity": "social_facility",
+    "building": "apartments",
+    "building:levels": "5",
+    "capacity": "35",
+    "name": "Jordan Court",
+    "operator": "Satellite Affordable Housing Associates",
+    "social_facility": "housing",
+    "social_facility:for": "senior",
+    "website": "https://www.sahahomes.org/properties/jordan-court"
+  }
+},
+{
+  "type": "way",
+  "id": 1112592181,
+  "center": {
+    "lat": 37.8633228,
+    "lon": -122.2694721
+  },
+  "tags": {
+    "addr:housenumber": "2501",
+    "addr:street": "Milvia Street",
+    "amenity": "social_facility",
+    "check_date": "2026-01-03",
+    "description": "\"Assisted Living, Memory Care\"",
+    "landuse": "residential",
+    "name": "The Ivy",
+    "name:en": "The Ivy",
+    "social_facility": "assisted_living",
+    "social_facility:for": "senior",
+    "was:name": "MorningStar of Berkeley"
+  }
+}
+
+  ]
+}

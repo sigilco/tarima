@@ -7,7 +7,13 @@ import { Sidebar } from "./Sidebar";
  * the left, the active view in the content column. Collapse state is
  * local; navigation stays in the URL.
  */
-export function WorkspaceShell({ children }: { children: ReactNode }) {
+export function WorkspaceShell({
+  active = "projects",
+  children,
+}: {
+  active?: "projects" | "audit";
+  children: ReactNode;
+}) {
   const [collapsed, setCollapsed] = useState(false);
 
   function signOut() {
@@ -20,7 +26,7 @@ export function WorkspaceShell({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-[100dvh] bg-background text-foreground">
       <Sidebar
-        active="projects"
+        active={active}
         collapsed={collapsed}
         onToggleCollapsed={() => setCollapsed((value) => !value)}
         onSignOut={signOut}

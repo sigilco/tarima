@@ -111,6 +111,40 @@ Inbound (the chase reply path):
    lands in the engine (an `outreach_messages` row with direction
    `inbound`, and a `chase.parse` step in the run journal).
 
+## Outreach identity (agent-sent mail, T5-T7)
+
+Agent-sent outreach mail (the `send_email` outbox drain) goes out under a
+separate identity on a dedicated subdomain, so a cold-contact reputation
+problem can never reach the OTP sender on the primary domain.
+
+Outbound setup:
+
+1. Add `outreach.tarima.events` as a subdomain on the Cloudflare zone that
+   hosts `tarima.illo.fyi` (DNS only; no A record needed, mail only).
+2. In Brevo, Domains, add `outreach.tarima.events` and publish the SPF and
+   DKIM records it shows on the Cloudflare DNS page. Publish DMARC too:
+   `TXT _dmarc.outreach  v=DMARC1; p=none; rua=mailto:ops@illo.fyi`
+   (p=none with reporting first; tighten to quarantine after monitoring).
+3. Verify `outreach@outreach.tarima.events` as a sender on the new domain
+   and store it as `MAIL_FROM_OUTREACH` in Infisical `/email`.
+4. `OUTREACH_REPLY_DOMAIN` and `OUTREACH_POSTAL_ADDRESS` are non-secret and
+   rendered into `app.env` from the manifest's `static` block; the postal
+   address is legally required on every commercial send (CAN-SPAM).
+5. Test: approve a staged `send_email` on staging and confirm the mail
+   leaves via Brevo from `outreach@outreach.tarima.events` with
+   `Reply-To: rfq+<entityId>@outreach.tarima.events`.
+
+Inbound (replies to `rfq+<entityId>@outreach.tarima.events`):
+
+1. Reuse the existing `apps/inbound-worker` catch-all: in Cloudflare Email
+   Routing for the zone, add a custom address or catch-all rule covering
+   `*@outreach.tarima.events` with action "Send to Worker" → `tarima-email`.
+   The same `INBOUND_WEBHOOK_SECRET` signs the POST to `/webhooks/email`;
+   nothing in the worker needs to change.
+2. Test: send a reply to `rfq+<entityId>@outreach.tarima.events` and
+   confirm an `outreach_messages` row with direction `inbound` and an
+   `outreach.reply` event appear.
+
 ## WhatsApp webhook (Meta Cloud API)
 
 1. Values come from Meta App Dashboard, WhatsApp, API Setup: test number,

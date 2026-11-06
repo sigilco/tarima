@@ -14,13 +14,17 @@ const databasePath = isAbsolute(databaseUrl) ? databaseUrl : resolve(APP_ROOT, d
 mkdirSync(dirname(databasePath), { recursive: true });
 
 const sqlite = new Database(databasePath);
+// Parallel vitest workers share one DATABASE_URL file: without a busy
+// timeout the journal_mode pragma and bootstrap DDL race into
+// SQLITE_BUSY ("database is locked") at import time.
+sqlite.pragma("busy_timeout = 5000");
 sqlite.pragma("journal_mode = WAL");
 
 // Bootstrap DDL so a fresh `pnpm dev` or test run lands on a working
 // schema without waiting for `drizzle-kit push`. Statements mirror
 // apps/api/drizzle/*.sql exactly; migrations remain the source of
 // truth and are applied on deploy.
-const BOOTSTRAP_DDL = [
+export const BOOTSTRAP_DDL = [
   "CREATE TABLE IF NOT EXISTS `access_requests` ( `id` integer PRIMARY KEY AUTOINCREMENT NOT NULL, `email` text NOT NULL, `intent` text, `created_at` integer NOT NULL );",
   "CREATE TABLE IF NOT EXISTS `api_keys` ( `id` text PRIMARY KEY NOT NULL, `user_id` text NOT NULL, `name` text DEFAULT '' NOT NULL, `prefix` text NOT NULL, `key_hash` text NOT NULL, `scopes` text DEFAULT '[]' NOT NULL, `created_at` integer NOT NULL, `revoked_at` integer, FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade );",
   "CREATE TABLE IF NOT EXISTS `entities` ( `id` text PRIMARY KEY NOT NULL, `project_id` text NOT NULL, `name` text NOT NULL, `contact_email` text, `goal` text DEFAULT '{}' NOT NULL, `result` text DEFAULT '{}' NOT NULL, `status` text DEFAULT 'pending' NOT NULL, `created_at` integer NOT NULL, `updated_at` integer NOT NULL, FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON UPDATE no action ON DELETE cascade );",
@@ -28,6 +32,8 @@ const BOOTSTRAP_DDL = [
   "CREATE TABLE IF NOT EXISTS `loopback_inbox` ( `id` text PRIMARY KEY NOT NULL, `to_addr` text NOT NULL, `from_addr` text, `subject` text NOT NULL, `body` text NOT NULL, `html` text, `created_at` integer NOT NULL );",
   "CREATE TABLE IF NOT EXISTS `outbox` ( `id` text PRIMARY KEY NOT NULL, `idempotency_key` text NOT NULL, `type` text NOT NULL, `payload` text DEFAULT '{}' NOT NULL, `status` text DEFAULT 'pending' NOT NULL, `created_at` integer NOT NULL, `sent_at` integer );",
   "CREATE TABLE IF NOT EXISTS `outreach_messages` ( `id` text PRIMARY KEY NOT NULL, `entity_id` text NOT NULL, `direction` text NOT NULL, `subject` text, `body` text NOT NULL, `follow_up_of` text, `sent_at` integer, `received_at` integer, `created_at` integer NOT NULL, FOREIGN KEY (`entity_id`) REFERENCES `entities`(`id`) ON UPDATE no action ON DELETE cascade );",
+  "CREATE TABLE IF NOT EXISTS `outreach_suppressions` ( `id` text PRIMARY KEY NOT NULL, `email` text NOT NULL, `reason` text, `source` text DEFAULT 'manual' NOT NULL, `created_at` integer NOT NULL );",
+  "CREATE UNIQUE INDEX IF NOT EXISTS `idx_suppressions_email` ON `outreach_suppressions` (`email`);",
   "CREATE TABLE IF NOT EXISTS `projects` ( `id` text PRIMARY KEY NOT NULL, `owner_id` text, `name` text NOT NULL, `description` text, `goal` text DEFAULT '{}' NOT NULL, `stage` text DEFAULT 'brief' NOT NULL, `created_at` integer NOT NULL, `updated_at` integer NOT NULL, FOREIGN KEY (`owner_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE set null );",
   "CREATE TABLE IF NOT EXISTS `sessions` ( `id` text PRIMARY KEY NOT NULL, `user_id` text NOT NULL, `token_hash` text NOT NULL, `expires_at` integer NOT NULL, `created_at` integer NOT NULL, FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade );",
   "CREATE TABLE IF NOT EXISTS `steps` ( `id` text PRIMARY KEY NOT NULL, `run_id` text NOT NULL, `step_key` text NOT NULL, `status` text DEFAULT 'pending' NOT NULL, `input` text DEFAULT '{}' NOT NULL, `output` text, `retries` integer DEFAULT 0 NOT NULL, `lease_owner` text, `lease_expires_at` integer, `run_at` integer NOT NULL, `error` text, `created_at` integer NOT NULL, `updated_at` integer NOT NULL, FOREIGN KEY (`run_id`) REFERENCES `workflows`(`id`) ON UPDATE no action ON DELETE cascade );",
@@ -49,10 +55,14 @@ const BOOTSTRAP_DDL = [
   "CREATE INDEX IF NOT EXISTS `idx_channel_bindings_user` ON `channel_bindings` (`user_id`);",
   "CREATE TABLE IF NOT EXISTS `connect_codes` ( `id` text PRIMARY KEY NOT NULL, `user_id` text NOT NULL, `channel` text NOT NULL, `code_hash` text NOT NULL, `expires_at` integer NOT NULL, `consumed_at` integer, `created_at` integer NOT NULL, FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade );",
   "CREATE UNIQUE INDEX IF NOT EXISTS `idx_connect_codes_hash` ON `connect_codes` (`code_hash`);",
-  "CREATE TABLE IF NOT EXISTS `venue_catalog` ( `id` text PRIMARY KEY NOT NULL, `city` text NOT NULL, `name` text NOT NULL, `area` text, `capacity` integer, `price_band` text, `source` text NOT NULL, `url` text, `external_id` text, `contact_email` text, `contact_phone` text, `website` text, `enriched_at` integer, `created_at` integer NOT NULL );",
+  "CREATE TABLE IF NOT EXISTS `venue_catalog` ( `id` text PRIMARY KEY NOT NULL, `city` text NOT NULL, `name` text NOT NULL, `area` text, `capacity` integer, `price_band` text, `source` text NOT NULL, `url` text, `external_id` text, `contact_email` text, `contact_phone` text, `website` text, `enriched_at` integer, `latitude` real, `longitude` real, `provider` text, `opening_hours` text, `contact_source` text, `rating` real, `last_verified_at` integer, `created_at` integer NOT NULL );",
   "CREATE INDEX IF NOT EXISTS `idx_venue_catalog_city` ON `venue_catalog` (`city`);",
   "CREATE UNIQUE INDEX IF NOT EXISTS `idx_venue_catalog_city_name` ON `venue_catalog` (`city`,`name`);",
-  "CREATE TABLE IF NOT EXISTS `search_cache` ( `query_hash` text PRIMARY KEY NOT NULL, `query` text NOT NULL, `venue_ids` text DEFAULT '[]' NOT NULL, `created_at` integer NOT NULL, `refreshed_at` integer NOT NULL );",
+  "CREATE INDEX IF NOT EXISTS `idx_venue_catalog_geo` ON `venue_catalog` (`city`,`latitude`,`longitude`);",
+  "CREATE TABLE IF NOT EXISTS `search_cache` ( `query_hash` text PRIMARY KEY NOT NULL, `query` text NOT NULL, `venue_ids` text DEFAULT '[]' NOT NULL, `payload` text, `kind` text, `expires_at` integer, `degraded` integer DEFAULT 0 NOT NULL, `created_at` integer NOT NULL, `refreshed_at` integer NOT NULL );",
+  "CREATE TABLE IF NOT EXISTS `place_cache` ( `cell` text NOT NULL, `category` text NOT NULL, `radius_m` integer NOT NULL, `payload` text NOT NULL, `source` text NOT NULL, `provider_run_at` integer NOT NULL, `expires_at` integer NOT NULL, `stale` integer DEFAULT 0 NOT NULL, PRIMARY KEY(`cell`, `category`) );",
+  "CREATE TABLE IF NOT EXISTS `provider_budget` ( `provider` text NOT NULL, `day` text NOT NULL, `count` integer DEFAULT 0 NOT NULL, PRIMARY KEY(`provider`, `day`) );",
+  "CREATE TABLE IF NOT EXISTS `provider_circuit` ( `provider` text PRIMARY KEY NOT NULL, `failures` integer DEFAULT 0 NOT NULL, `opened_at` integer, `state` text DEFAULT 'closed' NOT NULL );",
   "CREATE TABLE IF NOT EXISTS `user_messages` ( `id` text PRIMARY KEY NOT NULL, `user_id` text NOT NULL, `project_id` text, `kind` text NOT NULL, `summary` text NOT NULL, `read_at` integer, `created_at` integer NOT NULL, FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade, FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON UPDATE no action ON DELETE cascade );",
   "CREATE INDEX IF NOT EXISTS `idx_user_messages_user` ON `user_messages` (`user_id`,`created_at`);",
   "CREATE INDEX IF NOT EXISTS `idx_user_messages_unread` ON `user_messages` (`user_id`,`read_at`);",
@@ -85,6 +95,9 @@ const BOOTSTRAP_DDL = [
   "CREATE TABLE IF NOT EXISTS `memory_journal` ( `session_id` text NOT NULL, `line` integer NOT NULL, `idx` integer NOT NULL, `call_id` text NOT NULL, `principal_id` text, `action` text NOT NULL, `payload` text DEFAULT '{}' NOT NULL, `created_at` integer NOT NULL, PRIMARY KEY(`session_id`, `line`, `idx`) );",
   "CREATE INDEX IF NOT EXISTS `idx_memory_journal_principal` ON `memory_journal` (`principal_id`,`created_at`);",
   "CREATE TABLE IF NOT EXISTS `provider_ledger` ( `day` text NOT NULL, `provider` text NOT NULL, `bucket` text NOT NULL, `used` integer DEFAULT 0 NOT NULL, PRIMARY KEY(`day`,`provider`,`bucket`) );",
+  "CREATE TABLE IF NOT EXISTS `gtm_contacts` ( `id` text PRIMARY KEY NOT NULL, `email` text NOT NULL, `name` text, `source` text DEFAULT 'manual' NOT NULL, `consent` integer DEFAULT false NOT NULL, `do_not_contact` integer DEFAULT false NOT NULL, `do_not_contact_reason` text, `project_id` text, `notes` text, `created_at` integer NOT NULL, `updated_at` integer NOT NULL, FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON UPDATE no action ON DELETE set null );",
+  "CREATE UNIQUE INDEX IF NOT EXISTS `idx_gtm_contacts_email` ON `gtm_contacts` (`email`);",
+  "CREATE INDEX IF NOT EXISTS `idx_gtm_contacts_dnc` ON `gtm_contacts` (`do_not_contact`);",
 ];
 
 for (const statement of BOOTSTRAP_DDL) {
@@ -146,10 +159,48 @@ addColumnIfMissing(
   "enriched_at",
   "ALTER TABLE `venue_catalog` ADD `enriched_at` integer;",
 );
+addColumnIfMissing("venue_catalog", "latitude", "ALTER TABLE `venue_catalog` ADD `latitude` real;");
+addColumnIfMissing(
+  "venue_catalog",
+  "longitude",
+  "ALTER TABLE `venue_catalog` ADD `longitude` real;",
+);
+addColumnIfMissing("venue_catalog", "provider", "ALTER TABLE `venue_catalog` ADD `provider` text;");
+addColumnIfMissing(
+  "venue_catalog",
+  "opening_hours",
+  "ALTER TABLE `venue_catalog` ADD `opening_hours` text;",
+);
+addColumnIfMissing(
+  "venue_catalog",
+  "contact_source",
+  "ALTER TABLE `venue_catalog` ADD `contact_source` text;",
+);
+addColumnIfMissing("venue_catalog", "rating", "ALTER TABLE `venue_catalog` ADD `rating` real;");
+addColumnIfMissing(
+  "venue_catalog",
+  "last_verified_at",
+  "ALTER TABLE `venue_catalog` ADD `last_verified_at` integer;",
+);
+addColumnIfMissing("search_cache", "payload", "ALTER TABLE `search_cache` ADD `payload` text;");
+addColumnIfMissing("search_cache", "kind", "ALTER TABLE `search_cache` ADD `kind` text;");
+addColumnIfMissing(
+  "search_cache",
+  "expires_at",
+  "ALTER TABLE `search_cache` ADD `expires_at` integer;",
+);
+addColumnIfMissing(
+  "search_cache",
+  "degraded",
+  "ALTER TABLE `search_cache` ADD `degraded` integer DEFAULT 0 NOT NULL;",
+);
 // The provider index lands once the column exists (also when the column
 // was just added above).
 sqlite.exec(
   "CREATE UNIQUE INDEX IF NOT EXISTS `idx_venue_catalog_external` ON `venue_catalog` (`external_id`);",
+);
+sqlite.exec(
+  "CREATE INDEX IF NOT EXISTS `idx_venue_catalog_geo` ON `venue_catalog` (`city`,`latitude`,`longitude`);",
 );
 
 export const db = drizzle(sqlite, { schema });
