@@ -26,9 +26,14 @@ eve_port="${TARIMA_EVE_PORT:-4320}"
 export APP_SECRET="w3-dev-wa-app-secret"
 
 cleanup() {
-  [ -n "${server_pid:-}" ] && kill "$server_pid" 2>/dev/null || true
+  # server_pid leads its own process group (detached spawn below); kill
+  # the group so eve workflow workers cannot outlive the harness.
+  [ -n "${server_pid:-}" ] && kill -TERM "-$server_pid" 2>/dev/null || true
   [ -n "${mock_pid:-}" ] && kill "$mock_pid" 2>/dev/null || true
-  wait "${server_pid:-}" "${mock_pid:-}" 2>/dev/null || true
+  sleep 1
+  [ -n "${server_pid:-}" ] && kill -KILL "-$server_pid" 2>/dev/null || true
+  [ -n "${mock_pid:-}" ] && kill "$mock_pid" 2>/dev/null || true
+  wait "${mock_pid:-}" 2>/dev/null || true
   if [ "${WA_E2E_KEEP:-0}" != "1" ]; then rm -rf "$tmp"; fi
 }
 trap cleanup EXIT
@@ -56,10 +61,12 @@ export WHATSAPP_APP_SECRET="$APP_SECRET"
 export WHATSAPP_PHONE_NUMBER_ID=123456789
 export WHATSAPP_VERIFY_TOKEN=w3-fake-verify-token
 export WHATSAPP_API_BASE_URL="http://127.0.0.1:$wa_port"
-# Pin the eve local-workflow queue transport to an explicit IPv4 URL:
-# its default (http://localhost:$PORT) fails intermittently on this host
-# and the retry loop then leaves the run stuck in `pending`.
-export WORKFLOW_LOCAL_BASE_URL="http://127.0.0.1:$port"
+# Pin the eve local-workflow queue transport to an explicit IPv4 URL on
+# the eve origin: its default (http://localhost:$PORT) fails
+# intermittently on this host and the retry loop then leaves the run
+# stuck in `pending`. agent/runtime.ts re-pins this to TARIMA_EVE_PORT
+# when it mounts the runtime in-process; keep the export consistent.
+export WORKFLOW_LOCAL_BASE_URL="http://127.0.0.1:$eve_port"
 
 # The mock Graph API in its own process; its stdout is the assertion log.
 node "$web_root/tests/mocks/whatsapp-mock.mjs" "$wa_port" "$APP_SECRET" >"$tmp/mock.log" 2>&1 &
@@ -74,10 +81,22 @@ cd "$web_root"
 # Clean workflow state before boot: stale queue deliveries from earlier
 # runs would resume and wedge fresh turns.
 rm -rf "$web_root/.eve/.workflow-data"
-# Own session/process group so tool teardown cannot signal the server
-# mid-test.
-setsid node dist/server/server/index.mjs >"$tmp/server.log" 2>&1 &
-server_pid=$!
+# Own process group so tool teardown cannot signal the server mid-test.
+# setsid is Linux-only; spawn detached through node (portable) and take
+# the child's pid — with detached:true its pgid equals its pid.
+server_pid="$(node -e '
+  const { spawn } = require("node:child_process");
+  const { openSync } = require("node:fs");
+  const out = openSync(process.argv[1], "a");
+  const c = spawn(process.execPath, [process.argv[2]], {
+    cwd: process.argv[3],
+    detached: true,
+    stdio: ["ignore", out, out],
+  });
+  c.unref();
+  console.log(c.pid);
+' "$tmp/server.log" "$web_root/dist/server/server/index.mjs" "$web_root")"
+echo "[wa] server pid $server_pid (own process group)"
 
 for _ in $(seq 1 120); do
   curl -fsS "http://127.0.0.1:$port/api/health" >/dev/null 2>&1 && break
@@ -90,9 +109,18 @@ for _ in $(seq 1 60); do
   sleep 0.5
 done
 echo "[wa] eve health: $(curl -s -m 5 "http://127.0.0.1:$eve_port/eve/v1/health" || echo FAILED)"
-# Eve's local workflow queue transport retries its first deliveries right
-# after boot; webhooks posted into that window are dropped. Let it settle.
-sleep 8
+# Readiness wait on the eve queue before posting webhooks: the local
+# workflow world delivers queued turns by POSTing
+# /.well-known/workflow/v1/flow on the eve origin. While the runtime is
+# still booting that first delivery gets ECONNREFUSED and the run can
+# stall. Any HTTP status (the route answers 401 without the delivery
+# secret) proves the socket and the route are live — no blind sleep.
+for _ in $(seq 1 120); do
+  code="$(curl -s -m 5 -o /dev/null -w '%{http_code}' "http://127.0.0.1:$eve_port/.well-known/workflow/v1/flow" || true)"
+  [ "$code" != "000" ] && [ -n "$code" ] && break
+  sleep 0.5
+done
+echo "[wa] workflow queue route ready (HTTP $code)"
 
 # Stage a user + an unconsumed whatsapp connect code in the same DB the
 # app (and the webhook) read.
