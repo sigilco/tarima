@@ -88,6 +88,14 @@ observer-links 6, audit 2, gtm-contacts 5.
   (api copies `apps/web/dist`, turbo.json has no dependency edge). Hit
   it locally; built `--filter=web` first, then the rest. Pre-existing on
   the base, not introduced here — flagging for W-bookkeeping.
+- **Pre-push flake fixed, not retried around.** Two pushes failed in
+  `web#test` with `SqliteError: database is locked`: parallel vitest
+  workers share one `DATABASE_URL` temp file and raced
+  `journal_mode = WAL` + bootstrap DDL at import. Added
+  `busy_timeout = 5000` on the shared sqlite open
+  (`apps/api/src/db/index.ts`); three consecutive local `vitest run`
+  passes and the pre-push gate then went green. This is the same class
+  of flake that failed `search-core`'s first push.
 - `verify:smoke` requires a prior build (`apps/web/dist`); ran
   `turbo run build --filter=web` then `turbo run build build:eve` first.
 
