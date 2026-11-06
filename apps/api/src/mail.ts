@@ -33,15 +33,26 @@ function isLoopbackRecipient(to: string): boolean {
   return loopbackDomains().includes(domain);
 }
 
+/** The send endpoint: MAIL_API_BASE_URL (origin or full path), else Brevo.
+ * Same resolution as the email channel adapter (`sendEndpoint` in
+ * `packages/channels/src/providers/email.ts`). */
+function mailSendEndpoint(baseOverride: string | undefined): string {
+  const base = baseOverride?.replace(/\/+$/, "");
+  if (!base) return "https://api.brevo.com/v3/smtp/email";
+  return base.endsWith("/v3/smtp/email") ? base : `${base}/v3/smtp/email`;
+}
+
 /**
  * Transactional mail seam. Loopback domains are captured in the database,
  * Brevo HTTP API is used when BREVO_API_KEY is set, and everything else
  * logs to stdout. Callers never see the provider.
  *
- * The provider host is overridable with MAIL_API_BASE_URL so dev and CI
+ * The send endpoint is overridable with MAIL_API_BASE_URL so dev and CI
  * can point the exact Brevo-shaped request at a local mock (the default
- * stays the real endpoint). MAIL_API_BASE_URL only replaces the origin;
- * the /v3/smtp/email path and request/response shape are identical.
+ * stays the real endpoint). Resolution is `mailSendEndpoint` above, kept
+ * identical to the email channel adapter's `sendEndpoint`: the value may
+ * be the provider origin or the full `/v3/smtp/email` path, trailing
+ * slashes stripped, and the override sends even without BREVO_API_KEY.
  */
 export async function sendMail(message: MailMessage): Promise<void> {
   if (isLoopbackRecipient(message.to)) {
@@ -67,11 +78,7 @@ export async function sendMail(message: MailMessage): Promise<void> {
     console.info("[mail:noop]", message.subject, "->", message.to);
     return;
   }
-  const endpoint = baseOverride
-    ? baseOverride.endsWith("/v3/smtp/email")
-      ? baseOverride
-      : `${baseOverride}/v3/smtp/email`
-    : "https://api.brevo.com/v3/smtp/email";
+  const endpoint = mailSendEndpoint(baseOverride);
   const res = await fetch(endpoint, {
     method: "POST",
     headers: {
