@@ -16,8 +16,13 @@
  * before any request is served — and anchors the global at the nitro
  * dev serverDir (`node_modules/.nitro/dev`, the nitro-dev preset's
  * output.serverDir) so `../../..`-relative asset paths land back on
- * `apps/web/dist/client`. The `if` guard keeps the built/preview
- * bundle's own value untouched (its entry prepend runs first).
+ * `apps/web/dist/client`. The `request` hook re-asserts the anchor on
+ * every request because the eve mount overwrites the global for the
+ * whole duration of its (multi-second) import; without the re-assert a
+ * request landing inside that window still resolves against
+ * `.output/server` and 500s. When the global is already set at init
+ * (built/preview bundle, whose entry prepend runs first) this is a
+ * no-op.
  */
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -27,9 +32,19 @@ declare global {
   var __nitro_main__: string | undefined;
 }
 
-export default function tarimaDevNitroMain() {
+const DEV_NITRO_MAIN = pathToFileURL(
+  join(process.cwd(), "node_modules", ".nitro", "dev", "index.mjs"),
+).href;
+
+interface NitroAppLike {
+  hooks?: { hook?: (name: string, fn: () => void) => void };
+}
+
+export default function tarimaDevNitroMain(app: NitroAppLike) {
   if (globalThis.__nitro_main__) return;
-  globalThis.__nitro_main__ = pathToFileURL(
-    join(process.cwd(), "node_modules", ".nitro", "dev", "index.mjs"),
-  ).href;
+  const anchor = () => {
+    globalThis.__nitro_main__ = DEV_NITRO_MAIN;
+  };
+  anchor();
+  app.hooks?.hook?.("request", anchor);
 }
