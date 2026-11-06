@@ -59,17 +59,21 @@ pnpm turbo run build build:eve --filter=web
 bash apps/web/tests/e2e/run-memory.sh
 """
 
+[tasks."test:whatsapp-roundtrip"]
+description = "Opt-in WhatsApp channel round-trip proof (stub LLM, mock Graph API, throwaway DB)"
+run = "bash apps/web/tests/turn/whatsapp-run.sh"
+
 [tasks."eval:offline"]
 description = "Replay golden Berkeley venue queries against recorded fixtures (no network)"
 run = "pnpm --filter @tarima/api exec tsx scripts/eval-offline.ts"
 
 [tasks.build]
 description = "Build the web app (dist/) and the eve runtime (.output/)"
-run = "turbo run build build:eve"
+run = "pnpm turbo run build build:eve"
 
 [tasks."build:web"]
 description = "Build only the web app; output lands in apps/web/dist"
-run = "turbo run build"
+run = "pnpm turbo run build"
 
 [tasks."deploy:lint"]
 description = "mypy --strict the Python deploy runner + shellcheck install-host.sh"
