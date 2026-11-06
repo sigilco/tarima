@@ -1,0 +1,6474 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-05T21:45:36Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 282388068,
+  "lat": 37.8691109,
+  "lon": -122.2548636,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2300",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "College Avenue",
+    "alt_name": "Caffe Strada",
+    "amenity": "cafe",
+    "check_date": "2024-07-31",
+    "contact:facebook": "https://www.facebook.com/Caffe-Strada-Berkeley-132397263447164/https://www.facebook.com/Caffe-Strada-Berkeley-132397263447164/",
+    "cuisine": "coffee_shop",
+    "drive_through": "no",
+    "internet_access": "wlan",
+    "internet_access:fee": "no",
+    "name": "Caffé Strada",
+    "outdoor_seating": "yes",
+    "phone": "+1-510-843-5282",
+    "takeaway": "yes",
+    "terrace": "yes",
+    "toilets": "yes",
+    "toilets:access": "customers",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 282601069,
+  "lat": 37.8734190,
+  "lon": -122.2687460,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1920",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "pub",
+    "check_date": "2023-05-20",
+    "contact:instagram": "triplerockbeer",
+    "craft": "brewery",
+    "level": "0",
+    "microbrewery": "yes",
+    "name": "Triple Rock Brewery",
+    "opening_hours": "Tu, Sa 12:00-22:00; We-Fr 12:00-23:00; Su 12:00-21:00",
+    "outdoor_seating": "yes",
+    "phone": "+1 510 8432739",
+    "website": "https://triplerock.com/",
+    "wheelchair": "yes",
+    "wikidata": "Q16901987"
+  }
+},
+{
+  "type": "node",
+  "id": 286080783,
+  "lat": 37.8679894,
+  "lon": -122.2565510,
+  "tags": {
+    "addr:housenumber": "2600",
+    "addr:street": "Durant Avenue",
+    "amenity": "pub",
+    "check_date": "2024-07-31",
+    "name": "Henry's"
+  }
+},
+{
+  "type": "node",
+  "id": 286081304,
+  "lat": 37.8656869,
+  "lon": -122.2672122,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2409",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "cafe",
+    "check_date": "2023-08-19",
+    "indoor_seating": "yes",
+    "name": "Royal Ground Coffee",
+    "opening_hours": "Mo-Sa 07:00-16:00; Su 07:00-15:00",
+    "outdoor_seating": "no",
+    "phone": "+1-510-849-9888",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 286081305,
+  "lat": 37.8684190,
+  "lon": -122.2675560,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2255",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "cafe",
+    "check_date": "2025-03-31",
+    "cuisine": "coffee_shop",
+    "level": "0",
+    "name": "Penelope's Coffee and Tea",
+    "outdoor_seating": "yes",
+    "shop": "coffee",
+    "smoking": "no",
+    "source:name": "sign on building",
+    "website": "https://penelopescoffee.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 286081409,
+  "lat": 37.8733273,
+  "lon": -122.2648839,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2255",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Hearst Avenue",
+    "amenity": "fast_food",
+    "drive_through": "no",
+    "fast_food": "cafeteria",
+    "name": "Brown's",
+    "opening_hours": "Mo-Fr 07:30-16:30",
+    "operator": "University of California - Berkeley",
+    "phone": "+1-510-643-8323",
+    "website": "https://dining.berkeley.edu/campus-restaurants/browns/"
+  }
+},
+{
+  "type": "node",
+  "id": 286632448,
+  "lat": 37.8679215,
+  "lon": -122.2591467,
+  "tags": {
+    "addr:housenumber": "2344",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "cafe",
+    "check_date": "2025-01-26",
+    "cuisine": "coffee_shop",
+    "indoor_seating": "yes",
+    "name": "Quargo Coffee",
+    "outdoor_seating": "no",
+    "was:name": "Noah's Bagels"
+  }
+},
+{
+  "type": "node",
+  "id": 286632968,
+  "lat": 37.8704401,
+  "lon": -122.2549219,
+  "tags": {
+    "amenity": "cafe",
+    "check_date": "2024-09-30",
+    "cuisine": "bagel;salad;sandwich",
+    "food": "yes",
+    "level": "0",
+    "name": "Local X Design",
+    "outdoor_seating": "yes",
+    "takeaway": "yes",
+    "website": "https://dining.berkeley.edu/campus-restaurants/local-x-design/"
+  }
+},
+{
+  "type": "node",
+  "id": 288991105,
+  "lat": 37.8709518,
+  "lon": -122.2748450,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1800",
+    "addr:postcode": "94703",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "fast_food",
+    "cuisine": "burger",
+    "drive_in": "no",
+    "microbrewery": "no",
+    "name": "Nation's Giant Hamburgers",
+    "opening_hours": "Mo-Th, Su 06:00-00:30; Sa, Su 06:00-01:30",
+    "phone": "+1 510 8437326",
+    "smoking": "no",
+    "website": "https://www.nationsrestaurants.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 308995420,
+  "lat": 37.8687031,
+  "lon": -122.2606942,
+  "tags": {
+    "addr:housenumber": "2465",
+    "addr:street": "Bancroft Way",
+    "addr:unit": "14-",
+    "amenity": "pub",
+    "name": "Headland's Brewing",
+    "was:name": "Bear's Lair",
+    "website": "https://www.headlandsbrewing.com/on-campus-berkeley"
+  }
+},
+{
+  "type": "node",
+  "id": 314115388,
+  "lat": 37.8817265,
+  "lon": -122.2698100,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1400",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "cuisine": "italian;pizza",
+    "name": "Lo Coco's",
+    "phone": "+1-510-843-3745",
+    "website": "https://www.lococosberkeley.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 314115398,
+  "lat": 37.8806944,
+  "lon": -122.2690350,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1475",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "cuisine": "jewish",
+    "drive_in": "no",
+    "microbrewery": "no",
+    "name": "Saul's Deli",
+    "opening_hours": "Mo-Su 08:00-21:00",
+    "outdoor_seating": "parklet",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "http://www.saulsdeli.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 314115403,
+  "lat": 37.8809246,
+  "lon": -122.2690658,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1463",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "cuisine": "japanese",
+    "name": "Ijo Izakaya",
+    "opening_hours": "Mo, We-Fr 11:30-14:30, 17:00-21:30; Sa-Su 12:00-15:00, 17:00-22:00",
+    "outdoor_seating": "no",
+    "phone": "+1-510-6795200",
+    "website": "https://www.ijoizakaya.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 314115409,
+  "lat": 37.8798086,
+  "lon": -122.2690130,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1511",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "addr:unit": "D",
+    "amenity": "restaurant",
+    "contact:instagram": "https://www.instagram.com/itanisushi",
+    "contact:yelp": "https://www.yelp.com/biz/itani-sushi-berkeley-2",
+    "cuisine": "japanese;sushi",
+    "email": "info@itanisushi.com",
+    "name": "Itani Sushi",
+    "opening_hours": "Mo-Su 11:00-20:00",
+    "operator": "Itani Restaurant Group",
+    "phone": "+1-925-644-3316",
+    "website": "https://www.itanisushi.com/",
+    "website:menu": "https://www.itanisushi.com/sushibar"
+  }
+},
+{
+  "type": "node",
+  "id": 314115417,
+  "lat": 37.8798656,
+  "lon": -122.2689210,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1511",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "fast_food",
+    "cuisine": "mexican",
+    "name": "Mexicana Taqueria",
+    "opening_hours": "Mo-Su 11:00-19:00",
+    "phone": "+1-510-6292040",
+    "website": "https://www.mexicanataqueria.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 314115419,
+  "lat": 37.8798563,
+  "lon": -122.2690130,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1511",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "name": "Hopscotch Chicken",
+    "website": "https://www.hopscotchchicken.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 314115422,
+  "lat": 37.8797331,
+  "lon": -122.2690000,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1513",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "cuisine": "american;indian",
+    "diet:vegetarian": "yes",
+    "name": "Tigerlily Berkeley",
+    "opening_hours": "Sa,Su 11:00-14:00, Mo-Su 17:00-18:30",
+    "phone": "+1 510-540-7900",
+    "website": "https://www.tigerlily-berkeley.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 314115424,
+  "lat": 37.8798610,
+  "lon": -122.2687360,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1511",
+    "addr:street": "Shattuck Avenue",
+    "addr:unit": "F",
+    "amenity": "cafe",
+    "name": "Eggys",
+    "website": "https://www.instagram.com/eggysberkeley"
+  }
+},
+{
+  "type": "node",
+  "id": 314115432,
+  "lat": 37.8796544,
+  "lon": -122.2690441,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1515",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "bar",
+    "name": "Bar Panisse",
+    "was:amenity": "restaurant",
+    "was:cuisine": "spanish",
+    "was:name": "César"
+  }
+},
+{
+  "type": "node",
+  "id": 314115443,
+  "lat": 37.8795958,
+  "lon": -122.2689700,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1517",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "cuisine": "californian",
+    "drive_in": "no",
+    "microbrewery": "no",
+    "name": "Chez Panisse",
+    "opening_hours": "Mo-Tu 11:30-22:30; Fr-Sa 11:30-23:30",
+    "phone": "+1-510-548-5049",
+    "smoking": "no",
+    "website": "https://www.chezpanisse.com/",
+    "wikidata": "Q1105811",
+    "wikipedia": "en:Chez Panisse"
+  }
+},
+{
+  "type": "node",
+  "id": 314115473,
+  "lat": 37.8798600,
+  "lon": -122.2694690,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1512",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "check_date": "2023-05-27",
+    "contact:facebook": "cheeseboard",
+    "contact:instagram": "cheeseboardcoll",
+    "contact:twitter": "CheeseBoardColl",
+    "cooperative": "yes",
+    "cuisine": "pizza",
+    "delivery": "no",
+    "description:diet": "To order vegan and gluten-free pizzas, ask a worker before getting in line",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "only",
+    "drink:beer": "yes",
+    "drink:wine": "yes",
+    "drive_in": "no",
+    "email": "cheeseboard@mac.com",
+    "indoor_seating": "yes",
+    "microbrewery": "no",
+    "name": "Cheeseboard Pizza",
+    "opening_hours": "Mo-Tu,Su off; We-Fr 17:00-20:00; Sa 11:30-14:30,17:00-20:00",
+    "opening_hours:url": "https://cheeseboardcollective.coop/pizza/",
+    "outdoor_seating": "yes",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "phone": "+1 510 5493183",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "https://cheeseboardcollective.coop/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 314115490,
+  "lat": 37.8793300,
+  "lon": -122.2694030,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1540",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "cafe",
+    "cuisine": "coffee_shop",
+    "internet_access": "wlan",
+    "internet_access:fee": "no",
+    "name": "Vanne Bistro",
+    "old_name": "The French Hotel Cafe",
+    "opening_hours": "Mo-Fr 06:00-20:00; Su 07:00-19:00; Sa 06:30-20:00",
+    "outdoor_seating": "yes",
+    "phone": "+1 510 5489930",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "https://senshotelberkeley.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 314115506,
+  "lat": 37.8782230,
+  "lon": -122.2694410,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1600",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "addr:unit": "112",
+    "amenity": "restaurant",
+    "check_date": "2023-05-20",
+    "cuisine": "burger",
+    "drive_in": "no",
+    "level": "0",
+    "microbrewery": "no",
+    "name": "Barney's Gourmet Hamburgers",
+    "note": "Suite 112",
+    "opening_hours": "Mo-Th,Su 11:00-20:30; Fr-Sa 11:00-21:00",
+    "outdoor_seating": "yes",
+    "smoking": "no",
+    "website": "https://www.barneyshamburgers.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 314115511,
+  "lat": 37.8779258,
+  "lon": -122.2692410,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1620",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "cafe",
+    "cuisine": "coffee_shop",
+    "name": "Dera Cafe",
+    "smoking": "no",
+    "website": "https://www.instagram.com/officialderacafe/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 314115556,
+  "lat": 37.8770733,
+  "lon": -122.2691640,
+  "tags": {
+    "addr:country": "US",
+    "addr:housenumber": "1674",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "check_date": "2023-03-18",
+    "contact:facebook": "https://www.facebook.com/dalianrestaurant/",
+    "cuisine": "chinese",
+    "diet:vegetarian": "yes",
+    "name": "Da Lian",
+    "opening_hours": "Mo off; Tu-Fr,Su 11:30-14:30,16:30-21:00; Sa 16:30-21:00",
+    "phone": "+1 510-883-1883",
+    "website": "https://www.dalianrestaurant.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 314115558,
+  "lat": 37.8768171,
+  "lon": -122.2691230,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1686",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "check_date": "2026-09-21",
+    "cuisine": "japanese",
+    "diet:vegan": "only",
+    "diet:vegetarian": "yes",
+    "drive_in": "no",
+    "microbrewery": "no",
+    "name": "Cha Ya",
+    "opening_hours": "We-Mo 12:00-20:00",
+    "outdoor_seating": "no",
+    "payment:cards": "no",
+    "payment:cash": "yes",
+    "payment:credit_cards": "no",
+    "payment:debit_cards": "no",
+    "payment:venmo": "yes",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "https://www.chaya-berkeley.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 314115577,
+  "lat": 37.8764640,
+  "lon": -122.2690790,
+  "tags": {
+    "addr:country": "US",
+    "addr:housenumber": "1700",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "cuisine": "indian",
+    "diet:vegetarian": "yes",
+    "drive_in": "no",
+    "microbrewery": "no",
+    "name": "Taste of the Himalayas",
+    "opening_hours": "We-Mo 16:30-20:30, We-Mo 11:00-14:30",
+    "phone": "+1 510-849-4983",
+    "website": "https://www.tasteofthehimalayas.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 314115581,
+  "lat": 37.8763927,
+  "lon": -122.2690620,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1700",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "drive_in": "no",
+    "name": "Azure Hotpot",
+    "opening_hours": "Mo,Tu,Th,Fr 11:30-14:30; Sa,Su 00:00-15:00,17:00-23:00"
+  }
+},
+{
+  "type": "node",
+  "id": 314115583,
+  "lat": 37.8760111,
+  "lon": -122.2690487,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1730",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "cuisine": "italian",
+    "diet:vegetarian": "yes",
+    "name": "Agrodolce",
+    "opening_hours": "Tu-Su 17:00-21:00",
+    "outdoor_seating": "yes",
+    "phone": "+1 510-848-8748",
+    "website": "https://www.agrodolceberkeley.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 314115617,
+  "lat": 37.8752578,
+  "lon": -122.2689411,
+  "tags": {
+    "addr:country": "US",
+    "addr:housenumber": "1776",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "cuisine": "sushi",
+    "name": "Party Sushi",
+    "phone": "+1-510-841-1776",
+    "website": "https://partysushisf.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 314115623,
+  "lat": 37.8750513,
+  "lon": -122.2689164,
+  "tags": {
+    "addr:country": "US",
+    "addr:housenumber": "1788",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "cuisine": "italian",
+    "name": "Via del Corso",
+    "old_name": "Corso",
+    "outdoor_seating": "parklet",
+    "website": "https://www.viadelcorso.net/"
+  }
+},
+{
+  "type": "node",
+  "id": 314115626,
+  "lat": 37.8749100,
+  "lon": -122.2689000,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1796",
+    "addr:postcode": "94709-1750",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "cafe",
+    "check_date": "2024-05-03",
+    "cuisine": "bubble_tea",
+    "email": "cha.berkeley@gmail.com",
+    "name": "Cha Thai Tea",
+    "opening_hours": "Mo-Su 11:30-21:00",
+    "phone": "+1-510-225-9781"
+  }
+},
+{
+  "type": "node",
+  "id": 314115665,
+  "lat": 37.8740434,
+  "lon": -122.2684411,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1849",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "cafe",
+    "check_date": "2023-03-18",
+    "cuisine": "dessert;coffee;tea",
+    "diet:vegetarian": "yes",
+    "name": "U : Dessert Story",
+    "opening_hours:covid19": "Mo-Su 13:00-22:00",
+    "outdoor_seating": "yes",
+    "smoking": "no",
+    "website": "https://udessertstory.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 314115682,
+  "lat": 37.8737120,
+  "lon": -122.2687720,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1900",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "cafe",
+    "check_date": "2023-05-20",
+    "cuisine": "coffee_shop",
+    "diet:vegetarian": "yes",
+    "internet_access": "wlan",
+    "internet_access:fee": "no",
+    "level": "0",
+    "name": "Berkeley Espresso",
+    "opening_hours": "Mo-Su 06:00-21:00",
+    "outdoor_seating": "sidewalk",
+    "payment:credit_cards": "yes",
+    "phone": "+1 510 848 9576",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "https://www.berkeleyespresso.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 314115684,
+  "lat": 37.8731960,
+  "lon": -122.2687140,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1936",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "contact:instagram": "thenoodlebay",
+    "cuisine": "thai",
+    "diet:vegetarian": "yes",
+    "level": "0",
+    "name": "The Noodle",
+    "opening_hours": "Mo off; Tu-Su 12:00-15:00, 17:00-20:00",
+    "website": "https://thenoodlebay.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 314115688,
+  "lat": 37.8725460,
+  "lon": -122.2686471,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1986",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "check_date": "2026-01-29",
+    "cuisine": "algerian",
+    "drive_in": "no",
+    "level": "0",
+    "name": "Gusto",
+    "old_name": "Turkish Kitchen",
+    "outdoor_seating": "no",
+    "smoking": "no",
+    "website": "https://www.instagram.com/gusto_2026/"
+  }
+},
+{
+  "type": "node",
+  "id": 314115730,
+  "lat": 37.8723029,
+  "lon": -122.2686290,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1998",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "fast_food",
+    "brand": "McDonald's",
+    "brand:wikidata": "Q38076",
+    "check_date": "2025-03-19",
+    "cuisine": "burger",
+    "diet:vegetarian": "yes",
+    "drive_in": "no",
+    "drive_through": "no",
+    "indoor_seating": "yes",
+    "internet_access": "wlan",
+    "internet_access:fee": "no",
+    "name": "McDonald's",
+    "opening_hours": "Mo-Su 06:00-23:55",
+    "outdoor_seating": "no",
+    "phone": "+1 510-843-1500",
+    "takeaway": "yes",
+    "website": "https://www.mcdonalds.com/us/en-us/location/4372.html",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 314117745,
+  "lat": 37.8785742,
+  "lon": -122.2685870,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2109",
+    "addr:state": "CA",
+    "addr:street": "Cedar Street",
+    "amenity": "restaurant",
+    "contact:instagram": "gregoirerestaurant",
+    "cuisine": "french",
+    "drive_in": "no",
+    "microbrewery": "no",
+    "name": "Grégoire",
+    "opening_hours": "Mo-Th 11:30-19:00; Fr-Su 11:30-20:00",
+    "phone": "+1 510 8831893",
+    "smoking": "no",
+    "website": "https://www.gregoirerestaurant.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 314117759,
+  "lat": 37.8786643,
+  "lon": -122.2689270,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1543",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "alt_name": "JotMahal Palace of Indian Cuisine",
+    "amenity": "restaurant",
+    "check_date": "2023-03-18",
+    "cuisine": "indian",
+    "name": "JotMahal",
+    "opening_hours": "Mo-Su 11:00-15:00,17:00-21:00",
+    "phone": "+1-510-848-9664",
+    "takeaway": "yes",
+    "website": "https://www.jotmahalberkeley.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 317106193,
+  "lat": 37.8802469,
+  "lon": -122.2683403,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2124",
+    "addr:state": "CA",
+    "addr:street": "Vine Street",
+    "amenity": "cafe",
+    "brand": "Peet's Coffee",
+    "brand:wikidata": "Q1094101",
+    "check_date": "2024-10-24",
+    "cuisine": "coffee_shop",
+    "indoor_seating": "yes",
+    "name": "Peet's Coffee",
+    "note": "the original Peet's store",
+    "old_name": "Peet's Coffee & Tea;Peet's Coffee Tea & Spices",
+    "opening_hours": "Mo-Fr 05:30-20:00; Sa-Su 06:00-20:00",
+    "outdoor_seating": "sidewalk",
+    "phone": "+1 510-841-0564",
+    "shop": "coffee",
+    "takeaway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 318886206,
+  "lat": 37.8755667,
+  "lon": -122.2606291,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1832",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Euclid Avenue",
+    "amenity": "fast_food",
+    "check_date": "2026-02-01",
+    "cuisine": "mexican",
+    "indoor_seating": "yes",
+    "name": "La Burrita",
+    "outdoor_seating": "yes",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "takeaway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 318886209,
+  "lat": 37.8753367,
+  "lon": -122.2597989,
+  "tags": {
+    "amenity": "restaurant",
+    "cuisine": "indian",
+    "name": "Momo Masala",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 318886212,
+  "lat": 37.8754617,
+  "lon": -122.2597197,
+  "tags": {
+    "addr:housenumber": "2507",
+    "addr:street": "Hearst Avenue",
+    "addr:unit": "C",
+    "amenity": "restaurant",
+    "cuisine": "vietnamese",
+    "name": "Camille",
+    "website": "https://www.camilleberkeley.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 318886214,
+  "lat": 37.8754473,
+  "lon": -122.2598384,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2505",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Hearst Avenue",
+    "addr:unit": "Suite C",
+    "amenity": "restaurant",
+    "contact:yelp": "https://www.yelp.com/biz/aki-japanese-restaurant-berkeley",
+    "cuisine": "japanese;taiwanese",
+    "name": "Aki's Japanese Restaurant",
+    "opening_hours": "Mo-Fr 11:00-20:00",
+    "phone": "+1-510-848-0208",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 318886222,
+  "lat": 37.8756116,
+  "lon": -122.2601289,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1839",
+    "addr:street": "Euclid Avenue",
+    "amenity": "restaurant",
+    "cuisine": "american;mediterranean",
+    "name": "Bongo Burger"
+  }
+},
+{
+  "type": "node",
+  "id": 318886226,
+  "lat": 37.8758027,
+  "lon": -122.2604332,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1814",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Euclid Avenue",
+    "amenity": "fast_food",
+    "cuisine": "vietnamese;sandwich",
+    "name": "GHÉ Bánh Mì & Rolls",
+    "opening_hours": "Mo-Fr 10:00-17:00",
+    "phone": "+1-510-977-1977",
+    "website": "https://www.ghebanhmirolls.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 342742766,
+  "lat": 37.8725339,
+  "lon": -122.2667539,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2163",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "fast_food",
+    "brand": "Shake Shack",
+    "brand:wikidata": "Q1058722",
+    "check_date": "2026-06-28",
+    "cuisine": "burger",
+    "name": "Shake Shack",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 354035785,
+  "lat": 37.8678906,
+  "lon": -122.2573998,
+  "tags": {
+    "addr:housenumber": "2534",
+    "addr:street": "Durant Avenue",
+    "amenity": "fast_food",
+    "check_date": "2025-02-20",
+    "cuisine": "hot_dog",
+    "drive_through": "no",
+    "indoor_seating": "no",
+    "name": "Top Dog",
+    "outdoor_seating": "no",
+    "payment:cash": "yes",
+    "phone": "+1 510 8435967",
+    "website": "http://www.topdoghotdogs.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 354067005,
+  "lat": 37.8706902,
+  "lon": -122.2731666,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2080",
+    "addr:state": "CA",
+    "addr:street": "Martin Luther King Jr Way",
+    "amenity": "cafe",
+    "cuisine": "coffee_shop",
+    "indoor_seating": "yes",
+    "name": "MY Coffee Roastery",
+    "opening_hours": "Sa,Su 09:00-17:00; We-Fr 08:00-16:00",
+    "outdoor_seating": "yes",
+    "phone": "+1-510-981-1872",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "https://www.mycoffeeroastery.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 354639996,
+  "lat": 37.8724212,
+  "lon": -122.2610142,
+  "tags": {
+    "amenity": "cafe",
+    "cuisine": "coffee_shop",
+    "internet_access": "wlan",
+    "internet_access:fee": "no",
+    "name": "Free Speech Movement Cafe",
+    "outdoor_seating": "yes",
+    "terrace": "yes",
+    "website": "https://www.lib.berkeley.edu/about/fsm-cafe"
+  }
+},
+{
+  "type": "node",
+  "id": 354702449,
+  "lat": 37.8702677,
+  "lon": -122.2673443,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2114",
+    "addr:postcode": "94704",
+    "addr:street": "Center Street",
+    "amenity": "restaurant",
+    "check_date": "2025-08-18",
+    "cuisine": "burger",
+    "diet:halal": "yes",
+    "drive_in": "no",
+    "level": "1",
+    "microbrewery": "no",
+    "name": "Iniburger",
+    "outdoor_seating": "yes",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "https://www.iniburger.com/berkeley",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 354702929,
+  "lat": 37.8702867,
+  "lon": -122.2671958,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2126",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Center Street",
+    "air_conditioning": "yes",
+    "amenity": "restaurant",
+    "check_date": "2026-09-10",
+    "cuisine": "chinese",
+    "drive_through": "no",
+    "internet_access": "wlan",
+    "internet_access:fee": "no",
+    "internet_access:ssid": "Lis Noodle Guest",
+    "name": "Li's Knife Cut Noodle",
+    "opening_hours": "Su-Th 11:30-15:00,16:30-20:30; Fr-Sa 11:30-15:00,16:30-21:00",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "phone": "+1-510-570-2901",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "https://www.lisnoodle.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 365795396,
+  "lat": 37.8676865,
+  "lon": -122.2588201,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2355",
+    "addr:postcode": "94704",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "fast_food",
+    "check_date": "2023-06-11",
+    "cuisine": "burger",
+    "drive_through": "no",
+    "name": "Super Duper Burger",
+    "opening_hours": "Mo-Su 07:00-22:00",
+    "phone": "+1-510-9906483",
+    "takeaway": "yes",
+    "website": "https://superduperburgers.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 365795484,
+  "lat": 37.8698310,
+  "lon": -122.2597030,
+  "tags": {
+    "amenity": "fast_food",
+    "drive_through": "no",
+    "name": "Golden Bear Cafe",
+    "note": "Unsure what opening hours will be after end of summer on 2025-08-14",
+    "opening_hours": "Mo-Fr 09:00-18:00; Sa-Su off",
+    "outdoor_seating": "yes",
+    "website": "https://dining.berkeley.edu/campus-restaurants/the-golden-bear-cafe/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 366086636,
+  "lat": 37.8683710,
+  "lon": -122.2589578,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2311",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "fast_food",
+    "brand": "Chipotle",
+    "brand:wikidata": "Q465751",
+    "cuisine": "mexican",
+    "name": "Chipotle",
+    "official_name": "Chipotle Mexican Grill",
+    "opening_hours": "Mo-Su 10:45-22:00",
+    "phone": "+1-510-548-0340",
+    "takeaway": "yes",
+    "website": "https://locations.chipotle.com/ca/berkeley/2311-telegraph-ave"
+  }
+},
+{
+  "type": "node",
+  "id": 366086641,
+  "lat": 37.8680186,
+  "lon": -122.2591660,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2340",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "fast_food",
+    "check_date": "2023-06-11",
+    "cuisine": "pizza",
+    "drive_through": "no",
+    "name": "Blondie's Pizza",
+    "old_name": "Abe's Pizza",
+    "opening_hours": "Mo-Su 10:00- 00:00",
+    "website": "https://www.abespizza.com/bk-store.html"
+  }
+},
+{
+  "type": "node",
+  "id": 366088651,
+  "lat": 37.8662741,
+  "lon": -122.2588565,
+  "tags": {
+    "addr:housenumber": "2438",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "pub",
+    "check_date": "2026-06-05",
+    "contact:instagram": "https://www.instagram.com/raleighs_pub_berkeley/",
+    "name": "Raleigh's Pub",
+    "phone": "+1-510-280-5319",
+    "website": "https://www.raleighspub.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 366088655,
+  "lat": 37.8661790,
+  "lon": -122.2587883,
+  "tags": {
+    "addr:housenumber": "2442",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "cafe",
+    "check_date": "2026-06-05",
+    "cuisine": "sandwich",
+    "name": "Mezzo",
+    "old_name": "Cafe Intermezzo",
+    "outdoor_seating": "no",
+    "website": "https://www.mezzo-berkeley.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 366088657,
+  "lat": 37.8663709,
+  "lon": -122.2588494,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2428",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "restaurant",
+    "name": "Pin Rice"
+  }
+},
+{
+  "type": "node",
+  "id": 366352407,
+  "lat": 37.8670418,
+  "lon": -122.2563567,
+  "tags": {
+    "amenity": "restaurant",
+    "check_date": "2024-07-31",
+    "name": "Crossroads"
+  }
+},
+{
+  "type": "node",
+  "id": 366352408,
+  "lat": 37.8668692,
+  "lon": -122.2562718,
+  "tags": {
+    "amenity": "cafe",
+    "brand": "Peet's Coffee",
+    "brand:wikidata": "Q1094101",
+    "check_date": "2024-07-31",
+    "cuisine": "coffee_shop",
+    "diet:vegetarian": "yes",
+    "name": "Peet's Coffee",
+    "old_name": "Peet's Coffee and Tea",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 368204308,
+  "lat": 37.8652686,
+  "lon": -122.2581872,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2505",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Dwight Way",
+    "amenity": "fast_food",
+    "cuisine": "burger;mediterranean",
+    "drive_in": "no",
+    "drive_through": "no",
+    "name": "Bongo Burger",
+    "phone": "+1 510 5484100",
+    "website": "https://bongoburger.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 368204311,
+  "lat": 37.8650439,
+  "lon": -122.2582980,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2501",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "cafe",
+    "cuisine": "coffee_shop",
+    "name": "Sana’a Cafe",
+    "takeaway": "yes",
+    "website": "https://www.instagram.com/sanaacafeberkeley/"
+  }
+},
+{
+  "type": "node",
+  "id": 420034459,
+  "lat": 37.8782219,
+  "lon": -122.2692730,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1600",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "addr:unit": "102",
+    "amenity": "restaurant",
+    "check_date": "2023-05-20",
+    "cuisine": "crepe",
+    "drive_in": "no",
+    "level": "0",
+    "microbrewery": "no",
+    "name": "Crepevine",
+    "opening_hours": "Mo-Su 08:00-21:00",
+    "opening_hours:signed": "no",
+    "outdoor_seating": "yes",
+    "phone": "+1 510 7051836",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "https://crepevine.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 462041468,
+  "lat": 37.8680564,
+  "lon": -122.2580948,
+  "tags": {
+    "addr:housenumber": "2519",
+    "addr:street": "Durant Avenue",
+    "addr:unit": "A",
+    "amenity": "restaurant",
+    "check_date": "2023-06-11",
+    "cuisine": "italian",
+    "diet:vegetarian": "yes",
+    "name": "Gypsy's Trattoria Italiano",
+    "outdoor_seating": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 540535763,
+  "lat": 37.8662070,
+  "lon": -122.2672730,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2377",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "cuisine": "french",
+    "name": "La Note",
+    "website": "https://www.lanoterestaurant.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 540608832,
+  "lat": 37.8670534,
+  "lon": -122.2662207,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2129",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "amenity": "pub",
+    "check_date": "2025-03-31",
+    "happy_hours": "Mo-Fr 15:00-18:00",
+    "level": "0",
+    "name": "Beta Lounge",
+    "phone": "+1 510-845-3200",
+    "start_date": "2009",
+    "website": "https://betalounge.net"
+  }
+},
+{
+  "type": "node",
+  "id": 540608835,
+  "lat": 37.8670767,
+  "lon": -122.2660123,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2131",
+    "addr:street": "Durant Avenue",
+    "amenity": "cafe",
+    "check_date": "2025-03-31",
+    "cuisine": "coffee_shop",
+    "level": "0",
+    "name": "Gold Bean Cafe",
+    "old_name": "Sonoma Coffee Café",
+    "opening_hours:signed": "no",
+    "outdoor_seating": "yes",
+    "start_date": "2022"
+  }
+},
+{
+  "type": "node",
+  "id": 540608969,
+  "lat": 37.8710428,
+  "lon": -122.2684788,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2102",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "check_date": "2025-03-19",
+    "contact:instagram": "revivalbarandkitchen",
+    "cuisine": "regional;pizza;california;seafood;mediterranean",
+    "name": "Revival Kitchen",
+    "opening_hours": "Mo-Th 16:00-22:00; Fr 15:30-22:00; Sa 17:00-22:00; Sa, Su 10:30-14:00; Su 16:30-21:00",
+    "phone": "+1-510-549-9950",
+    "website": "https://www.revivalbarandkitchen.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 540608998,
+  "lat": 37.8711067,
+  "lon": -122.2680572,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "100",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Berkeley Square",
+    "addr:unit": "A",
+    "alt_name": "Original Pollo",
+    "amenity": "restaurant",
+    "cuisine": "american",
+    "diet:vegetarian": "yes",
+    "name": "Pollo's",
+    "opening_hours": "Mo-Sa 07:00-16:00",
+    "phone": "+1-510-486-8027",
+    "website": "http://orderoriginalpollo.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 540609033,
+  "lat": 37.8715035,
+  "lon": -122.2685282,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2024",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "check_date": "2025-03-19",
+    "contact:instagram": "comalnextdoor",
+    "cuisine": "mexican",
+    "drive_through": "no",
+    "name": "Comal Next Door",
+    "opening_hours": "Mo-Su 11:00-20:30",
+    "phone": "+1-510-422-6625",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "https://www.comalnextdoor.com/location/comal-next-door-berkeley/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 540609042,
+  "lat": 37.8716610,
+  "lon": -122.2685180,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2016",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "contact:instagram": "luciasberkeley",
+    "cuisine": "pizza",
+    "name": "Lucia’s Pizzeria",
+    "opening_hours": "We, Th, Su 17:00-21:00; Fr, Sa 17:00-21:45",
+    "website": "https://www.luciasberkeley.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 540983303,
+  "lat": 37.8694706,
+  "lon": -122.2661064,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2200",
+    "addr:street": "Oxford Street",
+    "amenity": "restaurant",
+    "check_date": "2023-03-18",
+    "cuisine": "california;regional",
+    "email": "info@gatherberkeley.com",
+    "facebook": "https://facebook.com/GatherBerkeley",
+    "instagram": "https://instagram.com/gatherberkeley",
+    "name": "Gather",
+    "opening_hours": "We-Fr 11:00-14:00, 16:00-20:30; Sa-Su 10:00-14:00, 16:00-20:30",
+    "phone": "+1 510-809-0400",
+    "website": "https://gatherberkeley.com",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 540994882,
+  "lat": 37.8686607,
+  "lon": -122.2675890,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2237",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "check_date": "2024-12-23",
+    "cuisine": "chinese;malatang",
+    "drive_in": "no",
+    "indoor_seating": "yes",
+    "name": "Zhangliang Malatang",
+    "old_name": "KoKoLo Donburi",
+    "opening_hours": "Mo-Su 11:30-14:30,17:00-21:00",
+    "outdoor_seating": "no",
+    "smoking": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 540995436,
+  "lat": 37.8687389,
+  "lon": -122.2668527,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2119",
+    "addr:street": "Kittredge Street",
+    "amenity": "restaurant",
+    "cuisine": "mediterranean",
+    "drive_in": "no",
+    "internet_access": "wlan",
+    "internet_access:fee": "no",
+    "microbrewery": "no",
+    "name": "Razan Organic Kitchen",
+    "opening_hours": "10:00-22:00",
+    "organic": "only",
+    "outdoor_seating": "yes",
+    "phone": "+1 510 4860449",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "https://www.razansorganickitchen.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 564553570,
+  "lat": 37.8720713,
+  "lon": -122.2676078,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2118",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "cafe",
+    "brand": "Blue Bottle Coffee",
+    "brand:en": "Blue Bottle Coffee",
+    "brand:ja": "ブルーボトルコーヒー",
+    "brand:wikidata": "Q4928917",
+    "contact:instagram": "bluebottle",
+    "cuisine": "coffee_shop",
+    "diet:vegetarian": "yes",
+    "internet_access": "wlan",
+    "name": "Blue Bottle Coffee",
+    "name:en": "Blue Bottle Coffee",
+    "name:ja": "ブルーボトルコーヒー",
+    "opening_hours": "Mo-Fr 06:30-18:00; Sa, Su 07:00-18:00",
+    "takeaway": "yes",
+    "website": "https://bluebottlecoffee.com/us/eng/cafes/downtown-berkeley"
+  }
+},
+{
+  "type": "node",
+  "id": 778894118,
+  "lat": 37.8728773,
+  "lon": -122.2733345,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1916",
+    "addr:state": "CA",
+    "addr:street": "Martin Luther King Jr Way",
+    "alt_name": "Las Cabanas Mexican Grill & Taqueria",
+    "amenity": "restaurant",
+    "cuisine": "mexican",
+    "name": "Las Cabanas",
+    "phone": "+1-510-845-9303",
+    "website": "https://lascabanasgrill.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 778894332,
+  "lat": 37.8718843,
+  "lon": -122.2728790,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1947",
+    "addr:state": "CA",
+    "addr:street": "Martin Luther King Jr Way",
+    "alt_name": "Bench Patisserie Cafe",
+    "amenity": "cafe",
+    "cuisine": "coffee_shop",
+    "name": "Benc⑁ Patisserie Cafe",
+    "old_name": "Gold Leaf Cafe"
+  }
+},
+{
+  "type": "node",
+  "id": 778894377,
+  "lat": 37.8722506,
+  "lon": -122.2732676,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1930",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Martin Luther King Jr Way",
+    "amenity": "cafe",
+    "cuisine": "coffee_shop",
+    "name": "Cafe Étoile",
+    "old_name": "Cafe Nostos",
+    "opening_hours": "Mo-Su 08:00-15:00",
+    "outdoor_seating": "sidewalk",
+    "phone": "+1-510-898-1475",
+    "smoking": "no",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 831726074,
+  "lat": 37.8707480,
+  "lon": -122.2704630,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2101",
+    "addr:state": "CA",
+    "addr:street": "Milvia Street",
+    "amenity": "restaurant",
+    "cuisine": "vietnamese",
+    "drive_in": "no",
+    "microbrewery": "no",
+    "name": "Pho Tasty",
+    "outdoor_seating": "no",
+    "smoking": "no",
+    "takeaway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1140526023,
+  "lat": 37.8720196,
+  "lon": -122.2679645,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2000",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Kala Bagai Way",
+    "amenity": "restaurant",
+    "contact:instagram": "cholita_linda",
+    "cuisine": "mexican;latin_american",
+    "indoor_seating": "yes",
+    "name": "Cholita Linda",
+    "opening_hours": "Mo-Fr 11:00-21:30",
+    "outdoor_seating": "no",
+    "website": "https://www.cholitalinda.com/location-berkeley"
+  }
+},
+{
+  "type": "node",
+  "id": 1250656738,
+  "lat": 37.8676848,
+  "lon": -122.2661355,
+  "tags": {
+    "addr:housenumber": "2190",
+    "addr:street": "Bancroft Way",
+    "amenity": "restaurant",
+    "cuisine": "chinese",
+    "drive_in": "no",
+    "name": "Great China",
+    "opening_hours": "Mo, We-Su 11:30-14:30; Mo, We, Th 17:30-21:00; Fr 17:30-21:30; Sa, Su 17:00-21:30",
+    "outdoor_seating": "no",
+    "phone": "+1-510-843-7996",
+    "website": "https://www.greatchinaberkeley.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 1253252713,
+  "lat": 37.8734380,
+  "lon": -122.2663780,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1920",
+    "addr:street": "Oxford Street",
+    "amenity": "cafe",
+    "check_date": "2026-03-05",
+    "check_date:opening_hours": "2026-03-05",
+    "name": "Yali's Cafe",
+    "opening_hours": "Mo-Fr 08:00-16:00"
+  }
+},
+{
+  "type": "node",
+  "id": 1281866068,
+  "lat": 37.8752461,
+  "lon": -122.2603210,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1870",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Euclid Avenue",
+    "amenity": "restaurant",
+    "contact:facebook": "https://www.facebook.com/xpressionrestaurant",
+    "contact:instagram": "https://www.instagram.com/xpressionrestaurant/",
+    "cuisine": "indian",
+    "email": "info@xpressionrestaurant.com",
+    "name": "Xpression",
+    "opening_hours": "Mo-Su 11:00-23:00",
+    "phone": "+1 510 704 0109",
+    "website": "https://xpressionrestaurant.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 1318370148,
+  "lat": 37.8753063,
+  "lon": -122.2603330,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1866",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Euclid Avenue",
+    "amenity": "restaurant",
+    "cuisine": "mediterranean;canadian;poutine;shawarma",
+    "diet:halal": "yes",
+    "name": "My-O-My",
+    "opening_hours": "Mo-Fr 11:00-21:00; Sa off; Su 12:00-18:00",
+    "phone": "+1-510-356-4460",
+    "takeaway": "yes",
+    "toilets": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1419597327,
+  "lat": 37.8670441,
+  "lon": -122.2586764,
+  "tags": {
+    "addr:housenumber": "2399",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "restaurant",
+    "check_date": "2023-06-11",
+    "cuisine": "ice_cream",
+    "name": "Cream",
+    "opening_hours": "Mo-Fr 12:00-24:00, Sa,Su 11:00-23:00"
+  }
+},
+{
+  "type": "node",
+  "id": 1419609091,
+  "lat": 37.8702988,
+  "lon": -122.2671012,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2130",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Center Street",
+    "amenity": "restaurant",
+    "check_date": "2026-06-22",
+    "contact:instagram": "https://instagram.com/ippuku_berkeley",
+    "cuisine": "japanese;yakitori",
+    "name": "Ippuku",
+    "opening_hours": "Su-Th 17:00-22:00; Fr-Sa 17:00-23:00",
+    "phone": "+1-510-655-1969",
+    "takeaway": "no",
+    "website": "https://ippukuberkeley.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 1419796896,
+  "lat": 37.8719113,
+  "lon": -122.2689878,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2072",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "restaurant",
+    "cuisine": "pizza;italian",
+    "drive_in": "no",
+    "microbrewery": "no",
+    "name": "North Beach Pizza",
+    "note": "new restaurant opening soon",
+    "outdoor_seating": "yes",
+    "smoking": "no",
+    "takeaway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1421339345,
+  "lat": 37.8718606,
+  "lon": -122.2559220,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "The Faculty Club"
+  }
+},
+{
+  "type": "node",
+  "id": 1421340713,
+  "lat": 37.8739200,
+  "lon": -122.2564732,
+  "tags": {
+    "amenity": "cafe",
+    "cuisine": "coffee_shop",
+    "name": "Yali's Cafe",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1454232936,
+  "lat": 37.8704713,
+  "lon": -122.2679439,
+  "tags": {
+    "addr:housenumber": "150",
+    "addr:street": "Berkeley Square",
+    "amenity": "cafe",
+    "check_date": "2024-04-07",
+    "cuisine": "juice",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "yes",
+    "level": "0",
+    "name": "Juice Appeal",
+    "opening_hours": "Mo-Fr 08:00-18:00; Sa 09:00-18:00; Su 10:00-17:00",
+    "outdoor_seating": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 1556259907,
+  "lat": 37.8691529,
+  "lon": -122.2686622,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2086",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Allston Way",
+    "amenity": "restaurant",
+    "check_date": "2024-04-07",
+    "cuisine": "mediterranean",
+    "name": "Zino",
+    "phone": "+1-510-6499466",
+    "website": "https://zinoberkeley.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 1598439746,
+  "lat": 37.8718740,
+  "lon": -122.2675790,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2015",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Kala Bagai Way",
+    "amenity": "restaurant",
+    "brand": "Ippudo",
+    "brand:en": "Ippudo",
+    "brand:ja": "一風堂",
+    "brand:wikidata": "Q6065417",
+    "cocktails": "no",
+    "contact:instagram": "ippudo",
+    "cuisine": "ramen",
+    "diet:halal": "no",
+    "diet:kosher": "no",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "yes",
+    "drink:beer": "yes",
+    "drink:sake": "yes",
+    "indoor_seating": "yes",
+    "name": "Ippudo",
+    "name:en": "Ippudo",
+    "name:ja": "一風堂",
+    "opening_hours": "Mo-Sa 11:30-22:00; Su 11:30-21:30",
+    "outdoor_seating": "no",
+    "phone": "+1-510-666-8807",
+    "reservation": "no",
+    "takeaway": "no",
+    "website": "https://ippudous.com/",
+    "website:menu": "https://qrco.de/bbzgyX",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1680255991,
+  "lat": 37.8682414,
+  "lon": -122.2675427,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2261",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "check_date": "2025-03-31",
+    "contact:instagram": "https://www.instagram.com/explore/locations/916489",
+    "cuisine": "louisiana",
+    "drive_in": "no",
+    "level": "0",
+    "microbrewery": "no",
+    "name": "Angeline's Louisiana Kitchen",
+    "opening_hours": "Tu-Fr 11:30-21:00; Sa-Su 12:00-20:30; Mo off",
+    "outdoor_seating": "sidewalk",
+    "phone": "+1 510 5486900",
+    "smoking": "no",
+    "website": "https://angelineskitchen.com",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1718826322,
+  "lat": 37.8802114,
+  "lon": -122.2686313,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2114",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Vine Street",
+    "amenity": "restaurant",
+    "check_date": "2023-08-19",
+    "cuisine": "middle_eastern;mediterranean",
+    "diet:vegetarian": "yes",
+    "name": "Fava",
+    "old_name": "Juice Bar Collective",
+    "opening_hours": "Tu-Sa 11:00-14:00",
+    "phone": "+1-510-944-7010",
+    "website": "https://www.favaonvine.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 1723313107,
+  "lat": 37.8710195,
+  "lon": -122.2675369,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2117",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Kala Bagai Way",
+    "amenity": "restaurant",
+    "check_date": "2023-05-27",
+    "cuisine": "sandwich",
+    "drive_in": "no",
+    "internet_access": "wlan",
+    "level": "1",
+    "microbrewery": "no",
+    "name": "Sandwich Zone",
+    "opening_hours": "Mo-Fr 07:00-15:30",
+    "outdoor_seating": "yes",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "https://ordersandwichzone.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1762442382,
+  "lat": 37.8711070,
+  "lon": -122.2727810,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2033",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Martin Luther King Junior Way",
+    "amenity": "restaurant",
+    "check_date": "2026-09-28",
+    "check_date:opening_hours": "2026-09-28",
+    "check_date:phone": "2026-09-28",
+    "cuisine": "japanese;sushi",
+    "drive_in": "no",
+    "microbrewery": "no",
+    "name": "Sun Sun Sushi Shop",
+    "opening_hours": "Mo-Sa 11:00-19:30",
+    "phone": "+1-510-898-1182",
+    "smoking": "no",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1804658584,
+  "lat": 37.8681001,
+  "lon": -122.2598461,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2433",
+    "addr:street": "Sather Lane",
+    "addr:unit": "F",
+    "amenity": "restaurant",
+    "check_date": "2022-03-04",
+    "cuisine": "korean",
+    "name": "HanKki",
+    "website": "https://hankkirestaurant.com"
+  }
+},
+{
+  "type": "node",
+  "id": 1954723361,
+  "lat": 37.8747988,
+  "lon": -122.2587029,
+  "tags": {
+    "amenity": "cafe",
+    "cuisine": "coffee_shop",
+    "name": "Qualcomm Cafe",
+    "old_name": "Yali's Cafe",
+    "wifi": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2055073966,
+  "lat": 37.8696780,
+  "lon": -122.2531492,
+  "tags": {
+    "addr:unit": "133",
+    "amenity": "cafe",
+    "cuisine": "sandwich",
+    "drive_through": "no",
+    "name": "Café Zeb",
+    "outdoor_seating": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2059093052,
+  "lat": 37.8718309,
+  "lon": -122.2721190,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1941",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "addr:unit": "A",
+    "amenity": "restaurant",
+    "check_date": "2026-09-24",
+    "contact:instagram": "https://www.instagram.com/kinda.izakaya/",
+    "contact:yelp": "https://www.yelp.com/biz/kinda-izakaya-berkeley",
+    "cuisine": "japanese;izakaya",
+    "diet:vegan": "yes",
+    "name": "Kinda Izakaya",
+    "opening_hours": "Su, Mo, Th 17:30-22:00; Fr, Sa 17:30-23:30",
+    "phone": "+1-510-647-9226",
+    "website": "https://kindaizakaya6.godaddysites.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2095621164,
+  "lat": 37.8679255,
+  "lon": -122.2661767,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2199",
+    "addr:street": "Bancroft Way",
+    "amenity": "cafe",
+    "check_date": "2026-08-27",
+    "cuisine": "coffee_shop;bubble_tea",
+    "name": "Binge Coffee House",
+    "old_name": "U Cha",
+    "outdoor_seating": "no",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2100543486,
+  "lat": 37.8713790,
+  "lon": -122.2675370,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2045",
+    "addr:state": "CA",
+    "addr:street": "Kala Bagai Way",
+    "amenity": "restaurant",
+    "cuisine": "vietnamese",
+    "drive_in": "no",
+    "microbrewery": "no",
+    "name": "Saigon Express",
+    "opening_hours": "Mo-Fr 10:00-19:00",
+    "outdoor_seating": "no",
+    "phone": "+1 510 486 1778",
+    "smoking": "no",
+    "takeaway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2174314527,
+  "lat": 37.8639627,
+  "lon": -122.2666710,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2120",
+    "addr:postcode": "94704",
+    "addr:street": "Dwight Way",
+    "amenity": "cafe",
+    "bar": "yes",
+    "check_date": "2026-04-30",
+    "contact:instagram": "https://www.instagram.com/waystationbrew/",
+    "cuisine": "coffee_shop",
+    "diet:vegetarian": "yes",
+    "indoor_seating": "yes",
+    "internet_access": "wlan",
+    "internet_access:fee": "no",
+    "name": "Way Station Brew",
+    "old_name": "Lindgren's Coffee and Cafe",
+    "opening_hours": "Mo-Su 08:00-18:00",
+    "opening_hours:kitchen": "Mo-Su 08:00-15:00",
+    "outdoor_seating": "yes",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "phone": "+1-510-982-1905",
+    "website": "https://waystationbrew.square.site/"
+  }
+},
+{
+  "type": "node",
+  "id": 2186231182,
+  "lat": 37.8709764,
+  "lon": -122.2675846,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2199",
+    "addr:state": "CA",
+    "addr:street": "Kala Bagai Way",
+    "amenity": "restaurant",
+    "cuisine": "pizza",
+    "drive_in": "no",
+    "level": "1",
+    "microbrewery": "no",
+    "name": "Arinell Pizza",
+    "outdoor_seating": "no",
+    "phone": "+1-510-841-4035",
+    "takeaway": "yes",
+    "website": "https://www.arinellpizza.net/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2186238363,
+  "lat": 37.8713221,
+  "lon": -122.2678920,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "92",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Square",
+    "addr:unit": "6",
+    "amenity": "fast_food",
+    "brand": "Subway",
+    "brand:wikidata": "Q244457",
+    "check_date": "2026-06-28",
+    "cuisine": "sandwich",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "yes",
+    "drive_in": "no",
+    "drive_through": "no",
+    "name": "Subway",
+    "opening_hours": "Mo-Th 09:00-21:00; Sa, Su 10:00-21:00; Fr 09:00-20:00",
+    "phone": "+1 510-703-0202",
+    "takeaway": "yes",
+    "website": "https://restaurants.subway.com/united-states/ca/berkeley/2048-kala-bagai-way",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2193950100,
+  "lat": 37.8809073,
+  "lon": -122.2696792,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1444",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Place",
+    "alt_name": "Safeway Signature Cafe",
+    "amenity": "cafe",
+    "branch": "Safeway Berkeley 691",
+    "brand": "Starbucks",
+    "brand:wikidata": "Q37158",
+    "cuisine": "coffee_shop",
+    "internet_access": "wlan",
+    "internet_access:fee": "no",
+    "name": "Starbucks",
+    "official_name": "Starbucks Coffee",
+    "phone": "+1 510-526-3086",
+    "ref": "91750",
+    "takeaway": "yes",
+    "website": "https://www.starbucks.com/store-locator/store/91750/safeway-berkeley-691-1444-shattuck-place-berkeley-ca-947091411-us"
+  }
+},
+{
+  "type": "node",
+  "id": 2195112047,
+  "lat": 37.8751784,
+  "lon": -122.2603090,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1878",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Euclid Avenue",
+    "amenity": "restaurant",
+    "cuisine": "noodle;chinese",
+    "name": "Impression of Lanzhou",
+    "opening_hours": "Mo-Su 11:00-22:00"
+  }
+},
+{
+  "type": "node",
+  "id": 2195112504,
+  "lat": 37.8754788,
+  "lon": -122.2603679,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1842",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Euclid Avenue",
+    "amenity": "cafe",
+    "check_date": "2026-03-05",
+    "check_date:opening_hours": "2026-03-05",
+    "name": "Abe's Cafe",
+    "opening_hours": "Mo-Fr 07:30-16:00"
+  }
+},
+{
+  "type": "node",
+  "id": 2195112579,
+  "lat": 37.8754816,
+  "lon": -122.2605508,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1834",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Euclid Avenue",
+    "amenity": "restaurant",
+    "check_date": "2025-03-13",
+    "cuisine": "pizza",
+    "name": "La Val's Pizza",
+    "opening_hours": "Mo-Su 11:00-21:00",
+    "website": "https://lavals.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 2196584154,
+  "lat": 37.8681989,
+  "lon": -122.2692560,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2020",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Kittredge Street",
+    "amenity": "cafe",
+    "cuisine": "italian;sandwich",
+    "internet_access": "yes",
+    "name": "Heroic Italian",
+    "opening_hours": "We-Su 11:30-19:00",
+    "outdoor_seating": "yes",
+    "phone": "+1-650-224-5999",
+    "smoking": "no",
+    "website": "https://heroicitalian.com/berkeley"
+  }
+},
+{
+  "type": "node",
+  "id": 2247181637,
+  "lat": 37.8715749,
+  "lon": -122.2716142,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1954",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "restaurant",
+    "check_date": "2025-02-08",
+    "cuisine": "sandwich",
+    "diet:vegan": "only",
+    "indoor_seating": "yes",
+    "name": "The Butcher's Son",
+    "opening_hours": "Mo-Fr 11:00-20:00; Sa 10:00-20:00; Su 10:00-16:00",
+    "outdoor_seating": "patio",
+    "phone": "+1-510-984-0818",
+    "website": "https://www.thebutchersveganson.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2247184686,
+  "lat": 37.8715901,
+  "lon": -122.2714953,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1960",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "restaurant",
+    "check_date": "2026-06-22",
+    "cuisine": "pizza",
+    "drive_in": "no",
+    "email": "hello@rosepizzeria.com",
+    "name": "Rose Pizzeria",
+    "opening_hours": "Mo-Tu off; We-Su 12:00-21:00",
+    "outdoor_seating": "yes",
+    "reservation": "yes",
+    "reservation:website": "https://resy.com/cities/berkeley-ca/venues/rose-pizzeria",
+    "takeaway": "yes",
+    "website": "https://www.rosepizzeria.com/",
+    "wheelchair": "yes",
+    "wikidata": "Q127502431",
+    "wikipedia": "en:Rose Pizzeria"
+  }
+},
+{
+  "type": "node",
+  "id": 2259555666,
+  "lat": 37.8703901,
+  "lon": -122.2704935,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2115",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Milvia Street",
+    "amenity": "cafe",
+    "name": "Nuha's Cafe",
+    "outdoor_seating": "yes",
+    "smoking": "no",
+    "takeaway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2260613734,
+  "lat": 37.8712014,
+  "lon": -122.2688109,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2087",
+    "addr:state": "CA",
+    "addr:street": "Addison Street",
+    "amenity": "cafe",
+    "name": "Jazzcaffé"
+  }
+},
+{
+  "type": "node",
+  "id": 2261143233,
+  "lat": 37.8693065,
+  "lon": -122.2694650,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2043",
+    "addr:state": "CA",
+    "addr:street": "Allston Way",
+    "amenity": "cafe",
+    "check_date": "2024-04-07",
+    "cuisine": "bagel;salad",
+    "name": "Lox Stock & Bagel",
+    "opening_hours": "Mo-Fr 08:00-15:00",
+    "outdoor_seating": "no",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "https://orderloxstocknbagel.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2263422860,
+  "lat": 37.8720963,
+  "lon": -122.2701306,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2017",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "restaurant",
+    "cuisine": "pizza",
+    "drive_in": "no",
+    "microbrewery": "no",
+    "name": "Red Tomato Pizza House",
+    "opening_hours": "Mo-Su 11:00-21:00",
+    "outdoor_seating": "no",
+    "phone": "+1 510 8456666",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "https://redtomatoberkeley.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2281414596,
+  "lat": 37.8758316,
+  "lon": -122.2689998,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1746",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "cafe",
+    "check_date": "2026-10-22",
+    "cuisine": "coffee_shop",
+    "indoor_seating": "yes",
+    "name": "Roast & Toast Cafe",
+    "opening_hours": "Mo-Th 06:00-22:00; Fr 06:00-00:00; Sa 08:00-00:00; Su 08:00-22:00",
+    "outdoor_seating": "sidewalk"
+  }
+},
+{
+  "type": "node",
+  "id": 2281419391,
+  "lat": 37.8733440,
+  "lon": -122.2687390,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1926",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "cuisine": "ramen",
+    "name": "Tsuruya",
+    "smoking": "no",
+    "website": "https://www.instagram.com/tsuruyaramen_berkeley/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2286087376,
+  "lat": 37.8723800,
+  "lon": -122.2677580,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2121",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "fast_food",
+    "check_date": "2024-08-17",
+    "name": "Oakberry Acai",
+    "old_name": "Copy Edge",
+    "website": "https://www.oakberry.com/store/Berkeley",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2322519344,
+  "lat": 37.8687321,
+  "lon": -122.2669185,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2115",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Kittredge Street",
+    "amenity": "restaurant",
+    "cuisine": "asian;chinese",
+    "name": "Dumpling Day",
+    "outdoor_seating": "no",
+    "smoking": "no",
+    "website": "https://www.dumplingday2115.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2322525666,
+  "lat": 37.8680570,
+  "lon": -122.2681540,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2272",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "check_date": "2025-02-17",
+    "cuisine": "asian;noodle",
+    "diet:vegetarian": "yes",
+    "name": "Toss Noodle Bar",
+    "opening_hours": "Mo-Su 11:00-22:00",
+    "phone": "+1 510-845-8677",
+    "takeaway": "yes",
+    "website": "https://tossnoodlebar.com",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2326546449,
+  "lat": 37.8719316,
+  "lon": -122.2688293,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2086",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "cafe",
+    "check_date": "2025-06-04",
+    "cuisine": "tea;bubble_tea",
+    "indoor_seating": "yes",
+    "name": "Asha Tea House",
+    "opening_hours": "Mo-Th 10:30-19:00; Fr-Su 10:00-19:30",
+    "outdoor_seating": "no",
+    "payment:credit_cards": "yes",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "https://ashateahouse.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2326546632,
+  "lat": 37.8718947,
+  "lon": -122.2691177,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2068",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "restaurant",
+    "cuisine": "thai",
+    "name": "Imm Thai Street Food",
+    "opening_hours": "Mo-Fr 11:00-22:00; Sa, Su 11:30-22:00",
+    "phone": "+1 510 8981123",
+    "toilets:wheelchair": "no",
+    "website": "https://www.immthaistreetfood.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2326547325,
+  "lat": 37.8718852,
+  "lon": -122.2691916,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2066",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "cafe",
+    "cuisine": "sandwich",
+    "name": "Cafe Rio",
+    "opening_hours": "Mo-Th,Sa 07:00-19:00; Fr 07:00-21:00"
+  }
+},
+{
+  "type": "node",
+  "id": 2326547409,
+  "lat": 37.8718164,
+  "lon": -122.2697291,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2042",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "restaurant",
+    "cuisine": "salvadoran",
+    "drive_in": "no",
+    "microbrewery": "no",
+    "name": "Platano",
+    "opening_hours": "Su-Th 11:30-21:00, Fr,Sa 11:30-22:00",
+    "outdoor_seating": "no",
+    "smoking": "no",
+    "website": "https://www.cafeplatano.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2326547549,
+  "lat": 37.8717592,
+  "lon": -122.2701750,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2020",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "restaurant",
+    "cuisine": "tibetan",
+    "name": "Cafe Tibet",
+    "opening_hours": "Mo, We-Su 17:00-22:00; Mo, We-Fr 11:30-14:30",
+    "website": "https://cafetibetberkeley.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 2342888634,
+  "lat": 37.8705505,
+  "lon": -122.2684210,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2122",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "fast_food",
+    "cuisine": "sandwich",
+    "diet:halal": "yes",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "yes",
+    "drive_through": "no",
+    "name": "Crave Subs",
+    "opening_hours": "Mo 10:00-18:00; Tu-Fr 10:00-19:00; Sa 11:00-20:00; Su 11:00-19:00",
+    "outdoor_seating": "yes",
+    "phone": "+1-510-7051140",
+    "takeaway": "yes",
+    "website": "https://www.cravesubsberkeley.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 2343046520,
+  "lat": 37.8620090,
+  "lon": -122.2533980,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2701",
+    "addr:street": "College Avenue",
+    "amenity": "cafe",
+    "cuisine": "coffee_shop",
+    "name": "Souvenir Coffee",
+    "old_name": "Sack's Coffee House"
+  }
+},
+{
+  "type": "node",
+  "id": 2349801494,
+  "lat": 37.8715810,
+  "lon": -122.2685240,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2020",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "check_date": "2026-06-22",
+    "cuisine": "mexican",
+    "email": "info@comalrg.com",
+    "name": "Comal",
+    "opening_hours": "Su-We 17:00-21:00; Th-Sa 17:00-22:00",
+    "outdoor_seating": "yes",
+    "phone": "+1-510-926-6300",
+    "reservation": "yes",
+    "reservation:website": "https://www.comalberkeley.com/reservations/",
+    "website": "https://www.comalberkeley.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2350130005,
+  "lat": 37.8697643,
+  "lon": -122.2683363,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2174",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "fast_food",
+    "check_date": "2024-04-07",
+    "cuisine": "pizza",
+    "drive_through": "no",
+    "indoor_seating": "yes",
+    "level": "0",
+    "name": "Sliver",
+    "opening_hours:signed": "no",
+    "outdoor_seating": "yes",
+    "website": "https://www.sliverpizzeria.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2350137845,
+  "lat": 37.8708242,
+  "lon": -122.2684597,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2110",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "check_date": "2025-03-19",
+    "cuisine": "sushi",
+    "diet:vegetarian": "yes",
+    "level": "0",
+    "name": "Sushi Secrets",
+    "opening_hours": "Mo-Sa 11:00-20:00; Su off",
+    "outdoor_seating": "yes",
+    "smoking": "no",
+    "website": "https://order.online/store/sushi-secrets-berkeley-732243/"
+  }
+},
+{
+  "type": "node",
+  "id": 2350147008,
+  "lat": 37.8722422,
+  "lon": -122.2689936,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2071",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "fast_food",
+    "brand": "Tender Greens",
+    "brand:wikidata": "Q113585516",
+    "check_date": "2025-03-19",
+    "cuisine": "salad",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "yes",
+    "drive_through": "no",
+    "level": "0",
+    "name": "Tender Greens",
+    "opening_hours": "Mo-Fr 10:00-21:00; Sa, Su 11:00-21:00",
+    "outdoor_seating": "yes",
+    "phone": "+1-510-356-0697",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "https://www.tendergreens.com/locations/berkeley",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2350156188,
+  "lat": 37.8717490,
+  "lon": -122.2727810,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1903",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "restaurant",
+    "cuisine": "indian",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "yes",
+    "name": "Udupi Palace",
+    "opening_hours": "Mo, We-Su 11:30-21:00",
+    "phone": "+1-510-843-6600",
+    "website": "https://www.udupipalaceberkeleyca.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 2379687292,
+  "lat": 37.8679436,
+  "lon": -122.2675397,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2283",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "cuisine": "thai",
+    "name": "Little Plearn Thai Kitchen",
+    "phone": "+1-510-704-1442"
+  }
+},
+{
+  "type": "node",
+  "id": 2379687545,
+  "lat": 37.8671650,
+  "lon": -122.2674590,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2323",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "check_date": "2024-12-23",
+    "cuisine": "chinese",
+    "level": "0",
+    "name": "眷湘 Easterly",
+    "name:en": "Easterly",
+    "name:zh": "眷湘",
+    "old_name": "Namaste Madras Cuisine",
+    "opening_hours": "Mo,We-Su 10:00-14:00,17:00-21:00; Tu off",
+    "phone": "+1 510-647-8008",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2379687561,
+  "lat": 37.8670956,
+  "lon": -122.2674325,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2327",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "bar",
+    "check_date": "2022-07-23",
+    "cocktails": "yes",
+    "cuisine": "burger;wings",
+    "drink:beer": "yes",
+    "drink:whisky": "yes",
+    "food": "yes",
+    "indoor_seating": "yes",
+    "name": "Tip-Sea",
+    "outdoor_seating": "no",
+    "phone": "+1 510 7051185",
+    "url": "https://gotab.io/loc/tipsea",
+    "was:name": "Venus",
+    "wheelchair": "limited",
+    "wheelchair:description": "Many tables aren't wheelchair accessible."
+  }
+},
+{
+  "type": "node",
+  "id": 2379688396,
+  "lat": 37.8659350,
+  "lon": -122.2673270,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2399",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "cuisine": "japanese;sushi",
+    "diet:vegetarian": "yes",
+    "email": "contact@nikkoberkeley.com",
+    "image": "http://www.nikkoberkeley.com/chirashi.jpg",
+    "indoor_seating": "yes",
+    "name": "Nikko Sushi",
+    "opening_hours": "Mo-Th 11:30-14:00, 16:00-20:30; Fr 11:30-21:00; Sa 12:00-21:00; Su 12:00-20:30",
+    "phone": "+1-510-704-8224",
+    "takeaway": "yes",
+    "website": "http://www.nikkoberkeley.com",
+    "website:menu": "http://www.nikkoberkeley.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 2426094776,
+  "lat": 37.8709628,
+  "lon": -122.2684696,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2106",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "cafe",
+    "cuisine": "bubble_tea",
+    "name": "Ceré Tea",
+    "outdoor_seating": "no",
+    "takeaway": "yes",
+    "website": "https://www.instagram.com/p/DdLT7mMgH_7/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2437969084,
+  "lat": 37.8721044,
+  "lon": -122.2700675,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2021",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "restaurant",
+    "cuisine": "mexican",
+    "drive_in": "no",
+    "microbrewery": "no",
+    "name": "University Taqueria",
+    "old_name": "El Burro Picante",
+    "opening_hours": "Mo-Su 11:00-00:00",
+    "outdoor_seating": "no",
+    "smoking": "no",
+    "takeaway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2491783847,
+  "lat": 37.8706976,
+  "lon": -122.2679711,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "139",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Berkeley Square",
+    "amenity": "cafe",
+    "check_date": "2025-02-14",
+    "cuisine": "dessert;ice_cream",
+    "level": "0",
+    "name": "Gadani",
+    "opening_hours": "Mo-Fr 11:00-22:00; Sa-Su 11:00-23:00",
+    "outdoor_seating": "no",
+    "website": "https://www.gadanicafe.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 2501269406,
+  "lat": 37.8698350,
+  "lon": -122.2683420,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2172",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "fast_food",
+    "brand": "Ike's Love and Sandwiches",
+    "brand:wikidata": "Q112028897",
+    "check_date": "2024-10-14",
+    "check_date:opening_hours": "2024-10-14",
+    "cuisine": "sandwich",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "yes",
+    "drive_through": "no",
+    "indoor_seating": "yes",
+    "level": "0",
+    "name": "Ike's Love and Sandwiches",
+    "opening_hours": "Mo-Su 10:00-21:00",
+    "outdoor_seating": "no",
+    "payment:credit_cards": "yes",
+    "phone": "+1 510-679-5130",
+    "short_name": "Ike's",
+    "takeaway": "yes",
+    "website": "https://locations.ikessandwich.com/ca/berkeley/205/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2512329707,
+  "lat": 37.8744945,
+  "lon": -122.2684750,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1801",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "addr:unit": "C",
+    "amenity": "cafe",
+    "cuisine": "bubble_tea",
+    "name": "Tea Hut",
+    "opening_hours": "Mo-Fr 08:30-21:00; Sa,Su 11:00-21:00",
+    "toilets:wheelchair": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2589491438,
+  "lat": 37.8699823,
+  "lon": -122.2683780,
+  "tags": {
+    "addr:housenumber": "2150",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "fast_food",
+    "brand:wikidata": "Q6884112",
+    "check_date": "2024-04-07",
+    "cuisine": "salad",
+    "diet:vegetarian": "yes",
+    "drive_through": "no",
+    "indoor_seating": "yes",
+    "level": "0",
+    "name": "Mixt",
+    "opening_hours:signed": "no",
+    "outdoor_seating": "no",
+    "smoking": "no",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2688825405,
+  "lat": 37.8680755,
+  "lon": -122.2580060,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2521",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "amenity": "fast_food",
+    "check_date": "2023-06-11",
+    "cuisine": "donut",
+    "drive_through": "no",
+    "name": "King Pin Donuts",
+    "opening_hours": "Mo-Su 07:00-03:00",
+    "outdoor_seating": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2688829746,
+  "lat": 37.8680800,
+  "lon": -122.2579230,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2523",
+    "addr:postcode": "94704-1714",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "amenity": "cafe",
+    "check_date": "2023-06-11",
+    "cuisine": "taiwanese;bubble_tea",
+    "name": "Sweetheart Cafe",
+    "opening_hours": "Mo-We 11:00-26:00; Th-Su 11:00-27:00; Sa 12:00-26:00",
+    "phone": "+1-510-540-0707",
+    "toilets:wheelchair": "no",
+    "website": "https://sweetheart-tea.weebly.com",
+    "wheelchair": "limited"
+  }
+},
+{
+  "type": "node",
+  "id": 2819609607,
+  "lat": 37.8694349,
+  "lon": -122.2668186,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2134",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Allston Way",
+    "amenity": "restaurant",
+    "contact:facebook": "https://m.facebook.com/CancunBerkeley/",
+    "contact:instagram": "https://www.instagram.com/cancunberkeley/",
+    "cuisine": "mexican",
+    "drive_in": "no",
+    "email": "cancun@sabormexicano.com",
+    "name": "Cancún",
+    "opening_hours": "Mo-Th 10:30-22:00; Fr-Sa 10:30-22:30; Su 12:00-21:00",
+    "outdoor_seating": "parklet",
+    "phone": "+1 510 5490964",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "https://sabormexicano.com/cancun/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2956705633,
+  "lat": 37.8718430,
+  "lon": -122.2695214,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2050",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "restaurant",
+    "cuisine": "korean;american;burger",
+    "name": "Berkeley Social Club",
+    "phone": "+1-510-900-5858",
+    "website": "https://www.berkeley-socialclub.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 2965338413,
+  "lat": 37.8671105,
+  "lon": -122.2586234,
+  "tags": {
+    "addr:housenumber": "2395",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "restaurant",
+    "check_date": "2023-06-11",
+    "cuisine": "asian",
+    "name": "Koja Kitchen",
+    "opening_hours": "Mo-Su 11:00-21:00",
+    "website": "https://www.kojakitchen.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 3036917827,
+  "lat": 37.8637344,
+  "lon": -122.2588573,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2566",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Telegraph Avenue",
+    "addr:unit": "B",
+    "amenity": "restaurant",
+    "check_date": "2026-06-26",
+    "contact:instagram": "https://www.instagram.com/kirakuberkeley/",
+    "contact:yelp": "https://www.yelp.com/biz/kiraku-berkeley",
+    "cuisine": "japanese;sushi",
+    "description": "Kiraku strives to deliver a genuine izakaya experience. By emulating the style of a modern izakaya popular in Japan, Kiraku hopes to spread the wonders of this style of eating to as many people as possible.",
+    "diet:gluten_free": "yes",
+    "diet:vegetarian": "yes",
+    "image": "https://kirakuberkeley.com/wp-content/uploads/2020/04/menu3.jpg",
+    "name": "Kiraku",
+    "opening_hours": "Tu-Th 17:30-22:00; Fr-Sa 17:30-23:00",
+    "phone": "+1-510-848-2758",
+    "reservation": "recommended",
+    "start_date": "2011-07",
+    "website": "https://kirakuberkeley.com/",
+    "website:menu": "https://kirakuberkeley.com/wp-content/uploads/2024/08/Kiraku_2024_Food_Menu.pdf"
+  }
+},
+{
+  "type": "node",
+  "id": 3075614341,
+  "lat": 37.8728113,
+  "lon": -122.2686736,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1956",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "check_date": "2025-03-19",
+    "cuisine": "japanese",
+    "diet:vegan": "only",
+    "drive_in": "no",
+    "level": "0",
+    "microbrewery": "no",
+    "name": "Tane Vegan Izakaya",
+    "opening_hours": "Mo-Su 16:30-21:30",
+    "opening_hours:signed": "no",
+    "outdoor_seating": "no",
+    "phone": "+1 510-898-1514",
+    "smoking": "no",
+    "website": "https://taneveganizakayaca.com",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3180274141,
+  "lat": 37.8697156,
+  "lon": -122.2519432,
+  "tags": {
+    "amenity": "cafe"
+  }
+},
+{
+  "type": "node",
+  "id": 3191146332,
+  "lat": 37.8697889,
+  "lon": -122.2676799,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2181",
+    "addr:postcode": "94704",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "pub",
+    "beer_garden": "yes",
+    "check_date": "2024-12-23",
+    "craft": "brewery",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "yes",
+    "food": "yes",
+    "indoor_seating": "yes",
+    "level": "0;1",
+    "microbrewery": "yes",
+    "name": "Jupiter",
+    "opening_hours": "Mo-Th,Su 11:30-22:00; Fr-Sa 11:30-24:00",
+    "outdoor_seating": "yes",
+    "website": "http://www.jupiterbeer.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3191146339,
+  "lat": 37.8698541,
+  "lon": -122.2676710,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2177",
+    "addr:postcode": "94704",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "check_date": "2024-12-23",
+    "check_date:opening_hours": "2022-11-05",
+    "cuisine": "onigiri",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "yes",
+    "indoor_seating": "no",
+    "level": "0",
+    "name": "Oori Rice Triangles",
+    "opening_hours": "Mo-Sa 11:00-20:00; Su 11:00-18:00",
+    "outdoor_seating": "no",
+    "takeaway": "only",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3194482961,
+  "lat": 37.8816382,
+  "lon": -122.2696704,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1400",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "addr:unit": "Suite 1A",
+    "amenity": "restaurant",
+    "bar": "yes",
+    "contact:instagram": "https://www.instagram.com/kamado_sushi_berkeley/",
+    "cuisine": "japanese;sushi",
+    "description": "Our specialty is “Omakase Sushi” \"Omakase\" is a Japanese phrase that means \"I'll leave it up to you.\" In the context of dining, particularly at sushi restaurants, ordering \"omakase\" means that the chef will choose the dishes for you.",
+    "diet:gluten_free": "yes",
+    "diet:vegetarian": "yes",
+    "indoor_seating": "yes",
+    "name": "Kamado Sushi",
+    "opening_hours": "Tu-Su 16:30-21:30",
+    "phone": "+1-510-540-5000",
+    "reservation": "yes",
+    "website:menu": "https://order.toasttab.com/online/kamado-sushi"
+  }
+},
+{
+  "type": "node",
+  "id": 3375326842,
+  "lat": 37.8678763,
+  "lon": -122.2575160,
+  "tags": {
+    "addr:housenumber": "2530",
+    "addr:street": "Durant Avenue",
+    "amenity": "fast_food",
+    "check_date": "2023-06-11",
+    "cuisine": "mexican",
+    "name": "La Burrita"
+  }
+},
+{
+  "type": "node",
+  "id": 3430431123,
+  "lat": 37.8677986,
+  "lon": -122.2580749,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2518",
+    "addr:postcode": "94704",
+    "addr:street": "Durant Avenue",
+    "addr:unit": "A",
+    "amenity": "fast_food",
+    "cuisine": "burger",
+    "name": "Bunz",
+    "opening_hours": "Mo-Su 17:30-02:30",
+    "phone": "+1-510-529-4327",
+    "website": "https://www.whatsinyourbunz.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 3509545437,
+  "lat": 37.8589942,
+  "lon": -122.2594876,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2826",
+    "addr:postcode": "94705",
+    "addr:state": "CA",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "restaurant",
+    "cuisine": "burmese",
+    "name": "Burma Berkeley",
+    "opening_hours": "Mo-Th 11:30-14:30,17:00-21:00; Fr 11:30-14:30,17:00-22:00; Sa 11:30-22:00; Su 11:30-21:00",
+    "phone": "+1 510 6479744",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "https://www.burmaberkeley.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3516376985,
+  "lat": 37.8699516,
+  "lon": -122.2660030,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2142",
+    "addr:postcode": "94704",
+    "addr:street": "Oxford Street",
+    "amenity": "restaurant",
+    "cuisine": "indian",
+    "name": "East Bay Spice Company",
+    "website": "https://eastbayspiceco.com"
+  }
+},
+{
+  "type": "node",
+  "id": 3516403893,
+  "lat": 37.8731324,
+  "lon": -122.2686900,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1938",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "cafe",
+    "check_date": "2023-05-20",
+    "cuisine": "bubble_tea",
+    "level": "0",
+    "name": "T-Bear",
+    "old_name": "Bubble Tea Share Time",
+    "opening_hours": "Mo-Su 12:00-20:00",
+    "outdoor_seating": "no",
+    "phone": "+1 510-529-4154",
+    "website": "https://tibearbk.kwickmenu.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 3520885167,
+  "lat": 37.8681385,
+  "lon": -122.2675479,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2271",
+    "addr:postcode": "94701",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "bar",
+    "check_date": "2022-07-23",
+    "cocktails": "yes",
+    "contact:facebook": "tupperandreed",
+    "contact:instagram": "tupperandreed",
+    "contact:twitter": "TupperandReed",
+    "drink:beer": "yes",
+    "drink:wine": "yes",
+    "email": "info@tupperandreed.com",
+    "food": "no",
+    "indoor_seating": "yes",
+    "live_music": "yes",
+    "name": "Tupper & Reed",
+    "opening_hours": "Tu-We 17:00-24:00; Th-Sa 17:00-02:00; Su 17:00-24:00",
+    "opening_hours:url": "https://www.tupperandreed.com/",
+    "operator": "Future Bars",
+    "outdoor_seating": "no",
+    "phone": "+1 510 8594472",
+    "smoking": "outside",
+    "sport": "billiards",
+    "website": "https://www.tupperandreed.com/",
+    "wheelchair": "yes",
+    "wheelchair:description": "A previous user said the tables were too tight, but the venue has ramps and elevators, and I've seen a wheelchair user there."
+  }
+},
+{
+  "type": "node",
+  "id": 3520889350,
+  "lat": 37.8702718,
+  "lon": -122.2693662,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2055 A",
+    "addr:postcode": "94704",
+    "addr:street": "Center Street",
+    "amenity": "cafe",
+    "cuisine": "crepes",
+    "name": "Crepes a Go Go",
+    "opening_hours": "Mo-Su 11:00-20:00",
+    "phone": "+1-707-207-5580",
+    "website": "https://www.ordercrepesagogo.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 3553118722,
+  "lat": 37.8717557,
+  "lon": -122.2728651,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1901",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "restaurant",
+    "cuisine": "kurdish;mediterranean",
+    "diet:vegetarian": "yes",
+    "name": "Rojbas Grill",
+    "opening_hours": "Mo,We-Su 11:00-21:00",
+    "website": "http://www.rojbasgrill.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 3781113864,
+  "lat": 37.8752949,
+  "lon": -122.2685508,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1797",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "cafe",
+    "board_games": "yes",
+    "cuisine": "coffee_shop",
+    "description": "Full service cafe with large selection of board games for play.",
+    "diet:vegetarian": "yes",
+    "name": "Victory Point Cafe",
+    "opening_hours": "Mo-Th 08:00-23:00; Fr 08:00-24:00; Sa 10:00-24:00; Su 10:00-23:00",
+    "outdoor_seating": "no",
+    "website": "https://www.victorypointcafe.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 3781573621,
+  "lat": 37.8726532,
+  "lon": -122.2686578,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1974",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "bar",
+    "name": "Spats",
+    "opening_hours": "Mo-Fr 17:00-02:00; Sa, Su 12:00-02:00",
+    "smoking": "no",
+    "sport": "billiards"
+  }
+},
+{
+  "type": "node",
+  "id": 3784994806,
+  "lat": 37.8719686,
+  "lon": -122.2681879,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2100",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "restaurant",
+    "brand": "Kura Sushi",
+    "brand:wikidata": "Q6445491",
+    "check_date": "2025-09-21",
+    "check_date:opening_hours": "2025-09-21",
+    "cuisine": "sushi",
+    "indoor_seating": "yes",
+    "name": "Kura Revolving Sushi Bar",
+    "official_name": "Kura Revolving Sushi Bar",
+    "opening_hours": "Su-Th 11:30-21:30; Fr 11:30-22:00; Sa 11:00-22:00",
+    "outdoor_seating": "yes",
+    "phone": "+1 661-679-8668",
+    "takeaway": "yes",
+    "was:addr:housenumber": "21",
+    "was:addr:street": "Shattuck Square",
+    "was:name": "85°C Bakery Cafe",
+    "website": "https://kurasushi.com/locations/berkeley-ca"
+  }
+},
+{
+  "type": "node",
+  "id": 3789654984,
+  "lat": 37.8697246,
+  "lon": -122.2661862,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2173",
+    "addr:postcode": "94704",
+    "addr:street": "Allston Way",
+    "amenity": "fast_food",
+    "check_date": "2023-03-18",
+    "cuisine": "sushi",
+    "drive_through": "no",
+    "name": "Sumo Roll",
+    "opening_hours": "11:00-20:30",
+    "payment:credit_cards": "yes",
+    "phone": "+1 510 8419000",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "http://www.eatsumoroll.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 3793692373,
+  "lat": 37.8688101,
+  "lon": -122.2664360,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2177",
+    "addr:postcode": "94703",
+    "addr:street": "Kittredge Street",
+    "amenity": "fast_food",
+    "check_date": "2026-01-29",
+    "contact:website": "https://dosa.company/menu/idcafeberkeley?item=buttermilk-VhSx",
+    "cuisine": "indian",
+    "diet:vegetarian": "yes",
+    "name": "Id Cafe",
+    "smoking": "no",
+    "wheelchair": "limited"
+  }
+},
+{
+  "type": "node",
+  "id": 4121822391,
+  "lat": 37.8678491,
+  "lon": -122.2567962,
+  "tags": {
+    "amenity": "restaurant",
+    "check_date": "2024-07-31",
+    "diet:vegetarian": "yes",
+    "name": "Dumpling Express"
+  }
+},
+{
+  "type": "node",
+  "id": 4121822399,
+  "lat": 37.8686873,
+  "lon": -122.2566747,
+  "tags": {
+    "amenity": "restaurant",
+    "check_date": "2024-07-31",
+    "cuisine": "chinese",
+    "name": "Chengdu Style Restaurant",
+    "opening_hours": "Mo-Su 11:00-21:30"
+  }
+},
+{
+  "type": "node",
+  "id": 4121837397,
+  "lat": 37.8716673,
+  "lon": -122.2617916,
+  "tags": {
+    "amenity": "cafe",
+    "level:ref": "2",
+    "name": "Micro Yali's"
+  }
+},
+{
+  "type": "node",
+  "id": 4124184026,
+  "lat": 37.8727947,
+  "lon": -122.2558516,
+  "tags": {
+    "amenity": "cafe",
+    "name": "The Coffee Lab",
+    "outdoor_seating": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4181862715,
+  "lat": 37.8690737,
+  "lon": -122.2598872,
+  "tags": {
+    "amenity": "fast_food",
+    "name": "Root 150"
+  }
+},
+{
+  "type": "node",
+  "id": 4181862717,
+  "lat": 37.8690481,
+  "lon": -122.2594983,
+  "tags": {
+    "amenity": "cafe",
+    "name": "Equator Coffee"
+  }
+},
+{
+  "type": "node",
+  "id": 4181862727,
+  "lat": 37.8689935,
+  "lon": -122.2598711,
+  "tags": {
+    "amenity": "fast_food",
+    "name": "True Blue Burgers"
+  }
+},
+{
+  "type": "node",
+  "id": 4181862747,
+  "lat": 37.8692601,
+  "lon": -122.2599245,
+  "tags": {
+    "amenity": "fast_food",
+    "name": "Asado"
+  }
+},
+{
+  "type": "node",
+  "id": 4181862754,
+  "lat": 37.8691629,
+  "lon": -122.2598925,
+  "tags": {
+    "amenity": "fast_food",
+    "name": "House of Pi"
+  }
+},
+{
+  "type": "node",
+  "id": 4218253001,
+  "lat": 37.8683107,
+  "lon": -122.2581173,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2519F",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "amenity": "restaurant",
+    "cuisine": "thai",
+    "name": "Thai Basil",
+    "opening_hours": "Mo-Th 11:00-00:00; Fr 11:00-02:00; Sa 11:00-01:00; Su 11:00-00:00",
+    "outdoor_seating": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4218262212,
+  "lat": 37.8681342,
+  "lon": -122.2582963,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:floor": "2",
+    "addr:housenumber": "2517",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "amenity": "restaurant",
+    "check_date": "2023-06-11",
+    "cuisine": "mexican",
+    "level": "1",
+    "name": "Cafe Durant"
+  }
+},
+{
+  "type": "node",
+  "id": 4435259900,
+  "lat": 37.8673730,
+  "lon": -122.2594881,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2442",
+    "addr:street": "Durant Avenue",
+    "amenity": "fast_food",
+    "cuisine": "sandwich",
+    "name": "Cheese 'n Stuff",
+    "phone": "+1 510 8439233",
+    "takeaway": "only",
+    "website": "https://www.cheesenstuff.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 5029409989,
+  "lat": 37.8654693,
+  "lon": -122.2672237,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2417",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "cuisine": "asian;barbecue",
+    "internet_access": "no",
+    "level": "0",
+    "name": "Wiki Wiki Hawaiian BBQ",
+    "opening_hours": "Mo-Sa 11:00-21:00",
+    "outdoor_seating": "yes",
+    "phone": "+1 510-548-3936",
+    "takeaway": "yes",
+    "website": "https://wikiwiki-hawaiian-bbq.business.site/"
+  }
+},
+{
+  "type": "node",
+  "id": 5072636672,
+  "lat": 37.8639968,
+  "lon": -122.2664371,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2126",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Dwight Way",
+    "amenity": "restaurant",
+    "check_date": "2026-06-26",
+    "cuisine": "japanese;sushi;onigiri;bento_box",
+    "description": "Organic, Authentic Japanese food, We also cater to all events , (Meetings, tournaments, weddings) Other then our main Restaurant we also deliver fresh sushi to Tokyo Fish Market and  Yaoya-San,",
+    "diet:vegetarian": "no",
+    "email": "musashiofberkeley@gmail.com",
+    "fax": "+1-510-843-2100",
+    "image": "https://musashiofberkeley.com/wp-content/uploads/2025/12/musashi_web_leftside_BG_image_2026-1.gif",
+    "indoor_seating": "yes",
+    "name": "Musashi",
+    "opening_hours": "Tu-Sa 11:30-14:00",
+    "outdoor_seating": "no",
+    "phone": "+1-510-843-2017",
+    "start_date": "1979",
+    "website": "https://musashiofberkeley.com/",
+    "website:menu": "https://musashiofberkeley.com/lunch/"
+  }
+},
+{
+  "type": "node",
+  "id": 5305408860,
+  "lat": 37.8688587,
+  "lon": -122.2676390,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2225",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "fast_food",
+    "brand": "Chipotle",
+    "brand:wikidata": "Q465751",
+    "check_date": "2025-03-31",
+    "cuisine": "mexican",
+    "drive_through": "no",
+    "indoor_seating": "yes",
+    "level": "0",
+    "name": "Chipotle",
+    "official_name": "Chipotle Mexican Grill",
+    "opening_hours": "10:45-23:00",
+    "outdoor_seating": "no",
+    "phone": "+1-510-6479166",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "https://locations.chipotle.com/ca/berkeley/2225-shattuck-ave",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5443857083,
+  "lat": 37.8723030,
+  "lon": -122.2541490,
+  "tags": {
+    "amenity": "cafe",
+    "internet_access": "yes",
+    "internet_access:fee": "no",
+    "name": "Ladle and Leaf",
+    "website": "https://ladleandleaf.com"
+  }
+},
+{
+  "type": "node",
+  "id": 5791353017,
+  "lat": 37.8681954,
+  "lon": -122.2662330,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2282",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Fulton Street",
+    "amenity": "cafe",
+    "brand:wikidata": "Q5934913",
+    "check_date": "2023-03-18",
+    "cuisine": "dessert",
+    "email": "hls.berkeley@gmail.com",
+    "name": "Hui Lau Shan",
+    "name:zh": "許留山",
+    "opening_hours": "Mo-Tu 13:30-20:30; We 14:30-20:30; Th-Fr 13:30-21:00; Sa-Su 12:30-21:00",
+    "opening_hours:signed": "yes",
+    "outdoor_seating": "no",
+    "takeaway": "yes",
+    "toilets": "no",
+    "url": "https://hlsberkeley.smartonlineorder.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5791412962,
+  "lat": 37.8717624,
+  "lon": -122.2681610,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2021",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "addr:unit": "C",
+    "amenity": "bar",
+    "contact:instagram": "breakroomberkeley",
+    "name": "The BreakRoom",
+    "old_name": "Draw Billiard Club",
+    "sport": "billiards",
+    "website": "https://www.breakroomberkeley.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 5963310936,
+  "lat": 37.8708743,
+  "lon": -122.2713856,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1935B",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Addison Street",
+    "amenity": "fast_food",
+    "brand": "Rush Bowls",
+    "brand:wikidata": "Q112765292",
+    "cuisine": "açaí",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "only",
+    "name": "Rush Bowls",
+    "opening_hours": "Mo-Su 07:00-20:00",
+    "phone": "+1 510-529-4419",
+    "takeaway": "yes",
+    "website": "https://rushbowls.com/berkeley"
+  }
+},
+{
+  "type": "node",
+  "id": 5977580683,
+  "lat": 37.8671647,
+  "lon": -122.2589836,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2384",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "fast_food",
+    "cuisine": "mexican",
+    "name": "Tacos Sinaloa",
+    "phone": "+1-510-665-7895",
+    "website": "https://www.doordash.com/store/tacos-sinaloa-berkeley-44986"
+  }
+},
+{
+  "type": "node",
+  "id": 6141321232,
+  "lat": 37.8789750,
+  "lon": -122.2698152,
+  "tags": {
+    "amenity": "cafe",
+    "brand": "Peet's Coffee",
+    "brand:wikidata": "Q1094101",
+    "cuisine": "coffee_shop",
+    "name": "Peet's Coffee",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6141321237,
+  "lat": 37.8773078,
+  "lon": -122.2687841,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1625",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "addr:unit": "102",
+    "alt_name": "Cafe Parisien",
+    "amenity": "cafe",
+    "cuisine": "coffee_shop",
+    "indoor_seating": "yes",
+    "name": "Café Parisien"
+  }
+},
+{
+  "type": "node",
+  "id": 6249990425,
+  "lat": 37.8665929,
+  "lon": -122.2600071,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2410",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Channing Way",
+    "amenity": "cafe",
+    "cuisine": "coffee_shop",
+    "internet_access": "wlan",
+    "internet_access:fee": "no",
+    "name": "1951 Coffee Company",
+    "outdoor_seating": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6308626056,
+  "lat": 37.8652560,
+  "lon": -122.2583437,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2499",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "cafe",
+    "check_date": "2023-06-11",
+    "cuisine": "coffee_shop",
+    "internet_access": "wlan",
+    "internet_access:fee": "no",
+    "name": "Romeo's Coffee",
+    "outdoor_seating": "no",
+    "phone": "+1-510-209-2464",
+    "toilets:wheelchair": "yes",
+    "website": "https://m.facebook.com/Romeos.Coffee/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6444564501,
+  "lat": 37.8680838,
+  "lon": -122.2582110,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2517",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "amenity": "restaurant",
+    "cuisine": "korean",
+    "name": "Kimchi Garden",
+    "website": "https://kimchigarden.business.site/"
+  }
+},
+{
+  "type": "node",
+  "id": 6448583485,
+  "lat": 37.8656165,
+  "lon": -122.2586933,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2468-A",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "restaurant",
+    "cuisine": "waffle",
+    "name": "Little Gem Belgian Waffles",
+    "opening_hours": "Mo-Th 15:00-23:00; Fr,Sa 12:00-24:00; Su 12:00-23:00",
+    "website": "http://www.littlegemwaffles.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 6634175894,
+  "lat": 37.8654108,
+  "lon": -122.2583759,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2491",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "fast_food",
+    "cuisine": "vietnamese;sandwich",
+    "drive_through": "no",
+    "name": "Nom Nom Banh Mi",
+    "opening_hours": "Mo-Sa 11:00-19:00",
+    "phone": "+1-510-984-0957",
+    "website": "https://nomnombanhmi.store"
+  }
+},
+{
+  "type": "node",
+  "id": 6727812391,
+  "lat": 37.8655219,
+  "lon": -122.2583932,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2485",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "restaurant",
+    "cuisine": "poke",
+    "name": "Poke Parlor",
+    "phone": "+1-510-256-9685",
+    "website": "http://pokeparlor.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 6781568979,
+  "lat": 37.8652640,
+  "lon": -122.2672200,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2429",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "cuisine": "indian;nepali",
+    "name": "4 Dreams Nepali Indian Cuisine",
+    "phone": "+1-510-570-2152",
+    "website": "https://www.4dreamscuisine.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 7065237633,
+  "lat": 37.8733004,
+  "lon": -122.2682760,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1919",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "addr:unit": "103",
+    "alt_name": "Marugame Seimen",
+    "amenity": "fast_food",
+    "branch": "Berkeley",
+    "brand": "Marugame Seimen",
+    "brand:wikidata": "Q10877253",
+    "cuisine": "noodle",
+    "drive_through": "no",
+    "indoor_seating": "yes",
+    "name": "Marugame Udon",
+    "opening_hours": "Mo-Su 11:00-22:00",
+    "outdoor_seating": "yes",
+    "phone": "+1-510-529-4622",
+    "takeaway": "yes",
+    "website": "https://marugameudon.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7065556676,
+  "lat": 37.8737073,
+  "lon": -122.2683480,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1919",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "fast_food",
+    "brand": "Mendocino Farms",
+    "brand:wikidata": "Q110671982",
+    "cuisine": "sandwich",
+    "disused:name": "Noah's NY Bagels",
+    "name": "Mendocino Farms",
+    "opening_hours": "Mo-Su 10:00-21:00",
+    "phone": "+1-510-809-2933",
+    "takeaway": "yes",
+    "website": "https://www.mendocinofarms.com/locations/Berkeley"
+  }
+},
+{
+  "type": "node",
+  "id": 7100056547,
+  "lat": 37.8684214,
+  "lon": -122.2589657,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2309",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "restaurant",
+    "check_date": "2026-05-26",
+    "cuisine": "japanese;ramen",
+    "name": "Hinodeya",
+    "phone": "+1-341-254-9207",
+    "takeaway": "yes",
+    "website": "https://hinodeyaramen.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 7471934966,
+  "lat": 37.8651962,
+  "lon": -122.2678295,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2430",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "check_date": "2025-06-18",
+    "check_date:opening_hours": "2024-12-09",
+    "cuisine": "chinese",
+    "diet:vegetarian": "yes",
+    "drink:beer": "yes",
+    "indoor_seating": "yes",
+    "internet_access": "wlan",
+    "internet_access:fee": "customers",
+    "level": "0",
+    "name": "Noodles Fresh",
+    "opening_hours": "Mo-Su 11:00-21:00",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "phone": "+1-510-906-8800",
+    "website": "https://noodlesfresh.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7472267370,
+  "lat": 37.8678468,
+  "lon": -122.2597154,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2435",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "amenity": "fast_food",
+    "check_date": "2023-06-11",
+    "contact:facebook": "ricefulonigiri",
+    "contact:instagram": "riceful_onigiri",
+    "contact:yelp": "https://www.yelp.com/biz/riceful-berkeley-3",
+    "cuisine": "japanese",
+    "email": "bericeful@gmail.com",
+    "indoor_seating": "no",
+    "name": "Riceful",
+    "note": "Only takeaway during Covid",
+    "opening_hours": "Mo-Su 11:00-20:00",
+    "opening_hours:url": "http://bericeful.com/",
+    "payment:cash": "no",
+    "payment:credit_cards": "yes",
+    "takeaway": "only",
+    "website": "http://bericeful.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7472319188,
+  "lat": 37.8653493,
+  "lon": -122.2583688,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2493",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "fast_food",
+    "cuisine": "nepali",
+    "name": "Gurkha Kitchen Express",
+    "phone": "+1-510-990-6131",
+    "website": "https://www.instagram.com/p/DYsb_HnSm_Y/"
+  }
+},
+{
+  "type": "node",
+  "id": 7807327089,
+  "lat": 37.8716034,
+  "lon": -122.2713920,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1966",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "restaurant",
+    "cuisine": "salad",
+    "name": "Anja’s",
+    "opening_hours": "Tu-Sa 08:30-15:00",
+    "phone": "+1-510-6478251",
+    "website": "https://anjaskitchen.com"
+  }
+},
+{
+  "type": "node",
+  "id": 7818293652,
+  "lat": 37.8696982,
+  "lon": -122.2665550,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2161",
+    "addr:postcode": "94704-1360",
+    "addr:state": "CA",
+    "addr:street": "Allston Way",
+    "addr:unit": "C",
+    "amenity": "cafe",
+    "check_date": "2025-05-07",
+    "check_date:currency:XBT": "2025-11-26",
+    "cuisine": "tea;coffee_shop",
+    "currency:XBT": "yes",
+    "name": "Elaichi",
+    "old_name": "One Plus",
+    "opening_hours": "Mo-Fr 07:30-21:00; Sa 08:00-21:00; Su 08:00-19:00",
+    "payment:cash": "no",
+    "payment:credit_cards": "yes",
+    "payment:lightning": "yes",
+    "payment:lightning:operator": "square",
+    "payment:lightning_contactless": "no",
+    "payment:onchain": "no",
+    "website": "https://www.elaichico.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7918021237,
+  "lat": 37.8755331,
+  "lon": -122.2591244,
+  "tags": {
+    "amenity": "cafe",
+    "name": "V&A Cafe",
+    "outdoor_seating": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7926192173,
+  "lat": 37.8633508,
+  "lon": -122.2589620,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2598",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "restaurant",
+    "check_date": "2026-06-26",
+    "contact:facebook": "https://www.facebook.com/mteverest123/",
+    "contact:instagram": "https://www.instagram.com/mounteverest_berkeley/",
+    "contact:yelp": "https://www.yelp.com/biz/mount-everest-berkeley",
+    "cuisine": "nepalese;indian;himalayan",
+    "description": "Mount Everest is a second generation, family run restaurant proudly serving the Berkeley community since 2010. For over a decade has been a go-to for students and locals who crave authentic Nepali and Indian cuisine made with love.",
+    "diet:halal": "yes",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "yes",
+    "email": "mteverest375@gmail.com",
+    "image": "https://mteverestberkeley.com/pluto-images/funnel/images/7255125b-3002-41b7-b33e-d0b0c820b617.jpg",
+    "indoor_seating": "yes",
+    "name": "Mount Everest",
+    "opening_hours": "Mo 11:30-15:00,16:00-21:30; Th-Fr 11:30-15:00,16:30-21:30; Sa 11:30-15:00,16:30-23:30; Su 11:30-15:00,16:30-21:30",
+    "phone": "+1-510-843-3951",
+    "reservation": "yes",
+    "takeaway": "yes",
+    "website": "https://mteverestberkeley.com/",
+    "website:menu": "https://mteverestberkeley.com/menu",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7926243229,
+  "lat": 37.8644085,
+  "lon": -122.2583560,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2533",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "restaurant",
+    "cuisine": "vietnamese",
+    "name": "Pho k&k",
+    "phone": "+1-510-666-9966",
+    "website": "https://www.facebook.com/pages/Pho-K-K/114037361961083"
+  }
+},
+{
+  "type": "node",
+  "id": 7926253272,
+  "lat": 37.8594590,
+  "lon": -122.2590370,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2801",
+    "addr:postcode": "94705-1118",
+    "addr:state": "CA",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "cafe",
+    "name": "Mudrakers Cafe",
+    "phone": "+1-510-649-7315",
+    "website": "https://foodeist.com/place/mudrakers-cafe"
+  }
+},
+{
+  "type": "node",
+  "id": 7932880097,
+  "lat": 37.8679540,
+  "lon": -122.2568490,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2590",
+    "addr:postcode": "94704-1715",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "amenity": "fast_food",
+    "check_date": "2024-08-03",
+    "cuisine": "pizza",
+    "drive_through": "no",
+    "indoor_seating": "no",
+    "name": "Artichoke Basille's Pizza",
+    "outdoor_seating": "parklet",
+    "phone": "+1-510-705-1266"
+  }
+},
+{
+  "type": "node",
+  "id": 7939602892,
+  "lat": 37.8680194,
+  "lon": -122.2585236,
+  "tags": {
+    "addr:housenumber": "2511",
+    "addr:street": "Durant Avenue",
+    "amenity": "restaurant",
+    "check_date": "2025-02-16",
+    "cuisine": "falafel",
+    "name": "D'yar"
+  }
+},
+{
+  "type": "node",
+  "id": 7988427212,
+  "lat": 37.8672777,
+  "lon": -122.2590013,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2380",
+    "addr:state": "CA",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "restaurant",
+    "check_date": "2023-06-11",
+    "cuisine": "pizza;indian",
+    "name": "Curry Pizza House",
+    "outdoor_seating": "no",
+    "website": "https://currypizzahouse.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 8023118913,
+  "lat": 37.8681697,
+  "lon": -122.2592103,
+  "tags": {
+    "addr:housenumber": "2328",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "cafe",
+    "brand": "Sharetea",
+    "brand:wikidata": "Q64827032",
+    "check_date": "2025-02-16",
+    "cuisine": "bubble_tea",
+    "name": "Sharetea",
+    "name:en": "Sharetea",
+    "name:zh": "歇腳亭",
+    "opening_hours": "11:00-25:00; May 16-Aug 16 11:00-23:00",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 8023119034,
+  "lat": 37.8680732,
+  "lon": -122.2591712,
+  "tags": {
+    "addr:housenumber": "2334",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "restaurant",
+    "check_date": "2023-06-11",
+    "name": "Fresh roll"
+  }
+},
+{
+  "type": "node",
+  "id": 8023119986,
+  "lat": 37.8668117,
+  "lon": -122.2589266,
+  "tags": {
+    "addr:housenumber": "2400",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "restaurant",
+    "check_date": "2025-08-25",
+    "name": "Himalayan Bite",
+    "website": "https://www.himalayanbitee.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 8072197934,
+  "lat": 37.8664242,
+  "lon": -122.2588618,
+  "tags": {
+    "addr:housenumber": "2426",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "restaurant",
+    "check_date": "2026-08-28",
+    "cuisine": "noodle;chinese",
+    "name": "Noodle Dynasty",
+    "website": "https://noodledynasty.club/"
+  }
+},
+{
+  "type": "node",
+  "id": 8072231016,
+  "lat": 37.8667533,
+  "lon": -122.2592030,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2488",
+    "addr:street": "Channing Way",
+    "amenity": "restaurant",
+    "cuisine": "chinese",
+    "name": "Chinese express",
+    "website": "https://www.yelp.com/biz/chinese-express-berkeley"
+  }
+},
+{
+  "type": "node",
+  "id": 8121733052,
+  "lat": 37.8684477,
+  "lon": -122.2603845,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2440",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Bancroft Way",
+    "amenity": "cafe",
+    "contact:facebook": "rareteausa",
+    "contact:instagram": "rareteausa",
+    "cuisine": "bubble_tea",
+    "name": "RareTea",
+    "phone": "+1-415-734-0525",
+    "takeaway": "yes",
+    "website": "https://www.rareteausa.com/",
+    "website:menu": "https://rareteabancroft.square.site/"
+  }
+},
+{
+  "type": "node",
+  "id": 8260742967,
+  "lat": 37.8698606,
+  "lon": -122.2701500,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2002",
+    "addr:street": "Center Street",
+    "amenity": "fast_food",
+    "name": "K's Coffee House",
+    "phone": "+1-510-848-2147"
+  }
+},
+{
+  "type": "node",
+  "id": 8316933705,
+  "lat": 37.8752639,
+  "lon": -122.2597825,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2503",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Hearst Avenue",
+    "amenity": "cafe",
+    "cuisine": "coffee_shop",
+    "name": "Gold Bean Cafe",
+    "opening_hours": "Mo-Su 17:00-24:00",
+    "phone": "+1-917-2444797"
+  }
+},
+{
+  "type": "node",
+  "id": 9064776280,
+  "lat": 37.8681462,
+  "lon": -122.2580196,
+  "tags": {
+    "addr:housenumber": "2521",
+    "addr:street": "Durant Avenue",
+    "addr:unit": "B",
+    "amenity": "fast_food",
+    "check_date": "2025-07-01",
+    "cuisine": "mexican",
+    "name": "L'Gusto",
+    "outdoor_seating": "yes",
+    "takeaway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9064789995,
+  "lat": 37.8681193,
+  "lon": -122.2580961,
+  "tags": {
+    "addr:housenumber": "2519",
+    "addr:street": "Durant Avenue",
+    "addr:unit": "B",
+    "amenity": "cafe",
+    "cuisine": "bubble_tea",
+    "name": "Boba Ninja",
+    "outdoor_seating": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9347384608,
+  "lat": 37.8717763,
+  "lon": -122.2515784,
+  "tags": {
+    "access": "customers",
+    "amenity": "cafe",
+    "name": "Portable Peet's Stand"
+  }
+},
+{
+  "type": "node",
+  "id": 9347384610,
+  "lat": 37.8716083,
+  "lon": -122.2517891,
+  "tags": {
+    "amenity": "fast_food",
+    "name": "Gridiron Grill"
+  }
+},
+{
+  "type": "node",
+  "id": 9347384611,
+  "lat": 37.8710156,
+  "lon": -122.2518374,
+  "tags": {
+    "access": "customers",
+    "amenity": "fast_food",
+    "name": "Oski's Place"
+  }
+},
+{
+  "type": "node",
+  "id": 9347384612,
+  "lat": 37.8708371,
+  "lon": -122.2515938,
+  "tags": {
+    "access": "customers",
+    "amenity": "fast_food",
+    "name": "Carved Stand"
+  }
+},
+{
+  "type": "node",
+  "id": 9347384613,
+  "lat": 37.8707834,
+  "lon": -122.2515301,
+  "tags": {
+    "access": "customers",
+    "amenity": "restaurant",
+    "brand": "Pizza My Heart",
+    "brand:wikidata": "Q7199970",
+    "cuisine": "pizza",
+    "name": "Pizza My Heart"
+  }
+},
+{
+  "type": "node",
+  "id": 9347384614,
+  "lat": 37.8707228,
+  "lon": -122.2514752,
+  "tags": {
+    "access": "customers",
+    "amenity": "fast_food",
+    "name": "Fifty Yard Franks"
+  }
+},
+{
+  "type": "node",
+  "id": 9347384615,
+  "lat": 37.8706690,
+  "lon": -122.2514138,
+  "tags": {
+    "access": "customers",
+    "amenity": "fast_food",
+    "name": "Golden Bear Grill"
+  }
+},
+{
+  "type": "node",
+  "id": 9347384616,
+  "lat": 37.8706136,
+  "lon": -122.2513567,
+  "tags": {
+    "access": "customers",
+    "amenity": "fast_food",
+    "name": "Taste of the Bay"
+  }
+},
+{
+  "type": "node",
+  "id": 9347384617,
+  "lat": 37.8701873,
+  "lon": -122.2508298,
+  "tags": {
+    "access": "customers",
+    "amenity": "fast_food",
+    "name": "Oski's Place"
+  }
+},
+{
+  "type": "node",
+  "id": 9347384618,
+  "lat": 37.8701561,
+  "lon": -122.2500549,
+  "tags": {
+    "access": "customers",
+    "amenity": "fast_food",
+    "name": "End Zone Grill"
+  }
+},
+{
+  "type": "node",
+  "id": 9347384619,
+  "lat": 37.8701266,
+  "lon": -122.2501340,
+  "tags": {
+    "access": "customers",
+    "amenity": "cafe",
+    "branch": "& Lighter Side",
+    "brand": "Peet's Coffee",
+    "brand:wikidata": "Q1094101",
+    "cuisine": "coffee_shop",
+    "name": "Peet's Coffee",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9347384620,
+  "lat": 37.8708215,
+  "lon": -122.2496159,
+  "tags": {
+    "access": "customers",
+    "amenity": "fast_food",
+    "name": "Fryers Not Cryers"
+  }
+},
+{
+  "type": "node",
+  "id": 9347384621,
+  "lat": 37.8712686,
+  "lon": -122.2497871,
+  "tags": {
+    "access": "customers",
+    "amenity": "fast_food",
+    "name": "Meat Street"
+  }
+},
+{
+  "type": "node",
+  "id": 9347384623,
+  "lat": 37.8719063,
+  "lon": -122.2507552,
+  "tags": {
+    "access": "customers",
+    "amenity": "fast_food",
+    "name": "Burgers & Hotdogs"
+  }
+},
+{
+  "type": "node",
+  "id": 9347384624,
+  "lat": 37.8719358,
+  "lon": -122.2508518,
+  "tags": {
+    "access": "customers",
+    "amenity": "fast_food",
+    "name": "Fault Line"
+  }
+},
+{
+  "type": "node",
+  "id": 9462746178,
+  "lat": 37.8754163,
+  "lon": -122.2598550,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2505",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Hearst Avenue",
+    "amenity": "cafe",
+    "cuisine": "bubble_tea",
+    "name": "J's Snacks and Tea"
+  }
+},
+{
+  "type": "node",
+  "id": 9553418872,
+  "lat": 37.8678125,
+  "lon": -122.2577668,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2528",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "addr:unit": "A",
+    "amenity": "cafe",
+    "check_date": "2025-07-08",
+    "contact:instagram": "bingecoffeehouse",
+    "cuisine": "coffee_shop;vietnamese",
+    "disused:amenity": "cafe",
+    "indoor_seating": "yes",
+    "name": "Binge Coffee House",
+    "outdoor_seating": "no",
+    "website:menu": "https://binge.squarespace.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 9553418873,
+  "lat": 37.8678279,
+  "lon": -122.2576246,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2528",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "addr:unit": "B",
+    "amenity": "fast_food",
+    "brand": "Taco Bell",
+    "brand:wikidata": "Q111972226",
+    "check_date": "2023-06-11",
+    "cuisine": "tex-mex",
+    "name": "Taco Bell Cantina",
+    "phone": "+1 510-984-0079",
+    "takeaway": "yes",
+    "website": "https://locations.tacobell.com/ca/berkeley/2528-durant-ave.html"
+  }
+},
+{
+  "type": "node",
+  "id": 9569351876,
+  "lat": 37.8686274,
+  "lon": -122.2585986,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2516",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Bancroft Way",
+    "amenity": "cafe",
+    "brand": "Yi Fang Tea",
+    "brand:en": "Yi Fang Tea",
+    "brand:wikidata": "Q66196395",
+    "brand:zh": "一芳水果茶",
+    "cuisine": "bubble_tea",
+    "name": "Yi Fang Tea",
+    "name:en": "Yi Fang Tea",
+    "name:zh": "一芳水果茶",
+    "opening_hours": "Mo-Su 11:00-21:00",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9572013605,
+  "lat": 37.8680505,
+  "lon": -122.2598384,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2433",
+    "addr:street": "Sather Lane",
+    "addr:unit": "E",
+    "amenity": "restaurant",
+    "check_date": "2023-06-11",
+    "contact:facebook": "pokebar",
+    "contact:instagram": "pokebar",
+    "cuisine": "poke;asian",
+    "name": "Poké Bar",
+    "phone": "+1 510 2805681",
+    "takeaway": "yes",
+    "website": "https://www.ilovepokebar.com/locations/berkeley"
+  }
+},
+{
+  "type": "node",
+  "id": 9572013607,
+  "lat": 37.8679573,
+  "lon": -122.2598223,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2433",
+    "addr:street": "Sather Lane",
+    "addr:unit": "G",
+    "amenity": "fast_food",
+    "check_date": "2022-03-04",
+    "cuisine": "korean",
+    "name": "Han Jul Kimbab & Roll Grab & Go",
+    "takeaway": "only"
+  }
+},
+{
+  "type": "node",
+  "id": 9572013610,
+  "lat": 37.8678213,
+  "lon": -122.2599014,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2431",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "addr:unit": "A",
+    "amenity": "restaurant",
+    "check_date": "2022-03-04",
+    "cuisine": "korean",
+    "name": "KoStop",
+    "opening_hours": "Mo-Su 11:30-21:00"
+  }
+},
+{
+  "type": "node",
+  "id": 9574578733,
+  "lat": 37.8682829,
+  "lon": -122.2581188,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2519",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "addr:unit": "D",
+    "amenity": "fast_food",
+    "check_date": "2025-07-01",
+    "cuisine": "hot_dog;korean",
+    "name": "Myungrang Hotdogs",
+    "outdoor_seating": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9574578734,
+  "lat": 37.8683145,
+  "lon": -122.2580739,
+  "tags": {
+    "addr:housenumber": "2521",
+    "addr:street": "Durant Avenue",
+    "addr:unit": "F",
+    "amenity": "restaurant",
+    "check_date": "2025-07-01",
+    "cuisine": "korean",
+    "name": "Steve's Korean B.B.Q.",
+    "outdoor_seating": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9574578735,
+  "lat": 37.8682969,
+  "lon": -122.2580578,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2521",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "addr:unit": "E",
+    "amenity": "fast_food",
+    "cuisine": "indian",
+    "name": "Punjabi Dhaba Indian Eatery",
+    "outdoor_seating": "yes",
+    "payment:cash": "yes",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9574578736,
+  "lat": 37.8682548,
+  "lon": -122.2580430,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2521",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "addr:unit": "D",
+    "amenity": "restaurant",
+    "cuisine": "ramen",
+    "name": "Bears Ramen House",
+    "outdoor_seating": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9574578737,
+  "lat": 37.8682146,
+  "lon": -122.2580343,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2521",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "addr:unit": "C",
+    "amenity": "restaurant",
+    "contact:yelp": "https://www.yelp.com/biz/katsumi-sushi-berkeley",
+    "cuisine": "sushi",
+    "indoor_seating": "yes",
+    "name": "Katsumi Sushi",
+    "opening_hours": "Mo-Su 12:30-23:00",
+    "outdoor_seating": "yes",
+    "phone": "+1-510-529-4799"
+  }
+},
+{
+  "type": "node",
+  "id": 9756197484,
+  "lat": 37.8678587,
+  "lon": -122.2596280,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2439",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "amenity": "bar",
+    "brewery": "various",
+    "cocktails": "yes",
+    "drink:wine": "served",
+    "food": "yes",
+    "leisure": "dance",
+    "min_age": "21",
+    "name": "Kip's Bar and Grill",
+    "smoking": "no",
+    "sport": "billiards"
+  }
+},
+{
+  "type": "node",
+  "id": 9830192820,
+  "lat": 37.8802598,
+  "lon": -122.2698877,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2085",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Vine Street",
+    "amenity": "cafe",
+    "contact:facebook": "Cafenated.co",
+    "contact:instagram": "cafenatedcoffeeco",
+    "contact:pinterest": "cafenatedCoffee",
+    "contact:twitter": "cafenatedco",
+    "cuisine": "coffee_shop",
+    "diet:vegan": "no",
+    "diet:vegetarian": "yes",
+    "drink:beer": "yes",
+    "drink:coffee": "yes",
+    "drink:espresso": "yes",
+    "drink:hot_chocolate": "yes",
+    "drink:tea": "yes",
+    "drink:wine": "yes",
+    "email": "contact@cafenated.co",
+    "food": "yes",
+    "indoor_seating": "yes",
+    "internet_access": "wlan",
+    "internet_access:fee": "customers",
+    "name": "Cafenated Coffee Co.",
+    "opening_hours": "Mo-Su 08:00-17:00",
+    "outdoor_seating": "yes",
+    "phone": "+1 800 3884049",
+    "shop": "coffee",
+    "smoking": "no",
+    "takeaway": "yes",
+    "url": "https://cafenated.square.site/",
+    "website": "https://cafenated.co/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9906770661,
+  "lat": 37.8683264,
+  "lon": -122.2612933,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2400",
+    "addr:street": "Bancroft Way",
+    "addr:unit": "A",
+    "amenity": "cafe",
+    "brand": "Chicha San Chen",
+    "brand:en": "Chicha San Chen",
+    "brand:wikidata": "Q133042869",
+    "brand:zh": "吃茶三千",
+    "cuisine": "bubble_tea",
+    "name": "Chicha San Chen",
+    "name:en": "Chicha San Chen",
+    "name:zh": "吃茶三千",
+    "old_name": "Blaze Pizza",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9910789304,
+  "lat": 37.8707464,
+  "lon": -122.2670878,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:floor": "12",
+    "addr:housenumber": "2121",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Center Street",
+    "amenity": "bar",
+    "check_date": "2026-09-01",
+    "cocktails": "yes",
+    "contact:facebook": "studyhallrooftoplounge",
+    "contact:instagram": "studyhallberkeley",
+    "dog": "yes",
+    "drink:beer": "yes",
+    "drink:wine": "yes",
+    "email": "freyes@pyramidglobal.com",
+    "food": "yes",
+    "indoor_seating": "yes",
+    "level": "12",
+    "live_music": "yes",
+    "location": "roof",
+    "name": "Study Hall Rooftop Lounge",
+    "opening_hours": "Su-Th 16:30-22:00; Fr-Sa 16:30-24:00",
+    "opening_hours:url": "https://www.studyhallrooftoplounge.com/",
+    "outdoor_seating": "yes",
+    "phone": "+1-510-982-0114",
+    "reservation": "yes",
+    "short_name": "Study Hall",
+    "website": "https://www.studyhallrooftoplounge.com/",
+    "website:menu": "https://www.studyhallrooftoplounge.com/our-menus",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9921987067,
+  "lat": 37.8698580,
+  "lon": -122.2681580,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2170",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "alt_name": "Imran & Ali's Coffee Hut",
+    "amenity": "cafe",
+    "check_date": "2023-05-20",
+    "check_date:currency:XBT": "2026-07-23",
+    "contact:instagram": "@coffeehut22",
+    "cuisine": "coffee_shop",
+    "currency:XBT": "yes",
+    "indoor_seating": "no",
+    "level": "0",
+    "name": "Coffee Hut",
+    "note": "semi-permanent coffee cart",
+    "opening_hours": "Mo-Fr 07:30-16:00; Sa-Su off",
+    "outdoor_seating": "pedestrian_zone",
+    "payment:lightning": "yes",
+    "payment:lightning:operator": "square",
+    "payment:lightning_contactless": "no",
+    "payment:onchain": "no",
+    "shop": "coffee"
+  }
+},
+{
+  "type": "node",
+  "id": 10179041977,
+  "lat": 37.8649060,
+  "lon": -122.2587970,
+  "tags": {
+    "amenity": "restaurant",
+    "cuisine": "ramen",
+    "name": "Bansho Ramen",
+    "opening_hours": "Tu-Su 11:30-21:00"
+  }
+},
+{
+  "type": "node",
+  "id": 10205094244,
+  "lat": 37.8755488,
+  "lon": -122.2601164,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1841",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Euclid Avenue",
+    "amenity": "restaurant",
+    "cuisine": "mexican",
+    "name": "El Talpense Mexican",
+    "opening_hours": "Mo-Sa 11:00-22:00",
+    "phone": "+1-510-549-1460",
+    "website": "https://order.snackpass.co/El-Talpense-5fca6d4a36379700b6ecc749"
+  }
+},
+{
+  "type": "node",
+  "id": 10205094247,
+  "lat": 37.8672234,
+  "lon": -122.2587157,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2383",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "cafe",
+    "check_date": "2023-06-11",
+    "cuisine": "bubble_tea",
+    "name": "Taiwan Professional Tea",
+    "opening_hours": "12:00-21:00",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 10592521001,
+  "lat": 37.8646674,
+  "lon": -122.2587158,
+  "tags": {
+    "amenity": "restaurant",
+    "cuisine": "thai",
+    "name": "Racha Cafe"
+  }
+},
+{
+  "type": "node",
+  "id": 10592570803,
+  "lat": 37.8717028,
+  "lon": -122.2685591,
+  "tags": {
+    "addr:housenumber": "2012",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "bar",
+    "check_date": "2025-03-19",
+    "cocktails": "yes",
+    "contact:instagram": "eastbayspicecompany",
+    "description": "Bar with a self-serve taproom",
+    "drink:beer": "yes",
+    "food": "yes",
+    "indoor_seating": "yes",
+    "level": "0",
+    "name": "Tap In Lounge",
+    "website": "https://www.eastbayspiceco.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 10680003138,
+  "lat": 37.8716140,
+  "lon": -122.2712530,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1974",
+    "addr:state": "Ca",
+    "addr:street": "University Avenue",
+    "amenity": "fast_food",
+    "brand": "BurgerIM",
+    "brand:wikidata": "Q61473337",
+    "cuisine": "burger",
+    "name": "BurgerIM",
+    "takeaway": "yes",
+    "website": "https://www.instagram.com/burgerimberkeley/"
+  }
+},
+{
+  "type": "node",
+  "id": 10680087190,
+  "lat": 37.8709073,
+  "lon": -122.2679729,
+  "tags": {
+    "addr:housenumber": "2125",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "cafe",
+    "brand": "Heytea",
+    "brand:en": "Heytea",
+    "brand:wikidata": "Q60875376",
+    "brand:zh": "喜茶",
+    "check_date": "2026-06-20",
+    "check_date:opening_hours": "2026-06-20",
+    "cuisine": "bubble_tea",
+    "level": "0",
+    "name": "Heytea",
+    "name:en": "Heytea",
+    "name:zh": "喜茶",
+    "opening_hours": "Mo-Su 11:30-21:00",
+    "outdoor_seating": "no",
+    "takeaway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 10769891609,
+  "lat": 37.8713192,
+  "lon": -122.2680936,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2039",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "contact:instagram": "pizzeriadalaura",
+    "cuisine": "pizza",
+    "indoor_seating": "yes",
+    "name": "Pizzeria Da Laura",
+    "was:name": "PiQ",
+    "website": "https://www.pizzeriadalaura.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 10969667013,
+  "lat": 37.8680159,
+  "lon": -122.2584615,
+  "tags": {
+    "addr:housenumber": "2513",
+    "addr:street": "Durant Avenue",
+    "amenity": "fast_food",
+    "check_date": "2025-02-16",
+    "cuisine": "sandwich",
+    "name": "I.B.'s"
+  }
+},
+{
+  "type": "node",
+  "id": 10969667015,
+  "lat": 37.8680390,
+  "lon": -122.2583269,
+  "tags": {
+    "addr:floor": "1",
+    "addr:housenumber": "2517",
+    "addr:street": "Durant Avenue",
+    "addr:unit": "A",
+    "amenity": "restaurant",
+    "check_date": "2023-06-11",
+    "cuisine": "chinese",
+    "level": "0",
+    "name": "Dumpling Kitchen"
+  }
+},
+{
+  "type": "node",
+  "id": 10969667019,
+  "lat": 37.8673145,
+  "lon": -122.2587524,
+  "tags": {
+    "addr:housenumber": "2375",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "cafe",
+    "check_date": "2023-06-11",
+    "name": "Bagel Street Cafe",
+    "opening_hours": "Mo-Fr 06:00-17:00; Sa-Su 07:00-16:00"
+  }
+},
+{
+  "type": "node",
+  "id": 10969972609,
+  "lat": 37.8668513,
+  "lon": -122.2582545,
+  "tags": {
+    "addr:housenumber": "2508",
+    "addr:street": "Channing Way",
+    "amenity": "cafe",
+    "check_date": "2023-06-11",
+    "cuisine": "bubble_tea",
+    "name": "Purple Kow",
+    "opening_hours": "Mo-Sa 12:00-22:00; Su 12:00-19:00",
+    "website": "https://purplekow.com"
+  }
+},
+{
+  "type": "node",
+  "id": 10969972610,
+  "lat": 37.8668382,
+  "lon": -122.2583936,
+  "tags": {
+    "addr:housenumber": "2506",
+    "addr:street": "Channing Way",
+    "amenity": "fast_food",
+    "branch": "Berkeley",
+    "cuisine": "burger",
+    "name": "Campus Burgers",
+    "website": "https://campusburgers.com"
+  }
+},
+{
+  "type": "node",
+  "id": 10969972613,
+  "lat": 37.8675639,
+  "lon": -122.2596437,
+  "tags": {
+    "addr:housenumber": "2430",
+    "addr:street": "Durant Avenue",
+    "amenity": "cafe",
+    "check_date": "2023-06-11",
+    "cuisine": "bubble_tea",
+    "name": "Plentea"
+  }
+},
+{
+  "type": "node",
+  "id": 10975548400,
+  "lat": 37.8713248,
+  "lon": -122.2733546,
+  "tags": {
+    "amenity": "fast_food",
+    "name": "Tacos truck"
+  }
+},
+{
+  "type": "node",
+  "id": 11230453092,
+  "lat": 37.8754199,
+  "lon": -122.2603560,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1854",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Euclid Avenue",
+    "amenity": "cafe",
+    "check_date": "2026-03-05",
+    "check_date:opening_hours": "2026-03-05",
+    "cuisine": "crepe",
+    "indoor_seating": "yes",
+    "name": "La Crêpe à moi",
+    "opening_hours": "Mo-Fr 09:00-20:00; Sa-Su 08:30-18:00",
+    "outdoor_seating": "sidewalk",
+    "website": "https://lacrepeamoi.com"
+  }
+},
+{
+  "type": "node",
+  "id": 11247451358,
+  "lat": 37.8672067,
+  "lon": -122.2594804,
+  "tags": {
+    "addr:housenumber": "2438",
+    "addr:street": "Durant Avenue",
+    "amenity": "cafe",
+    "check_date": "2026-03-15",
+    "cuisine": "coffee_shop",
+    "level": "0",
+    "name": "SoDoI Coffee Tasting House",
+    "opening_hours": "Mo-Fr 08:00-17:00; Sa-Su 09:00-17:00",
+    "phone": "+1 510-990-6487",
+    "website": "https://sodoicoffee.com/company/tasting-house/"
+  }
+},
+{
+  "type": "node",
+  "id": 11342285730,
+  "lat": 37.8703052,
+  "lon": -122.2670407,
+  "tags": {
+    "addr:housenumber": "2130",
+    "addr:street": "Center Street",
+    "amenity": "cafe",
+    "check_date": "2025-06-18",
+    "check_date:currency:XBT": "2026-09-10",
+    "cuisine": "coffee_shop",
+    "currency:XBT": "yes",
+    "indoor_seating": "yes",
+    "name": "Signal",
+    "outdoor_seating": "sidewalk",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "payment:lightning": "yes",
+    "payment:lightning:operator": "square",
+    "payment:lightning_contactless": "no",
+    "payment:onchain": "no",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11359640471,
+  "lat": 37.8723667,
+  "lon": -122.2679561,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2109",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "fast_food",
+    "brand": "Nick The Greek",
+    "brand:wikidata": "Q117222612",
+    "contact:facebook": "nickthegreeksj",
+    "contact:instagram": "nickthegreek",
+    "cuisine": "greek",
+    "indoor_seating": "yes",
+    "name": "Nick The Greek",
+    "outdoor_seating": "no",
+    "takeaway": "yes",
+    "website": "https://www.nickthegreek.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 11359640472,
+  "lat": 37.8724692,
+  "lon": -122.2682248,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1987",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "check_date": "2026-09-24",
+    "contact:yelp": "https://www.yelp.com/biz/sizzling-lunch-berkeley-2",
+    "cuisine": "japanese;teppanyaki",
+    "indoor_seating": "yes",
+    "name": "Sizzling Lunch",
+    "opening_hours": "Mo-Su 11:30-21:00",
+    "outdoor_seating": "no",
+    "phone": "+1-510-750-1943",
+    "website": "https://www.sizzlinglunch.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 11506546416,
+  "lat": 37.8652235,
+  "lon": -122.2590431,
+  "tags": {
+    "addr:housenumber": "2441",
+    "addr:street": "Dwight Way",
+    "amenity": "restaurant",
+    "cuisine": "mexican",
+    "name": "El Trompudo",
+    "website": "https://www.eltrompudotacos.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 11883169854,
+  "lat": 37.8785934,
+  "lon": -122.2688748,
+  "tags": {
+    "amenity": "restaurant",
+    "cuisine": "thai",
+    "name": "Farmhouse Kitchen",
+    "opening_hours": "Mo-Su 17:00-21:00, Mo-Fr 11:30-14:30, Sa,Su 00:00-15:00",
+    "website": "https://farmhousethai.com/berkeley-1"
+  }
+},
+{
+  "type": "node",
+  "id": 12035126939,
+  "lat": 37.8706743,
+  "lon": -122.2684388,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2116",
+    "addr:postcode": "94704",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "check_date": "2025-04-04",
+    "cuisine": "chinese",
+    "indoor_seating": "yes",
+    "level": "0",
+    "name": "Yin Ji Chang Fen",
+    "name:zh": "銀記腸粉店",
+    "opening_hours": "Mo-Su 10:30-20:30",
+    "outdoor_seating": "no",
+    "phone": "+1-510-570-2115",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "https://www.yinjichangfenusa.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12035126951,
+  "lat": 37.8724207,
+  "lon": -122.2674821,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2129",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "cafe",
+    "cuisine": "bubble_tea",
+    "name": "Teaspoon",
+    "phone": "+1-415-952-3812",
+    "website": "https://order.teaspoonlife.com/1998/berkeley"
+  }
+},
+{
+  "type": "node",
+  "id": 12108791764,
+  "lat": 37.8715826,
+  "lon": -122.2679652,
+  "tags": {
+    "addr:housenumber": "2014",
+    "addr:street": "Kala Bagai Way",
+    "amenity": "fast_food",
+    "check_date": "2026-06-12",
+    "cuisine": "chinese",
+    "drive_through": "no",
+    "level": "0",
+    "name": "Ten Seconds Yunnan Rice Noodles"
+  }
+},
+{
+  "type": "node",
+  "id": 12113186927,
+  "lat": 37.8758284,
+  "lon": -122.2601289,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Ali baba"
+  }
+},
+{
+  "type": "node",
+  "id": 12152802628,
+  "lat": 37.8707265,
+  "lon": -122.2684430,
+  "tags": {
+    "addr:housenumber": "2114",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "check_date": "2025-03-19",
+    "cuisine": "thai",
+    "level": "0",
+    "name": "Katak",
+    "opening_hours": "Mo-Th 11:00-20:30; Fr 11:00-21:30; Sa-Su 12:00-21:30",
+    "phone": "+1 628-358-8104",
+    "website": "https://katakchickenrice.com",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12198278636,
+  "lat": 37.8686289,
+  "lon": -122.2588406,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2512",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Bancroft Way",
+    "amenity": "fast_food",
+    "check_date": "2026-09-24",
+    "contact:instagram": "https://www.instagram.com/nipponcurryusa/",
+    "cuisine": "japanese;curry",
+    "diet:vegetarian": "yes",
+    "drive_through": "no",
+    "indoor_seating": "yes",
+    "name": "Nippon Curry",
+    "opening_hours": "Mo-Su 11:00-15:00,17:00-20:00",
+    "outdoor_seating": "no",
+    "payment:cash": "no",
+    "payment:credit_cards": "yes",
+    "phone": "+1-510-705-1254",
+    "takeaway": "yes",
+    "website": "https://nipponcurry.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12408499744,
+  "lat": 37.8652828,
+  "lon": -122.2678442,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2420",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "check_date": "2025-04-12",
+    "cuisine": "pizza",
+    "name": "North Beach Pizza",
+    "website": "https://www.northbeachpizzaberkeley.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 12550873893,
+  "lat": 37.8716426,
+  "lon": -122.2709079,
+  "tags": {
+    "addr:housenumber": "2000",
+    "addr:street": "Milvia Street",
+    "amenity": "restaurant",
+    "cuisine": "ramen",
+    "name": "Sobo Ramen",
+    "opening_hours": "Tu-Fr 11:30-14:30, Tu-Th,Su 17:00-21:00, Sa,Su 11:30-15:00, Fr,Sa 17:00-21:30",
+    "website": "https://www.soboramen.com/soboramenberkeley.html",
+    "website:menu": "https://www.soboramen.com/berkeley-menu.html"
+  }
+},
+{
+  "type": "node",
+  "id": 12594452807,
+  "lat": 37.8676778,
+  "lon": -122.2582269,
+  "tags": {
+    "addr:housenumber": "2516",
+    "addr:street": "Durant Avenue",
+    "addr:unit": "B",
+    "amenity": "pub",
+    "check_date": "2025-02-16",
+    "name": "Tap Haus"
+  }
+},
+{
+  "type": "node",
+  "id": 12645782955,
+  "lat": 37.8711682,
+  "lon": -122.2747227,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1812",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "addr:unit": "B",
+    "amenity": "cafe",
+    "check_date": "2025-03-08",
+    "cuisine": "bubble_tea",
+    "name": "Presotea"
+  }
+},
+{
+  "type": "node",
+  "id": 12717366186,
+  "lat": 37.8672882,
+  "lon": -122.2605158,
+  "tags": {
+    "amenity": "fast_food",
+    "diet:halal": "yes",
+    "diet:kosher": "yes",
+    "drive_through": "no",
+    "fast_food": "cafeteria",
+    "name": "Cafe 3",
+    "operator:wikidata": "Q168756",
+    "website": "https://dining.berkeley.edu/locations/dining-commons/cafe-3/"
+  }
+},
+{
+  "type": "node",
+  "id": 12750302979,
+  "lat": 37.8649600,
+  "lon": -122.2678068,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2440",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "cafe",
+    "cuisine": "yemeni",
+    "name": "Qahwa Time",
+    "website": "https://www.instagram.com/qahwatimeco/"
+  }
+},
+{
+  "type": "node",
+  "id": 12750336883,
+  "lat": 37.8637520,
+  "lon": -122.2676601,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2504",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "fast_food",
+    "check_date": "2025-06-03",
+    "cuisine": "chicken;thai",
+    "drive_through": "no",
+    "name": "Southside Station",
+    "opening_hours": "Mo-Th 10:00-15:00,16:00-21:00; Fr-Sa 10:00-21:00; Su 10:00-18:00",
+    "website": "https://www.eatsouthsidestation.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 12753466796,
+  "lat": 37.8663031,
+  "lon": -122.2679805,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2360",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "fast_food",
+    "brand": "Extreme Pizza",
+    "brand:wikidata": "Q5422364",
+    "cuisine": "pizza",
+    "name": "Extreme Pizza",
+    "takeaway": "yes",
+    "website": "https://extremepizza.hungerrush.com"
+  }
+},
+{
+  "type": "node",
+  "id": 12756347392,
+  "lat": 37.8687467,
+  "lon": -122.2580532,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2580",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Bancroft Way",
+    "addr:unit": "1",
+    "amenity": "fast_food",
+    "brand": "Panda Express",
+    "brand:wikidata": "Q1358690",
+    "cuisine": "chinese",
+    "name": "Panda Express",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12756347394,
+  "lat": 37.8667423,
+  "lon": -122.2594002,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2436",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Channing Way",
+    "amenity": "fast_food",
+    "cuisine": "smoothie",
+    "name": "Layers Superfood Bar",
+    "website": "https://www.layerssuperfoodbar.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 12758812331,
+  "lat": 37.8701666,
+  "lon": -122.2700330,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2023",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Center Street",
+    "amenity": "cafe",
+    "name": "Sasha Coffee",
+    "website": "https://www.sashacoffee.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 12761877029,
+  "lat": 37.8717167,
+  "lon": -122.2705827,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2000",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "cafe",
+    "indoor_seating": "yes",
+    "name": "Cafe Brusco"
+  }
+},
+{
+  "type": "node",
+  "id": 12793538442,
+  "lat": 37.8610669,
+  "lon": -122.2673662,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2628",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "cafe",
+    "check_date": "2025-09-26",
+    "contact:instagram": "https://www.instagram.com/foresteabar",
+    "cuisine": "japanese;tea;tea_shop;teahouse",
+    "drive_through": "no",
+    "name": "Forest Tea Bar",
+    "outdoor_seating": "yes",
+    "payment:cash": "no",
+    "payment:credit_cards": "yes",
+    "website": "https://forestea.live/"
+  }
+},
+{
+  "type": "node",
+  "id": 12793734595,
+  "lat": 37.8675399,
+  "lon": -122.2588006,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2367",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "bar",
+    "min_age": "21",
+    "name": "Cali's Sports Bar & Kitchen",
+    "opening_hours": "Su-Tu 11:00-23:39; We-Sa 11:00-26:00",
+    "phone": "+1 510 833 9928",
+    "website": "https://calisportsbar.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 12824934964,
+  "lat": 37.8716332,
+  "lon": -122.2675645,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2027",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Kala Bagai Way",
+    "amenity": "fast_food",
+    "cuisine": "juice",
+    "name": "The Fruit Tree",
+    "website": "https://thefruittree.co/collections/juices"
+  }
+},
+{
+  "type": "node",
+  "id": 12839034469,
+  "lat": 37.8725847,
+  "lon": -122.2663368,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2169",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "cafe",
+    "check_date": "2026-06-28",
+    "name": "Sightglass Coffee",
+    "website": "https://sightglasscoffee.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 12844462059,
+  "lat": 37.8673077,
+  "lon": -122.2674516,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2319",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "addr:unit": "A",
+    "amenity": "cafe",
+    "name": "Yume Mori Matcha"
+  }
+},
+{
+  "type": "node",
+  "id": 12844565226,
+  "lat": 37.8684511,
+  "lon": -122.2602258,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2456",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Bancroft Way",
+    "amenity": "restaurant",
+    "cuisine": "nepalese",
+    "name": "Momo House",
+    "not:brand:wikidata": "Q126369578"
+  }
+},
+{
+  "type": "node",
+  "id": 12845249591,
+  "lat": 37.8663267,
+  "lon": -122.2585359,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2431",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "fast_food",
+    "brand": "TKK Fried Chicken",
+    "brand:en": "TKK Fried Chicken",
+    "brand:wikidata": "Q15715284",
+    "brand:zh": "頂呱呱",
+    "cuisine": "chicken",
+    "name": "TKK Fried Chicken",
+    "name:en": "TKK Fried Chicken",
+    "name:zh": "頂呱呱",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12845249592,
+  "lat": 37.8662356,
+  "lon": -122.2585171,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2433",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "fast_food",
+    "brand": "The Yard Milkshake Bar",
+    "brand:wikidata": "Q116737896",
+    "cuisine": "milkshake",
+    "name": "The Yard Milkshake Bar",
+    "takeaway": "yes",
+    "website": "https://www.theyardmilkshakebar.com"
+  }
+},
+{
+  "type": "node",
+  "id": 12845249594,
+  "lat": 37.8662081,
+  "lon": -122.2581577,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2509",
+    "addr:street": "Haste Street",
+    "amenity": "fast_food",
+    "cuisine": "sandwich",
+    "name": "Sourdough & Co"
+  }
+},
+{
+  "type": "node",
+  "id": 12848048209,
+  "lat": 37.8656012,
+  "lon": -122.2584209,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2475",
+    "addr:state": "CA",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "fast_food",
+    "cuisine": "chinese",
+    "name": "DH Noodles and Grill",
+    "takeaway": "yes",
+    "website": "https://www.dhnoodlesandgrill.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 13061272707,
+  "lat": 37.8721591,
+  "lon": -122.2696414,
+  "tags": {
+    "addr:housenumber": "2041",
+    "addr:street": "University Avenue",
+    "amenity": "cafe",
+    "check_date": "2026-06-13",
+    "cuisine": "bubble_tea",
+    "indoor_seating": "yes",
+    "name": "ChaHalo",
+    "opening_hours": "11:00-21:00",
+    "outdoor_seating": "no",
+    "phone": "+1-510-990-5536"
+  }
+},
+{
+  "type": "node",
+  "id": 13078853478,
+  "lat": 37.8725306,
+  "lon": -122.2666615,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2165",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "amenity": "fast_food",
+    "cuisine": "smoothie",
+    "name": "Palmetto Superfoods",
+    "website": "https://www.palmettosuperfoods.com"
+  }
+},
+{
+  "type": "node",
+  "id": 13078872137,
+  "lat": 37.8707031,
+  "lon": -122.2662223,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2155",
+    "addr:street": "Center Street",
+    "amenity": "cafe",
+    "cuisine": "indonesian;singapore",
+    "name": "Kopi Bar and Bakery",
+    "website": "https://thekopibar.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 13079949480,
+  "lat": 37.8735276,
+  "lon": -122.2687660,
+  "tags": {
+    "addr:housenumber": "1912",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "restaurant",
+    "brand": "Dough Zone",
+    "brand:en": "Dough Zone",
+    "brand:wikidata": "Q110239795",
+    "brand:zh": "麵貼面",
+    "cuisine": "chinese",
+    "name": "Dough Zone",
+    "name:en": "Dough Zone",
+    "name:zh": "麵貼面",
+    "website": "https://www.doughzonedumplinghouse.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 13097263699,
+  "lat": 37.8685323,
+  "lon": -122.2596783,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2482",
+    "addr:street": "Bancroft Way",
+    "amenity": "cafe",
+    "name": "Kash Cafe",
+    "website": "https://www.instagram.com/kash.cafe"
+  }
+},
+{
+  "type": "node",
+  "id": 13097264862,
+  "lat": 37.8687226,
+  "lon": -122.2602055,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2465",
+    "addr:street": "Bancroft Way",
+    "amenity": "restaurant",
+    "cuisine": "chinese",
+    "name": "Take Eat Easy"
+  }
+},
+{
+  "type": "node",
+  "id": 13278456257,
+  "lat": 37.8753869,
+  "lon": -122.2597029,
+  "tags": {
+    "addr:housenumber": "2507",
+    "addr:street": "Hearst Avenue",
+    "addr:unit": "B",
+    "amenity": "restaurant",
+    "cuisine": "asian",
+    "name": "House of Three",
+    "website": "https://www.ho3berkeley.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 13932137754,
+  "lat": 37.8714117,
+  "lon": -122.2673564,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2107",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Addison Street",
+    "amenity": "restaurant",
+    "check_date": "2026-06-12",
+    "contact:instagram": "https://www.instagram.com/droposushi/",
+    "cuisine": "sushi",
+    "name": "Dropo Sushi",
+    "opening_hours": "Mo-Sa 11:00-17:00",
+    "phone": "+1-510-610-1067",
+    "website": "https://www.instagram.com/droposushi/"
+  }
+},
+{
+  "type": "node",
+  "id": 13937146802,
+  "lat": 37.8721757,
+  "lon": -122.2694872,
+  "tags": {
+    "addr:housenumber": "2047",
+    "addr:street": "University Avenue",
+    "amenity": "restaurant",
+    "check_date": "2026-06-13",
+    "name": "Nash Cafe"
+  }
+},
+{
+  "type": "node",
+  "id": 13969241892,
+  "lat": 37.8625774,
+  "lon": -122.2590231,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2618",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "fast_food",
+    "cuisine": "sandwich",
+    "name": "Haogie's World of Hoagies",
+    "website": "https://www.worldofhoagies.com"
+  }
+},
+{
+  "type": "node",
+  "id": 14044888651,
+  "lat": 37.8675550,
+  "lon": -122.2625444,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2315",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "amenity": "restaurant",
+    "cuisine": "french",
+    "name": "Julia's Restaurant",
+    "url": "https://www.berkeleycityclub.com/dining/julias-restaurant"
+  }
+},
+{
+  "type": "node",
+  "id": 14218600625,
+  "lat": 37.8716710,
+  "lon": -122.2681237,
+  "tags": {
+    "addr:floor": "1",
+    "addr:housenumber": "2021",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "fast_food",
+    "check_date": "2026-10-15",
+    "cuisine": "hot_dog",
+    "diet:vegetarian": "no",
+    "drink:beer": "yes",
+    "indoor_seating": "yes",
+    "level": "0",
+    "name": "Top Dog",
+    "outdoor_seating": "yes",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "phone": "+1-510-616-3360",
+    "website": "https://www.topdogdowntown.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 14244816276,
+  "lat": 37.8758016,
+  "lon": -122.2604305,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1814",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Euclid Avenue",
+    "amenity": "fast_food",
+    "cuisine": "vietnamese;sandwich",
+    "name": "GHE banh mi & rolls",
+    "website": "https://www.ghebanhmirolls.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 14274862801,
+  "lat": 37.8682446,
+  "lon": -122.2589381,
+  "tags": {
+    "addr:housenumber": "2315",
+    "addr:postcode": "94704",
+    "addr:street": "Telegraph Avenue",
+    "amenity": "cafe",
+    "contact:instagram": "dematcha.us",
+    "cuisine": "tea",
+    "email": "info@dematcha.us",
+    "name": "De Matcha",
+    "opening_hours": "Mo-Fr 09:00-19:00; Sa-Su 10:00-19:00",
+    "website": "https://www.dematcha.us/"
+  }
+},
+{
+  "type": "node",
+  "id": 14330139686,
+  "lat": 37.8709585,
+  "lon": -122.2698757,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2010",
+    "addr:postcode": "94704",
+    "addr:street": "Addison Street",
+    "amenity": "cafe",
+    "name": "Lexie’s Frozen Custard",
+    "opening_hours": "Tu-Su 13:00-22:00",
+    "phone": "+1 510-529-4470",
+    "website": "https://lexiesfrozencustard.com"
+  }
+},
+{
+  "type": "way",
+  "id": 28594148,
+  "center": {
+    "lat": 37.8739991,
+    "lon": -122.2688574
+  },
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1890",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "fast_food",
+    "brand": "Sweetgreen",
+    "brand:wikidata": "Q18636413",
+    "building": "retail",
+    "building:levels": "1",
+    "check_date": "2023-05-20",
+    "cuisine": "salad",
+    "name": "Sweetgreen",
+    "old_name": "Oscar's",
+    "opening_hours": "Mo-Su 10:30-20:00",
+    "outdoor_seating": "yes",
+    "phone": "+1-510-990-8262",
+    "takeaway": "yes",
+    "website": "https://order.sweetgreen.com/berkeley/menu"
+  }
+},
+{
+  "type": "way",
+  "id": 43160294,
+  "center": {
+    "lat": 37.8677927,
+    "lon": -122.2701529
+  },
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2235",
+    "addr:street": "Milvia Street",
+    "amenity": "restaurant",
+    "building": "yes",
+    "building:levels": "1",
+    "cuisine": "sushi",
+    "name": "Sushinista",
+    "opening_hours": "Mo-Fr 11:00-14:00,17:00-19:00; Sa-Su,PH off",
+    "phone": "+1 510-529-4885",
+    "roof:levels": "0",
+    "website": "https://sushinista.net"
+  }
+},
+{
+  "type": "way",
+  "id": 264221297,
+  "center": {
+    "lat": 37.8699631,
+    "lon": -122.2690479
+  },
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2068",
+    "addr:postcode": "94704",
+    "addr:street": "Center Street",
+    "amenity": "restaurant",
+    "building": "retail",
+    "building:levels": "1",
+    "cuisine": "american",
+    "diet:vegetarian": "yes",
+    "name": "Eureka!",
+    "opening_hours": "Su-Th 11:00-24:00, Fr,Sa 11:00-01:00",
+    "website": "https://eurekarestaurantgroup.com"
+  }
+},
+{
+  "type": "way",
+  "id": 270523632,
+  "center": {
+    "lat": 37.8690348,
+    "lon": -122.2543226
+  },
+  "tags": {
+    "amenity": "pub",
+    "building": "apartments",
+    "building:levels": "3",
+    "check_date": "2024-07-31",
+    "name": "Free House",
+    "roof:levels": "0"
+  }
+},
+{
+  "type": "way",
+  "id": 1022312146,
+  "center": {
+    "lat": 37.8664719,
+    "lon": -122.2670997
+  },
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2367",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "amenity": "pub",
+    "name": "Cornerstone Craft Beer & Live Music",
+    "phone": "+1-510-214-8600",
+    "website": "https://www.cornerstoneberkeley.com/"
+  }
+},
+{
+  "type": "way",
+  "id": 1098756727,
+  "center": {
+    "lat": 37.8727784,
+    "lon": -122.2604118
+  },
+  "tags": {
+    "amenity": "cafe",
+    "building": "yes",
+    "cuisine": "coffee_shop",
+    "description": "Permanent outdoor snack kiosk/coffee shop.",
+    "name": "Press Coffee",
+    "outdoor_seating": "yes",
+    "shop": "coffee"
+  }
+}
+
+  ]
+}
