@@ -14,6 +14,10 @@ const databasePath = isAbsolute(databaseUrl) ? databaseUrl : resolve(APP_ROOT, d
 mkdirSync(dirname(databasePath), { recursive: true });
 
 const sqlite = new Database(databasePath);
+// Parallel vitest workers share one DATABASE_URL file: without a busy
+// timeout the journal_mode pragma and bootstrap DDL race into
+// SQLITE_BUSY ("database is locked") at import time.
+sqlite.pragma("busy_timeout = 5000");
 sqlite.pragma("journal_mode = WAL");
 
 // Bootstrap DDL so a fresh `pnpm dev` or test run lands on a working
