@@ -26,7 +26,7 @@ const TG_PORT = 3911;
 const WA_PORT = 3912;
 const MAIL_PORT = 3913;
 const BASE = `http://127.0.0.1:${PORT}`;
-const deadline = Date.now() + 55_000;
+const deadline = Date.now() + Number(process.env.SMOKE_DEADLINE_MS ?? 55_000);
 
 const steps = [];
 const step = (name, ok, detail = "") => {
@@ -36,28 +36,71 @@ const step = (name, ok, detail = "") => {
 };
 
 const tmp = mkdtempSync(join(tmpdir(), "tarima-smoke-"));
-const children = [];
+// Every spawned child gets its own process group (detached) so cleanup
+// can signal the whole tree — the web server spawns workers/children of
+// its own, and a bare child.kill() leaks them (we leaked five orphans).
+const procs = [];
 let exiting = false;
-function killAll() {
-  if (exiting) return;
-  exiting = true;
-  for (const child of children) {
+
+function signalProc(rec, sig) {
+  const { child } = rec;
+  if (rec.done || !child.pid) return;
+  try {
+    process.kill(-child.pid, sig); // process group
+  } catch {
     try {
-      child.kill("SIGTERM");
+      child.kill(sig);
     } catch {}
   }
 }
-process.on("exit", killAll);
-process.on("SIGINT", () => process.exit(130));
+function signalAll(sig) {
+  for (const rec of procs) signalProc(rec, sig);
+}
+
+async function killAll() {
+  if (exiting) return;
+  exiting = true;
+  signalAll("SIGTERM");
+  const softDeadline = Date.now() + 8_000;
+  while (!procs.every((r) => r.done) && Date.now() < softDeadline) {
+    await new Promise((r) => setTimeout(r, 100));
+  }
+  if (!procs.every((r) => r.done)) {
+    signalAll("SIGKILL");
+    const hardDeadline = Date.now() + 3_000;
+    while (!procs.every((r) => r.done) && Date.now() < hardDeadline) {
+      await new Promise((r) => setTimeout(r, 50));
+    }
+  }
+}
+
+async function shutdown(code) {
+  await killAll();
+  process.exit(code);
+}
+process.on("SIGINT", () => void shutdown(130));
+process.on("SIGTERM", () => void shutdown(143));
+// Synchronous last resort: if we exit without the async cleanup having
+// finished (e.g. an uncaught throw), still take the groups down.
+process.on("exit", () => signalAll("SIGKILL"));
 
 function startChild(name, cmd, args, cwd) {
-  const child = spawn(cmd, args, { cwd, stdio: ["ignore", "pipe", "pipe"] });
+  const child = spawn(cmd, args, { cwd, detached: true, stdio: ["ignore", "pipe", "pipe"] });
+  const rec = { name, child, done: false };
   child.on("exit", (code) => {
+    rec.done = true;
     if (!exiting && code !== 0 && code !== null) {
       console.error(`[smoke] ${name} exited ${code}`);
     }
   });
-  children.push(child);
+  procs.push(rec);
+  // Drain the pipes: nobody reads them, and a full buffer would block
+  // the child on write.
+  child.stdout?.resume();
+  child.stderr?.resume();
+  if (process.env.SMOKE_REPORT_CHILDREN === "1") {
+    console.error(`[smoke] child ${name} pid=${child.pid}`);
+  }
   return child;
 }
 
@@ -120,6 +163,12 @@ let ok = true;
 try {
   await until(async () => (await fetch(`${BASE}/api/health`)).ok, "web health");
   step("web health", true);
+
+  // Self-check hook: scripts/smoke-leak-check.ts sets this to prove the
+  // cleanup path kills every child on a failing run.
+  if (process.env.SMOKE_FORCE_FAIL === "1") {
+    throw new Error("deliberate failure (SMOKE_FORCE_FAIL)");
+  }
 
   // 1. The landing page and one hashed asset (the preview bug: every
   //    /assets/* request 500'd when the eve mount clobbered __nitro_main__).
@@ -206,7 +255,7 @@ try {
   ok = false;
   step("smoke run", false, String(err));
 } finally {
-  killAll();
+  await killAll();
   try {
     rmSync(tmp, { recursive: true, force: true });
   } catch {}
