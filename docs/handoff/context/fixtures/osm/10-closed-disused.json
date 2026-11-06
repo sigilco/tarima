@@ -1,0 +1,3261 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-05T21:53:47Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 260556516,
+  "lat": 37.8724542,
+  "lon": -122.2579780,
+  "tags": {
+    "artwork_type": "sculpture",
+    "disused:amenity": "fountain",
+    "historic": "memorial",
+    "inscription": "John Mitchell was armorer from 1895 to 1904",
+    "material": "stone",
+    "name": "Mitchell Monument",
+    "note": "Fountain function has been permanently disabled",
+    "start_date": "1905",
+    "tourism": "artwork"
+  }
+},
+{
+  "type": "node",
+  "id": 282600907,
+  "lat": 37.8684747,
+  "lon": -122.2600135,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2460",
+    "addr:street": "Bancroft Way",
+    "brand": "Wells Fargo",
+    "brand:wikidata": "Q744149",
+    "disused:amenity": "bank",
+    "drive_through": "no",
+    "name": "Wells Fargo",
+    "operator": "Wells Fargo",
+    "website": "https://www.wellsfargo.com/locator/bank/2460__BANCROFT__WAY_BERKELEY_CA_94704/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 286081176,
+  "lat": 37.8671499,
+  "lon": -122.2582971,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2511",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Channing Way",
+    "check_date": "2025-05-03",
+    "cuisine": "thai",
+    "disused:amenity": "restaurant",
+    "name": "Berkeley Thai House"
+  }
+},
+{
+  "type": "node",
+  "id": 286081302,
+  "lat": 37.8647961,
+  "lon": -122.2671401,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2451",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "check_date": "2026-06-17",
+    "cuisine": "japanese",
+    "disused:amenity": "restaurant",
+    "indoor_seating": "yes",
+    "name": "Fish & Bird Sousaku Izakaya",
+    "opening_hours": "Mo 16:30-21:00; We,Th 17:00-21:00; Fr,Sa 16:30-21:30; Su 16:30-21:00",
+    "outdoor_seating": "no",
+    "phone": "+1-510-705-1539",
+    "smoking": "no",
+    "website": "https://fishbirdizakaya.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 314115394,
+  "lat": 37.8805030,
+  "lon": -122.2690174,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1491",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "check_date": "2025-08-22",
+    "disused:shop": "books",
+    "name": "Books Inc.",
+    "opening_hours": "Mo-Sa 10:00-20:00; Su 10:00-19:00",
+    "phone": "+1-510-525-7727",
+    "website": "https://www.booksinc.net/Berkeley",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 314115475,
+  "lat": 37.8816996,
+  "lon": -122.2697640,
+  "tags": {
+    "brand": "Wells Fargo",
+    "brand:wikidata": "Q744149",
+    "disused:amenity": "atm",
+    "operator": "Wells Fargo",
+    "operator:wikidata": "Q744149",
+    "operator:wikipedia": "en:Wells Fargo"
+  }
+},
+{
+  "type": "node",
+  "id": 314115691,
+  "lat": 37.8724290,
+  "lon": -122.2686400,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1988",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "check_date": "2023-06-11",
+    "disused:shop": "bicycle",
+    "old_name": "The Missing Link",
+    "opening_hours": "Mo-Fr 11:00-19:00; Sa 10:00-18:00; Su 11:00-18:00",
+    "service:bicycle:diy": "yes",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:repair": "no",
+    "service:bicycle:retail": "yes",
+    "service:bicycle:second_hand": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 314115728,
+  "lat": 37.8729720,
+  "lon": -122.2683120,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1951",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 318886210,
+  "lat": 37.8752789,
+  "lon": -122.2596780,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2509",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Hearst Avenue",
+    "brand": "Subway",
+    "brand:wikidata": "Q244457",
+    "cuisine": "sandwich",
+    "diet:vegetarian": "yes",
+    "disused:amenity": "fast_food",
+    "name": "Subway",
+    "opening_hours": "Mo-Fr 10:00-17:00",
+    "operator": "Subway IP Inc.",
+    "phone": "+1 510-849-9009",
+    "takeaway": "yes",
+    "website": "https://restaurants.subway.com/united-states/ca/berkeley/2509-hearst-ave"
+  }
+},
+{
+  "type": "node",
+  "id": 318886224,
+  "lat": 37.8757872,
+  "lon": -122.2601636,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1807",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Euclid Avenue",
+    "cuisine": "coffee_shop",
+    "disused:amenity": "cafe",
+    "name": "Delah Coffee",
+    "old_name": "Brewed Awakening",
+    "website": "https://delahcoffee.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 318886225,
+  "lat": 37.8756900,
+  "lon": -122.2601440,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1829",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Euclid Avenue",
+    "disused:amenity": "restaurant",
+    "name": "Mt. Agni",
+    "old_name": "Stuffed Inn"
+  }
+},
+{
+  "type": "node",
+  "id": 318886269,
+  "lat": 37.8697434,
+  "lon": -122.2672087,
+  "tags": {
+    "addr:housenumber": "2115",
+    "addr:street": "Allston Way",
+    "cuisine": "sandwich",
+    "disused:amenity": "cafe",
+    "name": "Cafe Panini"
+  }
+},
+{
+  "type": "node",
+  "id": 354052320,
+  "lat": 37.8717795,
+  "lon": -122.2725550,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1915",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "disused:amenity": "public_bath",
+    "leisure": "hot_tub",
+    "name": "The Hot Tubs"
+  }
+},
+{
+  "type": "node",
+  "id": 354052334,
+  "lat": 37.8717140,
+  "lon": -122.2706590,
+  "tags": {
+    "bicycle_parking": "stands",
+    "capacity": "10",
+    "covered": "no",
+    "disused:amenity": "bicycle_parking",
+    "fee": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 354703130,
+  "lat": 37.8703222,
+  "lon": -122.2669174,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2132",
+    "addr:postcode": "94704",
+    "addr:street": "Center Street",
+    "capacity": "60",
+    "check_date": "2024-07-04",
+    "cuisine": "chinese",
+    "disused:amenity": "restaurant",
+    "name": "Yin Ji Chang Fen",
+    "phone": "+1 510-570-2115",
+    "smoking": "no",
+    "website": "https://www.yinjichangfenusa.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 354703231,
+  "lat": 37.8703381,
+  "lon": -122.2667928,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2142",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Center Street",
+    "check_date": "2024-06-01",
+    "cuisine": "chinese",
+    "disused:amenity": "restaurant",
+    "name": "Easterly Hunan",
+    "smoking": "no",
+    "website": "https://easterlyhunancuisineca.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 354703480,
+  "lat": 37.8703566,
+  "lon": -122.2666483,
+  "tags": {
+    "addr:housenumber": "2146",
+    "addr:street": "Center Street",
+    "check_date": "2024-06-01",
+    "cuisine": "sandwich",
+    "disused:amenity": "cafe",
+    "name": "Cafe Rio"
+  }
+},
+{
+  "type": "node",
+  "id": 354703648,
+  "lat": 37.8703741,
+  "lon": -122.2665106,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2152",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Center Street",
+    "check_date": "2024-06-01",
+    "cuisine": "japanese",
+    "disused:amenity": "restaurant",
+    "name": "Moe Sushi and Grill",
+    "payment:bitcoincash": "yes",
+    "phone": "+1-510-280-5026",
+    "website": "https://www.moesushiandgrill.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 354703876,
+  "lat": 37.8703844,
+  "lon": -122.2664298,
+  "tags": {
+    "addr:housenumber": "2154",
+    "addr:postcode": "94704",
+    "addr:street": "Center Street",
+    "check_date": "2024-06-01",
+    "cuisine": "burger;mediterranean",
+    "disused:amenity": "fast_food",
+    "name": "Bongo Burger",
+    "outdoor_seating": "yes",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "phone": "+1 510-548-7700",
+    "website": "https://bongoburger.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 354703981,
+  "lat": 37.8703953,
+  "lon": -122.2663555,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2160",
+    "addr:street": "Center Street",
+    "check_date": "2024-06-01",
+    "cuisine": "american;hot_dog",
+    "diet:vegetarian": "yes",
+    "disused:amenity": "fast_food",
+    "drive_in": "no",
+    "drive_through": "no",
+    "microbrewery": "no",
+    "name": "Top Dog",
+    "outdoor_seating": "yes",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "smoking": "no",
+    "website": "http://www.topdoghotdogs.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 355798258,
+  "lat": 37.8702011,
+  "lon": -122.2676247,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2151",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "check_date": "2023-05-27",
+    "disused:amenity": "bank",
+    "old_name": "Bank of America;Games of Berkeley"
+  }
+},
+{
+  "type": "node",
+  "id": 368200688,
+  "lat": 37.8610489,
+  "lon": -122.2666003,
+  "tags": {
+    "addr:housenumber": "2627",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "car",
+    "name": "Honda Used Car"
+  }
+},
+{
+  "type": "node",
+  "id": 368204303,
+  "lat": 37.8632795,
+  "lon": -122.2676011,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2524",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "appliance"
+  }
+},
+{
+  "type": "node",
+  "id": 368204305,
+  "lat": 37.8638268,
+  "lon": -122.2676708,
+  "tags": {
+    "addr:housenumber": "2500",
+    "addr:street": "Shattuck Avenue",
+    "check_date": "2023-07-11",
+    "disused:shop": "electronics",
+    "name": "Radio Shack"
+  }
+},
+{
+  "type": "node",
+  "id": 368204307,
+  "lat": 37.8644974,
+  "lon": -122.2677272,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2468",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "cuisine": "thai",
+    "disused": "yes",
+    "disused:amenity": "restaurant",
+    "name": "Tuk Tuk Thai Cafe",
+    "website": "https://www.ordertuktuk.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 431015326,
+  "lat": 37.8697594,
+  "lon": -122.2660271,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2175",
+    "addr:postcode": "94704",
+    "addr:street": "Allston Way",
+    "cuisine": "persian",
+    "disused:amenity": "restaurant",
+    "name": "Alborz",
+    "old_name": "Saturn Cafe",
+    "phone": "+1 510 9840985",
+    "website": "https://alborzrestaurants.com/berkeley-restaurant/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 540536383,
+  "lat": 37.8679690,
+  "lon": -122.2681470,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2274",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "alt_name": "United Artists Theatres",
+    "check_date": "2023-03-11",
+    "disused:amenity": "cinema",
+    "name": "Regal UA Berkeley",
+    "operator": "Regal Cinemas",
+    "website": "https://www.regmovies.com/theatres/regal-ua-berkeley/1172",
+    "wheelchair": "limited",
+    "wikidata": "Q44859248"
+  }
+},
+{
+  "type": "node",
+  "id": 540608937,
+  "lat": 37.8709675,
+  "lon": -122.2689650,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2070",
+    "addr:state": "CA",
+    "addr:street": "Addison Street",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 540609038,
+  "lat": 37.8712770,
+  "lon": -122.2684940,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2036",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "check_date": "2025-12-01",
+    "disused:shop": "books",
+    "was:name": "Half Price Books",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 540609043,
+  "lat": 37.8719552,
+  "lon": -122.2685759,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2000",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "check_date": "2025-09-21",
+    "disused:amenity": "bank",
+    "drive_through": "no",
+    "was:name": "Citibank",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 540716562,
+  "lat": 37.8674090,
+  "lon": -122.2680890,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2300",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes",
+    "note": "Store ref 3026"
+  }
+},
+{
+  "type": "node",
+  "id": 778894197,
+  "lat": 37.8723609,
+  "lon": -122.2729093,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1921",
+    "addr:state": "CA",
+    "addr:street": "Martin Luther King Jr Way",
+    "disused:amenity": "restaurant",
+    "name": "Nakapan Thai Cuisine"
+  }
+},
+{
+  "type": "node",
+  "id": 1419609084,
+  "lat": 37.8701783,
+  "lon": -122.2660389,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2136",
+    "addr:postcode": "94704",
+    "addr:street": "Oxford Street",
+    "diet:vegetarian": "yes",
+    "disused:amenity": "restaurant",
+    "name": "Sunny Side Cafe",
+    "phone": "+1 510 8459900",
+    "website": "https://www.thesunnysidecafe.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 1419609098,
+  "lat": 37.8702398,
+  "lon": -122.2660443,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2134",
+    "addr:street": "Oxford Street",
+    "cuisine": "indian",
+    "disused:amenity": "bar",
+    "name": "East Bay Spice Company",
+    "phone": "+1 510 8454427",
+    "website": "https://www.eastbayspiceco.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1920871627,
+  "lat": 37.8694553,
+  "lon": -122.2683037,
+  "tags": {
+    "addr:housenumber": "2190",
+    "addr:street": "Shattuck Avenue",
+    "brand": "Walgreens",
+    "brand:wikidata": "Q1591889",
+    "dispensing": "no",
+    "disused:amenity": "pharmacy",
+    "disused:healthcare": "pharmacy",
+    "drive_through": "no",
+    "name": "Walgreens",
+    "phone": "+1-510-849-4691",
+    "website": "https://www.walgreens.com/locator/walgreens-2190+shattuck+ave-berkeley-ca-94704/id=15025",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2095576391,
+  "lat": 37.8685518,
+  "lon": -122.2681940,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2240",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2095579094,
+  "lat": 37.8688395,
+  "lon": -122.2682300,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2224",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "branch": "2224 Shattuck - Berkeley",
+    "brand": "Starbucks",
+    "brand:wikidata": "Q37158",
+    "check_date": "2024-04-07",
+    "cuisine": "coffee_shop",
+    "diet:vegetarian": "yes",
+    "disused:amenity": "cafe",
+    "indoor_seating": "no",
+    "name": "Starbucks",
+    "official_name": "Starbucks Coffee",
+    "opening_hours": "Mo-Fr 05:30-20:00; Sa-Su 06:00-20:00",
+    "outdoor_seating": "no",
+    "phone": "+1 510-843-6806",
+    "smoking": "no",
+    "takeaway": "only",
+    "website": "https://www.starbucks.com/store-locator/store/14844/2224-shattuck-berkeley-2224-shattuck-avenue-berkeley-ca-947041416-us",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2095579173,
+  "lat": 37.8689030,
+  "lon": -122.2682310,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2222",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2095634954,
+  "lat": 37.8690976,
+  "lon": -122.2682505,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2204",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2095636278,
+  "lat": 37.8692170,
+  "lon": -122.2682950,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2200",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2100540691,
+  "lat": 37.8714605,
+  "lon": -122.2675685,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2037",
+    "addr:state": "CA",
+    "addr:street": "Kala Bagai Way",
+    "cuisine": "salvadoran;mexican;pupusa",
+    "disused:amenity": "restaurant",
+    "drive_in": "no",
+    "name": "Las Delicias",
+    "opening_hours": "Mo-Sa 11:00-20:00",
+    "website": "https://www.lasdelicias.vip/"
+  }
+},
+{
+  "type": "node",
+  "id": 2174306782,
+  "lat": 37.8624963,
+  "lon": -122.2586140,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2629",
+    "addr:postcode": "94704",
+    "addr:street": "Telegraph Avenue",
+    "cuisine": "international",
+    "disused:amenity": "cafe",
+    "name": "Le Bateau Ivre",
+    "opening_hours": "We-Fr 11:30-19:00; Sa 10:00-19:00; Su 10:00-16:00",
+    "phone": "+1-510-849-1100",
+    "website": "https://www.lebateauivre.net/"
+  }
+},
+{
+  "type": "node",
+  "id": 2235914930,
+  "lat": 37.8691515,
+  "lon": -122.2682680,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2202",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2259131703,
+  "lat": 37.8689930,
+  "lon": -122.2682540,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2208",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2283661422,
+  "lat": 37.8728589,
+  "lon": -122.2686784,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1950",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "check_date": "2023-05-20",
+    "cuisine": "tea;dessert;ice_cream",
+    "disused:amenity": "cafe",
+    "level": "0",
+    "name": "Amausaan Uji Matcha",
+    "opening_hours": "Mo-Fr 13:30-21:00; Sa-Su 13:00-21:00"
+  }
+},
+{
+  "type": "node",
+  "id": 2286085921,
+  "lat": 37.8723970,
+  "lon": -122.2676400,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2125",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "disused:amenity": "cafe"
+  }
+},
+{
+  "type": "node",
+  "id": 2322524023,
+  "lat": 37.8676978,
+  "lon": -122.2681058,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2286",
+    "addr:street": "Shattuck Avenue",
+    "disused:amenity": "restaurant",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2322524432,
+  "lat": 37.8677800,
+  "lon": -122.2681132,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2284",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2322531262,
+  "lat": 37.8680820,
+  "lon": -122.2681630,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2270",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "gift",
+    "name": "Feelmore"
+  }
+},
+{
+  "type": "node",
+  "id": 2326547448,
+  "lat": 37.8717755,
+  "lon": -122.2700485,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2026",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "cuisine": "burger;american;fried_chicken",
+    "disused:amenity": "restaurant",
+    "name": "Cal's Fried Chicken & Burgers",
+    "website": "https://calsberkeley.com"
+  }
+},
+{
+  "type": "node",
+  "id": 2349795744,
+  "lat": 37.8718060,
+  "lon": -122.2685450,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2010",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "computer",
+    "name": "M.A.C.",
+    "opening_hours": "Mo-Sa 10:00-18:00",
+    "phone": "+1-510-644-0500",
+    "website": "https://www.macberkeley.com/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2350150099,
+  "lat": 37.8722095,
+  "lon": -122.2692487,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2059",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "disused:shop": "tailor",
+    "name": "Berkeley Sewing and Cleaning"
+  }
+},
+{
+  "type": "node",
+  "id": 2350152289,
+  "lat": 37.8721650,
+  "lon": -122.2695957,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2043",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "disused:shop": "hairdresser",
+    "name": "Gentle Hair Cuts",
+    "opening_hours": "Mo-Fr 09:00-18:00; Sa 09:00-17:00"
+  }
+},
+{
+  "type": "node",
+  "id": 2350153997,
+  "lat": 37.8718027,
+  "lon": -122.2723517,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1923",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "contact:instagram": "masaramenbistro",
+    "cuisine": "ramen",
+    "disused:amenity": "restaurant",
+    "name": "Masa",
+    "opening_hours": "Tu-Su 11:30-14:30, 17:00-21:00",
+    "website": "https://www.toasttab.com/masaramenbistro"
+  }
+},
+{
+  "type": "node",
+  "id": 2379688321,
+  "lat": 37.8660910,
+  "lon": -122.2673210,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2389",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "furniture",
+    "name": "Mattress Discounters",
+    "website": "https://www.mattressfirm.com/stores/ca/berkeley/mattress-stores-berkeley-ca-94704-9557.html"
+  }
+},
+{
+  "type": "node",
+  "id": 2398969511,
+  "lat": 37.8679566,
+  "lon": -122.2640951,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2244",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Bancroft Way",
+    "cuisine": "coffee_shop",
+    "disused:amenity": "cafe",
+    "name": "Cafe Blue Door",
+    "old_name": "Berkeley Floor Cafe",
+    "smoking": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2491784037,
+  "lat": 37.8709927,
+  "lon": -122.2679886,
+  "tags": {
+    "addr:housenumber": "2115",
+    "addr:street": "Shattuck Avenue",
+    "alt_name": "Western Dental & Orthodontics",
+    "brand": "Western Dental",
+    "brand:wikidata": "Q64211989",
+    "check_date": "2025-08-18",
+    "disused:amenity": "dentist",
+    "disused:healthcare": "dentist",
+    "name": "Western Dental"
+  }
+},
+{
+  "type": "node",
+  "id": 2501119324,
+  "lat": 37.8703491,
+  "lon": -122.2667070,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2144",
+    "addr:street": "Center Street",
+    "check_date": "2024-06-01",
+    "cuisine": "middle_eastern",
+    "disused:amenity": "restaurant",
+    "name": "Daryoush",
+    "phone": "+1-510-629-2144",
+    "website": "https://www.daryoush.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 2501122175,
+  "lat": 37.8702761,
+  "lon": -122.2672785,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2124",
+    "addr:street": "Center Street",
+    "check_date": "2023-11-11",
+    "cuisine": "seafood",
+    "disused:amenity": "restaurant",
+    "name": "Bag o'Crab",
+    "website": "https://www.bagocrabusa.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 2505095421,
+  "lat": 37.8759725,
+  "lon": -122.2509640,
+  "tags": {
+    "disused": "yes",
+    "disused:amenity": "restaurant",
+    "name": "Bayview Café"
+  }
+},
+{
+  "type": "node",
+  "id": 2559138917,
+  "lat": 37.8679791,
+  "lon": -122.2639916,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2250",
+    "addr:postcode": "94704",
+    "addr:street": "Bancroft Way",
+    "disused:shop": "bicycle",
+    "name": "Jitensha Studio",
+    "phone": "+1 510 5406240",
+    "service:bicycle:retail": "yes",
+    "website": "http://www.jitensha.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 3061396887,
+  "lat": 37.8702975,
+  "lon": -122.2691555,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2055",
+    "addr:postcode": "94704",
+    "addr:street": "Center Street",
+    "addr:unit": "D",
+    "disused:amenity": "bar",
+    "name": "Olfactory Brewing - Berkeley Taproom",
+    "note": "food is served by Delirama Jr. located inside",
+    "old_name": "Pacific Standard Taproom",
+    "operator": "Olfactory Brewing"
+  }
+},
+{
+  "type": "node",
+  "id": 3347105718,
+  "lat": 37.8698626,
+  "lon": -122.2664245,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2161",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Allston Way",
+    "addr:unit": "B",
+    "disused:shop": "beauty",
+    "name": "Soleil Tanning Salons"
+  }
+},
+{
+  "type": "node",
+  "id": 3360183193,
+  "lat": 37.8680627,
+  "lon": -122.2675401,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2277",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes",
+    "name": "Used Computer Store"
+  }
+},
+{
+  "type": "node",
+  "id": 3637571028,
+  "lat": 37.8656685,
+  "lon": -122.2587045,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2468",
+    "addr:postcode": "94704",
+    "addr:street": "Telegraph Avenue",
+    "check_date": "2026-10-14",
+    "contact:website": "http://places.singleplatform.com/sliver/menu?ref=openstreetmap",
+    "cuisine": "pizza",
+    "disused:amenity": "restaurant",
+    "name": "Sliver Pizzeria",
+    "outdoor_seating": "no",
+    "payment:cash": "no",
+    "payment:credit_cards": "yes",
+    "phone": "+1-510-356-4044",
+    "smoking": "no",
+    "takeaway": "yes",
+    "website": "https://www.sliverpizzeria.com/pizza-telegraph/"
+  }
+},
+{
+  "type": "node",
+  "id": 3717193207,
+  "lat": 37.8792053,
+  "lon": -122.2689940,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1529",
+    "addr:street": "Shattuck Avenue",
+    "check_date": "2023-03-18",
+    "disused:shop": "optician",
+    "name": "De Visu",
+    "opening_hours": "Mo-Su 12:00-18:00"
+  }
+},
+{
+  "type": "node",
+  "id": 3795571177,
+  "lat": 37.8700448,
+  "lon": -122.2676449,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2165",
+    "addr:street": "Shattuck Avenue",
+    "check_date": "2025-08-18",
+    "disused:shop": "yes",
+    "was:name": "GNC"
+  }
+},
+{
+  "type": "node",
+  "id": 3814256883,
+  "lat": 37.8645593,
+  "lon": -122.2677472,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2462",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "laundry",
+    "name": "Self Service Laundry"
+  }
+},
+{
+  "type": "node",
+  "id": 3814256884,
+  "lat": 37.8644522,
+  "lon": -122.2677256,
+  "tags": {
+    "addr:housenumber": "2474",
+    "addr:street": "Shattuck Ave",
+    "disused:shop": "musical_instrument",
+    "name": "The Starving Musician"
+  }
+},
+{
+  "type": "node",
+  "id": 3974239826,
+  "lat": 37.8687487,
+  "lon": -122.2682220,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2230",
+    "addr:street": "Shattuck Avenue",
+    "disused:amenity": "cinema",
+    "name": "Shattuck Cinemas",
+    "note": "closed in 2022",
+    "phone": "+1 510 6442992",
+    "toilets:wheelchair": "limited",
+    "website": "https://www.landmarktheatres.com/san-francisco-east-bay/shattuck-cinemas/info",
+    "wheelchair": "no",
+    "wikidata": "Q44859166"
+  }
+},
+{
+  "type": "node",
+  "id": 4121821879,
+  "lat": 37.8679438,
+  "lon": -122.2569271,
+  "tags": {
+    "addr:housenumber": "2550",
+    "addr:street": "Durant Avenue",
+    "disused:amenity": "cafe",
+    "name": "U Cafe"
+  }
+},
+{
+  "type": "node",
+  "id": 4218249372,
+  "lat": 37.8677666,
+  "lon": -122.2579221,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2520",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "check_date": "2023-06-11",
+    "cuisine": "indian",
+    "disused:amenity": "restaurant",
+    "name": "House Of Curries"
+  }
+},
+{
+  "type": "node",
+  "id": 4782303543,
+  "lat": 37.8709335,
+  "lon": -122.2711750,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1939",
+    "addr:state": "CA",
+    "addr:street": "Addison Street",
+    "damage:type": "fire",
+    "disused:amenity": "community_centre",
+    "name": "East Bay Media Center",
+    "phone": "+1-510-843-3699",
+    "website": "http://www.eastbaymediacenter.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 5009129869,
+  "lat": 37.8717749,
+  "lon": -122.2675907,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2017",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Kala Bagai Way",
+    "disused:amenity": "restaurant",
+    "name": "Malazui Tasty Bowl"
+  }
+},
+{
+  "type": "node",
+  "id": 5081896315,
+  "lat": 37.8686708,
+  "lon": -122.2584615,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2522",
+    "addr:street": "Bancroft Way",
+    "disused:amenity": "cafe",
+    "name": "Cafe Milano",
+    "website": "http://places.singleplatform.com/cafe-milano-4/menu?ref=openstreetmap",
+    "website:menu": "https://foodeist.com/place/cafe-milano-berkeley-ca/menu"
+  }
+},
+{
+  "type": "node",
+  "id": 5324276553,
+  "lat": 37.8728299,
+  "lon": -122.2689226,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2050",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Berkeley Way",
+    "check_date": "2023-05-20",
+    "cuisine": "vietnamese",
+    "disused:amenity": "restaurant",
+    "level": "0",
+    "name": "84 Viet",
+    "opening_hours:signed": "no",
+    "website": "https://www.84-viet.com"
+  }
+},
+{
+  "type": "node",
+  "id": 5832919589,
+  "lat": 37.8801086,
+  "lon": -122.2682970,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1510",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Walnut Street",
+    "clothes": "children;women",
+    "disused:shop": "clothes",
+    "name": "Dimples Boutique",
+    "phone": "+1 510-647-9949"
+  }
+},
+{
+  "type": "node",
+  "id": 5839728601,
+  "lat": 37.8707018,
+  "lon": -122.2691758,
+  "tags": {
+    "addr:housenumber": "2055",
+    "addr:street": "Center Street",
+    "disused:amenity": "theatre",
+    "name": "Osher Studio",
+    "operator": "Bay Area Childrens Theatre"
+  }
+},
+{
+  "type": "node",
+  "id": 6298795539,
+  "lat": 37.8676309,
+  "lon": -122.2619931,
+  "tags": {
+    "addr:housenumber": "2339",
+    "addr:street": "Durant Avenue",
+    "description": "The Free Clinic has moved to 830 University Ave",
+    "disused:amenity": "clinic",
+    "name": "Berkeley Free Clinic",
+    "toilets:wheelchair": "yes",
+    "website": "https://www.berkeleyfreeclinic.org/",
+    "wheelchair": "limited",
+    "wikidata": "Q4892019"
+  }
+},
+{
+  "type": "node",
+  "id": 7914227301,
+  "lat": 37.8714371,
+  "lon": -122.2751714,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1901",
+    "addr:postcode": "94703",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "disused:shop": "interior_decoration",
+    "name": "Talavera Ceramics & Tile",
+    "website": "https://www.talaveraceramicsandtile.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 7926245632,
+  "lat": 37.8590785,
+  "lon": -122.2590413,
+  "tags": {
+    "addr:housenumber": "2811",
+    "addr:street": "Telegraph Avenue",
+    "cuisine": "chinese",
+    "disused:amenity": "restaurant",
+    "name": "Taisan"
+  }
+},
+{
+  "type": "node",
+  "id": 7926249644,
+  "lat": 37.8640144,
+  "lon": -122.2583899,
+  "tags": {
+    "addr:housenumber": "2587",
+    "addr:street": "Telegraph Avenue",
+    "disused:amenity": "restaurant",
+    "name": "Pasta bene",
+    "phone": "+1-510-845-2363",
+    "website": "http://places.singleplatform.com/pasta-bene-2/menu?ref=openstreetmap"
+  }
+},
+{
+  "type": "node",
+  "id": 8023119035,
+  "lat": 37.8666895,
+  "lon": -122.2589015,
+  "tags": {
+    "addr:housenumber": "2404",
+    "addr:street": "Telegraph Avenue",
+    "check_date": "2023-06-11",
+    "disused:amenity": "restaurant",
+    "name": "Mochiholic"
+  }
+},
+{
+  "type": "node",
+  "id": 8072251362,
+  "lat": 37.8664939,
+  "lon": -122.2588639,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2424",
+    "addr:state": "CA",
+    "addr:street": "Telegraph Avenue",
+    "alt_name": "The Ink Stone",
+    "disused:shop": "art_supplies",
+    "layer": "2",
+    "name": "Inkstone",
+    "website": "https://www.theinkstone.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 8121734776,
+  "lat": 37.8685465,
+  "lon": -122.2594467,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2486",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Bancroft Way",
+    "disused:shop": "gift",
+    "name": "Whelans"
+  }
+},
+{
+  "type": "node",
+  "id": 8197233093,
+  "lat": 37.8642071,
+  "lon": -122.2583619,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2543",
+    "addr:street": "Telegraph Avenue",
+    "disused:shop": "clothes",
+    "name": "2nd street"
+  }
+},
+{
+  "type": "node",
+  "id": 8304613441,
+  "lat": 37.8717509,
+  "lon": -122.2702399,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2018",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "disused:shop": "rock",
+    "name": "Stone room"
+  }
+},
+{
+  "type": "node",
+  "id": 8931355904,
+  "lat": 37.8672755,
+  "lon": -122.2594048,
+  "tags": {
+    "access": "yes",
+    "check_date": "2025-12-19",
+    "disused:amenity": "toilets",
+    "toilets:disposal": "flush",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9143478645,
+  "lat": 37.8822502,
+  "lon": -122.2693789,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1385",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "addr:unit": "A",
+    "contact:email": "info@grovestreetkids.com",
+    "contact:facebook": "https://www.facebook.com/grovestreetkids",
+    "contact:instagram": "https://www.instagram.com/grovestreetkids/",
+    "contact:twitter": "https://twitter.com/grovestreetkids",
+    "disused:shop": "clothes",
+    "name": "Grove Street kids",
+    "note": "Kid's clothing store",
+    "opening_hours": "We-Sa 12:00-17:00",
+    "phone": "+1 510-843-5437",
+    "website": "https://www.grovestreetkids.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 9347284267,
+  "lat": 37.8711456,
+  "lon": -122.2675411,
+  "tags": {
+    "addr:housenumber": "2101",
+    "addr:street": "Kala Bagai Way",
+    "check_date": "2025-05-06",
+    "disused:shop": "furniture",
+    "name": "Scandinavian Designs",
+    "note": "closed as of 2021"
+  }
+},
+{
+  "type": "node",
+  "id": 9427102773,
+  "lat": 37.8638180,
+  "lon": -122.2584060,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2587",
+    "addr:street": "Telegraph Avenue",
+    "disused:amenity": "ice_cream",
+    "name": "Uji Time",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9553418872,
+  "lat": 37.8678125,
+  "lon": -122.2577668,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2528",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "addr:unit": "A",
+    "amenity": "cafe",
+    "check_date": "2025-07-08",
+    "contact:instagram": "bingecoffeehouse",
+    "cuisine": "coffee_shop;vietnamese",
+    "disused:amenity": "cafe",
+    "indoor_seating": "yes",
+    "name": "Binge Coffee House",
+    "outdoor_seating": "no",
+    "website:menu": "https://binge.squarespace.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 9572013603,
+  "lat": 37.8683570,
+  "lon": -122.2598961,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2466",
+    "addr:state": "CA",
+    "addr:street": "Bancroft Way",
+    "check_date": "2023-06-11",
+    "contact:instagram": "art_underground_tattoo",
+    "disused:shop": "tattoo",
+    "email": "artundergroundtattoo@gmail.com",
+    "level": "-1",
+    "name": "Art Underground Tattoo Studio",
+    "phone": "+1 510 3699202",
+    "website": "https://www.artundergroundtattoo.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 9572013608,
+  "lat": 37.8679631,
+  "lon": -122.2598991,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2431",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "addr:unit": "B",
+    "check_date": "2023-06-11",
+    "cuisine": "noodle",
+    "disused:amenity": "restaurant",
+    "name": "Noody"
+  }
+},
+{
+  "type": "node",
+  "id": 9574578732,
+  "lat": 37.8682106,
+  "lon": -122.2581108,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2519",
+    "addr:state": "CA",
+    "addr:street": "Durant Avenue",
+    "addr:unit": "C",
+    "check_date": "2025-07-01",
+    "cuisine": "mediterranean",
+    "disused:amenity": "restaurant",
+    "name": "Best California Gyros",
+    "outdoor_seating": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9778357078,
+  "lat": 37.8643816,
+  "lon": -122.2678103,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2480",
+    "addr:street": "Shattuck Avenue",
+    "alt_name": "Trek Bicycle Store",
+    "brand": "Trek",
+    "brand:wikidata": "Q1067617",
+    "disused:shop": "bicycle",
+    "name": "Trek",
+    "website": "https://www.trekbikes.com/us/en_us/retail/berkeley_downtown/"
+  }
+},
+{
+  "type": "node",
+  "id": 9804995798,
+  "lat": 37.8755187,
+  "lon": -122.2603759,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1828",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Euclid Avenue",
+    "disused:amenity": "restaurant",
+    "old_name": "Matiki Island"
+  }
+},
+{
+  "type": "node",
+  "id": 9805105450,
+  "lat": 37.8800073,
+  "lon": -122.2683432,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1508",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Walnut Street",
+    "addr:unit": "B",
+    "disused:amenity": "restaurant",
+    "disused:cuisine": "american",
+    "old_name": "Nico's 1508"
+  }
+},
+{
+  "type": "node",
+  "id": 10731237400,
+  "lat": 37.8706192,
+  "lon": -122.2670013,
+  "tags": {
+    "addr:housenumber": "2121",
+    "addr:street": "Center Street",
+    "addr:unit": "2",
+    "check_date": "2025-08-18",
+    "disused:shop": "clothes",
+    "name": "Shop College Wear",
+    "website": "https://shopcollegewear.com/collections/uc-berkeley"
+  }
+},
+{
+  "type": "node",
+  "id": 10969667017,
+  "lat": 37.8677658,
+  "lon": -122.2583089,
+  "tags": {
+    "addr:housenumber": "2518",
+    "addr:street": "Durant Avenue",
+    "addr:unit": "B",
+    "check_date": "2026-10-09",
+    "cuisine": "pizza",
+    "disused:amenity": "fast_food",
+    "name": "Seniore's Pizza",
+    "phone": "+1 510-548-5500",
+    "website": "https://www.seniorespizza.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 11128793844,
+  "lat": 37.8802020,
+  "lon": -122.2687084,
+  "tags": {
+    "addr:housenumber": "2212",
+    "addr:street": "Vine Street",
+    "addr:unit": "A",
+    "check_date": "2023-08-19",
+    "disused:shop": "florist",
+    "name": "H Julien Designs",
+    "phone": "+1 510-548-7400",
+    "website": "https://hjuliendesigns.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 11342285729,
+  "lat": 37.8703961,
+  "lon": -122.2662814,
+  "tags": {
+    "addr:housenumber": "2164",
+    "addr:street": "Center Street",
+    "check_date": "2023-11-11",
+    "cuisine": "bubble_tea",
+    "disused:amenity": "cafe",
+    "name": "Purple Kow"
+  }
+},
+{
+  "type": "node",
+  "id": 11506546415,
+  "lat": 37.8647586,
+  "lon": -122.2587146,
+  "tags": {
+    "addr:housenumber": "2510",
+    "addr:street": "Telegraph Avenue",
+    "disused:shop": "clothes",
+    "name": "Berkeley Hat Company"
+  }
+},
+{
+  "type": "node",
+  "id": 12539599644,
+  "lat": 37.8629661,
+  "lon": -122.2591027,
+  "tags": {
+    "disused:shop": "car_repair",
+    "name": "Berkeley Auto Care"
+  }
+},
+{
+  "type": "node",
+  "id": 12634724184,
+  "lat": 37.8710745,
+  "lon": -122.2576876,
+  "tags": {
+    "covered": "no",
+    "disused:amenity": "fountain",
+    "drinking_water": "no",
+    "fountain": "decorative",
+    "indoor": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 12674359595,
+  "lat": 37.8707602,
+  "lon": -122.2591505,
+  "tags": {
+    "covered": "no",
+    "disused:amenity": "fountain",
+    "fountain": "decorative",
+    "indoor": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 12737823540,
+  "lat": 37.8716508,
+  "lon": -122.2679327,
+  "tags": {
+    "addr:housenumber": "2012",
+    "addr:street": "Kala Bagai Way",
+    "check_date": "2025-04-07",
+    "cuisine": "korean",
+    "disused:amenity": "fast_food",
+    "level": "0",
+    "name": "Simmer & Steamer",
+    "website": "https://order.toasttab.com/online/simmer-and-steamer-berkeley"
+  }
+},
+{
+  "type": "node",
+  "id": 12748762013,
+  "lat": 37.8678831,
+  "lon": -122.2681276,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2278",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12750243400,
+  "lat": 37.8646777,
+  "lon": -122.2677929,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2450",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "interior_decoration"
+  }
+},
+{
+  "type": "node",
+  "id": 12750318382,
+  "lat": 37.8624388,
+  "lon": -122.2675319,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2578",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes",
+    "name": "Furniture Outlet"
+  }
+},
+{
+  "type": "node",
+  "id": 12750332297,
+  "lat": 37.8646346,
+  "lon": -122.2671319,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2471",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12750336888,
+  "lat": 37.8631738,
+  "lon": -122.2675898,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2530",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "beauty": "nails",
+    "check_date": "2025-08-18",
+    "disused:shop": "beauty",
+    "name": "Time for Nails"
+  }
+},
+{
+  "type": "node",
+  "id": 12750376534,
+  "lat": 37.8620706,
+  "lon": -122.2668434,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2609",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12750376535,
+  "lat": 37.8617361,
+  "lon": -122.2667683,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2611",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12750376536,
+  "lat": 37.8614354,
+  "lon": -122.2667576,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2623",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12750376537,
+  "lat": 37.8615412,
+  "lon": -122.2667576,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2621",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12750376538,
+  "lat": 37.8616556,
+  "lon": -122.2667656,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2619",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12753191739,
+  "lat": 37.8677860,
+  "lon": -122.2672088,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2109",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Bancroft Way",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12753199707,
+  "lat": 37.8704958,
+  "lon": -122.2726739,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1900",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Addison Street",
+    "disused:shop": "yes",
+    "name": "PGE"
+  }
+},
+{
+  "type": "node",
+  "id": 12754854396,
+  "lat": 37.8714890,
+  "lon": -122.2723385,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1928",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12754854397,
+  "lat": 37.8714882,
+  "lon": -122.2722521,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1936",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "addr:unit": "100",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12754854398,
+  "lat": 37.8715092,
+  "lon": -122.2720845,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1936",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "addr:unit": "105",
+    "disused:shop": "yes",
+    "name": "Comcast"
+  }
+},
+{
+  "type": "node",
+  "id": 12755033435,
+  "lat": 37.8716310,
+  "lon": -122.2711955,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1980",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12755049658,
+  "lat": 37.8715557,
+  "lon": -122.2719046,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1944",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "disused:shop": "bicycle",
+    "name": "Lulu's Cyclery",
+    "website": "https://luluscyclery.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 12755163752,
+  "lat": 37.8722296,
+  "lon": -122.2690918,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2067",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "disused:amenity": "cafe"
+  }
+},
+{
+  "type": "node",
+  "id": 12755179374,
+  "lat": 37.8721940,
+  "lon": -122.2693694,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2051",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "disused:shop": "laundry",
+    "name": "Berkeley Bubble Coin Laundromat"
+  }
+},
+{
+  "type": "node",
+  "id": 12756272608,
+  "lat": 37.8686561,
+  "lon": -122.2587396,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2514",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Bancroft Way",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12756347393,
+  "lat": 37.8687700,
+  "lon": -122.2578976,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2580",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Bancroft Way",
+    "addr:unit": "2",
+    "disused:shop": "yes",
+    "name": "Double Rainbox"
+  }
+},
+{
+  "type": "node",
+  "id": 12756380548,
+  "lat": 37.8687566,
+  "lon": -122.2577502,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2580",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Bancroft Way",
+    "addr:unit": "1",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12756388098,
+  "lat": 37.8688420,
+  "lon": -122.2573021,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2590",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Bancroft Way",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12756388099,
+  "lat": 37.8688526,
+  "lon": -122.2571600,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2592",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Bancroft Way",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12756388100,
+  "lat": 37.8688844,
+  "lon": -122.2570366,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2594",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Bancroft Way",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12756493388,
+  "lat": 37.8727824,
+  "lon": -122.2682540,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1951",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "addr:unit": "1",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12756493389,
+  "lat": 37.8728883,
+  "lon": -122.2682728,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1951",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "addr:unit": "2",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12756497963,
+  "lat": 37.8690986,
+  "lon": -122.2663397,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2230",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Oxford Street",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12756497964,
+  "lat": 37.8689692,
+  "lon": -122.2664043,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2240",
+    "addr:postcode": "94703",
+    "addr:state": "CA",
+    "addr:street": "Oxford Street",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12756522246,
+  "lat": 37.8674419,
+  "lon": -122.2660619,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2310",
+    "addr:state": "CA",
+    "addr:street": "Fulton Street",
+    "addr:unit": "D",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12756522248,
+  "lat": 37.8672550,
+  "lon": -122.2660188,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2310",
+    "addr:state": "CA",
+    "addr:street": "Fulton Street",
+    "addr:unit": "B",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12756522249,
+  "lat": 37.8671831,
+  "lon": -122.2660105,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2310",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Fulton Street",
+    "addr:unit": "A",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12756562751,
+  "lat": 37.8722701,
+  "lon": -122.2705414,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1947",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Milvia Street",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12758318224,
+  "lat": 37.8709107,
+  "lon": -122.2718834,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1919",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Addison Street",
+    "addr:unit": "102",
+    "cuisine": "japanese",
+    "disused:amenity": "restaurant",
+    "name": "Zabi Zabu"
+  }
+},
+{
+  "type": "node",
+  "id": 12760529134,
+  "lat": 37.8720619,
+  "lon": -122.2705071,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2001",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "disused:shop": "yes",
+    "name": "Copy Central"
+  }
+},
+{
+  "type": "node",
+  "id": 12760529136,
+  "lat": 37.8717323,
+  "lon": -122.2704174,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2004",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "disused:shop": "yes",
+    "name": "Darling Flower"
+  }
+},
+{
+  "type": "node",
+  "id": 12790946847,
+  "lat": 37.8605921,
+  "lon": -122.2666848,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2655",
+    "addr:postcode": "94705",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12793472570,
+  "lat": 37.8685963,
+  "lon": -122.2593033,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2490",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Bancroft Way",
+    "cuisine": "sandwich",
+    "disused:amenity": "fast_food",
+    "name": "Sandwich a Go Go"
+  }
+},
+{
+  "type": "node",
+  "id": 12793483422,
+  "lat": 37.8679932,
+  "lon": -122.2639379,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2252",
+    "addr:postcode": "94704",
+    "addr:street": "Bancroft Way",
+    "disused:shop": "mobile_phone",
+    "name": "UC Electronics"
+  }
+},
+{
+  "type": "node",
+  "id": 12793483423,
+  "lat": 37.8680038,
+  "lon": -122.2638441,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2254",
+    "addr:postcode": "94704",
+    "addr:street": "Bancroft Way",
+    "disused:shop": "sports",
+    "name": "Berkeley Sports"
+  }
+},
+{
+  "type": "node",
+  "id": 12793483424,
+  "lat": 37.8679255,
+  "lon": -122.2638360,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2302",
+    "addr:postcode": "94704",
+    "addr:street": "Ellsworth Street",
+    "disused:shop": "hairdresser",
+    "name": "La Petite Hair Salon"
+  }
+},
+{
+  "type": "node",
+  "id": 12793520855,
+  "lat": 37.8664390,
+  "lon": -122.2640111,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2235",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Channing Way",
+    "disused:amenity": "dentist",
+    "name": "James T. White, DDS",
+    "website": "https://www.jamesthorpewhitedds.com"
+  }
+},
+{
+  "type": "node",
+  "id": 12793538441,
+  "lat": 37.8609314,
+  "lon": -122.2673581,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2648",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12793602588,
+  "lat": 37.8707603,
+  "lon": -122.2727328,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2099",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Martin Luther King Junior Way",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12808311188,
+  "lat": 37.8685358,
+  "lon": -122.2664141,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2178",
+    "addr:postcode": "94703",
+    "addr:state": "CA",
+    "addr:street": "Kittredge Street",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12808311189,
+  "lat": 37.8685104,
+  "lon": -122.2666233,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2146",
+    "addr:postcode": "94703",
+    "addr:state": "CA",
+    "addr:street": "Kittredge Street",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12808311192,
+  "lat": 37.8684765,
+  "lon": -122.2671759,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2126",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Kittredge Street",
+    "disused:shop": "yes",
+    "name": "State Farm Insurance"
+  }
+},
+{
+  "type": "node",
+  "id": 12821334275,
+  "lat": 37.8593766,
+  "lon": -122.2594903,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2800",
+    "addr:postcode": "94705",
+    "addr:state": "CA",
+    "addr:street": "Telegraph Avenue",
+    "disused:shop": "bicycle",
+    "name": "Karim Cycle"
+  }
+},
+{
+  "type": "node",
+  "id": 12824398151,
+  "lat": 37.8634942,
+  "lon": -122.2584717,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2595",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Telegraph Avenue",
+    "disused:shop": "copyshop",
+    "name": "Krishna Copy"
+  }
+},
+{
+  "type": "node",
+  "id": 12832784317,
+  "lat": 37.8822148,
+  "lon": -122.2692918,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1385",
+    "addr:postcode": "94709",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "addr:unit": "B",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12839034468,
+  "lat": 37.8725543,
+  "lon": -122.2665589,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2167",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "University Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12845249590,
+  "lat": 37.8664114,
+  "lon": -122.2585439,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2429",
+    "addr:street": "Telegraph Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12845249593,
+  "lat": 37.8661658,
+  "lon": -122.2585064,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2433",
+    "addr:street": "Telegraph Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12847836509,
+  "lat": 37.8657783,
+  "lon": -122.2666849,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2114",
+    "addr:street": "Channing Way",
+    "disused:amenity": "restaurant"
+  }
+},
+{
+  "type": "node",
+  "id": 12848040250,
+  "lat": 37.8651962,
+  "lon": -122.2588609,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:street": "Dwight Way",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12848040251,
+  "lat": 37.8652025,
+  "lon": -122.2587885,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:street": "Dwight Way",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12848040252,
+  "lat": 37.8652195,
+  "lon": -122.2586409,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2498",
+    "addr:street": "Telegraph Avenue",
+    "disused:amenity": "restaurant",
+    "name": "Han's Bistro"
+  }
+},
+{
+  "type": "node",
+  "id": 12848040253,
+  "lat": 37.8652936,
+  "lon": -122.2586544,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:street": "Telegraph Avenue",
+    "disused:shop": "yes",
+    "name": "Gifts of Tara"
+  }
+},
+{
+  "type": "node",
+  "id": 12848040254,
+  "lat": 37.8653507,
+  "lon": -122.2586624,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2484",
+    "addr:street": "Telegraph Avenue",
+    "disused:shop": "yes",
+    "name": "Reprint Mint"
+  }
+},
+{
+  "type": "node",
+  "id": 12848040255,
+  "lat": 37.8654312,
+  "lon": -122.2586678,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2482",
+    "addr:street": "Telegraph Avenue",
+    "disused:shop": "yes",
+    "name": "Lhasa Karnak Herb Company"
+  }
+},
+{
+  "type": "node",
+  "id": 12848048208,
+  "lat": 37.8659264,
+  "lon": -122.2580592,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2506",
+    "addr:street": "Haste Street",
+    "cuisine": "mexican",
+    "disused:amenity": "restaurant",
+    "name": "Remys Mexican Restaurant"
+  }
+},
+{
+  "type": "node",
+  "id": 12848084985,
+  "lat": 37.8611099,
+  "lon": -122.2593095,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2712",
+    "addr:street": "Telegraph Avenue",
+    "community_centre:for": "lgbtq",
+    "disused:amenity": "community_centre",
+    "lgbtq": "primary",
+    "name": "Pacific Center"
+  }
+},
+{
+  "type": "node",
+  "id": 12863703095,
+  "lat": 37.8679012,
+  "lon": -122.2664085,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2179",
+    "addr:street": "Bancroft Way",
+    "disused:shop": "yes",
+    "name": "Subterranean Arthouse"
+  }
+},
+{
+  "type": "node",
+  "id": 12863708505,
+  "lat": 37.8686984,
+  "lon": -122.2581742,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2538",
+    "addr:street": "Bancroft Way",
+    "disused:shop": "clothes",
+    "name": "Bancroft Clothing"
+  }
+},
+{
+  "type": "node",
+  "id": 12863724240,
+  "lat": 37.8678959,
+  "lon": -122.2665641,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2175",
+    "addr:street": "Bancroft Way",
+    "description": "empty shop in new building",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12863751137,
+  "lat": 37.8630756,
+  "lon": -122.2684856,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2029",
+    "addr:street": "Blake Street",
+    "description": "empty shop in the Blake",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12863751138,
+  "lat": 37.8631238,
+  "lon": -122.2681173,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2035",
+    "addr:street": "Blake Street",
+    "description": "empty shop in the Blake",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12863751139,
+  "lat": 37.8630324,
+  "lon": -122.2686545,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2025",
+    "addr:street": "Blake Street",
+    "disused:shop": "yes",
+    "name": "Xin Huang Tai Chi and Ping Pong"
+  }
+},
+{
+  "type": "node",
+  "id": 12865281731,
+  "lat": 37.8658441,
+  "lon": -122.2588394,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2454",
+    "addr:street": "Telegraph Avenue",
+    "disused:shop": "books",
+    "name": "Cody's Books"
+  }
+},
+{
+  "type": "node",
+  "id": 12915993645,
+  "lat": 37.8615063,
+  "lon": -122.2591819,
+  "tags": {
+    "addr:housenumber": "2650",
+    "addr:street": "Telegraph Avenue",
+    "disused:amenity": "cafe"
+  }
+},
+{
+  "type": "node",
+  "id": 12955520693,
+  "lat": 37.8752473,
+  "lon": -122.2600413,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1879",
+    "addr:street": "Euclid Avenue",
+    "disused:shop": "yes",
+    "name": "Vickcopy"
+  }
+},
+{
+  "type": "node",
+  "id": 12974505149,
+  "lat": 37.8714346,
+  "lon": -122.2685249,
+  "tags": {
+    "addr:housenumber": "2026",
+    "addr:street": "Shattuck Avenue",
+    "books": "comic",
+    "disused:shop": "books",
+    "name": "Fantastic Comics"
+  }
+},
+{
+  "type": "node",
+  "id": 13054485752,
+  "lat": 37.8711357,
+  "lon": -122.2590818,
+  "tags": {
+    "addr:unit": "151",
+    "disused:shop": "ticket",
+    "level:ref": "1",
+    "name": "Ticket Booth"
+  }
+},
+{
+  "type": "node",
+  "id": 13078820349,
+  "lat": 37.8696995,
+  "lon": -122.2703758,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2175",
+    "addr:street": "Milvia Street",
+    "disused:amenity": "bank",
+    "name": "1st United Credit Union"
+  }
+},
+{
+  "type": "node",
+  "id": 13078823199,
+  "lat": 37.8712092,
+  "lon": -122.2671363,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2110",
+    "addr:street": "Addison Street",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13078823200,
+  "lat": 37.8712205,
+  "lon": -122.2670583,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2114",
+    "addr:street": "Addison Street",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13078836759,
+  "lat": 37.8690548,
+  "lon": -122.2682507,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2206",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13078836760,
+  "lat": 37.8689695,
+  "lon": -122.2682457,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2210",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13078836761,
+  "lat": 37.8686840,
+  "lon": -122.2682155,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2236",
+    "addr:street": "Shattuck Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13078856729,
+  "lat": 37.8727714,
+  "lon": -122.2686665,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1958",
+    "addr:street": "Shattuck Avenue",
+    "disused:amenity": "cafe",
+    "name": "Bangkook Noodles and Thai BBQ"
+  }
+},
+{
+  "type": "node",
+  "id": 13078881034,
+  "lat": 37.8703053,
+  "lon": -122.2660516,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2130",
+    "addr:street": "Oxford Street",
+    "disused:amenity": "cafe",
+    "name": "Flavia"
+  }
+},
+{
+  "type": "node",
+  "id": 13078881035,
+  "lat": 37.8704231,
+  "lon": -122.2660772,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2128",
+    "addr:street": "Oxford Street",
+    "disused:amenity": "cafe",
+    "name": "Starbucks"
+  }
+},
+{
+  "type": "node",
+  "id": 13078892483,
+  "lat": 37.8651012,
+  "lon": -122.2678291,
+  "tags": {
+    "description": "vacant retail in new building, no address yet",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13078908701,
+  "lat": 37.8734950,
+  "lon": -122.2683110,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1919",
+    "addr:street": "Shattuck Avenue",
+    "addr:unit": "102",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13078940894,
+  "lat": 37.8716087,
+  "lon": -122.2713358,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1970",
+    "addr:street": "University Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13078945633,
+  "lat": 37.8717974,
+  "lon": -122.2724282,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1921",
+    "addr:street": "University Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13078965485,
+  "lat": 37.8720263,
+  "lon": -122.2681166,
+  "tags": {
+    "addr:housenumber": "2100",
+    "addr:street": "Shattuck Avenue",
+    "addr:unit": "B",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13090637966,
+  "lat": 37.8818082,
+  "lon": -122.2697296,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1400",
+    "addr:street": "Shattuck Avenue",
+    "addr:unit": "4",
+    "disused:shop": "nutrition_supplements",
+    "name": "Earthly Nutrition"
+  }
+},
+{
+  "type": "node",
+  "id": 13097247853,
+  "lat": 37.8680378,
+  "lon": -122.2562785,
+  "tags": {
+    "addr:housenumber": "2600",
+    "addr:street": "Durant Avenue",
+    "disused:amenity": "cafe",
+    "name": "Poindexters Coffee"
+  }
+},
+{
+  "type": "node",
+  "id": 13097250474,
+  "lat": 37.8645120,
+  "lon": -122.2583558,
+  "tags": {
+    "addr:housenumber": "2529",
+    "addr:street": "Telegraph Avenue",
+    "disused:shop": "yes",
+    "name": "Bay Jiu-Jitsu"
+  }
+},
+{
+  "type": "node",
+  "id": 13097250475,
+  "lat": 37.8646048,
+  "lon": -122.2583375,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2525",
+    "addr:street": "Telegraph Avenue",
+    "disused:amenity": "restaurant",
+    "name": "The Blue Nile"
+  }
+},
+{
+  "type": "node",
+  "id": 13097267889,
+  "lat": 37.8670568,
+  "lon": -122.2585392,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2501",
+    "addr:street": "Channing Way",
+    "disused:shop": "yes",
+    "name": "Life and Succulence"
+  }
+},
+{
+  "type": "node",
+  "id": 13097293686,
+  "lat": 37.8666197,
+  "lon": -122.2588887,
+  "tags": {
+    "addr:housenumber": "2416",
+    "addr:street": "Telegraph Avenue",
+    "disused:shop": "yes",
+    "name": "Annapurna"
+  }
+},
+{
+  "type": "node",
+  "id": 13097293687,
+  "lat": 37.8665561,
+  "lon": -122.2588758,
+  "tags": {
+    "addr:housenumber": "2422",
+    "addr:street": "Telegraph Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13389554723,
+  "lat": 37.8671641,
+  "lon": -122.2594645,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2425",
+    "addr:street": "Channing Way",
+    "addr:unit": "C",
+    "disused:shop": "yes",
+    "name": "Berkeley Animal Rights Center"
+  }
+},
+{
+  "type": "node",
+  "id": 13969520792,
+  "lat": 37.8711913,
+  "lon": -122.2745794,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1812",
+    "addr:street": "University Avenue",
+    "addr:unit": "A",
+    "disused:amenity": "fast_food",
+    "name": "Good Eats"
+  }
+},
+{
+  "type": "node",
+  "id": 13969588353,
+  "lat": 37.8798691,
+  "lon": -122.2689645,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "1511",
+    "addr:street": "Shattuck Avenue",
+    "addr:unit": "C",
+    "disused:shop": "yes",
+    "name": "Juice Appeal"
+  }
+},
+{
+  "type": "node",
+  "id": 14262784083,
+  "lat": 37.8673670,
+  "lon": -122.2595724,
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2434",
+    "addr:street": "Durant Avenue",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 24221451,
+  "center": {
+    "lat": 37.8796830,
+    "lon": -122.2696653
+  },
+  "tags": {
+    "addr:country": "US",
+    "addr:housenumber": "1516",
+    "addr:state": "CA",
+    "addr:street": "Shattuck Avenue",
+    "building": "yes",
+    "building:levels": "2",
+    "disused:shop": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 30833092,
+  "center": {
+    "lat": 37.8726021,
+    "lon": -122.2671550
+  },
+  "tags": {
+    "building": "mixed_use",
+    "building:levels": "6",
+    "disused:shop": "hardware",
+    "old_name": "Berkeley Ace Hardware",
+    "roof:levels": "0",
+    "website": "https://www.moderaberkeley.com/"
+  }
+},
+{
+  "type": "way",
+  "id": 37060612,
+  "center": {
+    "lat": 37.8688235,
+    "lon": -122.2671903
+  },
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:housenumber": "2113",
+    "addr:postcode": "94704",
+    "addr:state": "CA",
+    "addr:street": "Kittredge Street",
+    "building": "theatre",
+    "disused:amenity": "cinema",
+    "name": "California Theaters",
+    "note": "Brand? by landmark theaters",
+    "phone": "+1 510 8480620",
+    "wheelchair": "limited",
+    "wikidata": "Q44858857"
+  }
+},
+{
+  "type": "way",
+  "id": 220677319,
+  "center": {
+    "lat": 37.8807489,
+    "lon": -122.2592375
+  },
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "1581",
+    "addr:postcode": "94708",
+    "addr:street": "Le Roy Avenue",
+    "disused:amenity": "school",
+    "name": "The Institute for Time and Reality",
+    "old_name": "Hillside Elementary School",
+    "operator": "Seppala",
+    "operator:type": "private",
+    "website": "https://www.facebook.com/theschool.cat/",
+    "wheelchair": "no",
+    "wheelchair:description": "not accessible"
+  }
+},
+{
+  "type": "way",
+  "id": 233937591,
+  "center": {
+    "lat": 37.8677310,
+    "lon": -122.2618080
+  },
+  "tags": {
+    "addr:housenumber": "2320",
+    "addr:street": "Dana Street",
+    "building": "church",
+    "denomination": "methodist",
+    "disused:amenity": "place_of_worship",
+    "ele": "73",
+    "gnis:feature_id": "1656770",
+    "name": "Trinity United Methodist Church",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 312023664,
+  "center": {
+    "lat": 37.8680315,
+    "lon": -122.2615852
+  },
+  "tags": {
+    "addr:housenumber": "2320",
+    "addr:street": "Dana Street",
+    "building": "church",
+    "denomination": "methodist",
+    "disused:amenity": "place_of_worship",
+    "name": "Trinity United Methodist Church",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 315997905,
+  "center": {
+    "lat": 37.8708631,
+    "lon": -122.2731503
+  },
+  "tags": {
+    "addr:city": "Berkeley",
+    "addr:country": "US",
+    "addr:housenumber": "2070",
+    "addr:postcode": "94703",
+    "addr:state": "CA",
+    "addr:street": "Martin Luther King Jr Way",
+    "building": "retail",
+    "building:levels": "1",
+    "disused:shop": "clothes",
+    "roof:levels": "0"
+  }
+},
+{
+  "type": "way",
+  "id": 765903383,
+  "center": {
+    "lat": 37.8699650,
+    "lon": -122.2680073
+  },
+  "tags": {
+    "disused:shop": "yes",
+    "indoor": "room",
+    "layer": "-1",
+    "level": "-1"
+  }
+},
+{
+  "type": "way",
+  "id": 765903384,
+  "center": {
+    "lat": 37.8702513,
+    "lon": -122.2680420
+  },
+  "tags": {
+    "cuisine": "coffee_shop",
+    "disused:amenity": "cafe",
+    "indoor": "room",
+    "layer": "-1",
+    "level": "-1",
+    "location": "underground",
+    "note": "Inside the BART station at the concourse level",
+    "old_name": "Seismic Coffee;Peet's Coffee & Tea;Scooter's World-Class Coffee",
+    "wifi": "no"
+  }
+}
+
+  ]
+}
