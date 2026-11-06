@@ -164,6 +164,7 @@ const tgPort = process.env.TELEGRAM_PORT ?? 3511;
 const waPort = process.env.WHATSAPP_PORT ?? 3512;
 const mailPort = process.env.MAIL_PORT ?? 3513;
 startChild("mock", process.execPath, [mockBoot, String(tgPort), String(waPort), String(mailPort)]);
+process.env.DATABASE_URL ??= ".data/dev.db";
 process.env.TELEGRAM_API_BASE_URL ??= `http://127.0.0.1:${tgPort}`;
 process.env.WHATSAPP_API_BASE_URL ??= `http://127.0.0.1:${waPort}`;
 process.env.MAIL_API_BASE_URL ??= `http://127.0.0.1:${mailPort}`;

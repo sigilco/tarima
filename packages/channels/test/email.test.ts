@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { createEmailAdapter } from "../src/providers/email";
 import type { LoopbackSink } from "../src/providers/email";
 import type { OutboundMessage } from "../src/types";
@@ -12,6 +12,10 @@ const ENV_KEYS = [
 ] as const;
 const saved: Record<string, string | undefined> = {};
 for (const key of ENV_KEYS) saved[key] = process.env[key];
+// Hermetic: ambient values (e.g. mise injecting .env.local) must not leak in.
+beforeEach(() => {
+  for (const key of ENV_KEYS) delete process.env[key];
+});
 afterEach(() => {
   for (const key of ENV_KEYS) {
     if (saved[key] === undefined) delete process.env[key];
