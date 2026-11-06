@@ -57,7 +57,10 @@ describe("beta contract freeze", () => {
     expect(isAllowlisted("a@x.io", "b@x.io")).toBe(false);
   });
 
-  it("bootstraps the new tables and projects.stage", async () => {
+  // The dynamic import runs the whole db bootstrap on first touch; under
+  // CI load (many vitest workers on few cores) that can exceed the default
+  // 5s timeout even though the work is finite.
+  it("bootstraps the new tables and projects.stage", { timeout: 30_000 }, async () => {
     const { db } = await import("../db");
     const { channelBindings, connectCodes, projects, venueCatalog } = await import("../db/schema");
     expect(db.select().from(channelBindings).all()).toEqual([]);
