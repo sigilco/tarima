@@ -71,6 +71,13 @@
       "when": 1793883744020,
       "tag": "0009_agent_mirror",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1793928772939,
+      "tag": "0010_gtm_contacts",
+      "breakpoints": true
     }
   ]
 }

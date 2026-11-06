@@ -95,9 +95,25 @@ export type {
 export { NOT_ALLOWLISTED_ERROR, USER_ROLES, isAllowlisted, parseAllowlist } from "./beta.js";
 export type { UserRole } from "./beta.js";
 export {
+  gtmContactSchema,
+  gtmContactSourceSchema,
+  setGtmConsentSchema,
+  setGtmDoNotContactSchema,
+  upsertGtmContactSchema,
+} from "./gtm.js";
+export type {
+  GtmContact,
+  GtmContactSource,
+  SetGtmConsent,
+  SetGtmDoNotContact,
+  UpsertGtmContact,
+} from "./gtm.js";
+export {
   mintRoomLinkRequestSchema,
   mintRoomLinkResponseSchema,
   observerLinkSchema,
+  observerViewResponseSchema,
+  projectObserverUrl,
   resolveRoomQuerySchema,
   resolveRoomResponseSchema,
   revokeRoomLinkResponseSchema,
@@ -108,6 +124,7 @@ export type {
   MintRoomLinkRequest,
   MintRoomLinkResponse,
   ObserverLink,
+  ObserverViewResponse,
   ResolveRoomQuery,
   ResolveRoomResponse,
   RevokeRoomLinkResponse,

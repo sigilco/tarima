@@ -641,3 +641,37 @@ export const approvals = sqliteTable(
 
 export type Approval = typeof approvals.$inferSelect;
 export type NewApproval = typeof approvals.$inferInsert;
+
+/**
+ * GTM contacts (contract `gtmContactSchema`): the consent/suppression
+ * list for founder-led outreach. One row per email; `do_not_contact`
+ * is the suppression flag every outbound path must check before
+ * sending. No UI and no sender live here yet — this is the record.
+ */
+export const gtmContacts = sqliteTable(
+  "gtm_contacts",
+  {
+    id: text("id").primaryKey(),
+    /** Stored lower-cased; the unique key of the table. */
+    email: text("email").notNull(),
+    name: text("name"),
+    /** Where the contact came from: "manual", "import", "tally", ... */
+    source: text("source").notNull().default("manual"),
+    /** Recorded opt-in to outreach. */
+    consent: integer("consent", { mode: "boolean" }).notNull().default(false),
+    /** Suppression flag: true means never contact, on any channel. */
+    doNotContact: integer("do_not_contact", { mode: "boolean" }).notNull().default(false),
+    doNotContactReason: text("do_not_contact_reason"),
+    projectId: text("project_id").references(() => projects.id, { onDelete: "set null" }),
+    notes: text("notes"),
+    createdAt: integer("created_at").notNull().$defaultFn(nowMs),
+    updatedAt: integer("updated_at").notNull().$defaultFn(nowMs),
+  },
+  (t) => [
+    uniqueIndex("idx_gtm_contacts_email").on(t.email),
+    index("idx_gtm_contacts_dnc").on(t.doNotContact),
+  ],
+);
+
+export type GtmContactRow = typeof gtmContacts.$inferSelect;
+export type NewGtmContactRow = typeof gtmContacts.$inferInsert;
